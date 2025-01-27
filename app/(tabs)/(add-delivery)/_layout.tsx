@@ -1,9 +1,8 @@
 import { Stack } from 'expo-router';
 
-export default function HomeLayout() {
+export default function AddDeliveryLayout() {
     
     return (
-        // Index layout
         <Stack
             screenOptions={{
                 headerStyle: {
@@ -16,7 +15,7 @@ export default function HomeLayout() {
                 },
             }}>
 
-            <Stack.Screen name="index"  options={{ title: "Index" }}/> 
+            <Stack.Screen name="add-delivery"  options={{ title: "Add Delivery" }}/> 
         </Stack>
     );
 }

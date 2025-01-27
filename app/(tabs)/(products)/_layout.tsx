@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function SupplyOrderLayout() {
+export default function ProductsLayout() {
     
     return (
         <Stack
@@ -15,7 +15,7 @@ export default function SupplyOrderLayout() {
                 },
             }}>
 
-            <Stack.Screen name="supply-order"  options={{ title: "Supply Order" }}/> 
+            <Stack.Screen name="products"  options={{ title: "Products" }}/> 
         </Stack>
     );
 }

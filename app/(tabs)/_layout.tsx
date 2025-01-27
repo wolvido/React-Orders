@@ -5,12 +5,13 @@ export default function TabLayout() {
 
   return (
     //tab bar below and above
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}> 
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+        
         <Tabs.Screen
-            name="(home)"
+            name="(add-delivery)"
             options={{
-                title: 'Home',
-                href: '/(tabs)/(home)',
+                title: 'Add Delivery',
+                href: '/(tabs)/(add-delivery)/add-delivery',
                 headerStyle: {
                 backgroundColor: 'lightblue'
             },
@@ -18,10 +19,10 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-            name="(inventory)"
+            name="(add-order)"
             options={{
-                title: 'Inventory',
-                href: "/(tabs)/(inventory)/inventory",
+                title: 'Add Order',
+                href: "/(tabs)/(add-order)/add-order",
                 headerStyle: { 
                     backgroundColor: 'orange'
                     },
@@ -29,10 +30,10 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen    
-            name="(order)"
+            name="(orders)"
             options={{
-                title: 'Order',
-                href: "/(tabs)/(order)/order",
+                title: 'Orders',
+                href: "/(tabs)/(orders)/orders",
                 headerStyle: { 
                     backgroundColor: 'lightpink'
                     },
@@ -40,12 +41,23 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-            name="(supply-order)"
+            name="(products)"
             options={{
-                title: 'Supply Order',
-                href: "/(tabs)/(supply-order)/supply-order",
+                title: 'Products',
+                href: "/(tabs)/(products)/products",
                 headerStyle: { 
                     backgroundColor: 'lightyellow'
+                    },
+        }}
+        />
+
+        <Tabs.Screen
+            name="(purchase-orders)"
+            options={{
+                title: 'Purchase Orders',
+                href: "/(tabs)/(purchase-orders)/purchase-orders",
+                headerStyle: { 
+                    backgroundColor: 'lightgreen'
                     },
         }}
         />

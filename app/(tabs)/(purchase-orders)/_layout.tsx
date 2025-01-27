@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function InventoryLayout() {
+export default function PurchaseOrders() {
     
     return (
         <Stack
@@ -15,7 +15,7 @@ export default function InventoryLayout() {
                 },
             }}>
 
-            <Stack.Screen name="inventory"  options={{ title: "Inventory" }}/> 
+            <Stack.Screen name="purchase-orders"  options={{ title: "Purchase Orders" }}/> 
         </Stack>
     );
 }
