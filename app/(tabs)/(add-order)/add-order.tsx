@@ -6,7 +6,7 @@ export default function AddOrderScreen() {
     return (
         <View style={commonStyles.main}>            
 
-            <Text>Add Order</Text>
+
             
         </View>
     );

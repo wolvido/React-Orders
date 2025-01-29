@@ -6,7 +6,7 @@ export default function AddDeliveryScreen() {
     return (
         <View style={commonStyles.main}>            
 
-            <Text>Add Delivery</Text>
+
             
         </View>
     );

@@ -68,5 +68,19 @@ export default StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
     },
+    extraHeader:
+    {
+        minHeight: 0,
+        height: 50,
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: ' #eae7e6',
+    },
+    searchBar:
+    {
+        minHeight: 0,
+        height: 38,
+        width: '40%',
+    }
 
 });
