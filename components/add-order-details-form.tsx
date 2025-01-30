@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { useState } from 'react';
+import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
 
 //replace this later
 interface DummyFormModel {
@@ -10,6 +11,8 @@ interface DummyFormModel {
 }
 
 function OrderDetailsForm() {
+
+    const router = useRouter();
 
     //form Handling logic
     const [formData, setFormData] = useState<DummyFormModel>({
@@ -22,8 +25,11 @@ function OrderDetailsForm() {
           [field]: value
         }));
       };
+
     const handleSubmit = () => {
-        console.log('Form Submitted with data:', formData);
+        console.log('Form Data:', formData);
+        console.log('Router object:', router);
+        router.push('/(tabs)/(products)/products');
     };
 
 

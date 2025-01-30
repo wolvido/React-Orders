@@ -1,24 +1,17 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { CommonActions, DefaultTheme} from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, BottomNavigation } from 'react-native-paper';
-
-import OrdersScreen from '@/app/(tabs)/(orders)/orders';
-import ProductsScreen from '@/app/(tabs)/(products)/products';
-import AddDeliveryScreen from '@/app/(tabs)/(add-delivery)/add-delivery';
-import AddOrderScreen from '@/app/(tabs)/(add-order)/add-order';
-import PurchaseOrdersScreen from '@/app/(tabs)/(purchase-orders)/purchase-orders';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import theme from '@/style/theme';
+import { Tabs } from 'expo-router';
 
-const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
 
     return (
-        <Tab.Navigator
+        
+        <Tabs
             screenOptions={{
                 headerShown: true,
                 headerStyle: {
@@ -92,9 +85,8 @@ export default function TabLayout() {
             )}
         >
 
-        <Tab.Screen
-            name="orders"
-            component={OrdersScreen}
+        <Tabs.Screen
+            name="(orders)"
             options={{
                 title: 'Orders',
                 tabBarLabel: 'Orders Screen',
@@ -104,9 +96,8 @@ export default function TabLayout() {
             }}
         />
 
-        <Tab.Screen
-            name="products"
-            component={ProductsScreen}
+        <Tabs.Screen
+            name="(products)"
             options={{
                 title: 'Products',
                 tabBarLabel: 'Products Screen',
@@ -116,9 +107,8 @@ export default function TabLayout() {
             }}
         />
 
-        <Tab.Screen
-            name="add-delivery"
-            component={AddDeliveryScreen}
+        <Tabs.Screen
+            name="(add-delivery)"
             options={{
                 title: 'Add Delivery',
                 tabBarLabel: 'Add Delivery',
@@ -128,9 +118,8 @@ export default function TabLayout() {
             }}
         />
 
-        <Tab.Screen
-            name="add-order"
-            component={AddOrderScreen}
+        <Tabs.Screen
+            name="(add-order)"
             options={{
                 title: 'Add Order',
                 tabBarLabel: 'Add Order',
@@ -140,76 +129,21 @@ export default function TabLayout() {
             }}
         />
 
-        <Tab.Screen
-            name="purchase-orders"
-            component={PurchaseOrdersScreen}
+        <Tabs.Screen
+            name="(purchase-orders)"
             options={{
                 title: 'Purchase Orders',
                 tabBarLabel: 'Purchase Orders',
+                href : "/(tabs)/(purchase-orders)/purchase-orders",
                 tabBarIcon: ({ color, size }) => {
                   return <MaterialCommunityIcons name="format-list-checkbox" size={size} color={color} />;
                 },
             }}
-        />
+        />{
 
+        }
+        </Tabs>
 
-
-
-{/* 
-            <Tab.Screen
-                name="(add-delivery)"
-                options={{
-                    title: 'Add Delivery',
-                    href: '/(tabs)/(add-delivery)/add-delivery',
-                    headerStyle: {
-                        backgroundColor: 'lightblue'
-                    },
-                }}
-            />
-
-            <Tab.Screen
-                name="(add-order)"
-                options={{
-                    title: 'Add Order',
-                    href: '/(tabs)/(add-order)/add-order',
-                    headerStyle: {
-                        backgroundColor: 'orange'
-                    },
-                }}
-            />
-
-            <Tab.Screen    
-                name="(orders)"
-                options={{
-                    title: 'Orders',
-                    href: '/(tabs)/(orders)/orders',
-                    headerStyle: {
-                        backgroundColor: 'lightpink'
-                    },
-                }}
-            />
-
-            <Tab.Screen
-                name="(products)"
-                options={{
-                    title: 'Products',
-                    href: '/(tabs)/(products)/products',
-                    headerStyle: {
-                        backgroundColor: 'lightyellow'
-                    },
-                }}
-            />
-            
-            <Tab.Screen
-                name="(purchase-orders)"
-                options={{
-                    title: 'Purchase Orders',
-                    href: '/(tabs)/(purchase-orders)/purchase-orders',
-                    headerStyle: {
-                        backgroundColor: 'lightgreen'
-                    },
-                }}
-            /> */}
-        </Tab.Navigator>
+        
     );
 }

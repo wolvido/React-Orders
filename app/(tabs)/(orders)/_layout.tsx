@@ -16,6 +16,7 @@ export default function OrdersLayout() {
             }}>
 
             <Stack.Screen name="orders"  options={{ title: "Orders" }}/> 
+            
         </Stack>
     );
 }
