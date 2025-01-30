@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native';
 import commonStyles from '@/style/common';
-import { orders } from '@/dummy-data/dummy-orders';
 import { products } from '@/dummy-data/dummy-products';
 import * as React from 'react';
-import { DataTable } from 'react-native-paper';
+import { DataTable, Searchbar } from 'react-native-paper';
+
+import theme from '@/style/theme';
 
 //react component
 export default function ProductsScreen() {
@@ -25,11 +25,29 @@ export default function ProductsScreen() {
           setPage(0);
         }, [itemsPerPage]);
 
+        const [searchQuery, setSearchQuery] = React.useState('');
+
     return (
         // <View style={commonStyles.main}>            
+        <DataTable>
+            <DataTable.Header style={commonStyles.extraHeader}>
+                <Searchbar
+                    placeholder="Search"
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
+                    mode='view'
+                    style = {commonStyles.searchBar}
+                    inputStyle = {commonStyles.searchBar}
+                    theme={{
+                        colors: {
+                            elevation: {
+                                level3: theme.colors.accent,  // This changes the inner background
+                            },
+                        },
+                    }}
+                />
+            </DataTable.Header>
 
-            
-            <DataTable>
             <DataTable.Header>
                 <DataTable.Title>Name</DataTable.Title>
                 <DataTable.Title numeric>Selling Price</DataTable.Title>
@@ -65,6 +83,16 @@ export default function ProductsScreen() {
                 onItemsPerPageChange={onItemsPerPageChange}
                 showFastPaginationControls
                 selectPageDropdownLabel={'Rows per page'}
+                dropdownItemRippleColor={'white'}
+
+                theme={{
+                    colors: {
+                        elevation: {
+                            level2: theme.colors.accent,
+                        },
+                        primary: 'black',
+                    },
+                }}
             />
 
         </DataTable>

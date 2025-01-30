@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import theme from '@/style/theme';
+import getStatusColor from '@/hooks/status-color-hook';
 
 //react component
 export default function PurchaseOrdersScreen() {
@@ -28,6 +29,8 @@ export default function PurchaseOrdersScreen() {
     const [value, setValue] = React.useState('left');
 
     const [searchQuery, setSearchQuery] = React.useState('');
+
+
 
     return (
     // <View style={commonStyles.main}>            
@@ -51,26 +54,32 @@ export default function PurchaseOrdersScreen() {
             </DataTable.Header>
 
             <DataTable.Header>
-                <DataTable.Title>PO number</DataTable.Title>
-                <DataTable.Title>Delivery Status</DataTable.Title>
-                <DataTable.Title>Controls</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 1}}>ID</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Supplier</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Transaction Date</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Expected Del. Date</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Expected Total</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Prepared By</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Status</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Remarks</DataTable.Title>
             </DataTable.Header>
 
             {items.slice(from, to).map((item) => (
             <DataTable.Row style={styles.table__row} key={item.key}>
-                <DataTable.Cell>{item.key}</DataTable.Cell>
-                <DataTable.Cell>{item.deliveryStatus}</DataTable.Cell>
-                <DataTable.Cell style={styles.buttonGroupCell}>
-                    <ToggleButton.Row style={styles.buttonGroup} onValueChange={value => setValue(value)} value={value}>
-                        <Button style={styles.button} compact buttonColor="#70ff81" icon="" mode="contained-tonal" onPress={() => console.log('Deliver Received')}>
-                            Receive Delivery
-                        </Button>
-                        <Button style={styles.button} compact buttonColor="#FF8488" icon="" mode="contained-tonal" onPress={() => console.log('Delivery Cancelled')}>
-                            Cancel Delivery
-                        </Button>
-                    </ToggleButton.Row>
+                <DataTable.Cell style={{flexGrow: 1}}>{item.key}</DataTable.Cell>
+                <DataTable.Cell style={{flexGrow: 3}}>{item.supplier}</DataTable.Cell>
+                <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate}</DataTable.Cell>
+                <DataTable.Cell style={{flexGrow: 3}}>{item.deliveryDate}</DataTable.Cell>
+                <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
+                <DataTable.Cell style={{flexGrow: 3}}>{item.preparedBy}</DataTable.Cell>
+                <DataTable.Cell 
+                style={{flexGrow: 3,}} 
+                textStyle = {
+                    {color: getStatusColor(item.status)}
+                }>
+                    {item.status}
                 </DataTable.Cell>
-
+                <DataTable.Cell style={{flexGrow: 3}}>{item.remarks}</DataTable.Cell>
             </DataTable.Row>
             ))}
 

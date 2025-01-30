@@ -1,36 +1,114 @@
+import Status from "@/enums/status";
+
 export const purchaseOrders = [
     {
         key: 1,
-        deliveryStatus: "Delivered"
+        supplier: "ABC Supplies Ltd.",
+        transactionDate: "2021-01-01",
+        deliveryDate: "2021-01-01",
+        total: 1000,
+        preparedBy: "John Doe",
+        status: Status.Delivered,
+        remarks: "Delivered on time, all items received in good condition",
     },
-    //generate
     {
         key: 2,
-        deliveryStatus: "Cancelled"
+        supplier: "Tech Components Inc.",
+        transactionDate: "2021-02-15",
+        deliveryDate: "2021-02-20",
+        total: 1000,
+        preparedBy: "Sarah Wilson",
+        status: Status.Pending,
+        remarks: "Awaiting shipment confirmation",
     },
     {
         key: 3,
-        deliveryStatus: "Not Delivered"
+        supplier: "Global Parts Co.",
+        transactionDate: "2021-03-10",
+        deliveryDate: "2021-03-15",
+        total: 1000,
+        preparedBy: "Mike Johnson",
+        status: Status.Cancelled,
+        remarks: "Order cancelled due to stock unavailability",
+    },
+    {
+        key: 4,
+        supplier: "Quality Manufacturing Ltd.",
+        transactionDate: "2021-04-05",
+        deliveryDate: "2021-04-07",
+        total: 2314,
+        preparedBy: "Emily Brown",
+        status: Status.Delivered,
+        remarks: "Partial delivery received, remaining items backordered",
     },
     {
         key: 5,
-        deliveryStatus: "Not Delivered"
+        supplier: "Industrial Solutions Corp.",
+        transactionDate: "2021-05-20",
+        deliveryDate: "2021-05-25",
+        total: 8444,
+        preparedBy: "Robert Chen",
+        status: Status.Pending,
+        remarks: "Order in production phase",
     },
     {
         key: 6,
-        deliveryStatus: "Cancelled"
+        supplier: "FastTrack Logistics",
+        transactionDate: "2021-06-15",
+        deliveryDate: "2021-06-18",
+        total: 5532,
+        preparedBy: "Lisa Martinez",
+        status: Status.Delivered,
+        remarks: "Express delivery completed",
     },
     {
         key: 7,
-        deliveryStatus: "Delivered"
+        supplier: "Precision Tools Co.",
+        transactionDate: "2021-07-01",
+        deliveryDate: "2021-07-10",
+        total: 3224,
+        preparedBy: "David Kim",
+        status: Status.Pending,
+        remarks: "Waiting for supplier confirmation",
     },
     {
         key: 8,
-        deliveryStatus: "Delivered"
+        supplier: "EcoFriendly Materials",
+        transactionDate: "2021-08-12",
+        deliveryDate: "2021-08-15",
+        total: 12333,
+        preparedBy: "Amanda Taylor",
+        status: Status.Pending,
+        remarks: "Sustainable materials being sourced",
     },
     {
         key: 9,
-        deliveryStatus: "Delivered"
+        supplier: "Wholesale Distributors LLC",
+        transactionDate: "2021-09-30",
+        deliveryDate: "2021-10-05",
+        total: 1222,
+        preparedBy: "James Wilson",
+        status: Status.Cancelled,
+        remarks: "Cancelled due to pricing disagreement",
     },
-
+    {
+        key: 10,
+        supplier: "Smart Electronics Ltd.",
+        transactionDate: "2021-10-15",
+        deliveryDate: "2021-10-20",
+        total: 7555,
+        preparedBy: "Rachel Park",
+        status: Status.Delivered,
+        remarks: "All items verified and accepted",
+    },
+    {
+        key: 11,
+        supplier: "MetalWorks Industries",
+        transactionDate: "2021-11-22",
+        deliveryDate: "2021-11-25",
+        total: 3667,
+        preparedBy: "Thomas Garcia",
+        status: Status.Cancelled,
+        remarks: "Custom order in fabrication",
+    }
 ];

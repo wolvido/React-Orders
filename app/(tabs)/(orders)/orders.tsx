@@ -1,12 +1,10 @@
-import { View, Text } from 'react-native';
 import commonStyles from '@/style/common';
-
 import theme from '@/style/theme';
-
 import * as React from 'react';
 import { DataTable, Searchbar } from 'react-native-paper';
-
 import { orders } from '@/dummy-data/dummy-orders';
+import getStatusColor from '@/hooks/status-color-hook';
+import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
 
 //react component
 export default function OrdersScreen() {
@@ -61,20 +59,35 @@ export default function OrdersScreen() {
             </DataTable.Header>
 
             <DataTable.Header>
-                <DataTable.Title>Customer</DataTable.Title>
-                <DataTable.Title numeric>Fulfillment Status</DataTable.Title>
-                <DataTable.Title numeric>Handled By</DataTable.Title>
-                <DataTable.Title numeric>Payment Status</DataTable.Title>
-                <DataTable.Title numeric>Transaction Date</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 1}}>Order ID</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Order Type</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Customer</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Transaction Date</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Payment Status</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Total</DataTable.Title>
             </DataTable.Header>
 
             {items.slice(from, to).map((item) => (
                 <DataTable.Row key={item.key}>
-                    <DataTable.Cell>{item.customer}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.fulfillmentStatus}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.handledby}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.paymentStatus}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.transactionDate}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 1}}>{item.key}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.orderType}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.customer}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate}</DataTable.Cell>
+                    <DataTable.Cell
+                        style={{flexGrow: 3}}
+                        textStyle = {
+                            {color: getPaymentStatusColor(item.paymentStatus)}
+                        }
+
+                        >{item.paymentStatus}</DataTable.Cell>
+                    <DataTable.Cell 
+                        style={{flexGrow: 3}}
+                        textStyle = {
+                            {color: getStatusColor(item.fulfillmentStatus)}
+                        }
+                    >{item.fulfillmentStatus}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
                 </DataTable.Row>
             ))}
 
