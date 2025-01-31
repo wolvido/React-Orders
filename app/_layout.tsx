@@ -1,11 +1,13 @@
-import CartContextProvider from '@/context/cart-context';
+
 import { Stack } from 'expo-router';
 import { Inventory } from '@/models/inventory';
-import InventoryContextProvider from '@/context/inventory-context';
-import SupplyOrderContextProvider, { SupplyOrderContext } from '@/context/supply-order-context';
 import { PaperProvider } from 'react-native-paper';
 import theme from '@/style/theme';
+import {enGB, registerTranslation } from 'react-native-paper-dates';
+// Register the translations you need
+registerTranslation('en', enGB)
 
+    
 export default function RootLayout() {
 
 
@@ -21,10 +23,6 @@ export default function RootLayout() {
 
     return (
         <PaperProvider theme={theme}>
-        <InventoryContextProvider initialDatabase={dummyInventoryDb}>
-        <SupplyOrderContextProvider initialValue={{id: 0, supplier: "", supplyOrderItems: []}}>    
-        <CartContextProvider initialValue={{ cartItems: [], cashier: "", id: 0, total: 0 }}>
-
             <Stack
                 screenOptions={{
                 headerStyle: {
@@ -38,10 +36,6 @@ export default function RootLayout() {
                 }}>
                 {/* <Stack.Screen name="(home)" options={{ title: "Home" }}/> */}
             </Stack>
-
-        </CartContextProvider>
-        </SupplyOrderContextProvider>
-        </InventoryContextProvider>
         </PaperProvider>
 
     );

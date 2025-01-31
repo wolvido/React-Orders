@@ -1,3 +1,5 @@
+import { Inventory } from "./inventory";
+
 export interface Product {
     key: number;
     name: string;

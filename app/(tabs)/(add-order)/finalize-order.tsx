@@ -1,4 +1,4 @@
-import StepIndicator from "@/context/order-step-indicator";
+import StepIndicator from "@/components/order-step-indicator";
 import { View } from "react-native";
 
 //react component

@@ -1,4 +1,4 @@
-import StepIndicator from "@/context/order-step-indicator";
+import StepIndicator from "@/components/order-step-indicator";
 import { Link } from "expo-router";
 import { View } from "react-native";
 

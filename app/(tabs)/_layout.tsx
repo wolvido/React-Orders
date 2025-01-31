@@ -6,7 +6,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import theme from '@/style/theme';
 import { Tabs } from 'expo-router';
 
-
 export default function TabLayout() {
 
     return (
@@ -89,7 +88,7 @@ export default function TabLayout() {
             name="(orders)"
             options={{
                 title: 'Orders',
-                tabBarLabel: 'Orders Screen',
+                tabBarLabel: 'Orders',
                 tabBarIcon: ({ color, size }) => {
                   return <MaterialCommunityIcons name="clipboard-list" size={size} color={color} />;
                 },
@@ -100,7 +99,7 @@ export default function TabLayout() {
             name="(products)"
             options={{
                 title: 'Products',
-                tabBarLabel: 'Products Screen',
+                tabBarLabel: 'Products',
                 tabBarIcon: ({ color, size }) => {
                   return <MaterialCommunityIcons name="package-variant" size={size} color={color} />;
                 },

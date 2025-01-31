@@ -1,24 +1,34 @@
 import commonStyles from '@/style/common';
 import theme from '@/style/theme';
 import * as React from 'react';
-import { DataTable, Searchbar } from 'react-native-paper';
+import { DataTable, Searchbar, Button, Portal, Modal, Appbar } from 'react-native-paper';
 import { orders } from '@/dummy-data/dummy-orders';
 import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
+import { useState, useEffect } from 'react';
+
+import PaymentStatus from '@/enums/payment-status';
+import { router } from 'expo-router';
+import { View } from 'react-native';
+import PaymentMethodSelector from '@/components/payment-form';
+import StatusForm from '@/components/fulfillment-status';
+import Status from '@/enums/status'
 
 //react component
 export default function OrdersScreen() {
     //handles the state of table pagination
-    const [page, setPage] = React.useState<number>(0);
+    const [page, setPage] = useState<number>(0);
 
     //stores the initial selection for the number of items per page
-    const [numberOfItemsPerPageList] = React.useState([5, 6, 7, 8, 9, 10]);
+    const [numberOfItemsPerPageList] = useState([5, 6, 7, 8, 9, 10]);
         //used for the dropdown menu to display the possible options
 
     //switches the page options
-    const [itemsPerPage, onItemsPerPageChange] = React.useState(
+    const [itemsPerPage, onItemsPerPageChange] = useState(
       numberOfItemsPerPageList[0]
     );
+
+    const [searchQuery, setSearchQuery] = useState('');
 
     const items = orders;
   
@@ -30,15 +40,65 @@ export default function OrdersScreen() {
   
     //resets the page to the start item range changes, 
     // so that it doesnt break when page doesnt exist
-    React.useEffect(() => {
+    useEffect(() => {
       setPage(0);
     }, [itemsPerPage]);
         //sometimes a page wont exist when you expand the number of items per page
 
-    const [searchQuery, setSearchQuery] = React.useState('');
+    // Handle payment button click
+    const [showPaymentForm, setShowPaymentForm] = useState(false);
+    const [selectedTotal, setSelectedTotal] = useState(0)
+    const handlePaymentClick = (total: number) => {
+        setSelectedTotal(total);
+        setShowPaymentForm(true);
+    };
+
+    //payment status
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState(0);
+    const [initialStatus, setInitialStatus] = useState<Status>();
+    const handleStatusClick = (orderId: number, status: Status) => {
+        setSelectedOrderId(orderId);
+        setShowStatusModal(true);
+        setInitialStatus(status);
+    };
 
     return (
-        // <View style={commonStyles.main}>            
+        <View>    
+            <Portal>
+                <Modal
+                    visible={showStatusModal}
+                    onDismiss={() => setShowStatusModal(false)}
+                    contentContainerStyle={{
+                        backgroundColor: 'white',
+                        padding: 20,
+                        margin: 20,
+                        borderRadius: 8
+                    }}
+                >
+                    <StatusForm orderId={selectedOrderId} defaultStatus={initialStatus || Status.Pending} />
+
+                    <Button 
+                        mode="contained" 
+                        onPress={() => setShowStatusModal(false)}
+                        style={{ marginTop: 10 }}
+                    >
+                        Back
+                    </Button>
+                </Modal>
+            </Portal>
+
+        {showPaymentForm && (
+            <View>
+                <Appbar.Header>
+                    <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
+                    <Appbar.Content title="Add Payment Method" />
+                </Appbar.Header>
+                <PaymentMethodSelector balance={selectedTotal} />
+            </View>
+        )}        
+
+        {!showPaymentForm && (
         <DataTable>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
@@ -66,6 +126,7 @@ export default function OrdersScreen() {
                 <DataTable.Title style={{flexGrow: 3}}>Payment Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Total</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 2}}>Action</DataTable.Title>
             </DataTable.Header>
 
             {items.slice(from, to).map((item) => (
@@ -81,13 +142,37 @@ export default function OrdersScreen() {
                         }
 
                         >{item.paymentStatus}</DataTable.Cell>
-                    <DataTable.Cell 
+
+                    {/* <DataTable.Cell 
                         style={{flexGrow: 3}}
                         textStyle = {
                             {color: getStatusColor(item.fulfillmentStatus)}
                         }
-                    >{item.fulfillmentStatus}</DataTable.Cell>
+                    >{item.fulfillmentStatus}</DataTable.Cell> */}
+
+                    <DataTable.Cell
+                        style={{flexGrow: 3}}
+                    >
+                        <Button 
+                            mode="outlined" 
+                            onPress={() => handleStatusClick(item.key, item.fulfillmentStatus)}
+                            textColor = {getStatusColor(item.fulfillmentStatus)}
+                            >
+                            {item.fulfillmentStatus}
+                        </Button>
+
+                    </DataTable.Cell>
+
                     <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 2}}>
+                            <Button 
+                                mode="contained" 
+                                onPress={() => handlePaymentClick(item.total)}
+                                disabled={item.paymentStatus === PaymentStatus.paid}
+                            >
+                                Add Pay
+                            </Button>
+                        </DataTable.Cell>
                 </DataTable.Row>
             ))}
 
@@ -102,9 +187,7 @@ export default function OrdersScreen() {
                 onItemsPerPageChange={onItemsPerPageChange}
                 showFastPaginationControls
                 selectPageDropdownLabel={'Rows per page'}
-
                 dropdownItemRippleColor={'white'}
-
                 theme={{
                     colors: {
                         elevation: {
@@ -116,7 +199,10 @@ export default function OrdersScreen() {
             />
 
         </DataTable>
+        )}
+
+        
             
-        // </View>
+        </View>
     );
 }
