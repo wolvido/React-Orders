@@ -11,7 +11,6 @@ registerTranslation('en', enGB)
     
 export default function RootLayout() {
 
-
     //dummy inventory database
     const item1 = {id: 1, name: 'Heinz Ketchup', description: "ketchup tomato", price: 10}
     const item2 = {id: 2, name: 'Parsely Dried', description: "spices something something", price: 5}

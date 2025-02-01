@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 import { DatePickerInput } from 'react-native-paper-dates';
-
 import { dummyCustomers } from '@/dummy-data/dummy-customers';
 import CustomersSelection from './costumers-selection';
-
 import { Customer } from '@/entities/customers';
-
 import { order } from '@/entities/order';
-
 import PaymentMethod from '@/entities/payment-method';
 
 // Define props interface
@@ -68,6 +64,12 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
     const handleCustomerSelect = (customer: Customer) => {
       setSelectedCustomer(customer);
   };
+
+  useEffect(() => {
+    console.time('render');
+    return () => console.timeEnd('render');
+  }, [formData]); // Monitor re-renders caused by formData changes
+  
 
   return (
     <View style={{ gap: 10, padding: 16 }}>
