@@ -1,6 +1,6 @@
 import { View, ScrollView, StyleSheet } from "react-native";
 import { Button, Card, TextInput, Text, List, HelperText } from "react-native-paper";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
@@ -47,25 +47,21 @@ export function CartComponent({
         }));
     };
 
-    const handleQuantityFocus = (productKey: number) => {
-        setQuantities(prev => ({ 
-            ...prev, 
-            [productKey]: '' 
-        }));
-        // Clear error on focus
-        setErrors(prev => ({
-            ...prev,
-            [productKey]: ''
-        }));
-    };
-
-    const handleQuantityBlur = (productKey: number) => {
+    const handleQuantityFocus = useCallback((productKey: number) => {
+        // Combine both state updates into one
+        requestAnimationFrame(() => {
+            setQuantities(prev => ({ ...prev, [productKey]: '' }));
+            setErrors(prev => ({ ...prev, [productKey]: '' }));
+        });
+    }, []);
+    
+    const handleQuantityBlur = useCallback((productKey: number) => {
         setQuantities(prev => ({ 
             ...prev, 
             [productKey]: prev[productKey] || '1'
         }));
-    };
-
+    }, []);
+    
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.key === productId);
         if (!product || !quantities[productId]) return;
@@ -116,18 +112,30 @@ export function CartComponent({
                 {products.map(product => (
                     <Card key={product.key} style={styles.productCard}>
                         <Card.Content>
-                            <Text variant="titleMedium">{product.name}</Text>
-                            <Text variant="bodyMedium">Price: ₱{product.sellingPrice}</Text>
-                            <Text variant="bodyMedium">Stock: {product.stocks}</Text>
-                            <View style={styles.addItemContainer}>
-                                <View style={styles.quantityContainer}>
+                            <View style={styles.cardLayout}>
+                                {/* Left side - Product info */}
+                                <View style={styles.productInfo}>
+                                    <Text variant="titleMedium">{product.name}</Text>
+                                    <View style={styles.detailsRow}>
+                                        <Text variant="bodyMedium">₱{product.sellingPrice}</Text>
+                                    </View>
+                                    <View style={styles.detailsRow}>
+                                        <View style={styles.pill}>
+                                            <Text variant="bodySmall">Stocks: {product.stocks}</Text>
+                                        </View>
+                                        <View style={styles.pill}>
+                                            <Text variant="bodySmall">Unit: {product.units}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+
+                                {/* Right side - Quantity and Add button */}
+                                <View style={styles.actionSection}>
                                     <TextInput
                                         mode="outlined"
-                                        label="Quantity"
+                                        label="Qty"
                                         value={quantities[product.key] || ''}
-                                        onChangeText={(text) => 
-                                            handleQuantityChange(text, product.key)
-                                        }
+                                        onChangeText={(text) => handleQuantityChange(text, product.key)}
                                         onFocus={() => handleQuantityFocus(product.key)}
                                         onBlur={() => handleQuantityBlur(product.key)}
                                         keyboardType="numeric"
@@ -135,21 +143,19 @@ export function CartComponent({
                                         maxLength={5}
                                         error={!!errors[product.key]}
                                     />
-                                    
-                                    {errors[product.key] ? (
-                                        <HelperText type="error" visible={true}>
-                                            {errors[product.key]}
-                                        </HelperText>
-                                    ) : null}
-
+                                    <Button 
+                                        mode="contained" 
+                                        onPress={() => handleAddItem(product.key)}
+                                    >
+                                        Add
+                                    </Button>
                                 </View>
-                                <Button 
-                                    mode="contained" 
-                                    onPress={() => handleAddItem(product.key)}
-                                >
-                                    Add
-                                </Button>
                             </View>
+                            {errors[product.key] ? (
+                                <HelperText type="error" visible={true}>
+                                    {errors[product.key]}
+                                </HelperText>
+                            ) : null}
                         </Card.Content>
                     </Card>
                 ))}
@@ -177,18 +183,34 @@ export function CartComponent({
                         />
                     ))}
                 </ScrollView>
-                <Text variant="titleLarge" style={styles.total}>
-                    Total: ₱{cart.total}
-                </Text>
-                <Button mode="contained" onPress={onProceed}>
-                    Proceed to Finalize
-                </Button>
+                <View style={styles.summaryContainer}>
+                    <Text variant="titleLarge" style={styles.total}>
+                        Total: ₱{cart.total}
+                    </Text>
+                    <Button mode="contained" onPress={onProceed}>
+                        Proceed to Finalize
+                    </Button>
+                </View>
+
+
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    detailsRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 4,
+    },
+    pill: {
+        backgroundColor: 'white',
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        borderRadius: 12,
+    },
     content: {
         flex: 1,
         flexDirection: 'row',
@@ -203,9 +225,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
-    productCard: {
-        marginBottom: 10,
-    },
     addItemContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -215,17 +234,53 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
     },
-    quantityInput: {
-        flex: 1,
-        marginRight: 10,
-    },
     total: {
         marginVertical: 20,
         textAlign: 'right',
+        fontSize: 27,
     },
     errorText: {
         color: '#B00020', 
         fontSize: 12,
         marginTop: 4,
     },
+    productCard: {
+        marginBottom: 8,
+    },
+    cardLayout: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    productInfo: {
+        flex: 1,
+        marginRight: 16,
+    },
+    actionSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    quantityInput: {
+        width: 80, // Fixed width for quantity
+    },
+    summaryContainer: {
+        backgroundColor: 'white',
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        gap: 12,
+        // Optional: Add shadow
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 3,
+    },
+    proceedButton: {
+        paddingVertical: 6,
+    }
 });

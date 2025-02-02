@@ -17,7 +17,7 @@ export default function AddItemsScreen() {
     return (
         <View style={styles.container}>
 
-            <StepIndicator currentStep={2} />
+            <StepIndicator currentStep={2} backPath="./add-order" />
 
             <CartComponent
                 products={products}

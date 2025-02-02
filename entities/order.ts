@@ -3,7 +3,7 @@ import { Customer } from "./customers";
 import PaymentMethod from "./payment-method";
 import PaymentStatus from "@/enums/payment-status";
 
-export interface order{
+export interface Order{
     id: number;
     orderType: PaymentMethod;
     customer: Customer;
@@ -11,4 +11,6 @@ export interface order{
     total: number;
     orderStatus: Status;
     fulfillmentStatus: PaymentStatus;
+    remarks: string;
+    deliveryAddress: string; //can be 'pickup'
 }

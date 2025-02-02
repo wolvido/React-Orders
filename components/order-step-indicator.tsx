@@ -1,18 +1,30 @@
+import { RelativePathString, useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native-paper';
 
-const StepIndicator = ({ currentStep }: { currentStep: number }) => {
+//this component is simply visual progression with back functionality
+//It is not a parent for any component
+
+interface StepIndicatorProps {
+  currentStep: number;
+  backPath: RelativePathString;  // Using the RelativePathString type
+}
+
+const StepIndicator = ({ currentStep, backPath }: StepIndicatorProps) => {
+  const router = useRouter();
+  
   const steps = [
-    { number: 1, label: 'Order Details' },
-    { number: 2, label: 'Add Items' },
-    { number: 3, label: 'Finalize' }
+      { number: 1, label: 'Order Details' },
+      { number: 2, label: 'Add Items' },
+      { number: 3, label: 'Delivery Details' }
   ];
 
   const handleBack = () => {
     if (currentStep > 1) {
-      window.history.back();
+        router.push(backPath);
     }
-  };
+  }
 
   return (
     <View style={styles.outerContainer}>
@@ -39,7 +51,7 @@ const StepIndicator = ({ currentStep }: { currentStep: number }) => {
               >
                 <Text style={styles.stepText}>{step.number}</Text>
               </View>
-              <Text style={styles.stepLabel}>{step.label}</Text>
+              <Text style={styles.stepLabel} >{step.label}</Text>
             </View>
             {index < steps.length - 1 && (
               <View
@@ -62,6 +74,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginVertical: 20,
+    height: 'auto',
+    marginBottom: 30,
   },
   stepsContainer: {
     flex: 1,
@@ -69,22 +83,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 20,
+    paddingRight: 95,
   },
   backButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 33,
+    height: 33,
+    borderRadius: 20,
     backgroundColor: '#4CAF50',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 15,
+    marginRight: 20,
   },
   backButtonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 23,
     fontWeight: 'bold',
     lineHeight: 20,  // This helps center it vertically
-    paddingBottom: 2, // Fine-tune the position
+    paddingBottom: 4, // Fine-tune the position
   },
   stepContainer: {
     flexDirection: 'row',
@@ -92,6 +107,7 @@ const styles = StyleSheet.create({
   },
   stepWrapper: {
     alignItems: 'center',
+    paddingTop: 10,
   },
   stepCircle: {
     width: 30,
@@ -109,10 +125,11 @@ const styles = StyleSheet.create({
   stepText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 16,
   },
   stepLabel: {
-    fontSize: 12,
-    color: '#666'
+    fontSize: 18,
+    color: '#666',
   },
   line: {
     width: 150,

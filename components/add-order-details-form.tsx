@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
@@ -9,8 +9,9 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { dummyCustomers } from '@/dummy-data/dummy-customers';
 import CustomersSelection from './costumers-selection';
 import { Customer } from '@/entities/customers';
-import { order } from '@/entities/order';
+import { Order } from '@/entities/order';
 import PaymentMethod from '@/entities/payment-method';
+import theme from '@/style/theme';
 
 // Define props interface
 interface OrderDetailsFormProps {
@@ -21,7 +22,7 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
     const router = useRouter();
 
     //form Handling logic
-    const [formData, setFormData] = useState<order>({
+    const [formData, setFormData] = useState<Order>({
         id: Math.floor(1000000 + Math.random() * 9000000),
         orderType: {
           type: "Cash",
@@ -37,24 +38,25 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         transactionDate: new Date(),
         total: 0,
         orderStatus: Status.Pending,
-        fulfillmentStatus: PaymentStatus.unPaid
+        fulfillmentStatus: PaymentStatus.unPaid,
+        remarks: '',
+        deliveryAddress: ''
     });
 
-    const handleInputChange = (field: keyof order, value: string | Date) => {
+    const handleInputChange = useCallback((field: keyof Order, value: string | Date) => {
         setFormData(prevData => ({
-          ...prevData,
-          [field]: value
+            ...prevData,
+            [field]: value
         }));
-      };
-
-    const handleSubmit = () => {
-        console.log('Form Data:', formData);
-        console.log('Router object:', router);
-        if (redirectTo){
+    }, []);
+  
+    const handleSubmit = useCallback(async () => {
+      await Promise.resolve();
+      if (redirectTo) {
           router.push(redirectTo);
-        }
-    };
-
+      }
+  }, [redirectTo, router]);
+    
     //customers modal controller
     const [visibleCustomers, setVisibleCustomers] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -65,20 +67,8 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
       setSelectedCustomer(customer);
   };
 
-  useEffect(() => {
-    console.time('render');
-    return () => console.timeEnd('render');
-  }, [formData]); // Monitor re-renders caused by formData changes
-  
-
   return (
     <View style={{ gap: 10, padding: 16 }}>
-      {/* <TextInput
-        label="Order Type"
-        value={formData.orderType}
-        onChangeText={(value) => handleInputChange('orderType', value)}
-        mode="outlined"
-      /> */}
 
       <DatePickerInput
         locale="en"
@@ -88,15 +78,6 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         mode="outlined"
         inputMode="start"
       />
-
-      {/* <TextInput
-        label="Total"
-        value={formData.total.toString()}
-        onChangeText={(value) => handleInputChange('total', value)}
-        keyboardType="numeric"
-        mode="outlined"
-      /> */}
-
 
       <View style={{ 
         flexDirection: 'row', 
@@ -125,14 +106,37 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         onSelectCustomer={handleCustomerSelect}
       />
 
-      <Button 
-        mode="contained" 
-        onPress={handleSubmit}
+      <Pressable 
+          onPress={handleSubmit}
+          style={({ pressed }) => [
+              styles.button,
+              { opacity: pressed ? 0.8 : 1 }
+          ]}
       >
-        Submit
-      </Button>
+          <Text style={styles.buttonText}>
+              Submit
+          </Text>
+      </Pressable>
+
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+      backgroundColor: theme.colors.primary,
+      height: 40,
+      paddingHorizontal: 16,
+      borderRadius: 4,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  buttonText: {
+      color: 'white',
+      fontSize: 14,
+      fontWeight: '500',
+      textTransform: 'uppercase'
+  }
+});
 
 export default OrderDetailsForm;

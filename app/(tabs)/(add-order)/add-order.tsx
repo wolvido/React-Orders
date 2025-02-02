@@ -8,7 +8,7 @@ import { View } from 'react-native';
 export default function AddOrderScreen() {
     return (
         <View>
-            <StepIndicator currentStep={1} />
+            <StepIndicator currentStep={1} backPath='../' />
             <OrderDetailsForm redirectTo="../add-items" />
         </View>
 

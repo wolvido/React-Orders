@@ -4,6 +4,7 @@ interface PaymentMethodBase {
 
 interface CashPayment extends PaymentMethodBase {
     type: "Cash";
+    id: number;
     amountDue: number; // Total amount to be paid
     cashTendered: number; // Cash given by the customer
     changeDue: number; // Calculated change
