@@ -1,8 +1,8 @@
 // CustomersSelection.tsx
 import { dummyCustomers } from "@/dummy-data/dummy-customers";
 import { Customer } from "@/entities/customers";
-import { Modal, Portal, List } from 'react-native-paper';
-import { View, ScrollView } from 'react-native';
+import { Portal, List, Button, Text} from 'react-native-paper';
+import { Modal, ScrollView, StyleSheet } from 'react-native';
 
 interface CustomersSelectionProps {
     customers: Customer[];
@@ -22,13 +22,12 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
             <Modal
                 visible={visible}
                 onDismiss={hideModal}
-                contentContainerStyle={{
-                    backgroundColor: 'white',
-                    padding: 20,
-                    margin: 20,
-                    borderRadius: 8,
-                }}
+                animationType="slide"
+
             >
+                <Text variant="headlineMedium" style={styles.modalTitle}>
+                    Select Customer
+                </Text>
                 <ScrollView>
                     <List.Section>
                         {customers.map((customer) => (
@@ -38,13 +37,37 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
                                 description={customer.email}
                                 onPress={() => handleCustomerSelect(customer)}
                                 left={props => <List.Icon {...props} icon="account" />}
+                                right={props => <List.Icon {...props} icon="chevron-right" />}
                             />
                         ))}
                     </List.Section>
                 </ScrollView>
+                <Button
+                        mode="contained"
+                        onPress={hideModal}
+                        style={styles.closeButton}
+                    >
+                        Close
+                </Button>
             </Modal>
         </Portal>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollView: {
+        flex: 1,
+    },
+    closeButton: {
+        margin: 16,
+    },
+    modalTitle: {
+        marginBottom: 16,
+        textAlign: 'center',
+    },
+});
 
 export default CustomersSelection;

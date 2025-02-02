@@ -79,25 +79,20 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         inputMode="start"
       />
 
-      <View style={{ 
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        gap: 8 
-        }}>
-        <TextInput
-            mode="outlined"
-            label="Customer"
-            value={selectedCustomer ? selectedCustomer.name : ''}
-            editable={false}
-            style={{ flex: 1 }}
-        />
-        <Button 
-            mode="contained" 
-            onPress={showCustomersModal}
-        >
-            Select Customer
-        </Button>
-      </View>
+      <Button
+          mode="outlined"
+          onPress={showCustomersModal}
+          style={[styles.input, styles.customerButton]}
+          contentStyle={styles.customerButtonContent}
+          icon="menu-down"
+      >
+          <Text style={[
+              styles.customerButtonText,
+              !selectedCustomer && styles.customerButtonPlaceholder
+          ]}>
+              {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
+          </Text>
+      </Button>
 
       <CustomersSelection 
         visible={visibleCustomers}
@@ -136,7 +131,28 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontWeight: '500',
       textTransform: 'uppercase'
-  }
+  },    
+  input: {
+    marginBottom: 16,
+  },
+  customerButton: {
+    height: 56,
+    borderRadius: 4,
+    justifyContent: 'center',
+  },
+  customerButtonContent: {
+      flexDirection: 'row-reverse', // Puts icon on right side
+      justifyContent: 'space-between',
+      height: '100%',
+  },
+  customerButtonText: {
+      textAlign: 'left',
+      flex: 1,
+      color: '#000000',
+  },
+  customerButtonPlaceholder: {
+      color: '#666666',
+  },
 });
 
 export default OrderDetailsForm;

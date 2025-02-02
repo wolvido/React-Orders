@@ -6,9 +6,6 @@ import theme from '@/style/theme';
 import {enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/context/cart-context';
 
-
-import { View, Text } from 'react-native';
-
 registerTranslation('en', enGB)
 export default function RootLayout() {
 
