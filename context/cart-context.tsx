@@ -1,11 +1,11 @@
-import { Cart } from "@/entities/cart"; 
+import { Cart } from "@/entities/cart";
 import { CartItem } from "@/entities/cart-item";
 import { Product } from "@/entities/product";
 import { createContext, useContext, ReactNode, useState } from 'react';
 
 interface CartContextType {
     cart: Cart;
-    addToCart: (cartItem: CartItem) => void;
+    addToCart: (item: CartItem) => void;
     removeFromCart: (product: Product) => void;
     getCart: () => Cart;
 }
@@ -14,7 +14,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<Cart>({
-        cartItems: [],
+        items: [],
         total: 0
     });
 
@@ -25,7 +25,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const addToCart = (cartItem: CartItem) => {
         setCart(prevCart => {
             // Check if product already exists in cart
-            const existingItemIndex = prevCart.cartItems.findIndex(
+            const existingItemIndex = prevCart.items.findIndex(
                 item => item.product.key === cartItem.product.key
             );
 
@@ -33,7 +33,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
             if (existingItemIndex >= 0) {
                 // Update existing item
-                updatedItems = prevCart.cartItems.map((item, index) => {
+                updatedItems = prevCart.items.map((item, index) => {
                     if (index === existingItemIndex) {
                         return {
                             ...item,
@@ -45,11 +45,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 });
             } else {
                 // Add new item
-                updatedItems = [...prevCart.cartItems, cartItem];
+                updatedItems = [...prevCart.items, cartItem];
             }
 
             return {
-                cartItems: updatedItems,
+                items: updatedItems,
                 total: calculateTotal(updatedItems)
             };
         });
@@ -57,12 +57,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const removeFromCart = (product: Product) => {
         setCart(prevCart => {
-            const updatedItems = prevCart.cartItems.filter(
+            const updatedItems = prevCart.items.filter(
                 item => item.product.key !== product.key
             );
 
             return {
-                cartItems: updatedItems,
+                items: updatedItems,
                 total: calculateTotal(updatedItems)
             };
         });
@@ -83,7 +83,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         </CartContext.Provider>
     );
 }
-
 
 export function useCart() {
     const context = useContext(CartContext);

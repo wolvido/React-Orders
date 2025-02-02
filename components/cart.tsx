@@ -14,7 +14,7 @@ interface CartComponentProps {
     onError?: (message: string) => void;
 }
 
-export function CartComponent({ 
+export function CartComponent({
     products, 
     cart, 
     onAddToCart, 
@@ -165,7 +165,7 @@ export function CartComponent({
             <View style={styles.rightPanel}>
             <Text variant="headlineMedium">Cart</Text>
                 <ScrollView>
-                    {cart.cartItems.map(item => (
+                    {cart.items.map(item => (
                         <List.Item
                             key={item.product.key}
                             title={item.product.name}
