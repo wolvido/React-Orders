@@ -3,23 +3,23 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 
-//this component is simply visual progression with back functionality
-//It is not a parent for any component
+//this component is not recommended to be used directly
+//but rather to be used by a context
+
+interface Step {
+  step: number;
+  label: string;
+}
 
 interface StepIndicatorProps {
   currentStep: number;
-  backPath: RelativePathString;  // Using the RelativePathString type
+  backPath: RelativePathString;
+  steps: Step[];  // New prop for steps
 }
 
-const StepIndicator = ({ currentStep, backPath }: StepIndicatorProps) => {
+const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => {
   const router = useRouter();
   
-  const steps = [
-      { number: 1, label: 'Order Details' },
-      { number: 2, label: 'Add Items' },
-      { number: 3, label: 'Delivery Details' }
-  ];
-
   const handleBack = () => {
     if (currentStep > 1) {
         router.push(backPath);
@@ -46,10 +46,10 @@ const StepIndicator = ({ currentStep, backPath }: StepIndicatorProps) => {
               <View
                 style={[
                   styles.stepCircle,
-                  currentStep >= step.number ? styles.activeStep : styles.inactiveStep,
+                  currentStep >= step.step ? styles.activeStep : styles.inactiveStep,
                 ]}
               >
-                <Text style={styles.stepText}>{step.number}</Text>
+                <Text style={styles.stepText}>{step.step}</Text>
               </View>
               <Text style={styles.stepLabel} >{step.label}</Text>
             </View>
@@ -57,7 +57,7 @@ const StepIndicator = ({ currentStep, backPath }: StepIndicatorProps) => {
               <View
                 style={[
                   styles.line,
-                  currentStep > step.number ? styles.activeLine : styles.inactiveLine,
+                  currentStep > step.step ? styles.activeLine : styles.inactiveLine,
                 ]}
               />
             )}
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 20,
-    paddingRight: 95,
+    paddingRight: 50,
   },
   backButton: {
     width: 33,

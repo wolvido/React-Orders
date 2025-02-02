@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import OrderForm from '@/components/finalize-order-form';
 import StepIndicator from '@/components/order-step-indicator';
+import orderSteps from './order-steps-label';
 
 export default function FinalizeOrder() {
 
@@ -16,7 +17,7 @@ export default function FinalizeOrder() {
 
     return (
         <View style={styles.container}>
-            <StepIndicator currentStep={3} backPath='./add-items'/>
+            <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
 
             <View style={styles.content}>
                 
