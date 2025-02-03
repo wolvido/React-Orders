@@ -11,21 +11,15 @@ import { Delivery } from "@/entities/delivery";
 import { router } from "expo-router";
 
 export default function ReceiveOrderScreen() {
-    const handleSubmitPO = (PurchaseOrder: Partial<PurchaseOrder>) => {
+    const handleSubmitPO = (purchaseOrder: PurchaseOrder) => {
         // Handle the form submission here
-        console.log(PurchaseOrder);
-    };
-
-    const handleSubmitDelivery = (delivery: Delivery) => {
-        console.log(delivery);
-        router.push('./purchase-order-items');
+        console.log(purchaseOrder);
     };
 
     return (
         <View>
             <StepIndicator currentStep={1} backPath="./purchase-orders" steps={receivePOSteps}/>
-            <PurchaseOrderForm initialData={purchaseOrders[0]} onSubmit={handleSubmitPO}/>
-            <AddDeliveryForm suppliers={dummySuppliers} existingDelivery={purchaseOrders[0].delivery} onSubmit={handleSubmitDelivery}/>
+            <PurchaseOrderForm purchaseOrder={purchaseOrders[1]} onSubmit={handleSubmitPO}/>
         </View>
     );
 

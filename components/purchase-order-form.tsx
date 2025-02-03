@@ -1,178 +1,94 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TextInput, HelperText, Text, SegmentedButtons } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
-import Status from '@/enums/status';
-import PaymentStatus from '@/enums/payment-status';
 import { PurchaseOrder } from '@/entities/purchase-order';
+import { Delivery } from '@/entities/delivery';
+import AddDeliveryForm from './add-delivery-form';
 
 interface PurchaseOrderFormProps {
-    onSubmit: (data: Partial<PurchaseOrder>) => void;
-    initialData?: PurchaseOrder;
+    purchaseOrder: PurchaseOrder;
+    onSubmit: (data: PurchaseOrder) => void;
 }
 
-export const PurchaseOrderForm = ({ onSubmit, initialData }: PurchaseOrderFormProps) => {
-    const [formData, setFormData] = useState({
-        remarks: '',
-        transactionDate: new Date(),
-        preparedBy: '',
-        status: Status.Pending,
-        paymentStatus: PaymentStatus.unPaid
-    });
-
-    const [errors, setErrors] = useState({
-        remarks: '',
-        preparedBy: ''
-    });
-
-    // Populate form when initialData is provided
-    useEffect(() => {
-        if (initialData) {
-            setFormData({
-                remarks: initialData.remarks,
-                transactionDate: initialData.transactionDate,
-                preparedBy: initialData.preparedBy,
-                status: initialData.status,
-                paymentStatus: initialData.paymentStatus
-            });
-        }
-    }, [initialData]);
-
-    // Validate and update form data
-    const handleChange = (field: keyof typeof formData, value: any) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
-
-        // Clear error when user types
-        if (errors[field as keyof typeof errors]) {
-            setErrors(prev => ({
-                ...prev,
-                [field]: ''
-            }));
-        }
-
-        // Validate and submit on every change
-        validateAndSubmit({
-            ...formData,
-            [field]: value
-        });
-    };
-
-    const validateAndSubmit = (data: typeof formData) => {
-        let isValid = true;
-        const newErrors = {
-            remarks: '',
-            preparedBy: ''
+export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderFormProps) => {
+    const handleDeliverySubmit = (deliveryData: Delivery) => {
+        // Combine PO data with new delivery data
+        const updatedPurchaseOrder: PurchaseOrder = {
+            ...purchaseOrder,
+            delivery: deliveryData
         };
-
-        // Validate remarks
-        if (!data.remarks.trim()) {
-            newErrors.remarks = 'Remarks is required';
-            isValid = false;
-        }
-
-        // Validate preparedBy
-        if (!data.preparedBy.trim()) {
-            newErrors.preparedBy = 'Prepared By is required';
-            isValid = false;
-        }
-
-        setErrors(newErrors);
-
-        if (isValid) {
-            const submitData: Partial<PurchaseOrder> = {
-                ...data,
-                id: initialData?.id // Include ID if editing existing order
-            };
-            onSubmit(submitData);
-        }
+        onSubmit(updatedPurchaseOrder);
     };
 
     return (
         <View style={styles.container}>
+            {/* Read-only Purchase Order Details */}
+            <View style={styles.poDetailsSection}>
+                <TextInput
+                    label="PO #"
+                    value={purchaseOrder.id.toString()}
+                    mode="outlined"
+                    editable={false}
+                    style={styles.input}
+                />
 
-            {errors.remarks && (
-                <HelperText type="error" visible={!!errors.remarks}>
-                    {errors.remarks}
-                </HelperText>
-            )}
+                <DatePickerInput
+                    locale="en"
+                    label="PO Date"
+                    value={purchaseOrder.transactionDate}
+                    onChange={() => {}}
+                    mode="outlined"
+                    style={[styles.input, styles.dateInput]}
+                    inputMode="start"
+                    editable={false}
+                    // removed disabled prop
+                />
 
-            <DatePickerInput
-                locale="en"
-                label="Transaction Date"
-                value={formData.transactionDate}
-                onChange={(date) => date && handleChange('transactionDate', date)}
-                mode="outlined"
-                style={styles.input}
-                inputMode="start"
-            />
+                <TextInput
+                    label="Remarks"
+                    value={purchaseOrder.remarks}
+                    mode="outlined"
+                    editable={false}
+                    style={styles.input}
+                    multiline
+                />
+            </View>
 
-            <TextInput
-                label="Prepared By"
-                value={formData.preparedBy}
-                onChangeText={(value) => handleChange('preparedBy', value)}
-                mode="outlined"
-                style={styles.input}
-                error={!!errors.preparedBy}
-            />
-
-            <TextInput
-                label="Remarks"
-                value={formData.remarks}
-                onChangeText={(value) => handleChange('remarks', value)}
-                mode="outlined"
-                style={styles.input}
-                error={!!errors.remarks}
-            />
-            {errors.preparedBy && (
-                <HelperText type="error" visible={!!errors.preparedBy}>
-                    {errors.preparedBy}
-                </HelperText>
-            )}
-
-            {/* <Text variant="bodyLarge" style={styles.label}>Status</Text>
-            <SegmentedButtons
-                value={formData.status}
-                onValueChange={(value) => handleChange('status', value)}
-                buttons={[
-                    { value: Status.Pending, label: 'Pending' },
-                    { value: Status.Delivered, label: 'Fulfilled' },
-                    { value: Status.Cancelled, label: 'Cancelled' },
-                ]}
-                style={styles.segmentedButton}
-            /> */}
-
-            {/* <Text variant="bodyLarge" style={styles.label}>Payment Status</Text>
-            <SegmentedButtons
-                value={formData.paymentStatus}
-                onValueChange={(value) => handleChange('paymentStatus', value)}
-                buttons={[
-                    { value: PaymentStatus.unPaid, label: 'Unpaid' },
-                    { value: PaymentStatus.partialPaid, label: 'Partial' },
-                    { value: PaymentStatus.paid, label: 'Paid' },
-                ]}
-                style={styles.segmentedButton}
-            /> */}
+            {/* Delivery Form Section */}
+            <View style={styles.deliverySection}>
+                <AddDeliveryForm 
+                    onSubmit={handleDeliverySubmit}
+                    suppliers={[purchaseOrder.delivery?.supplier]}
+                    existingDelivery={purchaseOrder.delivery}
+                />
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 16,
-        gap: 8
+    },
+    poDetailsSection: {
+        backgroundColor: '#f5f5f5',
+        paddingTop: 16,
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderRadius: 8,
+    },
+    deliverySection: {
+        flex: 1,
     },
     input: {
-        marginBottom: 8,
+        marginBottom: 12,
+        backgroundColor: '#fff',
     },
-    label: {
-        marginTop: 8,
-        marginBottom: 4,
-    },
-    segmentedButton: {
-        marginBottom: 16,
+    dateInput: {
+        backgroundColor: '#fff',
+        opacity: 1, // Ensures the text is fully visible
     }
 });
 
