@@ -3,9 +3,6 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
 
-//this component is not recommended to be used directly
-//but rather to be used by a context
-
 interface Step {
   step: number;
   label: string;
@@ -13,33 +10,35 @@ interface Step {
 
 interface StepIndicatorProps {
   currentStep: number;
-  backPath: RelativePathString;
-  steps: Step[];  // New prop for steps
+  backPath?: RelativePathString;
+  steps: Step[];
 }
 
 const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => {
   const router = useRouter();
   
   const handleBack = () => {
-    if (currentStep > 1) {
+    if (backPath) {
         router.push(backPath);
     }
   }
 
   return (
     <View style={styles.outerContainer}>
-      <TouchableOpacity 
-        onPress={handleBack} 
-        style={[
-          styles.backButton,
-          { opacity: currentStep > 1 ? 1 : 0.5 }
-        ]}
-        disabled={currentStep <= 1}
-      >
-        <Text style={styles.backButtonText}>←</Text>
-      </TouchableOpacity>
+      {backPath && (
+        <TouchableOpacity 
+          onPress={handleBack} 
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>←</Text>
+        </TouchableOpacity>
+      )}
 
-      <View style={styles.stepsContainer}>
+      <View style={[
+        styles.stepsContainer,
+        // Adjust padding when there's no back button
+        !backPath && { paddingLeft: 50 }
+      ]}>
         {steps.map((step, index) => (
           <View key={index} style={styles.stepContainer}>
             <View style={styles.stepWrapper}>
@@ -51,7 +50,7 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
               >
                 <Text style={styles.stepText}>{step.step}</Text>
               </View>
-              <Text style={styles.stepLabel} >{step.label}</Text>
+              <Text style={styles.stepLabel}>{step.label}</Text>
             </View>
             {index < steps.length - 1 && (
               <View
@@ -98,8 +97,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 23,
     fontWeight: 'bold',
-    lineHeight: 20,  // This helps center it vertically
-    paddingBottom: 4, // Fine-tune the position
+    lineHeight: 20,
+    paddingBottom: 4,
   },
   stepContainer: {
     flexDirection: 'row',

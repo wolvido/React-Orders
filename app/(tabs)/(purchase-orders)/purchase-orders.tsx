@@ -89,7 +89,7 @@ export default function PurchaseOrdersScreen() {
                                 styles.receiveButton,
                                 item.status.toLowerCase() === 'cancelled' && styles.cancelledButton
                             ]}
-                            disabled={item.status.toLowerCase() === 'cancelled'}
+                            disabled={item.status.toLowerCase() === 'cancelled'  || item.status.toLowerCase() === 'fulfilled'}
                         >
                             Receive
                         </Button>

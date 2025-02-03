@@ -23,7 +23,7 @@ export default function ReceiveOrderScreen() {
 
     return (
         <View>
-            <StepIndicator currentStep={1} backPath='../' steps={receivePOSteps}/>
+            <StepIndicator currentStep={1} backPath="./purchase-orders" steps={receivePOSteps}/>
             <PurchaseOrderForm initialData={purchaseOrders[0]} onSubmit={handleSubmitPO}/>
             <AddDeliveryForm suppliers={dummySuppliers} existingDelivery={purchaseOrders[0].delivery} onSubmit={handleSubmitDelivery}/>
         </View>

@@ -19,7 +19,7 @@ export default function AddDeliveryScreen() {
     
     return (
         <View>            
-            <StepIndicator currentStep={1} backPath='../' steps={deliverySteps}/>
+            <StepIndicator currentStep={1} steps={deliverySteps}/>
             
             <AddDeliveryForm suppliers={dummySuppliers} onSubmit={onSubmit}/>
         </View>
