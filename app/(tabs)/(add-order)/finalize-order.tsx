@@ -9,8 +9,6 @@ import { Button } from 'react-native-paper';
 export default function FinalizeOrder() {
     const { getCurrentOrder, updateDeliveryAddress, updateRemarks} = useOrder();
 
-    console.log(getCurrentOrder()); //delete later
-
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
         updateDeliveryAddress(formData.deliveryAddress);
@@ -24,7 +22,6 @@ export default function FinalizeOrder() {
             <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
 
             <View style={styles.content}>
-                
                 <OrderFormFinal onFormChange={handleFormChange} />
             </View>
 

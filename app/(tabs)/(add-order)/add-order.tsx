@@ -23,7 +23,6 @@ export default function AddOrderScreen() {
             <StepIndicator currentStep={1} backPath='../' steps={orderSteps} />
             <OrderDetailsForm onSubmit={handleOrderSubmit} />
         </View>
-
     );
 }
 

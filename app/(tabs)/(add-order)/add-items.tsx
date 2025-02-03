@@ -12,8 +12,6 @@ export default function AddItemsScreen() {
     const { cart, addToCart, removeFromCart } = useCart();
     const { getCurrentOrder, updateCart } = useOrder();
 
-    console.log(getCurrentOrder()); //delete later
-
     const handleProceed = () => {
         updateCart(cart);
         router.push('/finalize-order');
