@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Modal } from 'react-native';
 import { Button, TextInput, Text, List } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -8,9 +8,10 @@ import { Delivery } from '@/entities/delivery';
 interface AddDeliveryFormProps {
     suppliers: Supplier[];
     onSubmit: (delivery: Delivery) => void;
+    existingDelivery?: Delivery; // Optional delivery to edit
 }
 
-export const AddDeliveryForm = ({ suppliers, onSubmit }: AddDeliveryFormProps) => {
+export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDeliveryFormProps) => {
     const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
     const [dueDate, setDueDate] = useState<Date>(new Date());
     const [deliveredBy, setDeliveredBy] = useState('');
@@ -19,18 +20,30 @@ export const AddDeliveryForm = ({ suppliers, onSubmit }: AddDeliveryFormProps) =
     const [supplier, setSupplier] = useState<Supplier | null>(null);
     const [showSupplierModal, setShowSupplierModal] = useState(false);
 
+    // Populate form when existingDelivery is provided
+    useEffect(() => {
+        if (existingDelivery) {
+            setDeliveryDate(existingDelivery.deliveryDate);
+            setDueDate(existingDelivery.dueDate);
+            setDeliveredBy(existingDelivery.deliveredBy);
+            setCost(existingDelivery.total.toString());
+            setReceiptNumber(existingDelivery.receiptNumber);
+            setSupplier(existingDelivery.supplier);
+        }
+    }, [existingDelivery]);
+
     const handleSubmit = () => {
         if (!supplier) return;
 
         const newDelivery: Delivery = {
-            id: Date.now() + Math.floor(100000 + Math.random() * 900000),
+            id: existingDelivery?.id || Date.now() + Math.floor(100000 + Math.random() * 900000),
             supplier: supplier,
             deliveryDate: deliveryDate,
             deliveredBy: deliveredBy,
             total: parseFloat(cost) || 0,
             receiptNumber: receiptNumber,
             dueDate: dueDate,
-            receivedItems: { total: 0, items: [] },
+            receivedItems: existingDelivery?.receivedItems || { total: 0, items: [] },
         };
 
         onSubmit(newDelivery);

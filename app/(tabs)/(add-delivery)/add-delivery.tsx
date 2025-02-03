@@ -9,9 +9,10 @@ import { router } from "expo-router";
 export default function AddDeliveryScreen() {
 
     function onSubmit(delivery: any) {
+        console.log(delivery);
         router.push('./add-delivery-items');
     }
-
+    
     return (
         <View>            
             <StepIndicator currentStep={1} backPath='../' steps={deliverySteps}/>

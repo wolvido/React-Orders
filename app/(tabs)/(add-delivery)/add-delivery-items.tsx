@@ -5,7 +5,7 @@ import { products } from "@/dummy-data/dummy-products";
 import StepIndicator from "@/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
 
-export default function AddDeliveryItems() {
+export default function AddDeliveryItemsScreen() {
 
     const{ delivery, addToDelivery, removeFromDelivery} = useDelivery();
 
