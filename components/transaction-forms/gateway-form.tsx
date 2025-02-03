@@ -1,7 +1,7 @@
 import PaymentMethod from "@/entities/payment-method";
 import { useState } from "react";
 import { View } from "react-native";
-import { TextInput, Button, HelperText, SegmentedButtons } from 'react-native-paper';
+import { TextInput, Button, HelperText } from 'react-native-paper';
 
 type PaymentGateway = Extract<PaymentMethod, { type: "Payment gateway" }>;
 
@@ -16,13 +16,7 @@ function GatewayForm() {
     // Add input state to handle decimal input properly
     const [feeInput, setFeeInput] = useState('0');
     const [idInput, setIdInput] = useState('');
-
-    // Payment provider options
-    const providers = [
-        { value: 'gcash', label: 'GCash' },
-        { value: 'maya', label: 'Maya' },
-        { value: 'paypal', label: 'Paypal'}
-    ];
+    const [providerInput, setProviderInput] = useState('');
 
     const handleFeeChange = (value: string) => {
         // Allow empty string, numbers, and one decimal point
@@ -47,6 +41,7 @@ function GatewayForm() {
     };
 
     const handleProviderChange = (value: string) => {
+        setProviderInput(value);
         setFormData(prev => ({
             ...prev,
             paymentProvider: value
@@ -64,13 +59,14 @@ function GatewayForm() {
 
     return (
         <View style={{ gap: 10, padding: 16 }}>
-            <SegmentedButtons
-                value={formData.paymentProvider}
-                onValueChange={handleProviderChange}
-                buttons={providers}
+            <TextInput
+                mode="outlined"
+                label="Payment Provider"
+                value={providerInput}
+                onChangeText={handleProviderChange}
             />
             <HelperText type="error" visible={formData.paymentProvider === ''}>
-                Please select a payment provider
+                Please enter a payment provider
             </HelperText>
 
             <TextInput
