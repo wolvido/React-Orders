@@ -1,5 +1,5 @@
 import { View, ScrollView, StyleSheet } from "react-native";
-import { Button, Card, TextInput, Text, List, HelperText } from "react-native-paper";
+import { Button, Card, TextInput, Text, List, HelperText, Searchbar } from "react-native-paper";
 import { useState, useEffect, useCallback } from "react";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
@@ -24,6 +24,12 @@ export function CartComponent({
 }: CartComponentProps) {
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Add filtered products logic
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     useEffect(() => {
         const initialQuantities = products.reduce((acc, product) => ({
@@ -108,8 +114,15 @@ export function CartComponent({
     return (
         <View style={styles.content}>
             {/* Products List - Left Side */}
+
             <ScrollView style={styles.leftPanel}>
-                {products.map(product => (
+                <Searchbar
+                        placeholder="Search products"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        style={styles.searchBar}
+                    />
+                {filteredProducts.map(product => (
                     <Card key={product.key} style={styles.productCard}>
                         <Card.Content>
                             <View style={styles.cardLayout}>
@@ -282,5 +295,10 @@ const styles = StyleSheet.create({
     },
     proceedButton: {
         paddingVertical: 6,
+    },
+    searchBar: {
+        marginBottom: 10,
+        elevation: 0, // Removes shadow on Android
+        borderRadius: 8,
     }
 });
