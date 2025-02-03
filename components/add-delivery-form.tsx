@@ -57,6 +57,11 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
     return (
         <ScrollView style={styles.container}>
             <View style={styles.form}>
+            {supplier && (
+                    <Text style={styles.supplierLabel}>
+                        Supplier
+                    </Text>
+                )}
                 <Button
                     mode="outlined"
                     onPress={() => setShowSupplierModal(true)}
@@ -163,6 +168,50 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
 };
 
 const styles = StyleSheet.create({
+    supplierInputContainer: {
+        marginBottom: 16,
+        position: 'relative',
+        height: 56, // Match TextInput height
+    },
+    supplierLabel: {
+        position: 'absolute',
+        left: 16,
+        top: 16,
+        fontSize: 16,
+        color: '#666666',
+        backgroundColor: 'transparent',
+        zIndex: 1,
+        transform: [{translateY: 0}],
+    },
+    supplierLabelSelected: {
+        top: -8,
+        left: 12,
+        fontSize: 12,
+        color: '#000000',
+        backgroundColor: 'white',
+        paddingHorizontal: 4,
+    },
+    supplierButton: {
+        height: 56,
+        borderRadius: 4,
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#000000',
+    },
+    supplierButtonContent: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        height: '100%',
+    },
+    supplierButtonText: {
+        textAlign: 'left',
+        flex: 1,
+        color: '#000000',
+        fontSize: 16,
+    },
+    supplierButtonPlaceholder: {
+        color: '#666666',
+    },
     container: {
         flex: 1,
     },
@@ -186,25 +235,8 @@ const styles = StyleSheet.create({
     },
     modalCloseButton: {
         marginTop: 16,
-    },    
-    supplierButton: {
-        height: 56, // Match TextInput height
-        borderRadius: 4,
-        justifyContent: 'center',
-    },
-    supplierButtonContent: {
-        flexDirection: 'row-reverse', // Puts icon on right side
-        justifyContent: 'space-between',
-        height: '100%',
-    },
-    supplierButtonText: {
-        textAlign: 'left',
-        flex: 1,
-        color: '#000000',
-    },
-    supplierButtonPlaceholder: {
-        color: '#666666',
-    },
+    } 
+
 });
 
 export default AddDeliveryForm;
