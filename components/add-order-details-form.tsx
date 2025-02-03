@@ -40,7 +40,11 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         orderStatus: Status.Pending,
         fulfillmentStatus: PaymentStatus.unPaid,
         remarks: '',
-        deliveryAddress: ''
+        deliveryAddress: '',
+        cart: {
+          items: [],
+          total: 0
+        }
     });
 
     const handleInputChange = useCallback((field: keyof Order, value: string | Date) => {

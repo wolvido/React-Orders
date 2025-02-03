@@ -2,6 +2,7 @@ import Status from "@/enums/status";
 import { Customer } from "./customers";
 import PaymentMethod from "./payment-method";
 import PaymentStatus from "@/enums/payment-status";
+import { Cart } from "./cart";
 
 export interface Order{
     id: number;
@@ -13,4 +14,5 @@ export interface Order{
     fulfillmentStatus: PaymentStatus;
     remarks: string;
     deliveryAddress: string; //can be 'pickup'
+    cart: Cart;
 }
