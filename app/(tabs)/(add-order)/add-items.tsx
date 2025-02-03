@@ -6,12 +6,16 @@ import { useCart } from "@/context/cart-context";
 import { products } from "@/dummy-data/dummy-products";
 import { CartComponent } from "@/components/cart";
 import orderSteps from "./order-steps-label";
+import { useOrder } from "@/context/order-context";
 
 export default function AddItemsScreen() {
     const { cart, addToCart, removeFromCart } = useCart();
+    const { getCurrentOrder, updateCart } = useOrder();
+
+    console.log(getCurrentOrder()); //delete later
 
     const handleProceed = () => {
-        console.log(cart);
+        updateCart(cart);
         router.push('/finalize-order');
     };
 

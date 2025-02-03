@@ -2,16 +2,20 @@ import { View, StyleSheet } from 'react-native';
 import OrderForm from '@/components/finalize-order-form';
 import StepIndicator from '@/components/order-step-indicator';
 import orderSteps from './order-steps-label';
+import OrderFormFinal from '@/components/finalize-order-form';
+import { useOrder } from '@/context/order-context';
+import { Button } from 'react-native-paper';
 
 export default function FinalizeOrder() {
+    const { getCurrentOrder, updateDeliveryAddress, updateRemarks} = useOrder();
+
+    console.log(getCurrentOrder()); //delete later
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
-        // Update your order state here
-        setOrder(prev => ({
-            ...prev,
-            remarks: formData.remarks,
-            deliveryAddress: formData.deliveryAddress
-        }));
+        // Update delivery address
+        updateDeliveryAddress(formData.deliveryAddress);
+        // Update remarks
+        updateRemarks(formData.remarks);
     };
 
 
@@ -21,16 +25,17 @@ export default function FinalizeOrder() {
 
             <View style={styles.content}>
                 
-                <OrderForm onFormChange={handleFormChange} />
+                <OrderFormFinal onFormChange={handleFormChange} />
             </View>
+
+            <Button mode="contained" onPress={() => console.log(getCurrentOrder())} children={undefined}/>
+
         </View>
     );
 
 }
 
-//temp, function not implemented yet
-function setOrder(arg0: (prev: any) => any) {
-}
+
 
 const styles = StyleSheet.create({
     container: {

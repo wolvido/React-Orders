@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { useCallback, useEffect, useState } from 'react';
-import { ExternalPathString, RelativePathString, useRouter } from 'expo-router';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button, Text } from 'react-native-paper';
+import { useCallback, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -11,29 +10,26 @@ import CustomersSelection from './costumers-selection';
 import { Customer } from '@/entities/customers';
 import { Order } from '@/entities/order';
 import PaymentMethod from '@/entities/payment-method';
-import theme from '@/style/theme';
 
 // Define props interface
 interface OrderDetailsFormProps {
-  redirectTo: RelativePathString | ExternalPathString;
+    onSubmit: (order: Order) => void;
 }
 
-function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
-    const router = useRouter();
-
+function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
     //form Handling logic
     const [formData, setFormData] = useState<Order>({
         id: Math.floor(1000000 + Math.random() * 9000000),
         orderType: {
-          type: "Cash",
-          amountDue: 0,
-          cashTendered: 0,
-          changeDue: 0
+            type: "Cash",
+            amountDue: 0,
+            cashTendered: 0,
+            changeDue: 0
         } as PaymentMethod,
         customer: {
-          id: 0,
-          name: '',
-          email: ''
+            id: 0,
+            name: '',
+            email: ''
         },
         transactionDate: new Date(),
         total: 0,
@@ -42,8 +38,8 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         remarks: '',
         deliveryAddress: '',
         cart: {
-          items: [],
-          total: 0
+            items: [],
+            total: 0
         }
     });
 
@@ -54,12 +50,14 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
         }));
     }, []);
   
-    const handleSubmit = useCallback(async () => {
-      await Promise.resolve();
-      if (redirectTo) {
-          router.push(redirectTo);
-      }
-  }, [redirectTo, router]);
+    const handleSubmit = useCallback(() => {
+        // Validate form data here if needed
+        const isValid = formData.customer.id !== 0; // Add more validation as needed
+        
+        if (isValid) {
+            onSubmit(formData);
+        }
+    }, [formData, onSubmit]);
     
     //customers modal controller
     const [visibleCustomers, setVisibleCustomers] = useState(false);
@@ -68,95 +66,111 @@ function OrderDetailsForm({ redirectTo }: OrderDetailsFormProps) {
     const hideCustomersModal = () => setVisibleCustomers(false);
 
     const handleCustomerSelect = (customer: Customer) => {
-      setSelectedCustomer(customer);
-  };
+        setSelectedCustomer(customer);
+        setFormData(prev => ({
+            ...prev,
+            customer: customer
+        }));
+    };
 
-  return (
-    <View style={{ gap: 10, padding: 16 }}>
+    return (
+        <View style={styles.container}>
+        <DatePickerInput
+            locale="en"
+            label="Transaction Date"
+            value={formData.transactionDate}
+            onChange={(date) => handleInputChange('transactionDate', date as Date)}
+            mode="outlined"
+            inputMode="start"
+        />
 
-      <DatePickerInput
-        locale="en"
-        label="Transaction Date"
-        value={formData.transactionDate}
-        onChange={(date) => handleInputChange('transactionDate', date as Date)}
-        mode="outlined"
-        inputMode="start"
-      />
+        <View style={styles.customerInputContainer}>
+            {selectedCustomer && (
+                <Text style={styles.customerLabel}>
+                    Customer
+                </Text>
+            )}
+            <Button
+                mode="outlined"
+                onPress={showCustomersModal}
+                style={styles.customerButton}
+                contentStyle={styles.customerButtonContent}
+                icon="menu-down"
+            >
+                <Text style={[
+                    styles.customerButtonText,
+                    !selectedCustomer && styles.customerButtonPlaceholder
+                ]}>
+                    {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
+                </Text>
+            </Button>
+        </View>
 
-      <Button
-          mode="outlined"
-          onPress={showCustomersModal}
-          style={[styles.input, styles.customerButton]}
-          contentStyle={styles.customerButtonContent}
-          icon="menu-down"
-      >
-          <Text style={[
-              styles.customerButtonText,
-              !selectedCustomer && styles.customerButtonPlaceholder
-          ]}>
-              {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
-          </Text>
-      </Button>
+        <TextInput
+            mode="outlined"
+            label="Delivery Address"
+            value={formData.deliveryAddress}
+            onChangeText={(value) => handleInputChange('deliveryAddress', value)}
+        />
 
-      <CustomersSelection 
-        visible={visibleCustomers}
-        hideModal={hideCustomersModal}
-        customers={dummyCustomers}
-        onSelectCustomer={handleCustomerSelect}
-      />
+        <CustomersSelection 
+            visible={visibleCustomers}
+            hideModal={hideCustomersModal}
+            customers={dummyCustomers}
+            onSelectCustomer={handleCustomerSelect}
+        />
 
-      <Pressable 
-          onPress={handleSubmit}
-          style={({ pressed }) => [
-              styles.button,
-              { opacity: pressed ? 0.8 : 1 }
-          ]}
-      >
-          <Text style={styles.buttonText}>
-              Submit
-          </Text>
-      </Pressable>
-
+        <Button 
+            mode="contained"
+            onPress={handleSubmit}
+            disabled={!selectedCustomer}
+        >
+            Submit Order Details
+        </Button>
     </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
-  button: {
-      backgroundColor: theme.colors.primary,
-      height: 40,
-      paddingHorizontal: 16,
-      borderRadius: 4,
-      justifyContent: 'center',
-      alignItems: 'center',
-  },
-  buttonText: {
-      color: 'white',
-      fontSize: 14,
-      fontWeight: '500',
-      textTransform: 'uppercase'
-  },    
-  input: {
-    marginBottom: 16,
-  },
-  customerButton: {
-    height: 56,
-    borderRadius: 4,
-    justifyContent: 'center',
-  },
-  customerButtonContent: {
-      flexDirection: 'row-reverse', // Puts icon on right side
-      justifyContent: 'space-between',
-      height: '100%',
-  },
-  customerButtonText: {
-      textAlign: 'left',
-      flex: 1,
-      color: '#000000',
-  },
-  customerButtonPlaceholder: {
-      color: '#666666',
-  },
+    container: {
+        padding: 16,
+        gap: 16, // Consistent spacing between all elements
+    },
+    customerInputContainer: {
+        position: 'relative',
+    },
+    customerLabel: {
+        position: 'absolute',
+        top: -8,
+        left: 12,
+        fontSize: 12,
+        color: '#000000',
+        backgroundColor: 'white',
+        paddingHorizontal: 4,
+        zIndex: 1,
+    },
+    customerButton: {
+        height: 56,
+        borderRadius: 4,
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#000000',
+    },
+    customerButtonContent: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        height: '100%',
+    },
+    customerButtonText: {
+        textAlign: 'left',
+        flex: 1,
+        color: '#000000',
+        fontSize: 16,
+    },
+    customerButtonPlaceholder: {
+        color: '#666666',
+    },
+    
 });
 
 export default OrderDetailsForm;

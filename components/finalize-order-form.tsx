@@ -6,7 +6,7 @@ interface OrderFormProps {
     onFormChange: (data: { remarks: string; deliveryAddress: string }) => void;
 }
 
-export default function OrderForm({ onFormChange }: OrderFormProps) {
+export default function OrderFormFinal({ onFormChange }: OrderFormProps) {
     const [isPickup, setIsPickup] = useState(false);
     const [remarks, setRemarks] = useState('');
     const [deliveryAddress, setDeliveryAddress] = useState('');

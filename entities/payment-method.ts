@@ -2,7 +2,7 @@ interface PaymentMethodBase {
     type: string; // Discriminator property
 }
 
-interface CashPayment extends PaymentMethodBase {
+export interface CashPayment extends PaymentMethodBase {
     type: "Cash";
     id: number;
     amountDue: number; // Total amount to be paid
@@ -10,7 +10,7 @@ interface CashPayment extends PaymentMethodBase {
     changeDue: number; // Calculated change
 }
   
-interface ChequePayment extends PaymentMethodBase {
+export interface ChequePayment extends PaymentMethodBase {
     type: "Cheque";
     chequeNumber: string;
     bankName: string;
@@ -19,7 +19,7 @@ interface ChequePayment extends PaymentMethodBase {
     chequeDate: Date;
 }
   
-interface BankTransferPayment extends PaymentMethodBase {
+export interface BankTransferPayment extends PaymentMethodBase {
     type: "Bank Transfer";
     amount: number;
     bankName: string;
@@ -27,7 +27,7 @@ interface BankTransferPayment extends PaymentMethodBase {
     depositDate: Date;
 }
 
-interface PaymentGateway extends PaymentMethodBase{
+export interface PaymentGateway extends PaymentMethodBase{
     type: "Payment gateway";
     paymentProvider: string; //gcash, maya, etc..
     id: number;
