@@ -1,16 +1,21 @@
 import { DeliveryCartComponent } from "@/components/delivery-cart";
-import { useDelivery } from "@/context/delivery-cart-context";
+import { useDeliveryCart } from "@/context/delivery-cart-context";
 import { View, StyleSheet } from "react-native";
 import { products } from "@/dummy-data/dummy-products";
 import StepIndicator from "@/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
+import { useDelivery } from "@/context/delivery-context";
+import { Button } from "react-native-paper";
 
 export default function AddDeliveryItemsScreen() {
 
-    const{ delivery, addToDelivery, removeFromDelivery} = useDelivery();
+    const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
+
+    const{ delivery, addToDelivery, removeFromDelivery, getDelivery, clearDelivery} = useDeliveryCart();
 
         const handleProceed = () => {
-            console.log(delivery);
+            updateReceivedDelivery(getDelivery());
+            clearDelivery();
         };
 
     return (

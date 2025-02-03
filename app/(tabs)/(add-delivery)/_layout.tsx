@@ -1,10 +1,10 @@
-import { DeliveryProvider } from '@/context/delivery-cart-context';
+import { DeliveryCartProvider } from '@/context/delivery-cart-context';
 import { Stack } from 'expo-router';
 
 export default function AddDeliveryLayout() {
     
     return (
-        <DeliveryProvider>
+        <DeliveryCartProvider>
             <Stack
                 screenOptions={{
                     headerStyle: {
@@ -19,6 +19,6 @@ export default function AddDeliveryLayout() {
 
                 <Stack.Screen name="add-delivery"  options={{ title: "Add Delivery" }}/> 
             </Stack>
-        </DeliveryProvider>
+        </DeliveryCartProvider>
     );
 }

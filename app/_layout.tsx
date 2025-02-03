@@ -6,6 +6,7 @@ import theme from '@/style/theme';
 import {enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/context/cart-context';
 import { OrderProvider } from '@/context/order-context';
+import { DeliveryProvider } from '@/context/delivery-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
@@ -13,6 +14,7 @@ export default function RootLayout() {
     return (
         <PaperProvider theme={theme}>
             <OrderProvider>
+                <DeliveryProvider>
                 <CartProvider>
                     <Stack
                         screenOptions={{
@@ -29,6 +31,7 @@ export default function RootLayout() {
                     </Stack>
                     
                 </CartProvider>
+                </DeliveryProvider>
             </OrderProvider>
 
         </PaperProvider>

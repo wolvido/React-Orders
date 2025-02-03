@@ -8,11 +8,12 @@ interface DeliveryContextType {
     addToDelivery: (receivedItem: ReceivedItem) => void;
     removeFromDelivery: (product: Product) => void;
     getDelivery: () => ReceivedDelivery;
+    clearDelivery: () => void;
 }
 
 const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined);
 
-export function DeliveryProvider({ children }: { children: ReactNode }) {
+export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     const [delivery, setDelivery] = useState<ReceivedDelivery >(
         {
             items: [],
@@ -74,19 +75,28 @@ export function DeliveryProvider({ children }: { children: ReactNode }) {
         return delivery;
     };
 
+    //method to clear the delivery cart
+    const clearDelivery = () => {
+        setDelivery({
+            items: [],
+            total: 0
+        });
+    };
+
     return (
         <DeliveryContext.Provider value={{
             delivery,
             addToDelivery,
             removeFromDelivery,
-            getDelivery
+            getDelivery,
+            clearDelivery
         }}>
             {children}
         </DeliveryContext.Provider>
     );
 }
 
-export function useDelivery() {
+export function useDeliveryCart() {
     const context = useContext(DeliveryContext);
     if (context === undefined) {
         throw new Error('useDelivery must be used within a DeliveryProvider');
