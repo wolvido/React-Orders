@@ -20,7 +20,7 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = 'htttp unya na url';
+        this.baseUrl = 'https://localhost:7215/api/orders';
     }
 
     private async handleResponse<T>(response: Response): Promise<T> {
