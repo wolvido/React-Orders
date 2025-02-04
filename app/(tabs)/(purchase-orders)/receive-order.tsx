@@ -9,11 +9,15 @@ import AddDeliveryForm from "@/components/add-delivery-form";
 import { dummySuppliers } from "@/dummy-data/dummy-suppliers";
 import { Delivery } from "@/entities/delivery";
 import { router } from "expo-router";
+import { usePurchaseOrder } from "@/context/purchase-order-context";
 
 export default function ReceiveOrderScreen() {
+    const { initializePurchaseOrder } = usePurchaseOrder();
+
+
     const handleSubmitPO = (purchaseOrder: PurchaseOrder) => {
         // Handle the form submission here
-        console.log(purchaseOrder);
+        initializePurchaseOrder(purchaseOrder);
     };
 
     return (

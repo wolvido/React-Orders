@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 export default function PurchaseOrders() {
     
     return (
+        
         <Stack
             screenOptions={{
                 headerStyle: {
