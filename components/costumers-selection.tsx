@@ -1,5 +1,4 @@
 // CustomersSelection.tsx
-import { dummyCustomers } from "@/dummy-data/dummy-customers";
 import { Customer } from "@/entities/customers";
 import { Portal, List, Button, Text} from 'react-native-paper';
 import { Modal, ScrollView, StyleSheet } from 'react-native';
