@@ -10,13 +10,15 @@ import { CashPayment, ChequePayment, BankTransferPayment, PaymentGateway } from 
 // Define the context type
 interface OrderContextType {
     currentOrder: Order | null;
-    updatePaymentMethod: (paymentMethod: PaymentMethod) => void;
+    updatePaymentById: (paymentMethod: PaymentMethod, orderId: number) => void;
     updateCart: (cart: Cart) => void;
     updateRemarks: (remarks: string) => void;
     updateDeliveryAddress: (address: string) => void;
     getCurrentOrder: () => Order | null;
     finalizeOrder: () => void;
     initializeOrder: (orderDetails: Partial<Order>) => void;
+    updateFulfillmentById: (status: Status, id: number) => void;
+    getOrderbyId: (id: number) => Order;
 }
 
 // Create the context
@@ -47,8 +49,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             },
             transactionDate: new Date(),
             total: 0,
-            orderStatus: Status.Pending,
-            fulfillmentStatus: PaymentStatus.unPaid,
+            orderStatus: PaymentStatus.unPaid,
+            fulfillmentStatus: Status.Pending,
             remarks: '',
             deliveryAddress: '',
             cart: {
@@ -60,23 +62,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         setCurrentOrder(newOrder);
     };
 
-    const updatePaymentMethod = (paymentMethod: PaymentMethod) => {
-        if (!currentOrder) return;
-
-        let paymentStatus = PaymentStatus.unPaid;
-
-        if (isCashPayment(paymentMethod)) {
-            // Now TypeScript knows this is specifically a CashPayment
-            paymentStatus = paymentMethod.cashTendered >= paymentMethod.amountDue 
-                ? PaymentStatus.paid 
-                : PaymentStatus.unPaid;
-        }
-
-        setCurrentOrder({
-            ...currentOrder,
-            orderType: paymentMethod,
-            fulfillmentStatus: paymentStatus
-        });
+    const updatePaymentById = (paymentMethod: PaymentMethod, orderId:number) => {
+        //repo call
+        console.log('Payment Request to be sent:', paymentMethod);
     };
 
     const updateCart = (cart: Cart) => {
@@ -112,15 +100,50 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         setCurrentOrder(null);
     };
 
+    const getOrderbyId = (id: number): Order => {
+        //repo call
+        //dummy for now
+        return {
+            id: id,
+            orderType: { type: "Cash", amountDue: 0, cashTendered: 0, changeDue: 0 } as PaymentMethod,
+            customer: { id: 0, name: '', email: '' },
+            transactionDate: new Date(),
+            total: 0,
+            orderStatus: PaymentStatus.unPaid,
+            fulfillmentStatus: Status.Pending,
+            remarks: '',
+            deliveryAddress: '',
+            cart: { items: [], total: 0 }
+        };
+    };
+
+    const updateFulfillmentById = (status: Status, id: number) => {
+        // const order:Order = getOrderbyId(id);
+        // if (!currentOrder) return;
+
+        // if (order.id === id) {
+        //     setCurrentOrder({
+        //         ...currentOrder,
+        //         fulfillmentStatus: status
+        //     });
+        // }
+
+        console.log('Fulfillment status updated to:', status);
+
+        //repo call
+    };
+
     const value = {
         currentOrder,
-        updatePaymentMethod,
+        updatePaymentById,
         updateCart,
         updateRemarks,
         updateDeliveryAddress,
         getCurrentOrder,
         finalizeOrder,
-        initializeOrder
+        initializeOrder,
+        updateFulfillmentById,
+        getOrderbyId
     };
 
     return (

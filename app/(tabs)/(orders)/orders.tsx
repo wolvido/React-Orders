@@ -11,9 +11,14 @@ import { View } from 'react-native';
 import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
 import Status from '@/enums/status'
+import PaymentMethod from '@/entities/payment-method';
+import { useOrder } from '@/context/order-context';
 
 //react component
 export default function OrdersScreen() {
+
+    const{ updatePaymentById } = useOrder();
+
     //handles the state of table pagination
     const [page, setPage] = useState<number>(0);
 
@@ -62,6 +67,13 @@ export default function OrdersScreen() {
         setInitialStatus(status);
     };
 
+    const handlePaymentSubmit = (paymentMethod: PaymentMethod) => {
+        // Handle the payment method data here
+        console.log('Payment Method:', paymentMethod);
+        updatePaymentById(paymentMethod, selectedOrderId);
+        // Update order or perform other actions
+    };
+
     return (
         <View>    
             <Portal>
@@ -93,9 +105,9 @@ export default function OrdersScreen() {
                     <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                     <Appbar.Content title="Add Payment Method" />
                 </Appbar.Header>
-                <PaymentMethodSelector balance={selectedTotal} orderId={selectedOrderId} />
+                <PaymentMethodSelector balance={selectedTotal} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
             </View>
-        )}        
+        )}
 
         {!showPaymentForm && (
         <DataTable>
@@ -129,18 +141,18 @@ export default function OrdersScreen() {
             </DataTable.Header>
 
             {items.slice(from, to).map((item) => (
-                <DataTable.Row key={item.key}>
-                    <DataTable.Cell style={{flexGrow: 1}}>{item.key}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.orderType}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.customer}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate}</DataTable.Cell>
+                <DataTable.Row key={item.id}>
+                    <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
+                    <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                     <DataTable.Cell
                         style={{flexGrow: 3}}
                         textStyle = {
-                            {color: getPaymentStatusColor(item.paymentStatus)}
+                            {color: getPaymentStatusColor(item.orderStatus)}
                         }
 
-                        >{item.paymentStatus}</DataTable.Cell>
+                        >{item.orderStatus}</DataTable.Cell>
 
                     {/* <DataTable.Cell 
                         style={{flexGrow: 3}}
@@ -154,7 +166,7 @@ export default function OrdersScreen() {
                     >
                         <Button 
                             mode="outlined" 
-                            onPress={() => handleStatusClick(item.key, item.fulfillmentStatus)}
+                            onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
                             textColor = {getStatusColor(item.fulfillmentStatus)}
                             >
                             {item.fulfillmentStatus}
@@ -166,8 +178,8 @@ export default function OrdersScreen() {
                     <DataTable.Cell style={{flexGrow: 2}}>
                             <Button 
                                 mode="contained" 
-                                onPress={() => handlePaymentClick(item.total, item.key)}
-                                disabled={item.paymentStatus === PaymentStatus.paid}
+                                onPress={() => handlePaymentClick(item.total, item.id)}
+                                disabled={item.orderStatus === PaymentStatus.paid}
                             >
                                 Add Pay
                             </Button>

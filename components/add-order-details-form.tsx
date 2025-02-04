@@ -33,8 +33,8 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
         },
         transactionDate: new Date(),
         total: 0,
-        orderStatus: Status.Pending,
-        fulfillmentStatus: PaymentStatus.unPaid,
+        orderStatus: PaymentStatus.unPaid,
+        fulfillmentStatus: Status.Pending,
         remarks: '',
         deliveryAddress: '',
         cart: {
