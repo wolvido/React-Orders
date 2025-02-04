@@ -10,13 +10,11 @@ import PaymentMethod from '@/entities/payment-method';
 
 interface PaymentMethodSelectorProps {
     balance: number;
-    orderId: number;
+    onPaymentSubmit: (paymentMethod: PaymentMethod) => void;
 }
 
-function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps) {
+function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelectorProps) {
     const [selectedMethod, setSelectedMethod] = useState('cash');
-
-    console.log('id', orderId);
 
     const paymentMethods = [
         { value: 'cash', label: 'Cash' },
@@ -35,8 +33,8 @@ function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps)
             id: data.id,
             depositDate: data.depositDate
         };
-
-        console.log('Payment Request to be sent:', paymentMethod);
+        
+        onPaymentSubmit(paymentMethod);
     };
 
     const handleGatewaySubmit = (data: Extract<PaymentMethod, { type: "Payment gateway" }>) => {
@@ -47,7 +45,7 @@ function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps)
             transactionFee: data.transactionFee
         };
 
-        console.log('Payment Request to be sent:', paymentMethod);
+        onPaymentSubmit(paymentMethod);
     };
 
     const handleChequeSubmit = (data: Extract<PaymentMethod, { type: "Cheque" }>) => {
@@ -60,7 +58,7 @@ function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps)
             chequeDate: data.chequeDate
         };
 
-        console.log('Payment Request to be sent:', paymentMethod);
+        onPaymentSubmit(paymentMethod);
     };
 
     const handleCashSubmit = (data: Extract<PaymentMethod, { type: "Cash" }>) => {
@@ -72,7 +70,7 @@ function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps)
             changeDue: data.changeDue
         };
 
-        console.log('Payment Request to be sent:', paymentMethod);
+        onPaymentSubmit(paymentMethod);
     };
 
     const renderForm = () => {
@@ -116,3 +114,4 @@ function PaymentMethodSelector({ balance, orderId }: PaymentMethodSelectorProps)
 }
 
 export default PaymentMethodSelector;
+
