@@ -9,11 +9,12 @@ import orderSteps from "./order-steps-label";
 import { useOrder } from "@/context/order-context";
 
 export default function AddItemsScreen() {
-    const { cart, addToCart, removeFromCart } = useCart();
+    const { cart, addToCart, removeFromCart, emptyCart } = useCart();
     const { getCurrentOrder, updateCart } = useOrder();
 
     const handleProceed = () => {
         updateCart(cart);
+        emptyCart();
         router.push('/finalize-order');
     };
 

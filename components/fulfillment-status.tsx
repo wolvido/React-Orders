@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import Status from '@/enums/status';
 
 interface StatusFormProps {
-    orderId: number;
     defaultStatus: Status;
+    onStatusChange: (status: Status) => void;
 }
 
-export default function StatusForm({ orderId, defaultStatus }: StatusFormProps) {
+export default function StatusForm({ defaultStatus, onStatusChange }: StatusFormProps) {
     const [selectedStatus, setSelectedStatus] = useState<string>(defaultStatus);
 
     useEffect(() => {
@@ -22,12 +22,6 @@ export default function StatusForm({ orderId, defaultStatus }: StatusFormProps) 
         { value: Status.Cancelled, label: 'Cancelled' },
     ];
 
-    const handleStatusChange = (value: string) => {
-        setSelectedStatus(value);
-        console.log('Order ID:', orderId);
-        console.log('Selected Status:', value);
-    };
-
     return (
         <View style={{ padding: 16 }}>
             <Text variant="headlineSmall">Update Fulfillment Status</Text>
@@ -39,7 +33,10 @@ export default function StatusForm({ orderId, defaultStatus }: StatusFormProps) 
                     }
                 }
                 value={selectedStatus}
-                onValueChange={handleStatusChange}
+                onValueChange={(value) => {
+                    setSelectedStatus(value);
+                    onStatusChange(value as Status);
+                }}
                 buttons={statusOptions}
             />
         </View>
