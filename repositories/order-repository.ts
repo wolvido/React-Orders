@@ -1,3 +1,4 @@
+import { DateAdapter } from "@/adapter/date-adapter";
 import { Order } from "@/entities/order";
 import PaymentStatus from "@/enums/payment-status";
 import Status from "@/enums/status";
@@ -18,11 +19,40 @@ export interface IOrderRepository {
 
 export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
+    private orders: Order[] = [];
+    private loading: boolean = false;
 
     constructor() {
         this.baseUrl = 'https://localhost:7215/api/orders';
+        this.loadOrders();
     }
 
+        // Get the current orders
+        getOrders() {
+            return this.orders;
+        }
+    
+        // Get loading state
+        isLoading() {
+            return this.loading;
+        }
+    
+        // Load/refresh orders
+        async loadOrders() {
+            try {
+                this.loading = true;
+                const response = await fetch(this.baseUrl);
+                const data = await this.handleResponse<Order[]>(response);
+                this.orders = data;
+            } catch (error) {
+                console.error('Failed to load orders:', error);
+                this.orders = [];
+            } finally {
+                this.loading = false;
+            }
+        }
+
+    //response handler
     private async handleResponse<T>(response: Response): Promise<T> {
         if (!response.ok) {
             if (response.status === 404) {
@@ -30,7 +60,18 @@ export class OrderRepository implements IOrderRepository {
             }
             throw new Error(`HTTP error status: ${response.status}`);
         }
-        return await response.json();
+
+        const data = await response.json();
+        
+        // If array
+        if (Array.isArray(data)) {
+            return DateAdapter.adaptOrders(data) as T;
+        }
+        // If single
+        if (data && 'transactionDate' in data) {
+            return DateAdapter.adaptOrder(data) as T;
+        }
+        return data;
     }
 
     async getById(id: number): Promise<Order | null> {

@@ -2,20 +2,31 @@ import commonStyles from '@/style/common';
 import theme from '@/style/theme';
 import * as React from 'react';
 import { DataTable, Searchbar, Button, Portal, Modal, Appbar } from 'react-native-paper';
-import { orders } from '@/dummy-data/dummy-orders';
 import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
 import { useState, useEffect } from 'react';
 import PaymentStatus from '@/enums/payment-status';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
 import Status from '@/enums/status'
 import PaymentMethod from '@/entities/payment-method';
 import { useOrder } from '@/context/order-context';
+import { OrderRepository } from '@/repositories/order-repository';
+import { Order } from '@/entities/order';
 
 //react component
 export default function OrdersScreen() {
+
+    //get the order items from the order repository
+    const orderRepository = new OrderRepository();
+    const [items, setItems] = useState<Order[]>([]);
+    useEffect(() => {
+        orderRepository.getAll().then((data) => {
+            setItems(data);
+        });
+    }, []);
+
 
     const{ updatePaymentById, updateFulfillmentById } = useOrder();
 
@@ -32,8 +43,6 @@ export default function OrdersScreen() {
     );
 
     const [searchQuery, setSearchQuery] = useState('');
-
-    const items = orders;
   
     //calculates the range of items per page in display
     //whenever the page changes, it calculates from what index of the array the currect state is
@@ -158,7 +167,7 @@ export default function OrdersScreen() {
                             {color: getPaymentStatusColor(item.orderStatus)}
                         }
 
-                        >{item.orderStatus}</DataTable.Cell>
+                        >{item.orderStatus.toString()}</DataTable.Cell>
 
                     {/* <DataTable.Cell 
                         style={{flexGrow: 3}}
