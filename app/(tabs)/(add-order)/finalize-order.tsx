@@ -8,7 +8,7 @@ import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 
 export default function FinalizeOrder() {
-    const { getCurrentOrder, updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
+    const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
