@@ -6,9 +6,7 @@ import { orders } from '@/dummy-data/dummy-orders';
 import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
 import { useState, useEffect } from 'react';
-
 import PaymentStatus from '@/enums/payment-status';
-import { router } from 'expo-router';
 import { View } from 'react-native';
 import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
@@ -48,8 +46,9 @@ export default function OrdersScreen() {
     // Handle payment button click
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [selectedTotal, setSelectedTotal] = useState(0)
-    const handlePaymentClick = (total: number) => {
+    const handlePaymentClick = (total: number, id: number) => {
         setSelectedTotal(total);
+        setSelectedOrderId(id);
         setShowPaymentForm(true);
     };
 
@@ -94,7 +93,7 @@ export default function OrdersScreen() {
                     <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                     <Appbar.Content title="Add Payment Method" />
                 </Appbar.Header>
-                <PaymentMethodSelector balance={selectedTotal} />
+                <PaymentMethodSelector balance={selectedTotal} orderId={selectedOrderId} />
             </View>
         )}        
 
@@ -167,7 +166,7 @@ export default function OrdersScreen() {
                     <DataTable.Cell style={{flexGrow: 2}}>
                             <Button 
                                 mode="contained" 
-                                onPress={() => handlePaymentClick(item.total)}
+                                onPress={() => handlePaymentClick(item.total, item.key)}
                                 disabled={item.paymentStatus === PaymentStatus.paid}
                             >
                                 Add Pay
@@ -201,8 +200,6 @@ export default function OrdersScreen() {
         </DataTable>
         )}
 
-        
-            
         </View>
     );
 }

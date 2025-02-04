@@ -6,7 +6,11 @@ import { DatePickerInput } from 'react-native-paper-dates';
 
 type BankTransferPayment = Extract<PaymentMethod, { type: "Bank Transfer" }>;
 
-function BankTransferForm() {
+interface BankTransferFormProps {
+    onSubmit: (data: BankTransferPayment) => void;
+}
+
+function BankTransferForm({ onSubmit }: BankTransferFormProps) {
     const [formData, setFormData] = useState<BankTransferPayment>({
         type: "Bank Transfer",
         amount: 0,
@@ -58,7 +62,7 @@ function BankTransferForm() {
     };
 
     const handleSubmit = () => {
-        console.log('Form Submitted with data:', formData);
+        onSubmit(formData);
     };
 
     const isFormValid = 

@@ -5,7 +5,11 @@ import { TextInput, Button } from 'react-native-paper';
 
 type CashPayment = Extract<PaymentMethod, { type: "Cash" }>;
 
-function CashForm() {
+interface CashFormProps {
+    onSubmit: (data: CashPayment) => void;
+}
+
+function CashForm({ onSubmit }: CashFormProps) {
     const [formData, setFormData] = useState<CashPayment>({
         id: Math.floor(Math.random() * 1000000) + 1,
         type: "Cash",
@@ -48,7 +52,7 @@ function CashForm() {
     };
 
     const handleSubmit = () => {
-        console.log('Form Submitted with data:', formData);
+        onSubmit(formData);
     };
 
     return (

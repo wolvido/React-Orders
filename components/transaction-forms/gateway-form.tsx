@@ -5,7 +5,11 @@ import { TextInput, Button, HelperText } from 'react-native-paper';
 
 type PaymentGateway = Extract<PaymentMethod, { type: "Payment gateway" }>;
 
-function GatewayForm() {
+interface GatewayFormProps {
+    onSubmit: (data: PaymentGateway) => void;
+}
+
+function GatewayForm({ onSubmit }: GatewayFormProps) {
     const [formData, setFormData] = useState<PaymentGateway>({
         type: "Payment gateway",
         paymentProvider: '',
@@ -49,7 +53,7 @@ function GatewayForm() {
     };
 
     const handleSubmit = () => {
-        console.log('Form Submitted with data:', formData);
+        onSubmit(formData);
     };
 
     const isFormValid = 

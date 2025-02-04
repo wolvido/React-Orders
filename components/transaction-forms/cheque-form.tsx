@@ -6,7 +6,11 @@ import { DatePickerInput } from 'react-native-paper-dates';
 
 type ChequePayment = Extract<PaymentMethod, { type: "Cheque" }>;
 
-function ChequeForm() {
+interface ChequeFormProps {
+    onSubmit: (data: ChequePayment) => void;
+}
+
+function ChequeForm({ onSubmit }: ChequeFormProps) {
     const [formData, setFormData] = useState<ChequePayment>({
         type: "Cheque",
         chequeNumber: '',
@@ -55,8 +59,13 @@ function ChequeForm() {
     };
 
     const handleSubmit = () => {
-        console.log('Form Submitted with data:', formData);
+        onSubmit(formData);
     };
+
+    const isFormValid = 
+        formData.chequeNumber !== '' && 
+        formData.bankName !== '' && 
+        formData.amount > 0;
 
     return (
         <View style={{ gap: 10, padding: 16 }}>
@@ -99,7 +108,7 @@ function ChequeForm() {
             <Button 
                 mode="contained" 
                 onPress={handleSubmit}
-                disabled={!formData.chequeNumber || !formData.bankName || formData.amount <= 0}
+                disabled={!isFormValid}
             >
                 Process Payment
             </Button>
