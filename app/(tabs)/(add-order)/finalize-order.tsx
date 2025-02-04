@@ -5,15 +5,19 @@ import orderSteps from './order-steps-label';
 import OrderFormFinal from '@/components/finalize-order-form';
 import { useOrder } from '@/context/order-context';
 import { Button } from 'react-native-paper';
+import { router } from 'expo-router';
 
 export default function FinalizeOrder() {
-    const { getCurrentOrder, updateDeliveryAddress, updateRemarks} = useOrder();
+    const { getCurrentOrder, updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
         updateDeliveryAddress(formData.deliveryAddress);
         // Update remarks
         updateRemarks(formData.remarks);
+        finalizeOrder();
+        
+        router.push("/");
     };
 
 

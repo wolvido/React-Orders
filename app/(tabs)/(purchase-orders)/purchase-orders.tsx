@@ -11,6 +11,7 @@ import getStatusColor from '@/hooks/status-color-hook';
 import { useEffect, useState } from 'react';
 import { PurchaseOrder } from '@/entities/purchase-order';
 import { router } from "expo-router";
+import { usePurchaseOrder } from '@/context/purchase-order-context';
 
 export default function PurchaseOrdersScreen() {
     const [page, setPage] = useState<number>(0);
@@ -18,6 +19,8 @@ export default function PurchaseOrdersScreen() {
     const [itemsPerPage, onItemsPerPageChange] = useState(
         numberOfItemsPerPageList[0]
     );
+
+    const { initializePurchaseOrder } = usePurchaseOrder();
 
     const items = purchaseOrders;
 
@@ -31,7 +34,7 @@ export default function PurchaseOrdersScreen() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleReceiveOrder = (order: PurchaseOrder) => {
-        console.log('Receiving order:', order);
+        initializePurchaseOrder(order);
         router.push('./receive-order');
     };
 

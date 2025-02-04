@@ -7,6 +7,7 @@ type CashPayment = Extract<PaymentMethod, { type: "Cash" }>;
 
 function CashForm() {
     const [formData, setFormData] = useState<CashPayment>({
+        id: Math.floor(Math.random() * 1000000) + 1,
         type: "Cash",
         amountDue: 0,
         cashTendered: 0,

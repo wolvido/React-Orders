@@ -6,6 +6,7 @@ import StepIndicator from "@/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
 import { useDelivery } from "@/context/delivery-context";
 import { Button } from "react-native-paper";
+import { router } from "expo-router";
 
 export default function AddDeliveryItemsScreen() {
 
@@ -15,7 +16,10 @@ export default function AddDeliveryItemsScreen() {
 
         const handleProceed = () => {
             updateReceivedDelivery(getDelivery());
+            finalizeDelivery();
             clearDelivery();
+
+            router.push("/");
         };
 
     return (

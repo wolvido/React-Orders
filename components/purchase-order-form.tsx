@@ -7,15 +7,21 @@ import { Delivery } from '@/entities/delivery';
 import AddDeliveryForm from './add-delivery-form';
 
 interface PurchaseOrderFormProps {
-    purchaseOrder: PurchaseOrder;
+    purchaseOrder: PurchaseOrder | null;
     onSubmit: (data: PurchaseOrder) => void;
 }
 
 export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderFormProps) => {
     const handleDeliverySubmit = (deliveryData: Delivery) => {
-        // Combine PO data with new delivery data
         const updatedPurchaseOrder: PurchaseOrder = {
-            ...purchaseOrder,
+            ...(purchaseOrder || {
+                id: 0,
+                remarks: '',
+                transactionDate: new Date(),
+                preparedBy: '',
+                status: 'Pending',
+                paymentStatus: 'unPaid'
+            } as PurchaseOrder),
             delivery: deliveryData
         };
         onSubmit(updatedPurchaseOrder);
@@ -27,7 +33,7 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
             <View style={styles.poDetailsSection}>
                 <TextInput
                     label="PO #"
-                    value={purchaseOrder.id.toString()}
+                    value={purchaseOrder?.id.toString()}
                     mode="outlined"
                     editable={false}
                     style={styles.input}
@@ -36,7 +42,7 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
                 <DatePickerInput
                     locale="en"
                     label="PO Date"
-                    value={purchaseOrder.transactionDate}
+                    value={purchaseOrder?.transactionDate}
                     onChange={() => {}}
                     mode="outlined"
                     style={[styles.input, styles.dateInput]}
@@ -47,7 +53,7 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
 
                 <TextInput
                     label="Remarks"
-                    value={purchaseOrder.remarks}
+                    value={purchaseOrder?.remarks}
                     mode="outlined"
                     editable={false}
                     style={styles.input}
@@ -59,8 +65,8 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
             <View style={styles.deliverySection}>
                 <AddDeliveryForm 
                     onSubmit={handleDeliverySubmit}
-                    suppliers={[purchaseOrder.delivery?.supplier]}
-                    existingDelivery={purchaseOrder.delivery}
+                    suppliers={purchaseOrder?.delivery?.supplier ? [purchaseOrder.delivery.supplier] : []}
+                    existingDelivery={purchaseOrder?.delivery}
                 />
             </View>
         </View>

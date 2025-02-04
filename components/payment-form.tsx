@@ -12,7 +12,7 @@ interface PaymentMethodSelectorProps {
 }
 
 function PaymentMethodSelector({ balance }: PaymentMethodSelectorProps) {
-    const [selectedMethod, setSelectedMethod] = useState('');
+    const [selectedMethod, setSelectedMethod] = useState('cash');
 
     const paymentMethods = [
         { value: 'cash', label: 'Cash' },
