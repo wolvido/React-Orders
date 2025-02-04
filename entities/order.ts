@@ -10,8 +10,8 @@ export interface Order{
     customer: Customer;
     transactionDate: Date;
     total: number;
-    orderStatus: Status;
-    fulfillmentStatus: PaymentStatus;
+    orderStatus: PaymentStatus;
+    fulfillmentStatus: Status;
     remarks: string;
     deliveryAddress: string; //can be 'pickup'
     cart: Cart;
