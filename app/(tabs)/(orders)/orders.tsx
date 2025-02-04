@@ -71,7 +71,8 @@ export default function OrdersScreen() {
         // Handle the payment method data here
         console.log('Payment Method:', paymentMethod);
         updatePaymentById(paymentMethod, selectedOrderId);
-        // Update order or perform other actions
+        //hide the payment form
+        setShowPaymentForm(false);
     };
 
     const handleStatusChange = (status: Status) => {
@@ -110,7 +111,7 @@ export default function OrdersScreen() {
                     <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                     <Appbar.Content title="Add Payment Method" />
                 </Appbar.Header>
-                <PaymentMethodSelector balance={selectedTotal} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
+                <PaymentMethodSelector balance={selectedTotal} onPaymentSubmit={handlePaymentSubmit}/>
             </View>
         )}
 
