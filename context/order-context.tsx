@@ -5,7 +5,6 @@ import PaymentMethod from '@/entities/payment-method';
 import { Cart } from '@/entities/cart';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
-import { CashPayment, ChequePayment, BankTransferPayment, PaymentGateway } from '@/entities/payment-method';
 
 // Define the context type
 interface OrderContextType {
@@ -23,11 +22,6 @@ interface OrderContextType {
 
 // Create the context
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
-
-// Type guard for cash payment
-function isCashPayment(payment: PaymentMethod): payment is CashPayment {
-    return payment.type === 'Cash';
-}
 
 // Provider component
 export function OrderProvider({ children }: { children: ReactNode }) {
@@ -97,6 +91,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     const finalizeOrder = () => {
+        console.log('Order finalized:', currentOrder);
         setCurrentOrder(null);
     };
 

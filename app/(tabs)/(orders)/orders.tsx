@@ -17,7 +17,7 @@ import { useOrder } from '@/context/order-context';
 //react component
 export default function OrdersScreen() {
 
-    const{ updatePaymentById } = useOrder();
+    const{ updatePaymentById, updateFulfillmentById } = useOrder();
 
     //handles the state of table pagination
     const [page, setPage] = useState<number>(0);
@@ -74,8 +74,13 @@ export default function OrdersScreen() {
         // Update order or perform other actions
     };
 
+    const handleStatusChange = (status: Status) => {
+        // Do something with the new status
+        updateFulfillmentById(status, selectedOrderId);
+    };
+
     return (
-        <View>    
+        <View>
             <Portal>
                 <Modal
                     visible={showStatusModal}
@@ -87,7 +92,7 @@ export default function OrdersScreen() {
                         borderRadius: 8
                     }}
                 >
-                    <StatusForm orderId={selectedOrderId} defaultStatus={initialStatus || Status.Pending} />
+                    <StatusForm onStatusChange={handleStatusChange} defaultStatus={initialStatus || Status.Pending} />
 
                     <Button 
                         mode="contained" 
@@ -176,14 +181,14 @@ export default function OrdersScreen() {
 
                     <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
                     <DataTable.Cell style={{flexGrow: 2}}>
-                            <Button 
-                                mode="contained" 
-                                onPress={() => handlePaymentClick(item.total, item.id)}
-                                disabled={item.orderStatus === PaymentStatus.paid}
-                            >
-                                Add Pay
-                            </Button>
-                        </DataTable.Cell>
+                        <Button 
+                            mode="contained" 
+                            onPress={() => handlePaymentClick(item.total, item.id)}
+                            disabled={item.orderStatus === PaymentStatus.paid}
+                        >
+                            Add Pay
+                        </Button>
+                    </DataTable.Cell>
                 </DataTable.Row>
             ))}
 

@@ -15,10 +15,12 @@ export default function FinalizeOrder() {
         updateDeliveryAddress(formData.deliveryAddress);
         // Update remarks
         updateRemarks(formData.remarks);
-        finalizeOrder();
-        
-        router.push("/");
     };
+
+    const handleFinalizeOrder = () => {
+        finalizeOrder();
+        router.push("/");
+    }
 
 
     return (
@@ -29,7 +31,9 @@ export default function FinalizeOrder() {
                 <OrderFormFinal onFormChange={handleFormChange} />
             </View>
 
-            <Button mode="contained" onPress={() => console.log(getCurrentOrder())} children={undefined}/>
+            <Button mode="contained" onPress={handleFinalizeOrder}>
+                Finalize Order
+            </Button>
 
         </View>
     );
