@@ -19,38 +19,11 @@ export interface IOrderRepository {
 
 export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
-    private orders: Order[] = [];
-    private loading: boolean = false;
 
     constructor() {
         this.baseUrl = 'https://localhost:7215/api/orders';
-        this.loadOrders();
     }
 
-        // Get the current orders
-        getOrders() {
-            return this.orders;
-        }
-    
-        // Get loading state
-        isLoading() {
-            return this.loading;
-        }
-    
-        // Load/refresh orders
-        async loadOrders() {
-            try {
-                this.loading = true;
-                const response = await fetch(this.baseUrl);
-                const data = await this.handleResponse<Order[]>(response);
-                this.orders = data;
-            } catch (error) {
-                console.error('Failed to load orders:', error);
-                this.orders = [];
-            } finally {
-                this.loading = false;
-            }
-        }
 
     //response handler
     private async handleResponse<T>(response: Response): Promise<T> {
@@ -62,7 +35,7 @@ export class OrderRepository implements IOrderRepository {
         }
 
         const data = await response.json();
-        
+
         // If array
         if (Array.isArray(data)) {
             return DateAdapter.adaptOrders(data) as T;
@@ -71,7 +44,7 @@ export class OrderRepository implements IOrderRepository {
         if (data && 'transactionDate' in data) {
             return DateAdapter.adaptOrder(data) as T;
         }
-        return data;
+        return await data;
     }
 
     async getById(id: number): Promise<Order | null> {
@@ -81,7 +54,7 @@ export class OrderRepository implements IOrderRepository {
 
     async getAll(): Promise<Order[]> {
         const response = await fetch(this.baseUrl);
-        return this.handleResponse<Order[]>(response);
+        return await this.handleResponse<Order[]>(response);
     }
 
     async create(order: Omit<Order, 'id'>): Promise<Order> {
@@ -92,7 +65,7 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify(order)
         });
-        return this.handleResponse<Order>(response);
+        return await this.handleResponse<Order>(response);
     }
 
     async update(id: number, orderData: Partial<Order>): Promise<Order> {
@@ -103,7 +76,7 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify(orderData)
         });
-        return this.handleResponse<Order>(response);
+        return await this.handleResponse<Order>(response);
     }
 
     async delete(id: number): Promise<boolean> {
@@ -115,17 +88,17 @@ export class OrderRepository implements IOrderRepository {
 
     async getByCustomerId(customerId: number): Promise<Order[]> {
         const response = await fetch(`${this.baseUrl}/customer/${customerId}`);
-        return this.handleResponse<Order[]>(response);
+        return await this.handleResponse<Order[]>(response);
     }
 
     async getByStatus(status: Status): Promise<Order[]> {
         const response = await fetch(`${this.baseUrl}/status/${status}`);
-        return this.handleResponse<Order[]>(response);
+        return await this.handleResponse<Order[]>(response);
     }
 
     async getByPaymentStatus(status: PaymentStatus): Promise<Order[]> {
         const response = await fetch(`${this.baseUrl}/payment-status/${status}`);
-        return this.handleResponse<Order[]>(response);
+        return await this.handleResponse<Order[]>(response);
     }
 
     async updateFulfillmentStatus(id: number, status: Status): Promise<Order> {
@@ -136,7 +109,7 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify({ status })
         });
-        return this.handleResponse<Order>(response);
+        return await this.handleResponse<Order>(response);
     }
 
     async updatePaymentStatus(id: number, status: PaymentStatus): Promise<Order> {
@@ -147,6 +120,6 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify({ status })
         });
-        return this.handleResponse<Order>(response);
+        return await this.handleResponse<Order>(response);
     }
 }
