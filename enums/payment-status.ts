@@ -1,6 +1,6 @@
 enum PaymentStatus {
-    paid = 'paid',
-    unPaid = 'unPaid',
+    paid = 'Paid',
+    unPaid = 'UnPaid',
     partialPaid = 'Partial Paid',
 }
 
