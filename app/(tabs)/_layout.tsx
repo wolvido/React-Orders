@@ -1,12 +1,24 @@
 import React from 'react';
 import { CommonActions, DefaultTheme} from '@react-navigation/native';
-import { Text, BottomNavigation } from 'react-native-paper';
+import { Text, BottomNavigation, IconButton } from 'react-native-paper';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import theme from '@/style/theme';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
+
+import { useAuth } from '@/authentication/ctx';
 
 export default function TabLayout() {
+
+    const { logout, isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (!isAuthenticated) {
+        return <Redirect href="/sign-in" />;
+    }
 
     return (
         
@@ -22,6 +34,15 @@ export default function TabLayout() {
                     fontSize: 20,
                 },
                 headerShadowVisible: true,
+
+                headerRight: () => (
+                    <IconButton
+                        icon="logout"
+                        iconColor="white"
+                        size={24}
+                        onPress={logout}
+                    />
+                ),
             }}
 
 
