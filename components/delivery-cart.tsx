@@ -202,7 +202,7 @@ export function DeliveryCartComponent({
 
 const styles = StyleSheet.create({
     detailsRow: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         gap: 8,
         marginTop: 4,
