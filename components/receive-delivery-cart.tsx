@@ -68,6 +68,9 @@ export function ReceiveDeliveryCartComponent({
                                         <View style={styles.pill}>
                                             <Text variant="bodySmall">Quantity: {item.quantity}</Text>
                                         </View>
+                                        <View style={styles.pill}>
+                                            <Text variant="bodySmall">Unit: {item.product.units}</Text>
+                                        </View>
                                     </View>
                                 </View>
                                 <View style={styles.actionSection}>

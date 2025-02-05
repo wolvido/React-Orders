@@ -14,6 +14,8 @@ import PaymentMethod from '@/entities/payment-method';
 import { useOrder } from '@/context/order-context';
 import { OrderRepository } from '@/repositories/order-repository';
 import { Order } from '@/entities/order';
+import { useSearch } from '@/hooks/search-filter';
+import { EmptyState } from '@/components/empty-state';
 
 //react component
 export default function OrdersScreen() {
@@ -27,6 +29,14 @@ export default function OrdersScreen() {
         });
     }, []);
 
+    const searchableFields: (keyof Order)[] = [
+        'orderType',
+        'customer',
+    ];
+    const { searchQuery, setSearchQuery, filteredItems } = useSearch<Order>(
+        items,
+        searchableFields
+    );
 
     const{ updatePaymentById, updateFulfillmentById } = useOrder();
 
@@ -34,7 +44,7 @@ export default function OrdersScreen() {
     const [page, setPage] = useState<number>(0);
 
     //stores the initial selection for the number of items per page
-    const [numberOfItemsPerPageList] = useState([5, 6, 7, 8, 9, 10]);
+    const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
         //used for the dropdown menu to display the possible options
 
     //switches the page options
@@ -42,8 +52,6 @@ export default function OrdersScreen() {
       numberOfItemsPerPageList[0]
     );
 
-    const [searchQuery, setSearchQuery] = useState('');
-  
     //calculates the range of items per page in display
     //whenever the page changes, it calculates from what index of the array the currect state is
     const from = page * itemsPerPage; 
@@ -89,6 +97,18 @@ export default function OrdersScreen() {
         updateFulfillmentById(status, selectedOrderId);
     };
 
+        if (items.length === 0) {
+            return (
+                <View>
+                    <EmptyState
+                        title="Awaiting Data..."
+                        subtitle="No orders available at the moment"
+                        loading={true}
+                    />
+                </View>
+            );
+        }
+
     return (
         <View>
             <Portal>
@@ -128,7 +148,7 @@ export default function OrdersScreen() {
         <DataTable>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search"
+                    placeholder="Search customer or order type"
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -155,7 +175,7 @@ export default function OrdersScreen() {
                 <DataTable.Title style={{flexGrow: 2}}>Action</DataTable.Title>
             </DataTable.Header>
 
-            {items.slice(from, to).map((item) => (
+            {filteredItems.slice(from, to).map((item) => (
                 <DataTable.Row key={item.id}>
                     <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
                     <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>

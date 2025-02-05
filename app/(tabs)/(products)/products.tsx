@@ -1,18 +1,22 @@
 import commonStyles from '@/style/common';
+import { StyleSheet, View } from 'react-native';
 import { products } from '@/dummy-data/dummy-products';
 import * as React from 'react';
-import { DataTable, Searchbar } from 'react-native-paper';
-
+import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
 import theme from '@/style/theme';
+import { useEffect, useState } from 'react';
+import { Product } from '@/entities/product';
+import { useSearch } from '@/hooks/search-filter';
+import { EmptyState } from '@/components/empty-state';
 
 //react component
 export default function ProductsScreen() {
 
-        const [page, setPage] = React.useState<number>(0);
+        const [page, setPage] = useState<number>(0);
     
-        const [numberOfItemsPerPageList] = React.useState([5, 6, 7, 8, 9, 10]);
+        const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
     
-        const [itemsPerPage, onItemsPerPageChange] = React.useState(
+        const [itemsPerPage, onItemsPerPageChange] = useState(
           numberOfItemsPerPageList[0]
         );
     
@@ -21,18 +25,38 @@ export default function ProductsScreen() {
         const from = page * itemsPerPage; 
         const to = Math.min((page + 1) * itemsPerPage, items.length);
       
-        React.useEffect(() => {
+        useEffect(() => {
           setPage(0);
         }, [itemsPerPage]);
 
-        const [searchQuery, setSearchQuery] = React.useState('');
+
+        //search
+        const searchableFields: (keyof Product)[] = [
+            'name'
+        ];
+        const { searchQuery, setSearchQuery, filteredItems } = useSearch<Product>(
+            items,
+            searchableFields
+        );
+
+    if (items.length === 0) {
+        return (
+            <View>
+                <EmptyState
+                    title="Awaiting shipment..."
+                    subtitle="No products available at the moment"
+                />
+            </View>
+
+        );
+    }
 
     return (
         // <View style={commonStyles.main}>            
         <DataTable>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search"
+                    placeholder="Search name"
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -59,7 +83,7 @@ export default function ProductsScreen() {
 
             </DataTable.Header>
 
-            {items.slice(from, to).map((item) => (
+            {filteredItems.slice(from, to).map((item) => (
                 <DataTable.Row key={item.key}>
                     <DataTable.Cell>{item.name}</DataTable.Cell>
                     <DataTable.Cell numeric>{item.sellingPrice}</DataTable.Cell>
@@ -99,3 +123,27 @@ export default function ProductsScreen() {
         // </View>
     );
 }
+
+const styles = StyleSheet.create({
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: 'transparent',
+    },
+    emptyText: {
+        marginTop: 16,
+        color: theme.colors.primary,
+        textAlign: 'center',
+    },
+    emptySubtext: {
+        marginTop: 8,
+        color: theme.colors.secondary,
+        textAlign: 'center',
+        opacity: 0.8,
+    },
+    spinner: {
+        marginBottom: 16,
+    },
+});

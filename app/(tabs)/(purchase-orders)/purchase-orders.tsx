@@ -12,10 +12,12 @@ import { useEffect, useState } from 'react';
 import { PurchaseOrder } from '@/entities/purchase-order';
 import { router } from "expo-router";
 import { usePurchaseOrder } from '@/context/purchase-order-context';
+import { useSearch } from '@/hooks/search-filter';
+import { EmptyState } from '@/components/empty-state';
 
 export default function PurchaseOrdersScreen() {
     const [page, setPage] = useState<number>(0);
-    const [numberOfItemsPerPageList] = useState([5, 6, 7, 8, 9, 10]);
+    const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
     const [itemsPerPage, onItemsPerPageChange] = useState(
         numberOfItemsPerPageList[0]
     );
@@ -31,18 +33,40 @@ export default function PurchaseOrdersScreen() {
         setPage(0);
     }, [itemsPerPage]);
 
-    const [searchQuery, setSearchQuery] = useState('');
 
     const handleReceiveOrder = (order: PurchaseOrder) => {
         initializePurchaseOrder(order);
         router.push('./receive-order');
     };
 
+    //search
+    const searchableFields = [
+        'delivery.supplier.name',
+        'preparedBy',
+    ];
+    const { searchQuery, setSearchQuery, filteredItems } = useSearch<PurchaseOrder>(
+        items,
+        searchableFields
+    );
+
+    if (items.length === 0) {
+        return (
+            <View>
+                <EmptyState
+                    title="Awaiting Data..."
+                    subtitle="No purchase orders available at the moment"
+                    loading={true}
+                />
+            </View>
+        );
+    }
+    
+
     return (
         <DataTable>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search"
+                    placeholder="Search supplier or prepared by"
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -69,7 +93,7 @@ export default function PurchaseOrdersScreen() {
                 <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
             </DataTable.Header>
 
-            {items.slice(from, to).map((item) => (
+            {filteredItems.slice(from, to).map((item) => (
                 <DataTable.Row style={styles.table__row} key={item.id}>
                     <DataTable.Cell style={{ flexGrow: 1 }}>{item.id}</DataTable.Cell>
                     <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.supplier.name}</DataTable.Cell>
