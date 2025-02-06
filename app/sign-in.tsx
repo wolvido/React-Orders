@@ -13,7 +13,7 @@ export default function SignInScreen() {
 
     if (!isAuthenticated) {
         return(
-            <View>
+            <View style={{  flex: 1, height: '100%'}}>
                 <LoginScreen/>
             </View>
         )

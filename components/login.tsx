@@ -24,7 +24,7 @@ export const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'android' ? 'padding' : 'height'}
       style={styles.container}
     >
       <Surface style={styles.surface} elevation={4}>
