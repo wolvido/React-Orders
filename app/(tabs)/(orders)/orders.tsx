@@ -97,17 +97,17 @@ export default function OrdersScreen() {
         updateFulfillmentById(status, selectedOrderId);
     };
 
-        if (items.length === 0) {
-            return (
-                <View>
-                    <EmptyState
-                        title="Awaiting Data..."
-                        subtitle="No orders available at the moment"
-                        loading={true}
-                    />
-                </View>
-            );
-        }
+    if (items.length === 0) {
+        return (
+            <View>
+                <EmptyState
+                    title="Awaiting Data..."
+                    subtitle="No orders available at the moment"
+                    loading={true}
+                />
+            </View>
+        );
+    }
 
     return (
         <View>

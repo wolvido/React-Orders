@@ -11,6 +11,13 @@ import { OrderProvider } from '@/context/order-context';
 import { DeliveryProvider } from '@/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
 
+// import 'react-native-get-random-values'; // Required for crypto-related operations
+// import 'core-js/stable'; // Polyfills modern JS features
+// import 'regenerator-runtime/runtime'; // Ensures async/await works correctly
+// import 'react-native-url-polyfill/auto'; // Fixes URL-related issues
+// import 'expo-crypto'; // If you're using crypto functions
+
+
 registerTranslation('en', enGB)
 export default function RootLayout() {
 

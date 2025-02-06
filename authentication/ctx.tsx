@@ -1,6 +1,5 @@
 // src/context/AuthContext.tsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Improve type safety with proper user type
 type User = {
@@ -32,8 +31,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const loadStoredAuth = async () => {
     try {
       setIsLoading(true);
-      const storedToken = await AsyncStorage.getItem('userToken');
-      const storedUserData = await AsyncStorage.getItem('userData');
+      const storedToken = localStorage.getItem('userToken');
+      const storedUserData =  localStorage.getItem('userData');
   
       if (storedToken && storedUserData) {
         const parsedUser = JSON.parse(storedUserData);
@@ -42,8 +41,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error('Error loading stored auth:', error);
-      // Clear potentially corrupted data
-      await AsyncStorage.multiRemove(['userToken', 'userData']);
+
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userData');
     } finally {
       setIsLoading(false);
     }
@@ -68,8 +68,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const mockToken = 'mock-jwt-token';
   
       // Store authentication state
-      await AsyncStorage.setItem('userToken', mockToken);
-      await AsyncStorage.setItem('userData', JSON.stringify(mockUser));
+      localStorage.setItem('userToken', mockToken);
+      localStorage.setItem('userData', JSON.stringify(mockUser));
   
       setUser(mockUser);
       setIsAuthenticated(true);
@@ -98,8 +98,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const mockUser = { id: '1', email, username };
       const mockToken = 'mock-jwt-token';
 
-      await AsyncStorage.setItem('userToken', mockToken);
-      await AsyncStorage.setItem('userData', JSON.stringify(mockUser));
+      localStorage.setItem('userToken', mockToken);
+      localStorage.setItem('userData', JSON.stringify(mockUser));
 
       setUser(mockUser);
       setIsAuthenticated(true);
@@ -117,7 +117,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setIsLoading(true);
       // Clear all auth-related storage
-      await AsyncStorage.multiRemove(['userToken', 'userData']);
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userData');
       
       setUser(null);
       setIsAuthenticated(false);

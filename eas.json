@@ -4,13 +4,13 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
+    "preview": {
       "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "apk"
       }
+    },
+    "development": {
+      "developmentClient": true
     },
     "production": {
       "autoIncrement": true
