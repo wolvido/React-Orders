@@ -3,7 +3,7 @@ export interface Product {
     name: string;
     sellingPrice: number;
     costPrice: number;
-    units: 'CASE' | 'JAR' | 'BUNDLE';
+    unitType: 'CASE' | 'JAR' | 'BUNDLE';
     stocks: number;
     category: string;
     brand: string;

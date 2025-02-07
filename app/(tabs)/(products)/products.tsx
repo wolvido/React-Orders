@@ -56,7 +56,7 @@ export default function ProductsScreen() {
         <DataTable>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search name"
+                    placeholder="Search..."
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -77,7 +77,7 @@ export default function ProductsScreen() {
                 <DataTable.Title numeric>Selling Price</DataTable.Title>
                 <DataTable.Title numeric>Cost Price</DataTable.Title>
                 <DataTable.Title numeric>Stocks</DataTable.Title>
-                <DataTable.Title numeric>Units</DataTable.Title>
+                <DataTable.Title numeric>Unit Type</DataTable.Title>
                 <DataTable.Title numeric>Category</DataTable.Title>
                 <DataTable.Title numeric>Brand</DataTable.Title>
 
@@ -89,7 +89,7 @@ export default function ProductsScreen() {
                     <DataTable.Cell numeric>{item.sellingPrice}</DataTable.Cell>
                     <DataTable.Cell numeric>{item.costPrice}</DataTable.Cell>
                     <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.units}</DataTable.Cell>
+                    <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
                     <DataTable.Cell numeric>{item.category}</DataTable.Cell>
                     <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
 

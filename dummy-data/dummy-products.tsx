@@ -6,7 +6,7 @@ export const products: Product[] = [
         name: 'Heinz Ketchup',
         sellingPrice: 10,
         costPrice: 5,
-        units: 'CASE',
+        unitType: 'CASE',
         stocks: 10,
         category: 'Condiments',
         brand: 'Heinz'
@@ -16,7 +16,7 @@ export const products: Product[] = [
         name: 'Parsley Dried', // Fixed typo in Parsley
         sellingPrice: 5,
         costPrice: 3,         // Added missing costPrice
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 15,           // Added missing stocks
         category: 'Spices',   // Added category
         brand: 'Generic'      // Added brand
@@ -26,7 +26,7 @@ export const products: Product[] = [
         name: 'Olive Oil Extra Virgin',
         sellingPrice: 15,
         costPrice: 10,        // Added missing costPrice
-        units: 'CASE',
+        unitType: 'CASE',
         stocks: 8,            // Added missing stocks
         category: 'Oils',     // Added category
         brand: 'Premium'      // Added brand
@@ -36,7 +36,7 @@ export const products: Product[] = [
         name: 'Basmati Rice',
         sellingPrice: 12,
         costPrice: 8,         // Added missing costPrice
-        units: 'BUNDLE',
+        unitType: 'BUNDLE',
         stocks: 20,           // Added missing stocks
         category: 'Grains',   // Added category
         brand: 'Royal'        // Added brand
@@ -46,7 +46,7 @@ export const products: Product[] = [
         name: 'Black Pepper Ground',
         sellingPrice: 6,
         costPrice: 4,         // Added missing costPrice
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 25,           // Added missing stocks
         category: 'Spices',   // Added category
         brand: 'Generic'      // Added brand
@@ -56,7 +56,7 @@ export const products: Product[] = [
         name: 'Pasta Spaghetti',
         sellingPrice: 4,
         costPrice: 2,         // Added missing costPrice
-        units: 'BUNDLE',
+        unitType: 'BUNDLE',
         stocks: 30,           // Added missing stocks
         category: 'Pasta',    // Added category
         brand: 'Italia'       // Added brand
@@ -66,7 +66,7 @@ export const products: Product[] = [
         name: 'Tomato Sauce',
         sellingPrice: 3,
         costPrice: 1.5,       // Added missing costPrice
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 40,           // Added missing stocks
         category: 'Sauces',   // Added category
         brand: 'HomeMade'     // Added brand
@@ -76,7 +76,7 @@ export const products: Product[] = [
         name: 'Greek Yogurt',
         sellingPrice: 8,
         costPrice: 5,         // Added missing costPrice
-        units: 'CASE',
+        unitType: 'CASE',
         stocks: 12,           // Added missing stocks
         category: 'Dairy',    // Added category
         brand: 'Olympus'      // Added brand
@@ -86,7 +86,7 @@ export const products: Product[] = [
         name: 'Coconut Milk',
         sellingPrice: 4.5,
         costPrice: 2.5,
-        units: 'CASE',
+        unitType: 'CASE',
         stocks: 18,
         category: 'Dairy Alternatives',
         brand: 'Thai Choice'
@@ -96,7 +96,7 @@ export const products: Product[] = [
         name: 'Quinoa Red',
         sellingPrice: 9,
         costPrice: 6,
-        units: 'BUNDLE',
+        unitType: 'BUNDLE',
         stocks: 15,
         category: 'Grains',
         brand: 'Organic Valley'
@@ -106,7 +106,7 @@ export const products: Product[] = [
         name: 'Honey Raw',
         sellingPrice: 12,
         costPrice: 8,
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 22,
         category: 'Sweeteners',
         brand: 'BeeNatural'
@@ -116,7 +116,7 @@ export const products: Product[] = [
         name: 'Cinnamon Ground',
         sellingPrice: 5.5,
         costPrice: 3.5,
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 28,
         category: 'Spices',
         brand: 'SpiceMaster'
@@ -126,7 +126,7 @@ export const products: Product[] = [
         name: 'Almond Flour',
         sellingPrice: 14,
         costPrice: 9,
-        units: 'BUNDLE',
+        unitType: 'BUNDLE',
         stocks: 16,
         category: 'Baking',
         brand: 'NutFlour'
@@ -136,7 +136,7 @@ export const products: Product[] = [
         name: 'Soy Sauce',
         sellingPrice: 6,
         costPrice: 3.5,
-        units: 'CASE',
+        unitType: 'CASE',
         stocks: 35,
         category: 'Condiments',
         brand: 'Asian Delights'
@@ -146,7 +146,7 @@ export const products: Product[] = [
         name: 'Chia Seeds',
         sellingPrice: 8,
         costPrice: 5,
-        units: 'JAR',
+        unitType: 'JAR',
         stocks: 20,
         category: 'Superfoods',
         brand: 'HealthyLife'

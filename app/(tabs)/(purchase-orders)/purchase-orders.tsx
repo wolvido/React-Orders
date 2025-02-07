@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import commonStyles from '@/style/common';
 import * as React from 'react';
 import { DataTable } from 'react-native-paper';
@@ -63,10 +63,10 @@ export default function PurchaseOrdersScreen() {
     
 
     return (
-        <DataTable>
+        <View style={styles.container}>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search supplier or prepared by"
+                    placeholder="Search..."
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -82,69 +82,78 @@ export default function PurchaseOrdersScreen() {
                 />
             </DataTable.Header>
 
-            <DataTable.Header>
-                <DataTable.Title style={{ flexGrow: 1 }}>ID</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Supplier</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Transaction Date</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Expected Del. Date</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 2 }}>Expected Total</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Prepared By</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Status</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
-            </DataTable.Header>
+            <View style={styles.tableContainer}>
+                <ScrollView>
+                    <DataTable>
+                        <DataTable.Header>
+                            <DataTable.Title style={{ flexGrow: 1 }}>ID</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Supplier</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Transaction Date</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Expected Del. Date</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 2 }}>Expected Total</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Prepared By</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Status</DataTable.Title>
+                            <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
+                        </DataTable.Header>
+                    
+                        {filteredItems.slice(from, to).map((item) => (
+                            <DataTable.Row style={styles.table__row} key={item.id}>
+                                <DataTable.Cell style={{ flexGrow: 1 }}>{item.id}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.supplier.name}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 3 }}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.deliveryDate.toLocaleDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 2 }}>{item.delivery.total}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 3 }}>{item.preparedBy}</DataTable.Cell>
+                                <DataTable.Cell
+                                    style={{ flexGrow: 3 }}
+                                    textStyle={{
+                                        color: getStatusColor(item.status)
+                                    }}>
+                                    {item.status}
+                                </DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 3 }}>
+                                    <Button 
+                                        mode="contained" 
+                                        onPress={() => handleReceiveOrder(item)}
+                                        style={[
+                                            styles.receiveButton,
+                                            item.status.toLowerCase() === 'cancelled' && styles.cancelledButton
+                                        ]}
+                                        disabled={item.status.toLowerCase() === 'cancelled'  || item.status.toLowerCase() === 'fulfilled'}
+                                    >
+                                        Receive
+                                    </Button>
+                                </DataTable.Cell>
+                            </DataTable.Row>
+                        ))}
+                    </DataTable>
+                </ScrollView>
+            </View>
 
-            {filteredItems.slice(from, to).map((item) => (
-                <DataTable.Row style={styles.table__row} key={item.id}>
-                    <DataTable.Cell style={{ flexGrow: 1 }}>{item.id}</DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.supplier.name}</DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 3 }}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.deliveryDate.toLocaleDateString()}</DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 2 }}>{item.delivery.total}</DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 3 }}>{item.preparedBy}</DataTable.Cell>
-                    <DataTable.Cell
-                        style={{ flexGrow: 3 }}
-                        textStyle={{
-                            color: getStatusColor(item.status)
-                        }}>
-                        {item.status}
-                    </DataTable.Cell>
-                    <DataTable.Cell style={{ flexGrow: 3 }}>
-                        <Button 
-                            mode="contained" 
-                            onPress={() => handleReceiveOrder(item)}
-                            style={[
-                                styles.receiveButton,
-                                item.status.toLowerCase() === 'cancelled' && styles.cancelledButton
-                            ]}
-                            disabled={item.status.toLowerCase() === 'cancelled'  || item.status.toLowerCase() === 'fulfilled'}
-                        >
-                            Receive
-                        </Button>
-                    </DataTable.Cell>
-                </DataTable.Row>
-            ))}
-
-            <DataTable.Pagination
-                page={page}
-                numberOfPages={Math.ceil(items.length / itemsPerPage)}
-                onPageChange={(page) => setPage(page)}
-                label={`${from + 1}-${to} of ${items.length}`}
-                numberOfItemsPerPageList={numberOfItemsPerPageList}
-                numberOfItemsPerPage={itemsPerPage}
-                onItemsPerPageChange={onItemsPerPageChange}
-                showFastPaginationControls
-                selectPageDropdownLabel={'Rows per page'}
-                dropdownItemRippleColor={'white'}
-                theme={{
-                    colors: {
-                        elevation: {
-                            level2: theme.colors.accent,
+            <View style={styles.paginationContainer}>
+                <DataTable.Pagination
+                    page={page}
+                    numberOfPages={Math.ceil(items.length / itemsPerPage)}
+                    onPageChange={(page) => setPage(page)}
+                    label={`${from + 1}-${to} of ${items.length}`}
+                    numberOfItemsPerPageList={numberOfItemsPerPageList}
+                    numberOfItemsPerPage={itemsPerPage}
+                    onItemsPerPageChange={onItemsPerPageChange}
+                    showFastPaginationControls
+                    selectPageDropdownLabel={'Rows per page'}
+                    dropdownItemRippleColor={'white'}
+                    theme={{
+                        colors: {
+                            elevation: {
+                                level2: theme.colors.accent,
+                            },
+                            primary: 'black',
                         },
-                        primary: 'black',
-                    },
-                }}
-            />
-        </DataTable>
+                    }}
+                />
+            </View>
+
+        </View>
     );
 }
 
@@ -177,5 +186,20 @@ const styles = StyleSheet.create({
     cancelledButton: {
         backgroundColor: '#cccccc',  // grey color for cancelled items
         opacity: 0.7
-    }
+    },
+    container: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    tableContainer: {
+        flex: 1,
+        flexGrow: 1,
+    },
+    paginationContainer: {
+        width: '100%',
+        backgroundColor: 'white', // Or match your theme
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0', // Optional - adds a subtle separator
+    },
 });
