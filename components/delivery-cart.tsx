@@ -125,7 +125,7 @@ export function DeliveryCartComponent({
                                             <Text variant="bodySmall">Current Stock: {product.stocks}</Text>
                                         </View>
                                         <View style={styles.pill}>
-                                            <Text variant="bodySmall">Unit: {product.units}</Text>
+                                            <Text variant="bodySmall">Unit: {product.unitType}</Text>
                                         </View>
                                     </View>
                                 </View>
