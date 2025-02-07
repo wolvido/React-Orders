@@ -1,5 +1,5 @@
 import commonStyles from '@/style/common';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { products } from '@/dummy-data/dummy-products';
 import * as React from 'react';
 import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
@@ -11,24 +11,19 @@ import { EmptyState } from '@/components/empty-state';
 
 //react component
 export default function ProductsScreen() {
-
         const [page, setPage] = useState<number>(0);
-    
         const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
-    
         const [itemsPerPage, onItemsPerPageChange] = useState(
           numberOfItemsPerPageList[0]
         );
     
         const items = products;
-      
         const from = page * itemsPerPage; 
         const to = Math.min((page + 1) * itemsPerPage, items.length);
       
         useEffect(() => {
           setPage(0);
         }, [itemsPerPage]);
-
 
         //search
         const searchableFields: (keyof Product)[] = [
@@ -47,13 +42,11 @@ export default function ProductsScreen() {
                     subtitle="No products available at the moment"
                 />
             </View>
-
         );
     }
 
     return (
-        // <View style={commonStyles.main}>            
-        <DataTable>
+        <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
                     placeholder="Search..."
@@ -83,18 +76,23 @@ export default function ProductsScreen() {
 
             </DataTable.Header>
 
-            {filteredItems.slice(from, to).map((item) => (
-                <DataTable.Row key={item.key}>
-                    <DataTable.Cell>{item.name}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.sellingPrice}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.costPrice}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.category}</DataTable.Cell>
-                    <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
+            <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <ScrollView style={{ flex: 1 }}>
+                    <DataTable>
 
-                </DataTable.Row>
-            ))}
+                        {filteredItems.slice(from, to).map((item) => (
+                            <DataTable.Row key={item.key}>
+                                <DataTable.Cell>{item.name}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.sellingPrice}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.costPrice}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.category}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
+                            </DataTable.Row>
+                        ))}
+                    </DataTable>
+                </ScrollView>
 
             {/* the table controller */}
             <DataTable.Pagination
@@ -119,8 +117,9 @@ export default function ProductsScreen() {
                 }}
             />
 
-        </DataTable>
-        // </View>
+            </View>
+        </View>
+        
     );
 }
 

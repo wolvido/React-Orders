@@ -6,7 +6,7 @@ import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
 import { useState, useEffect } from 'react';
 import PaymentStatus from '@/enums/payment-status';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
 import Status from '@/enums/status'
@@ -17,17 +17,22 @@ import { Order } from '@/entities/order';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 
+import { orders } from '@/dummy-data/dummy-orders';
+
 //react component
 export default function OrdersScreen() {
 
     //get the order items from the order repository
-    const orderRepository = new OrderRepository();
-    const [items, setItems] = useState<Order[]>([]);
-    useEffect(() => {
-        orderRepository.getAll().then((data) => {
-            setItems(data);
-        });
-    }, []);
+    // const orderRepository = new OrderRepository();
+    // const [items, setItems] = useState<Order[]>([]);
+    // useEffect(() => {
+    //     orderRepository.getAll().then((data) => {
+    //         setItems(data);
+    //     });
+    // }, []);
+
+    //lets use dummy data for now
+    const items = orders;
 
     const searchableFields: (keyof Order)[] = [
         'orderType',
@@ -110,7 +115,7 @@ export default function OrdersScreen() {
     }
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Portal>
                 <Modal
                     visible={showStatusModal}
@@ -145,10 +150,10 @@ export default function OrdersScreen() {
         )}
 
         {!showPaymentForm && (
-        <DataTable>
+        <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <DataTable.Header style={commonStyles.extraHeader}>
                 <Searchbar
-                    placeholder="Search customer or order type"
+                    placeholder="Search..."
                     onChangeText={setSearchQuery}
                     value={searchQuery}
                     mode='view'
@@ -175,76 +180,86 @@ export default function OrdersScreen() {
                 <DataTable.Title style={{flexGrow: 2}}>Action</DataTable.Title>
             </DataTable.Header>
 
-            {filteredItems.slice(from, to).map((item) => (
-                <DataTable.Row key={item.id}>
-                    <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
-                    <DataTable.Cell
-                        style={{flexGrow: 3}}
-                        textStyle = {
-                            {color: getPaymentStatusColor(item.orderStatus)}
-                        }
+            <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <ScrollView style={{ flex: 1 }}>
+                            <DataTable>
+                                {filteredItems.slice(from, to).map((item) => (
+                                    <DataTable.Row key={item.id}>
+                                        <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
+                                        <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
+                                        <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
+                                        <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
+                                        <DataTable.Cell
+                                            style={{flexGrow: 3}}
+                                            textStyle = {
+                                                {color: getPaymentStatusColor(item.orderStatus)}
+                                            }
 
-                        >{item.orderStatus.toString()}</DataTable.Cell>
+                                            >{item.orderStatus.toString()}</DataTable.Cell>
 
-                    {/* <DataTable.Cell 
-                        style={{flexGrow: 3}}
-                        textStyle = {
-                            {color: getStatusColor(item.fulfillmentStatus)}
-                        }
-                    >{item.fulfillmentStatus}</DataTable.Cell> */}
+                                        {/* <DataTable.Cell 
+                                            style={{flexGrow: 3}}
+                                            textStyle = {
+                                                {color: getStatusColor(item.fulfillmentStatus)}
+                                            }
+                                        >{item.fulfillmentStatus}</DataTable.Cell> */}
 
-                    <DataTable.Cell
-                        style={{flexGrow: 3}}
-                    >
-                        <Button 
-                            mode="outlined" 
-                            onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
-                            textColor = {getStatusColor(item.fulfillmentStatus)}
-                            >
-                            {item.fulfillmentStatus}
-                        </Button>
+                                        <DataTable.Cell
+                                            style={{flexGrow: 3}}
+                                        >
+                                            <Button 
+                                                mode="outlined" 
+                                                onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
+                                                textColor = {getStatusColor(item.fulfillmentStatus)}
+                                                >
+                                                {item.fulfillmentStatus}
+                                            </Button>
 
-                    </DataTable.Cell>
+                                        </DataTable.Cell>
 
-                    <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
-                    <DataTable.Cell style={{flexGrow: 2}}>
-                        <Button 
-                            mode="contained" 
-                            onPress={() => handlePaymentClick(item.total, item.id)}
-                            disabled={item.orderStatus === PaymentStatus.paid}
-                        >
-                            Add Pay
-                        </Button>
-                    </DataTable.Cell>
-                </DataTable.Row>
-            ))}
-
-            {/* the table controller */}
-            <DataTable.Pagination
-                page={page}
-                numberOfPages={Math.ceil(items.length / itemsPerPage)}
-                onPageChange={(page) => setPage(page)}
-                label={`${from + 1}-${to} of ${items.length}`}
-                numberOfItemsPerPageList={numberOfItemsPerPageList}
-                numberOfItemsPerPage={itemsPerPage}
-                onItemsPerPageChange={onItemsPerPageChange}
-                showFastPaginationControls
-                selectPageDropdownLabel={'Rows per page'}
-                dropdownItemRippleColor={'white'}
-                theme={{
-                    colors: {
-                        elevation: {
-                            level2: theme.colors.accent,
+                                        <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
+                                        <DataTable.Cell style={{flexGrow: 2}}>
+                                            <Button 
+                                                mode="contained" 
+                                                onPress={() => handlePaymentClick(item.total, item.id)}
+                                                disabled={item.orderStatus === PaymentStatus.paid}
+                                            >
+                                                Add Pay
+                                            </Button>
+                                        </DataTable.Cell>
+                                    </DataTable.Row>
+                                ))}
+                           </DataTable>
+                        </ScrollView>
+                {/* the table controller */}
+                <DataTable.Pagination
+                    page={page}
+                    numberOfPages={Math.ceil(items.length / itemsPerPage)}
+                    onPageChange={(page) => setPage(page)}
+                    label={`${from + 1}-${to} of ${items.length}`}
+                    numberOfItemsPerPageList={numberOfItemsPerPageList}
+                    numberOfItemsPerPage={itemsPerPage}
+                    onItemsPerPageChange={onItemsPerPageChange}
+                    showFastPaginationControls
+                    selectPageDropdownLabel={'Rows per page'}
+                    dropdownItemRippleColor={'white'}
+                    theme={{
+                        colors: {
+                            elevation: {
+                                level2: theme.colors.accent,
+                            },
+                            primary: 'black',
                         },
-                        primary: 'black',
-                    },
-                }}
-            />
+                    }}
+                    style={{
+                        backgroundColor: 'white',
+                        borderTopWidth: 1,
+                        borderTopColor: '#e0e0e0'
+                    }}
+                />
 
-        </DataTable>
+            </View>
+        </View>
         )}
 
         </View>

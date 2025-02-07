@@ -82,20 +82,20 @@ export default function PurchaseOrdersScreen() {
                 />
             </DataTable.Header>
 
+            <DataTable.Header>
+                <DataTable.Title style={{ flexGrow: 1 }}>ID</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Supplier</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Transaction Date</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Expected Del. Date</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 2 }}>Expected Total</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Prepared By</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Status</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
+            </DataTable.Header>
+
             <View style={styles.tableContainer}>
                 <ScrollView>
                     <DataTable>
-                        <DataTable.Header>
-                            <DataTable.Title style={{ flexGrow: 1 }}>ID</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Supplier</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Transaction Date</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Expected Del. Date</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 2 }}>Expected Total</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Prepared By</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Status</DataTable.Title>
-                            <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
-                        </DataTable.Header>
-                    
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row style={styles.table__row} key={item.id}>
                                 <DataTable.Cell style={{ flexGrow: 1 }}>{item.id}</DataTable.Cell>
