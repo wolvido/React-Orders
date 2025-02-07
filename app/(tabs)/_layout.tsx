@@ -218,7 +218,6 @@ export default function TabLayout() {
     );
 }
 
-
 const styles = StyleSheet.create({
     drawerContainer: {
         width: 250,

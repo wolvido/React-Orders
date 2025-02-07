@@ -7,7 +7,7 @@ import { Cart } from "./cart";
 export interface Order{
     id: number;
     orderType: PaymentMethod;
-    customer: Customer;
+    customer: Customer; //can be 'walk in'
     transactionDate: Date;
     total: number;
     orderStatus: PaymentStatus;

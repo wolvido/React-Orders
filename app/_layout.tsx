@@ -10,15 +10,9 @@ import { CartProvider } from '@/context/cart-context';
 import { OrderProvider } from '@/context/order-context';
 import { DeliveryProvider } from '@/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
-import useOrientation from '@/hooks/orientation-hook';
-
-
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
-
-    //detects orientation for design purposes
-    //const orientation = useOrientation();
 
     return (
         <AuthProvider>

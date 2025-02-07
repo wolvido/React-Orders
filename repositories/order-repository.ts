@@ -16,14 +16,12 @@ export interface IOrderRepository {
     updatePaymentStatus(id: number, status: PaymentStatus): Promise<Order>;
 }
 
-
 export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = 'https://localhost:7215/api/orders';
+        this.baseUrl = '';
     }
-
 
     //response handler
     private async handleResponse<T>(response: Response): Promise<T> {
