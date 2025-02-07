@@ -100,7 +100,7 @@ export default function TabLayout() {
                                         <MaterialCommunityIcons
                                             name={item.icon}
                                             size={size}
-                                            color="white"
+                                            color={state.routes[state.index].name === item.name ? theme.colors.primary : "white"}
                                         />
                                     )}
                                     label={item.label}
@@ -108,7 +108,7 @@ export default function TabLayout() {
                                     theme={{
                                         colors: {
                                             onSurfaceVariant: 'white',
-                                            onSecondaryContainer: 'white',
+                                            onSecondaryContainer: theme.colors.primary,
                                             secondaryContainer: theme.colors.background,
                                         }
                                     }}
@@ -197,12 +197,6 @@ export default function TabLayout() {
                 );
             }}
         >
-            <Tabs.Screen
-                name="index"
-                options={{
-                    href: null,
-                }}
-            />
             {navigationItems.map((item) => (
                 <Tabs.Screen
                     key={item.name}
