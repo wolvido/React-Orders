@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CommonActions, DefaultTheme} from '@react-navigation/native';
-import { Text, BottomNavigation, IconButton } from 'react-native-paper';
+import { Text, BottomNavigation, IconButton, Drawer } from 'react-native-paper';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import theme from '@/style/theme';
 import { Redirect, Tabs } from 'expo-router';
 
 import { useAuth } from '@/authentication/ctx';
+import useOrientation from '@/hooks/orientation-hook';
+import { View, StyleSheet, Animated } from 'react-native';
 
 export default function TabLayout() {
-
+    const orientation = useOrientation();
     const { logout, isAuthenticated, isLoading } = useAuth();
-
+    const [drawerVisible, setDrawerVisible] = useState(false);
+    
     if (isLoading) {
         return <Text>Loading...</Text>;
     }
@@ -20,150 +23,223 @@ export default function TabLayout() {
         return <Redirect href="/sign-in" />;
     }
 
+    const navigationItems = [
+        {
+            name: '(orders)',
+            label: 'Orders',
+            icon: 'clipboard-list' as const,
+        },
+        {
+            name: '(products)',
+            label: 'Products',
+            icon: 'package-variant' as const,
+        },
+        {
+            name: '(add-delivery)',
+            label: 'Add Delivery',
+            icon: 'truck-delivery' as const,
+        },
+        {
+            name: '(add-order)',
+            label: 'Add Order',
+            icon: 'cart-plus' as const,
+        },
+        {
+            name: '(purchase-orders)',
+            label: 'Purchase Orders',
+            icon: 'format-list-checkbox' as const,
+        },
+    ];
+
     return (
-        
         <Tabs
-            screenOptions={{
-                headerShown: true,
-                headerStyle: {
-                    backgroundColor: theme.colors.primary, // Header background color
-                },
-                headerTintColor: 'white', // Header text/icons color
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                },
-                headerShadowVisible: true,
+        screenOptions={{
+            headerShown: true,
+            headerStyle: {
+                backgroundColor: theme.colors.primary,
+            },
+            headerTintColor: 'white',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+                fontSize: 20,
+            },
+            headerShadowVisible: true,
+            headerLeft: orientation === 'LANDSCAPE' ? () => (
+                <IconButton
+                    icon={drawerVisible ? "menu-open" : "menu"}
+                    iconColor="white"
+                    size={24}
+                    onPress={() => setDrawerVisible(!drawerVisible)}
+                />
+            ) : undefined,
+            headerRight: () => (
+                <IconButton
+                    icon="logout"
+                    iconColor="white"
+                    size={24}
+                    onPress={logout}
+                />
+            ),
+        }}
+        tabBar={({ navigation, state, descriptors, insets }) => {
+            if (orientation === 'LANDSCAPE') {
+                return (
+                    <Animated.View style={[
+                        styles.drawerContainer,
+                        {
+                            transform: [{
+                                translateX: drawerVisible ? 0 : -250,
+                            }],
+                        }
+                    ]}>
+                        <Drawer.Section style={styles.drawer}>
+                            {navigationItems.map((item) => (
+                                <Drawer.Item
+                                    key={item.name}
+                                    icon={({ size }) => (
+                                        <MaterialCommunityIcons
+                                            name={item.icon}
+                                            size={size}
+                                            color="white"
+                                        />
+                                    )}
+                                    label={item.label}
+                                    active={state.routes[state.index].name === item.name}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: 'white',
+                                            onSecondaryContainer: 'white',
+                                            secondaryContainer: theme.colors.background,
+                                        }
+                                    }}
+                                    onPress={() => {
+                                        const event = navigation.emit({
+                                            type: 'tabPress',
+                                            target: item.name,
+                                            canPreventDefault: true,
+                                        });
 
-                headerRight: () => (
-                    <IconButton
-                        icon="logout"
-                        iconColor="white"
-                        size={24}
-                        onPress={logout}
-                    />
-                ),
-            }}
+                                        if (!event.defaultPrevented) {
+                                            navigation.dispatch({
+                                                ...CommonActions.navigate(item.name),
+                                                target: state.key,
+                                            });
+                                        }
+                                    }}
+                                />
+                            ))}
+                            <Drawer.Item
+                                icon={({ size }) => (
+                                    <MaterialCommunityIcons
+                                        name="logout"
+                                        size={size}
+                                        color="white"
+                                    />
+                                )}
+                                label="Logout"
+                                theme={{
+                                    colors: {
+                                        onSurfaceVariant: 'white',
+                                    }
+                                }}
+                                onPress={logout}
+                            />
+                        </Drawer.Section>
+                    </Animated.View>
+                );
+            }
 
-
-            tabBar={({ navigation, state, descriptors, insets }) => (
-                <BottomNavigation.Bar
-                    navigationState={state}
-                    safeAreaInsets={insets}
-
-                    style={{
-                        backgroundColor: theme.colors.primary,
-                        
-                    }}  
-
-                    activeColor = 'white'
-                    inactiveColor='white'
-
-                    activeIndicatorStyle={{
-                        backgroundColor: theme.colors.background,
-                    }}
-
-                    onTabPress={({ route, preventDefault }) => {
-                        const event = navigation.emit({
-                            type: 'tabPress',
-                            target: route.key,
-                            canPreventDefault: true,
-                        });
-
-                    
-                        if (event.defaultPrevented) {
-                            preventDefault();
-                        } else {
-                            navigation.dispatch({
-                                ...CommonActions.navigate(route.name, route.params),
-                                target: state.key,
+                return (
+                    <BottomNavigation.Bar
+                        navigationState={state}
+                        safeAreaInsets={insets}
+                        style={{
+                            backgroundColor: theme.colors.primary,
+                        }}
+                        activeColor="white"
+                        inactiveColor="white"
+                        activeIndicatorStyle={{
+                            backgroundColor: theme.colors.background,
+                        }}
+                        onTabPress={({ route, preventDefault }) => {
+                            const event = navigation.emit({
+                                type: 'tabPress',
+                                target: route.key,
+                                canPreventDefault: true,
                             });
-                        }
-                    }}
 
-                    renderIcon={({ route, focused, color }) => {
-                        const { options } = descriptors[route.key];
-                        if (options.tabBarIcon) {
-                            // Invert the color for icons - when tab is active use yellow, when inactive use white
-                            const iconColor = focused ? theme.colors.primary : "white";
-                            return options.tabBarIcon({ focused, color: iconColor, size: 24 });
-                        }
-                        return null;
-                    }}
-
-                    getLabelText={({ route }) => {
-                        const { options } = descriptors[route.key];
-                        const label =
-                            typeof options.tabBarLabel === 'string'
+                            if (event.defaultPrevented) {
+                                preventDefault();
+                            } else {
+                                navigation.dispatch({
+                                    ...CommonActions.navigate(route.name, route.params),
+                                    target: state.key,
+                                });
+                            }
+                        }}
+                        renderIcon={({ route, focused, color }) => {
+                            const { options } = descriptors[route.key];
+                            if (options.tabBarIcon) {
+                                const iconColor = focused ? theme.colors.primary : "white";
+                                return options.tabBarIcon({ focused, color: iconColor, size: 24 });
+                            }
+                            return null;
+                        }}
+                        getLabelText={({ route }) => {
+                            const { options } = descriptors[route.key];
+                            return typeof options.tabBarLabel === 'string'
                                 ? options.tabBarLabel
                                 : options.title !== undefined
                                     ? options.title
                                     : route.name;
-                        return label;
+                        }}
+                    />
+                );
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    href: null,
+                }}
+            />
+            {navigationItems.map((item) => (
+                <Tabs.Screen
+                    key={item.name}
+                    name={item.name}
+                    options={{
+                        title: item.label,
+                        tabBarLabel: item.label,
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialCommunityIcons 
+                                name={item.icon} 
+                                size={size} 
+                                color={color} 
+                            />
+                        ),
                     }}
                 />
-            )}
-        >
-
-        <Tabs.Screen
-            name="(orders)"
-            options={{
-                title: 'Orders',
-                tabBarLabel: 'Orders',
-                tabBarIcon: ({ color, size }) => {
-                  return <MaterialCommunityIcons name="clipboard-list" size={size} color={color} />;
-                },
-            }}
-        />
-
-        <Tabs.Screen
-            name="(products)"
-            options={{
-                title: 'Products',
-                tabBarLabel: 'Products',
-                tabBarIcon: ({ color, size }) => {
-                  return <MaterialCommunityIcons name="package-variant" size={size} color={color} />;
-                },
-            }}
-        />
-
-        <Tabs.Screen
-            name="(add-delivery)"
-            options={{
-                title: 'Add Delivery',
-                tabBarLabel: 'Add Delivery',
-                tabBarIcon: ({ color, size }) => {
-                  return <MaterialCommunityIcons name="truck-delivery" size={size} color={color} />;
-                },
-            }}
-        />
-
-        <Tabs.Screen
-            name="(add-order)"
-            options={{
-                title: 'Add Order',
-                tabBarLabel: 'Add Order',
-                tabBarIcon: ({ color, size }) => {
-                  return <MaterialCommunityIcons name="cart-plus" size={size} color={color} />;
-                },
-            }}
-        />
-
-        <Tabs.Screen
-            name="(purchase-orders)"
-            options={{
-                title: 'Purchase Orders',
-                tabBarLabel: 'Purchase Orders',
-                href : "/(tabs)/(purchase-orders)/purchase-orders",
-                tabBarIcon: ({ color, size }) => {
-                  return <MaterialCommunityIcons name="format-list-checkbox" size={size} color={color} />;
-                },
-            }}
-        />{
-
-        }
+            ))}
         </Tabs>
-
-        
     );
 }
+
+
+const styles = StyleSheet.create({
+    drawerContainer: {
+        width: 250,
+        backgroundColor: theme.colors.primary,
+        position: 'absolute',
+        left: 0,
+        top: 64, // Height of your header
+        bottom: 0,
+        zIndex: 1,
+    },
+    drawer: {
+        backgroundColor: 'transparent',
+    },
+    contentContainer: {
+        flex: 1,
+        marginLeft: 0, // This will be animated
+    },
+});
