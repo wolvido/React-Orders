@@ -96,13 +96,14 @@ export default function TabLayout() {
                                 canPreventDefault: true,
                             });
 
-                            // in case we need to prevent navigation
+                            // in case we need to prevent navigation for some reason
                             if (!event.defaultPrevented) {
                                 navigation.dispatch({
                                     ...CommonActions.navigate(name),
                                     target: state.key,
                                 });
                             }
+                            //why use this instead of expo navigation? because its safer
                         }}
                         onLogout={logout}
                     />
@@ -128,6 +129,7 @@ export default function TabLayout() {
                                 canPreventDefault: true,
                             });
 
+                            // in case we need to prevent navigation for some reason
                             if (event.defaultPrevented) {
                                 preventDefault();
                             } else {
