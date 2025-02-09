@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const mockUser = { 
         id: '1', 
         username,
-        email: `${username}@example.com` // You might want to modify this based on your needs
+        email: `${username}@example.com` // modify this later
       };
       const mockToken = 'mock-jwt-token';
   
@@ -77,7 +77,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await AsyncStorage.setItem('userData', JSON.stringify(mockUser));
   
       setUser(mockUser);
+
+      // auto authenticate user, add API later
       setIsAuthenticated(true);
+      
     } catch (error) {
       console.error('Login error:', error);
       setIsAuthenticated(false);
