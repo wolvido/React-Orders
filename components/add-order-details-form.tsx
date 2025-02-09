@@ -10,6 +10,7 @@ import CustomersSelection from './costumers-selection';
 import { Customer } from '@/entities/customers';
 import { Order } from '@/entities/order';
 import PaymentMethod from '@/entities/payment-method';
+import { DatePicker } from './date-picker';
 
 // Define props interface
 interface OrderDetailsFormProps {
@@ -75,17 +76,11 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.datePickerWrapper}>
-                <DatePickerInput
-                    locale="en"
-                    label="Transaction Date"
-                    value={formData.transactionDate}
-                    onChange={(date) => handleInputChange('transactionDate', date as Date)}
-                    mode="outlined"
-                    inputMode="start"
-                />
-            </View>
-
+            <DatePicker
+                label="Transaction Date"
+                value={formData.transactionDate}
+                onChange={(date) => handleInputChange('transactionDate', date as Date)}
+            />
             <View style={styles.customerInputContainer}>
                 {selectedCustomer && (
                     <Text style={styles.customerLabel}>
