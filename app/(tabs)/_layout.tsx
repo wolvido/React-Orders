@@ -9,6 +9,7 @@ import { Redirect, Tabs } from 'expo-router';
 import { useAuth } from '@/authentication/ctx';
 import useOrientation from '@/hooks/orientation-hook';
 import { View, StyleSheet, Animated } from 'react-native';
+import { LandscapeDrawer } from '@/components/landscape-drawer';
 
 export default function TabLayout() {
     const orientation = useOrientation();
@@ -84,68 +85,27 @@ export default function TabLayout() {
         tabBar={({ navigation, state, descriptors, insets }) => {
             if (orientation === 'LANDSCAPE') {
                 return (
-                    <Animated.View style={[
-                        styles.drawerContainer,
-                        {
-                            transform: [{
-                                translateX: drawerVisible ? 0 : -250,
-                            }],
-                        }
-                    ]}>
-                        <Drawer.Section style={styles.drawer}>
-                            {navigationItems.map((item) => (
-                                <Drawer.Item
-                                    key={item.name}
-                                    icon={({ size }) => (
-                                        <MaterialCommunityIcons
-                                            name={item.icon}
-                                            size={size}
-                                            color={state.routes[state.index].name === item.name ? theme.colors.primary : "white"}
-                                        />
-                                    )}
-                                    label={item.label}
-                                    active={state.routes[state.index].name === item.name}
-                                    theme={{
-                                        colors: {
-                                            onSurfaceVariant: 'white',
-                                            onSecondaryContainer: theme.colors.primary,
-                                            secondaryContainer: theme.colors.background,
-                                        }
-                                    }}
-                                    onPress={() => {
-                                        const event = navigation.emit({
-                                            type: 'tabPress',
-                                            target: item.name,
-                                            canPreventDefault: true,
-                                        });
+                    <LandscapeDrawer
+                        visible={drawerVisible}
+                        navigationItems={navigationItems}
+                        currentRoute={state.routes[state.index].name}
+                        onNavigate={(name) => {
+                            const event = navigation.emit({
+                                type: 'tabPress',
+                                target: name,
+                                canPreventDefault: true,
+                            });
 
-                                        if (!event.defaultPrevented) {
-                                            navigation.dispatch({
-                                                ...CommonActions.navigate(item.name),
-                                                target: state.key,
-                                            });
-                                        }
-                                    }}
-                                />
-                            ))}
-                            <Drawer.Item
-                                icon={({ size }) => (
-                                    <MaterialCommunityIcons
-                                        name="logout"
-                                        size={size}
-                                        color="white"
-                                    />
-                                )}
-                                label="Logout"
-                                theme={{
-                                    colors: {
-                                        onSurfaceVariant: 'white',
-                                    }
-                                }}
-                                onPress={logout}
-                            />
-                        </Drawer.Section>
-                    </Animated.View>
+                            // in case we need to prevent navigation
+                            if (!event.defaultPrevented) {
+                                navigation.dispatch({
+                                    ...CommonActions.navigate(name),
+                                    target: state.key,
+                                });
+                            }
+                        }}
+                        onLogout={logout}
+                    />
                 );
             }
 
