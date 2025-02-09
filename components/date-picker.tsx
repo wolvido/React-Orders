@@ -1,3 +1,4 @@
+import useOrientation from '@/hooks/orientation-hook';
 import React, { useState, useMemo } from 'react';
 import { View, Modal, StyleSheet, Animated, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Text, TouchableRipple, IconButton } from 'react-native-paper';
@@ -14,6 +15,8 @@ export const DatePicker = ({ label, value, onChange, error }: DatePickerProps) =
     const [slideAnim] = useState(new Animated.Value(0));
     const [isFocused, setIsFocused] = useState(false);
     const [currentMonth, setCurrentMonth] = useState(value || new Date());
+
+    const isLandscape = useOrientation() === 'LANDSCAPE';
 
     const showDatePicker = () => {
         setIsVisible(true);
@@ -71,8 +74,10 @@ export const DatePicker = ({ label, value, onChange, error }: DatePickerProps) =
                     key={i}
                     style={[
                         styles.dayCell,
+                        //conditional styles, applies when true
                         isSelected && styles.selectedDay,
-                        isToday && styles.today
+                        isToday && styles.today,
+                        isLandscape && styles.dayCellLandscape // Adjust cell height in landscape mode
                     ]}
                     onPress={() => handleDateSelect(date)}
                 >
@@ -87,7 +92,7 @@ export const DatePicker = ({ label, value, onChange, error }: DatePickerProps) =
         }
 
         return days;
-    }, [currentMonth, value]);
+    }, [currentMonth, value, isLandscape]);
 
     const changeMonth = (increment: number) => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + increment, 1));
@@ -105,16 +110,16 @@ export const DatePicker = ({ label, value, onChange, error }: DatePickerProps) =
             >
                 <View style={styles.inputContent}>
                     <Text style={[
-                        styles.label,
-                        (isFocused || value) && styles.labelSmall,
-                        error && styles.errorText
-                    ]}>
+                            styles.label,
+                            (isFocused || value) && styles.labelSmall,
+                            error && styles.errorText
+                        ]}>
                         {label}
                     </Text>
                     <Text style={[
-                        styles.value,
-                        !value && styles.placeholder
-                    ]}>
+                            styles.value,
+                            !value && styles.placeholder
+                        ]}>
                         {value ? formatDate(value) : 'Select date'}
                     </Text>
                 </View>
@@ -141,7 +146,10 @@ export const DatePicker = ({ label, value, onChange, error }: DatePickerProps) =
                                                     inputRange: [0, 1],
                                                     outputRange: [300, 0]
                                                 })
-                                            }]
+                                            }],
+                                            width: isLandscape ? '90%' : 'auto',
+                                            height: isLandscape ? '90%' : 'auto', // Adjust height in landscape mode
+                                            alignSelf: isLandscape ? 'center' : 'stretch',
                                         }
                                     ]}
                                 >
@@ -240,7 +248,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
-        padding: 16,
+        paddingHorizontal: 16,
     },
     header: {
         flexDirection: 'row',
@@ -268,22 +276,24 @@ const styles = StyleSheet.create({
     dayCell: {
         width: '14.28%',
         aspectRatio: 1,
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 1,
+    },
+    dayCellLandscape: {
+        aspectRatio: 1.2, // Adjust cell height in landscape mode
     },
     dayText: {
         fontSize: 14,
     },
     selectedDay: {
-        backgroundColor: '#6200EE',
+        backgroundColor: 'rgb(15, 119, 107)',
         borderRadius: 20,
     },
     selectedDayText: {
         color: 'white',
     },
     today: {
-        borderWidth: 1,
-        borderColor: '#6200EE',
-        borderRadius: 20,
     },
 });
