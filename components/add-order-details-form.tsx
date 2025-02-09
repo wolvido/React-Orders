@@ -75,66 +75,73 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
 
     return (
         <View style={styles.container}>
-        <DatePickerInput
-            locale="en"
-            label="Transaction Date"
-            value={formData.transactionDate}
-            onChange={(date) => handleInputChange('transactionDate', date as Date)}
-            mode="outlined"
-            inputMode="start"
-        />
+            <View style={styles.datePickerWrapper}>
+                <DatePickerInput
+                    locale="en"
+                    label="Transaction Date"
+                    value={formData.transactionDate}
+                    onChange={(date) => handleInputChange('transactionDate', date as Date)}
+                    mode="outlined"
+                    inputMode="start"
+                />
+            </View>
 
-        <View style={styles.customerInputContainer}>
-            {selectedCustomer && (
-                <Text style={styles.customerLabel}>
-                    Customer
-                </Text>
-            )}
-            <Button
+            <View style={styles.customerInputContainer}>
+                {selectedCustomer && (
+                    <Text style={styles.customerLabel}>
+                        Customer
+                    </Text>
+                )}
+                <Button
+                    mode="outlined"
+                    onPress={showCustomersModal}
+                    style={styles.customerButton}
+                    contentStyle={styles.customerButtonContent}
+                    icon="menu-down"
+                >
+                    <Text style={[
+                        styles.customerButtonText,
+                        !selectedCustomer && styles.customerButtonPlaceholder
+                    ]}>
+                        {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
+                    </Text>
+                </Button>
+            </View>
+
+            <TextInput
                 mode="outlined"
-                onPress={showCustomersModal}
-                style={styles.customerButton}
-                contentStyle={styles.customerButtonContent}
-                icon="menu-down"
+                label="Delivery Address"
+                value={formData.deliveryAddress}
+                onChangeText={(value) => handleInputChange('deliveryAddress', value)}
+            />
+
+            <Button 
+                mode="contained"
+                onPress={handleSubmit}
+                disabled={!selectedCustomer}
             >
-                <Text style={[
-                    styles.customerButtonText,
-                    !selectedCustomer && styles.customerButtonPlaceholder
-                ]}>
-                    {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
-                </Text>
+                Submit Order Details
             </Button>
-        </View>
 
-        <TextInput
-            mode="outlined"
-            label="Delivery Address"
-            value={formData.deliveryAddress}
-            onChangeText={(value) => handleInputChange('deliveryAddress', value)}
-        />
-
-        <CustomersSelection 
-            visible={visibleCustomers}
-            hideModal={hideCustomersModal}
-            customers={dummyCustomers}
-            onSelectCustomer={handleCustomerSelect}
-        />
-
-        <Button 
-            mode="contained"
-            onPress={handleSubmit}
-            disabled={!selectedCustomer}
-        >
-            Submit Order Details
-        </Button>
+            <CustomersSelection 
+                visible={visibleCustomers}
+                hideModal={hideCustomersModal}
+                customers={dummyCustomers}
+                onSelectCustomer={handleCustomerSelect}
+            />
     </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
-        gap: 16, // Consistent spacing between all elements
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+    },
+    datePickerWrapper: {
+        marginBottom: 35,
+        marginTop: 40,
     },
     customerInputContainer: {
         position: 'relative',
