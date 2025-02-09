@@ -8,7 +8,7 @@ import { Redirect, Tabs } from 'expo-router';
 
 import { useAuth } from '@/authentication/ctx';
 import useOrientation from '@/hooks/orientation-hook';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated, Pressable } from 'react-native';
 import { LandscapeDrawer } from '@/components/landscape-drawer';
 
 export default function TabLayout() {
@@ -85,28 +85,35 @@ export default function TabLayout() {
         tabBar={({ navigation, state, descriptors, insets }) => {
             if (orientation === 'LANDSCAPE') {
                 return (
-                    <LandscapeDrawer
-                        visible={drawerVisible}
-                        navigationItems={navigationItems}
-                        currentRoute={state.routes[state.index].name}
-                        onNavigate={(name) => {
-                            const event = navigation.emit({
-                                type: 'tabPress',
-                                target: name,
-                                canPreventDefault: true,
-                            });
-
-                            // in case we need to prevent navigation for some reason
-                            if (!event.defaultPrevented) {
-                                navigation.dispatch({
-                                    ...CommonActions.navigate(name),
-                                    target: state.key,
+                    <>
+                        {drawerVisible && (
+                            <Pressable 
+                                style={styles.overlay}
+                                onPress={() => setDrawerVisible(false)}
+                            />
+                        )}
+                        <LandscapeDrawer
+                            visible={drawerVisible}
+                            navigationItems={navigationItems}
+                            currentRoute={state.routes[state.index].name}
+                            onNavigate={(name) => {
+                                const event = navigation.emit({
+                                    type: 'tabPress',
+                                    target: name,
+                                    canPreventDefault: true,
                                 });
-                            }
-                            //why use this instead of expo navigation? because its safer
-                        }}
-                        onLogout={logout}
-                    />
+            
+                                if (!event.defaultPrevented) {
+                                    navigation.dispatch({
+                                        ...CommonActions.navigate(name),
+                                        target: state.key,
+                                    });
+                                    setDrawerVisible(false); // Close drawer after navigation
+                                }
+                            }}
+                            onLogout={logout}
+                        />
+                    </>
                 );
             }
 
@@ -195,6 +202,15 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        marginLeft: 0, // This will be animated
+        marginLeft: 0,
+    },    
+    overlay: {
+        position: 'absolute',
+        top: 64, 
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        zIndex: 0, 
     },
 });
