@@ -4,6 +4,7 @@ import { Button, TextInput, Text, List } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { Supplier } from '@/entities/supplier';
 import { Delivery } from '@/entities/delivery';
+import { DatePicker } from './date-picker';
 
 interface AddDeliveryFormProps {
     suppliers: Supplier[];
@@ -77,24 +78,16 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     </Text>
                 </Button>
 
-                <DatePickerInput
-                    locale="en"
+                <DatePicker
                     label="Delivery Date"
                     value={deliveryDate}
                     onChange={(d) => d && setDeliveryDate(d)}
-                    mode="outlined"
-                    style={styles.input}
-                    inputMode='start'
                 />
 
-                <DatePickerInput
-                    locale="en"
+                <DatePicker
                     label="Due Date"
                     value={dueDate}
                     onChange={(d) => d && setDueDate(d)}
-                    mode="outlined"
-                    style={styles.input}
-                    inputMode='start'
                 />
 
                 <TextInput
