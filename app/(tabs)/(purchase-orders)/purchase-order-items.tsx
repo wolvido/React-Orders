@@ -28,7 +28,6 @@ export default function AddPurchaseOrderItemsScreen() {
                 receivedDelivery={purchaseOrder?.delivery?.receivedItems ?? { total: 0, items: [] }}
                 onProceed={handleDeliveryFinalized}
                 onError={(message) => {
-                    // Handle error messages
                     console.error(message);
                 }}
             />

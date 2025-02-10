@@ -10,6 +10,7 @@ import { CartProvider } from '@/context/cart-context';
 import { OrderProvider } from '@/context/order-context';
 import { DeliveryProvider } from '@/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
+import { ScrollView } from 'react-native';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
@@ -22,21 +23,19 @@ export default function RootLayout() {
                     <OrderProvider>
                         <DeliveryProvider>
                             <CartProvider>
-
-                                <Stack
-                                    screenOptions={{
-                                    headerStyle: {
-                                        backgroundColor: 'green'
-                                    },
-                                    headerTintColor: '#fff',
-                                    headerShown: false,
-                                    headerTitleStyle: {
-                                        fontWeight: 'bold',
-                                    },
-                                    }}>
-                                    {/* <Stack.Screen name="(home)" options={{ title: "Home" }}/> */}
-                                </Stack>
-                                
+                                    <Stack
+                                        screenOptions={{
+                                        headerStyle: {
+                                            backgroundColor: 'green'
+                                        },
+                                        headerTintColor: '#fff',
+                                        headerShown: false,
+                                        headerTitleStyle: {
+                                            fontWeight: 'bold',
+                                        },
+                                        }}>
+                                        
+                                    </Stack>
                             </CartProvider>
                         </DeliveryProvider>
                     </OrderProvider>
