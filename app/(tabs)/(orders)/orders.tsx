@@ -141,11 +141,21 @@ export default function OrdersScreen() {
 
         {showPaymentForm && (
             <View>
-                <Appbar.Header>
-                    <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
-                    <Appbar.Content title="Add Payment Method" />
-                </Appbar.Header>
-                <PaymentMethodSelector balance={selectedTotal} onPaymentSubmit={handlePaymentSubmit}/>
+                <ScrollView 
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={{ 
+                        paddingBottom: 100 // Add extra padding at bottom
+                    }}
+                    showsVerticalScrollIndicator={true}
+                    keyboardDismissMode="interactive"
+                    automaticallyAdjustKeyboardInsets={true}
+                >
+                    <Appbar.Header>
+                        <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
+                        <Appbar.Content title="Add Payment Method" />
+                    </Appbar.Header>
+                    <PaymentMethodSelector balance={selectedTotal} onPaymentSubmit={handlePaymentSubmit}/>
+                </ScrollView>
             </View>
         )}
 
@@ -181,56 +191,56 @@ export default function OrdersScreen() {
             </DataTable.Header>
 
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <ScrollView style={{ flex: 1 }}>
-                            <DataTable>
-                                {filteredItems.slice(from, to).map((item) => (
-                                    <DataTable.Row key={item.id}>
-                                        <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
-                                        <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
-                                        <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
-                                        <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
-                                        <DataTable.Cell
-                                            style={{flexGrow: 3}}
-                                            textStyle = {
-                                                {color: getPaymentStatusColor(item.orderStatus)}
-                                            }
+                <ScrollView style={{ flex: 1 }}>
+                    <DataTable>
+                        {filteredItems.slice(from, to).map((item) => (
+                            <DataTable.Row key={item.id}>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
+                                <DataTable.Cell
+                                    style={{flexGrow: 3}}
+                                    textStyle = {
+                                        {color: getPaymentStatusColor(item.orderStatus)}
+                                    }
 
-                                            >{item.orderStatus.toString()}</DataTable.Cell>
+                                    >{item.orderStatus.toString()}</DataTable.Cell>
 
-                                        {/* <DataTable.Cell 
-                                            style={{flexGrow: 3}}
-                                            textStyle = {
-                                                {color: getStatusColor(item.fulfillmentStatus)}
-                                            }
-                                        >{item.fulfillmentStatus}</DataTable.Cell> */}
+                                {/* <DataTable.Cell 
+                                    style={{flexGrow: 3}}
+                                    textStyle = {
+                                        {color: getStatusColor(item.fulfillmentStatus)}
+                                    }
+                                >{item.fulfillmentStatus}</DataTable.Cell> */}
 
-                                        <DataTable.Cell
-                                            style={{flexGrow: 3}}
+                                <DataTable.Cell
+                                    style={{flexGrow: 3}}
+                                >
+                                    <Button 
+                                        mode="outlined" 
+                                        onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
+                                        textColor = {getStatusColor(item.fulfillmentStatus)}
                                         >
-                                            <Button 
-                                                mode="outlined" 
-                                                onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
-                                                textColor = {getStatusColor(item.fulfillmentStatus)}
-                                                >
-                                                {item.fulfillmentStatus}
-                                            </Button>
+                                        {item.fulfillmentStatus}
+                                    </Button>
 
-                                        </DataTable.Cell>
+                                </DataTable.Cell>
 
-                                        <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
-                                        <DataTable.Cell style={{flexGrow: 2}}>
-                                            <Button 
-                                                mode="contained" 
-                                                onPress={() => handlePaymentClick(item.total, item.id)}
-                                                disabled={item.orderStatus === PaymentStatus.paid}
-                                            >
-                                                Add Pay
-                                            </Button>
-                                        </DataTable.Cell>
-                                    </DataTable.Row>
-                                ))}
-                           </DataTable>
-                        </ScrollView>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 2}}>
+                                    <Button 
+                                        mode="contained" 
+                                        onPress={() => handlePaymentClick(item.total, item.id)}
+                                        disabled={item.orderStatus === PaymentStatus.paid}
+                                    >
+                                        Add Pay
+                                    </Button>
+                                </DataTable.Cell>
+                            </DataTable.Row>
+                        ))}
+                    </DataTable>
+                </ScrollView>
                 {/* the table controller */}
                 <DataTable.Pagination
                     page={page}

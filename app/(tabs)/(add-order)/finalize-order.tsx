@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import OrderForm from '@/components/finalize-order-form';
 import StepIndicator from '@/components/order-step-indicator';
 import orderSteps from './order-steps-label';
@@ -19,21 +19,30 @@ export default function FinalizeOrder() {
 
     const handleFinalizeOrder = () => {
         finalizeOrder();
-        router.push("/");
+        router.push('/orders');
     }
-
 
     return (
         <View style={styles.container}>
             <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
+                <ScrollView 
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={{ 
+                        paddingBottom: 100 // Add extra padding at bottom
+                    }}
+                    showsVerticalScrollIndicator={true}
+                    keyboardDismissMode="interactive"
+                    automaticallyAdjustKeyboardInsets={true}
+                >
 
-            <View style={styles.content}>
-                <OrderFormFinal onFormChange={handleFormChange} />
-            </View>
+                    <View style={styles.content}>
+                        <OrderFormFinal onFormChange={handleFormChange} />
+                    </View>
 
-            <Button mode="contained" onPress={handleFinalizeOrder}>
-                Finalize Order
-            </Button>
+                    <Button mode="contained" onPress={handleFinalizeOrder}>
+                        Finalize Order
+                    </Button>
+                </ScrollView>
 
         </View>
     );

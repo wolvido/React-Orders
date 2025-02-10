@@ -1,6 +1,6 @@
 import StepIndicator from "@/components/order-step-indicator";
 import receivePOSteps from "./receive-PO-steps";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import deliverySteps from "../(add-delivery)/delivery-steps-label";
 import PurchaseOrderForm from "@/components/purchase-order-form";
 import { purchaseOrders } from "@/dummy-data/dummy-purchase-orders";
@@ -18,9 +18,19 @@ export default function ReceiveOrderScreen() {
     };
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <StepIndicator currentStep={1} backPath="./purchase-orders" steps={receivePOSteps}/>
-            <PurchaseOrderForm purchaseOrder={purchaseOrder} onSubmit={handleSubmitPO}/>
+            <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{
+                    paddingBottom: 100
+                }}
+                showsVerticalScrollIndicator={true}
+                keyboardDismissMode="interactive"
+                automaticallyAdjustKeyboardInsets={true}
+            >
+                <PurchaseOrderForm purchaseOrder={purchaseOrder} onSubmit={handleSubmitPO}/>
+            </ScrollView>
         </View>
     );
 

@@ -5,8 +5,8 @@ import CashForm from './transaction-forms/cash-form';
 import ChequeForm from './transaction-forms/cheque-form';
 import BankTransferForm from './transaction-forms/bank-transfer-form';
 import GatewayForm from './transaction-forms/gateway-form';
-import { BankTransferPayment } from '@/entities/payment-method';
 import PaymentMethod from '@/entities/payment-method';
+
 
 interface PaymentMethodSelectorProps {
     balance: number;
@@ -105,7 +105,6 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
                     onValueChange={setSelectedMethod}
                     buttons={paymentMethods}
                 />
-
                 {renderForm()}
             </View>
         </View>

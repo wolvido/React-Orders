@@ -56,7 +56,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View>
             <View style={styles.form}>
             {supplier && (
                     <Text style={styles.supplierLabel}>
@@ -156,7 +156,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     
                 </View>
             </Modal>
-        </ScrollView>
+        </View>
     );
 };
 
@@ -206,10 +206,10 @@ const styles = StyleSheet.create({
         color: '#666666',
     },
     container: {
+
     },
     form: {
-        padding: 16,
-        flex: 1,
+        padding: 16
     },
     input: {
         marginBottom: 16,

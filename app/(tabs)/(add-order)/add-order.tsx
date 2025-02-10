@@ -1,7 +1,7 @@
 import React from 'react';
 import OrderDetailsForm from '@/components/add-order-details-form';
 import StepIndicator from '@/components/order-step-indicator';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import orderSteps from './order-steps-label';
 import { Order } from '@/entities/order';
 import { router } from 'expo-router';
@@ -19,9 +19,19 @@ export default function AddOrderScreen() {
     };
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <StepIndicator currentStep={1} steps={orderSteps} />
-            <OrderDetailsForm onSubmit={handleOrderSubmit} />
+            <ScrollView 
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ 
+                    paddingBottom: 100 // Add extra padding at bottom
+                }}
+                showsVerticalScrollIndicator={true}
+                keyboardDismissMode="interactive"
+                automaticallyAdjustKeyboardInsets={true}
+            >
+                <OrderDetailsForm onSubmit={handleOrderSubmit} />
+            </ScrollView>
         </View>
     );
 }
