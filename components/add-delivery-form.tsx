@@ -213,10 +213,10 @@ const styles = StyleSheet.create({
         color: '#666666',
     },
     container: {
-        flex: 1,
     },
     form: {
         padding: 16,
+        flex: 1,
     },
     input: {
         marginBottom: 16,
