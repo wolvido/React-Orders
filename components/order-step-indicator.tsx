@@ -41,7 +41,9 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
       ]}>
         {steps.map((step, index) => (
           <View key={index} style={styles.stepContainer}>
+
             <View style={styles.stepWrapper}>
+
               <View
                 style={[
                   styles.stepCircle,
@@ -50,8 +52,12 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
               >
                 <Text style={styles.stepText}>{step.step}</Text>
               </View>
+
               <Text style={styles.stepLabel}>{step.label}</Text>
             </View>
+
+            
+
             {index < steps.length - 1 && (
               <View
                 style={[
@@ -72,9 +78,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginVertical: 20,
+    marginVertical: 10,
     height: 'auto',
-    marginBottom: 30,
+    marginBottom: 15,
   },
   stepsContainer: {
     flex: 1,
@@ -97,7 +103,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 23,
     fontWeight: 'bold',
-    lineHeight: 20,
+    lineHeight: 25, //back arrow vertical position
     paddingBottom: 4,
   },
   stepContainer: {
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
   },
   stepWrapper: {
     alignItems: 'center',
-    paddingTop: 10,
+    position: 'relative',
   },
   stepCircle: {
     width: 30,
@@ -129,6 +135,10 @@ const styles = StyleSheet.create({
   stepLabel: {
     fontSize: 18,
     color: '#666',
+    position: 'absolute', 
+    top: 30,
+    width: '1000%', // ensures text exceed container when needed
+    textAlign: 'center',
   },
   line: {
     width: 150,
