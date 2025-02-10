@@ -1,3 +1,4 @@
+import useOrientation from '@/hooks/orientation-hook';
 import { RelativePathString, useRouter } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
@@ -16,6 +17,8 @@ interface StepIndicatorProps {
 
 const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => {
   const router = useRouter();
+
+  const isLandscape = useOrientation() === 'LANDSCAPE';
   
   const handleBack = () => {
     if (backPath) {
@@ -24,7 +27,10 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
   }
 
   return (
-    <View style={styles.outerContainer}>
+    <View style={[
+      styles.outerContainer,
+      isLandscape && styles.outerContainerLandscape
+    ]}>
       {backPath && (
         <TouchableOpacity 
           onPress={handleBack} 
@@ -36,13 +42,19 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
 
       <View style={[
         styles.stepsContainer,
-        // Adjust padding when there's no back button
-        !backPath && { paddingLeft: 50 }
+        !backPath && { paddingLeft: 50 },
+        isLandscape && styles.stepsContainerLandscape
       ]}>
         {steps.map((step, index) => (
-          <View key={index} style={styles.stepContainer}>
+          <View key={index} style={[
+            styles.stepContainer,
+            isLandscape && styles.stepContainerLandscape
+          ]}>
 
-            <View style={styles.stepWrapper}>
+            <View style={[
+              styles.stepWrapper,
+              isLandscape && styles.stepWrapperLandscape
+            ]}>
 
               <View
                 style={[
@@ -53,16 +65,27 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
                 <Text style={styles.stepText}>{step.step}</Text>
               </View>
 
-              <Text style={styles.stepLabel}>{step.label}</Text>
-            </View>
+              {isLandscape && (
+                <Text style={[
+                  styles.stepLabelLandscape,
+                  currentStep >= step.step && styles.activeLabel
+                ]}>{step.label}</Text>
+              )}
 
-            
+              {!isLandscape && (
+                  <Text style={[
+                    styles.stepLabel,
+                    currentStep >= step.step && styles.activeLabel
+                  ]}>{step.label}</Text>
+                )}
+            </View>
 
             {index < steps.length - 1 && (
               <View
                 style={[
                   styles.line,
                   currentStep > step.step ? styles.activeLine : styles.inactiveLine,
+                  isLandscape && styles.lineLandscape
                 ]}
               />
             )}
@@ -80,14 +103,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginVertical: 10,
     height: 'auto',
-    marginBottom: 15,
+    marginBottom: 15, //15 -5
   },
   stepsContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 33,
+    height: 33, //33
     paddingRight: 50,
   },
   backButton: {
@@ -150,6 +173,36 @@ const styles = StyleSheet.create({
   },
   inactiveLine: {
     backgroundColor: '#ccc',
+  },
+  outerContainerLandscape: {
+    marginVertical: 3,
+  },
+  stepsContainerLandscape: {
+    height: 33,
+    marginBottom: -14,
+    marginTop: 2,
+  },
+  stepContainerLandscape: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  stepWrapperLandscape: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  stepLabelLandscape: {
+    fontSize: 18,
+    color: '#666',
+    marginLeft: 8,
+    textAlign: 'right',
+  },
+  lineLandscape: {
+    width: 100,
+    marginHorizontal: 8,
+  },
+  activeLabel: {
+    color: '#4CAF50',  // Same green as the active step circles
   },
 });
 
