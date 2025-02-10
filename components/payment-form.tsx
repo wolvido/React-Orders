@@ -19,8 +19,8 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
     const paymentMethods = [
         { value: 'cash', label: 'Cash' },
         { value: 'cheque', label: 'Cheque' },
-        { value: 'bank', label: 'Bank Transfer' },
-        { value: 'gateway', label: 'Payment Gateway' },
+        { value: 'bank', label: 'Bank Transfer' },   
+        { value: 'gateway', label: 'Payment Gateway'  },
     ];
 
     const handleBankTransferSubmit = (data: Extract<PaymentMethod, { type: "Bank Transfer" }>) => {
@@ -89,13 +89,12 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View>
             <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
-
                 <Text 
                     variant="headlineMedium" 
-                    style={{ flex: 1, textAlign: 'center' }}
-                >
+                    style={{ flex: 1, textAlign: 'center' }}>
+
                     Balance: ₱{(balance || 0).toFixed(2)}
                 </Text>
             </View>

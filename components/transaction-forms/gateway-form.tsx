@@ -69,9 +69,6 @@ function GatewayForm({ onSubmit }: GatewayFormProps) {
                 value={providerInput}
                 onChangeText={handleProviderChange}
             />
-            <HelperText type="error" visible={formData.paymentProvider === ''}>
-                Please enter a payment provider
-            </HelperText>
 
             <TextInput
                 mode="outlined"
@@ -80,9 +77,6 @@ function GatewayForm({ onSubmit }: GatewayFormProps) {
                 onChangeText={handleIdChange}
                 keyboardType="numeric"
             />
-            <HelperText type="error" visible={formData.id <= 0}>
-                Reference ID is required
-            </HelperText>
 
             <TextInput
                 mode="outlined"
@@ -91,9 +85,6 @@ function GatewayForm({ onSubmit }: GatewayFormProps) {
                 onChangeText={handleFeeChange}
                 keyboardType="decimal-pad"
             />
-            <HelperText type="error" visible={formData.transactionFee < 0}>
-                Transaction fee cannot be negative
-            </HelperText>
 
             <Button 
                 mode="contained" 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
+import { DatePicker } from "../date-picker";
 
 type BankTransferPayment = Extract<PaymentMethod, { type: "Bank Transfer" }>;
 
@@ -72,6 +73,7 @@ function BankTransferForm({ onSubmit }: BankTransferFormProps) {
 
     return (
         <View style={{ gap: 10, padding: 16 }}>
+
             <TextInput
                 mode="outlined"
                 label="Amount"
@@ -79,9 +81,6 @@ function BankTransferForm({ onSubmit }: BankTransferFormProps) {
                 onChangeText={handleAmountChange}
                 keyboardType="decimal-pad"
             />
-            <HelperText type="error" visible={formData.amount <= 0}>
-                Amount must be greater than 0
-            </HelperText>
 
             <TextInput
                 mode="outlined"
@@ -89,9 +88,6 @@ function BankTransferForm({ onSubmit }: BankTransferFormProps) {
                 value={formData.bankName}
                 onChangeText={handleBankNameChange}
             />
-            <HelperText type="error" visible={formData.bankName.trim() === ''}>
-                Bank name is required
-            </HelperText>
 
             <TextInput
                 mode="outlined"
@@ -100,21 +96,11 @@ function BankTransferForm({ onSubmit }: BankTransferFormProps) {
                 onChangeText={handleIdChange}
                 keyboardType="numeric"
             />
-            <HelperText type="error" visible={formData.id <= 0}>
-                Reference ID is required
-            </HelperText>
 
-            <DatePickerInput
-                locale="en"
+            <DatePicker
                 label="Deposit Date"
                 value={formData.depositDate}
                 onChange={handleDateChange}
-                inputMode="start"
-                mode="outlined"
-                validRange={{
-                    startDate: new Date(new Date().setDate(new Date().getDate() - 30)), // Last 30 days
-                    endDate: new Date(), // Today
-                }}
             />
 
             <Button 
