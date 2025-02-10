@@ -5,6 +5,9 @@ import { DatePickerInput } from 'react-native-paper-dates';
 import { PurchaseOrder } from '@/entities/purchase-order';
 import { Delivery } from '@/entities/delivery';
 import AddDeliveryForm from './add-delivery-form';
+import Status from '@/enums/status';
+import PaymentStatus from '@/enums/payment-status';
+import { DatePicker } from './date-picker';
 
 interface PurchaseOrderFormProps {
     purchaseOrder: PurchaseOrder | null;
@@ -19,8 +22,8 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
                 remarks: '',
                 transactionDate: new Date(),
                 preparedBy: '',
-                status: 'Pending',
-                paymentStatus: 'unPaid'
+                status: Status.Pending,
+                paymentStatus: PaymentStatus.unPaid,
             } as PurchaseOrder),
             delivery: deliveryData
         };
@@ -39,16 +42,10 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
                     style={styles.input}
                 />
 
-                <DatePickerInput
-                    locale="en"
+                <DatePicker
                     label="PO Date"
-                    value={purchaseOrder?.transactionDate}
+                    value={purchaseOrder?.transactionDate ?? null}
                     onChange={() => {}}
-                    mode="outlined"
-                    style={[styles.input, styles.dateInput]}
-                    inputMode="start"
-                    editable={false}
-                    // removed disabled prop
                 />
 
                 <TextInput
@@ -75,7 +72,6 @@ export const PurchaseOrderForm = ({ purchaseOrder, onSubmit }: PurchaseOrderForm
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         padding: 16,
     },
     poDetailsSection: {
@@ -86,7 +82,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     deliverySection: {
-        flex: 1,
+
     },
     input: {
         marginBottom: 12,
