@@ -34,7 +34,10 @@ const StepIndicator = ({ currentStep, backPath, steps }: StepIndicatorProps) => 
       {backPath && (
         <TouchableOpacity 
           onPress={handleBack} 
-          style={styles.backButton}
+          style={[
+            styles.backButton,
+            isLandscape && styles.backButtonLandscape
+          ]}
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
@@ -175,7 +178,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   outerContainerLandscape: {
-    marginVertical: 3,
+    marginVertical: 3
+  },
+  backButtonLandscape: {
+    marginBottom: -14,
   },
   stepsContainerLandscape: {
     height: 33,
