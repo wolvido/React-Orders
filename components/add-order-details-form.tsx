@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
+        padding: 16,
     },
     datePickerWrapper: {
         marginBottom: 35,
