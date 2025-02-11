@@ -14,10 +14,8 @@ import { ScrollView } from 'react-native';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
-
     return (
         <AuthProvider>
-           
             <PaperProvider theme={theme}>
                 <PurchaseOrderProvider>
                     <OrderProvider>
@@ -42,11 +40,5 @@ export default function RootLayout() {
                 </PurchaseOrderProvider>
             </PaperProvider>
         </AuthProvider>
-
-
-        // <View>
-        //     <Text>Root Layout</Text>
-        // </View>
-
     );
 }
