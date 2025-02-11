@@ -10,6 +10,7 @@ interface ReceiveDeliveryCartComponentProps {
     onError?: (message: string) => void;
 }
 
+//receives a delivery type as cart items, also submits a delivery type
 export function ReceiveDeliveryCartComponent({ 
     receivedDelivery, 
     onProceed,
