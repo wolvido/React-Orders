@@ -6,6 +6,9 @@ import { Cart } from '@/entities/cart';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 
+//dummy delete later
+import { orders } from '@/dummy-data/dummy-orders';
+
 // Define the context type
 interface OrderContextType {
     currentOrder: Order | null;
@@ -98,18 +101,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     const getOrderbyId = (id: number): Order => {
         //repo call
         //dummy for now
-        return {
-            id: id,
-            orderType: { type: "Cash", amountDue: 0, cashTendered: 0, changeDue: 0 } as PaymentMethod,
-            customer: { id: 0, name: '', email: '' },
-            transactionDate: new Date(),
-            total: 0,
-            orderStatus: PaymentStatus.unPaid,
-            fulfillmentStatus: Status.Pending,
-            remarks: '',
-            deliveryAddress: '',
-            cart: { items: [], total: 0 }
-        };
+        const order = orders.find(order => order.id === id);
+
+        return (order as Order);
     };
 
     const updateFulfillmentById = (status: Status, id: number) => {

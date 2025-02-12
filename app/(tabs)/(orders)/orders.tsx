@@ -18,9 +18,12 @@ import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 
 import { orders } from '@/dummy-data/dummy-orders';
+import { OrderProvider } from '@/context/order-context';
 
 //react component
 export default function OrdersScreen() {
+
+    const { getOrderbyId } = useOrder();
 
     //get the order items from the order repository
     // const orderRepository = new OrderRepository();
@@ -70,15 +73,6 @@ export default function OrdersScreen() {
     }, [itemsPerPage]);
         //sometimes a page wont exist when you expand the number of items per page
 
-    // Handle payment button click
-    const [showPaymentForm, setShowPaymentForm] = useState(false);
-    const [selectedTotal, setSelectedTotal] = useState(0)
-    const handlePaymentClick = (total: number, id: number) => {
-        setSelectedTotal(total);
-        setSelectedOrderId(id);
-        setShowPaymentForm(true);
-    };
-
     //payment status
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(0);
@@ -87,6 +81,13 @@ export default function OrdersScreen() {
         setSelectedOrderId(orderId);
         setShowStatusModal(true);
         setInitialStatus(status);
+    };
+
+    // Handle payment button click
+    const [showPaymentForm, setShowPaymentForm] = useState(false);
+    const handlePaymentClick = (id: number) => {
+        setSelectedOrderId(id);
+        setShowPaymentForm(true);
     };
 
     const handlePaymentSubmit = (paymentMethod: PaymentMethod) => {
@@ -154,7 +155,7 @@ export default function OrdersScreen() {
                         <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                         <Appbar.Content title="Add Payment Method" />
                     </Appbar.Header>
-                    <PaymentMethodSelector balance={selectedTotal} onPaymentSubmit={handlePaymentSubmit}/>
+                    <PaymentMethodSelector getOrderById={getOrderbyId} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
                 </ScrollView>
             </View>
         )}
@@ -196,23 +197,16 @@ export default function OrdersScreen() {
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.type}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.name}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell
                                     style={{flexGrow: 3}}
                                     textStyle = {
                                         {color: getPaymentStatusColor(item.orderStatus)}
-                                    }
-
-                                    >{item.orderStatus.toString()}</DataTable.Cell>
-
-                                {/* <DataTable.Cell 
-                                    style={{flexGrow: 3}}
-                                    textStyle = {
-                                        {color: getStatusColor(item.fulfillmentStatus)}
-                                    }
-                                >{item.fulfillmentStatus}</DataTable.Cell> */}
+                                    }>
+                                    {item.orderStatus.toString()}
+                                </DataTable.Cell>
 
                                 <DataTable.Cell
                                     style={{flexGrow: 3}}
@@ -231,7 +225,7 @@ export default function OrdersScreen() {
                                 <DataTable.Cell style={{flexGrow: 2}}>
                                     <Button 
                                         mode="contained" 
-                                        onPress={() => handlePaymentClick(item.total, item.id)}
+                                        onPress={() => handlePaymentClick(item.id)}
                                         disabled={item.orderStatus === PaymentStatus.paid}
                                     >
                                         Add Pay

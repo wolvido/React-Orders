@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SegmentedButtons, Text, Button } from 'react-native-paper';
 import CashForm from './transaction-forms/cash-form';
@@ -6,14 +6,28 @@ import ChequeForm from './transaction-forms/cheque-form';
 import BankTransferForm from './transaction-forms/bank-transfer-form';
 import GatewayForm from './transaction-forms/gateway-form';
 import PaymentMethod from '@/entities/payment-method';
+import { Order } from '@/entities/order';
 
 
 interface PaymentMethodSelectorProps {
-    balance: number;
+    orderId: number;
     onPaymentSubmit: (paymentMethod: PaymentMethod) => void;
+    getOrderById: (id: number) => Order;
 }
 
-function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelectorProps) {
+function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: PaymentMethodSelectorProps) {
+
+    console.log('PaymentMethodSelector', orderId);
+    
+    const [order, setOrder] = useState<Order | null>(null);
+
+    useEffect(() => {
+        const orderData = getOrderById(orderId);
+        console.log('Order Data:', orderData);
+        setOrder(orderData);
+    }, [orderId, getOrderById]);
+
+
     const [selectedMethod, setSelectedMethod] = useState('cash');
 
     const paymentMethods = [
@@ -31,7 +45,8 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
             amount: data.amount,
             bankName: data.bankName,
             id: data.id,
-            depositDate: data.depositDate
+            depositDate: data.depositDate,
+            orderId: orderId
         };
         
         onPaymentSubmit(paymentMethod);
@@ -42,7 +57,8 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
             type: "Payment gateway",
             paymentProvider: data.paymentProvider,
             id: data.id,
-            transactionFee: data.transactionFee
+            transactionFee: data.transactionFee,
+            orderId: orderId
         };
 
         onPaymentSubmit(paymentMethod);
@@ -55,7 +71,8 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
             bankName: data.bankName,
             amount: data.amount,
             remark: data.remark,
-            chequeDate: data.chequeDate
+            chequeDate: data.chequeDate,
+            orderId: orderId
         };
 
         onPaymentSubmit(paymentMethod);
@@ -65,9 +82,10 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
         const paymentMethod: PaymentMethod = {
             type: "Cash",
             id: data.id,
-            amountDue: data.amountDue,
+            amount: data.amount,
             cashTendered: data.cashTendered,
-            changeDue: data.changeDue
+            changeDue: data.changeDue,
+            orderId: orderId
         };
 
         onPaymentSubmit(paymentMethod);
@@ -90,25 +108,65 @@ function PaymentMethodSelector({ balance, onPaymentSubmit  }: PaymentMethodSelec
 
     return (
         <View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
-                <Text 
-                    variant="headlineMedium" 
-                    style={{ flex: 1, textAlign: 'center' }}>
-
-                    Balance: ₱{(balance || 0).toFixed(2)}
-                </Text>
-            </View>
-
-            <View style={{ gap: 16, padding: 16 }}>
-                <SegmentedButtons
-                    value={selectedMethod}
-                    onValueChange={setSelectedMethod}
-                    buttons={paymentMethods}
-                />
-                {renderForm()}
+            <View style={{ padding: 16 }}>
+                {/* Order Details Card */}
+                <View style={{ marginBottom: 24 }}>
+                    <Text variant="headlineSmall" style={{ marginBottom: 16 }}>Order Details</Text>
+                    <View style={{
+                        backgroundColor: '#fff',
+                        borderRadius: 12,
+                        padding: 16,
+                        elevation: 2,
+                        gap: 12,
+                    }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text variant="labelLarge" style={{ color: '#666' }}>Customer</Text>
+                            <Text variant="bodyLarge">{order?.customer?.name || 'N/A'}</Text>
+                        </View>
+    
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text variant="labelLarge" style={{ color: '#666' }}>Reference No</Text>
+                            <Text variant="bodyLarge">{order?.referenceNo || 'N/A'}</Text>
+                        </View>
+    
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text variant="labelLarge" style={{ color: '#666' }}>Date</Text>
+                            <Text variant="bodyLarge">
+                                {order?.transactionDate 
+                                    ? new Date(order.transactionDate).toLocaleDateString() 
+                                    : 'N/A'}
+                            </Text>
+                        </View>
+    
+                        <View style={{ 
+                            marginTop: 8,
+                            paddingTop: 16,
+                            borderTopWidth: 1,
+                            borderTopColor: '#eee',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <Text variant="titleMedium" style={{ color: '#666' }}>Balance Due</Text>
+                            <Text variant="headlineSmall" style={{ color: '#2196F3' }}>
+                                ₱{(order?.total || 0).toFixed(2)}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+    
+                <View style={{ gap: 16 }}>
+                    <SegmentedButtons
+                        value={selectedMethod}
+                        onValueChange={setSelectedMethod}
+                        buttons={paymentMethods}
+                    />
+                    {renderForm()}
+                </View>
             </View>
         </View>
     );
+    
 }
 
 export default PaymentMethodSelector;
