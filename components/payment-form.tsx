@@ -108,13 +108,13 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             <View style={{ padding: 16 }}>
                 {/* Order Details Card */}
                 <View style={{ marginBottom: 24 }}>
-                    <Text variant="headlineSmall" style={{ marginBottom: 16 }}>Order Details</Text>
+                    <Text variant="titleLarge" style={{ marginBottom: 10 }}>Order Details</Text>
                     <View style={{
                         backgroundColor: '#fff',
                         borderRadius: 12,
                         padding: 16,
                         elevation: 2,
-                        gap: 8,
+                        gap: 6,
                     }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text variant="labelLarge" style={{ color: '#666' }}>Customer</Text>
