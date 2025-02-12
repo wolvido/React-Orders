@@ -49,7 +49,7 @@ export const purchaseOrders: PurchaseOrder[] = [
         remarks: "Rush order",
         transactionDate: new Date("2024-01-11"),
         preparedBy: "john employee",
-        status: Status.Cancelled,
+        status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
             receiptNumber: "PO-789012",

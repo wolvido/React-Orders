@@ -1,10 +1,19 @@
-export interface Product {
-    key: number;
+interface ProductBase {
     name: string;
     sellingPrice: number;
     costPrice: number;
-    unitType: 'CASE' | 'JAR' | 'BUNDLE';
-    stocks: number;
     category: string;
     brand: string;
+}
+
+export interface Product extends ProductBase {
+    stocks: number;
+    isBundle: boolean;
+    bundleItems: BundleProduct[];
+    unitType: 'CASE' | 'JAR';
+}
+
+export interface BundleProduct extends ProductBase {
+    bundleQuantity: number;
+    unitType: 'BUNDLE';
 }

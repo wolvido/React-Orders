@@ -1,7 +1,6 @@
 enum Status {
     Delivered = "Fulfilled",
-    Pending = "Pending",
-    Cancelled = "Cancelled"
+    Pending = "Pending"
 }
 
 export default Status;
