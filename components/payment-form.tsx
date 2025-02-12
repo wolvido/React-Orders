@@ -17,13 +17,10 @@ interface PaymentMethodSelectorProps {
 
 function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: PaymentMethodSelectorProps) {
 
-    console.log('PaymentMethodSelector', orderId);
-    
     const [order, setOrder] = useState<Order | null>(null);
 
     useEffect(() => {
         const orderData = getOrderById(orderId);
-        console.log('Order Data:', orderData);
         setOrder(orderData);
     }, [orderId, getOrderById]);
 
@@ -117,7 +114,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
                         borderRadius: 12,
                         padding: 16,
                         elevation: 2,
-                        gap: 12,
+                        gap: 8,
                     }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text variant="labelLarge" style={{ color: '#666' }}>Customer</Text>
@@ -140,7 +137,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
     
                         <View style={{ 
                             marginTop: 8,
-                            paddingTop: 16,
+                            paddingTop: 10,
                             borderTopWidth: 1,
                             borderTopColor: '#eee',
                             flexDirection: 'row',
