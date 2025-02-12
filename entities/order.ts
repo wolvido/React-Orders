@@ -2,12 +2,11 @@ import Status from "@/enums/status";
 import { Customer } from "./customers";
 import PaymentStatus from "@/enums/payment-status";
 import { Cart } from "./cart";
-import { OrderType } from "./order-type";
 
 export interface Order{
     id: number;
     referenceNo: number;
-    orderType: OrderType; //this is user defined, can be anything
+    orderType: string; //this is user defined, can be anything
     customer: Customer; //can be 'walk in'
     transactionDate: Date;
     total: number;
