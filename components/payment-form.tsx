@@ -39,7 +39,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
         //how to create a PaymentMethod object
         const paymentMethod: PaymentMethod = {
             type: "Bank Transfer",
-            amount: data.amount,
+            payment: data.payment,
             bankName: data.bankName,
             id: data.id,
             depositDate: data.depositDate,
@@ -54,7 +54,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             type: "Payment gateway",
             paymentProvider: data.paymentProvider,
             id: data.id,
-            transactionFee: data.transactionFee,
+            payment: data.payment,
             orderId: orderId
         };
 
@@ -66,7 +66,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             type: "Cheque",
             chequeNumber: data.chequeNumber,
             bankName: data.bankName,
-            amount: data.amount,
+            payment: data.payment,
             remark: data.remark,
             chequeDate: data.chequeDate,
             orderId: orderId
@@ -79,7 +79,6 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
         const paymentMethod: PaymentMethod = {
             type: "Cash",
             id: data.id,
-            amount: data.amount,
             cashTendered: data.cashTendered,
             changeDue: data.changeDue,
             orderId: orderId
@@ -91,13 +90,13 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
     const renderForm = () => {
         switch (selectedMethod) {
             case 'cash':
-                return <CashForm onSubmit={handleCashSubmit} />;
+                return <CashForm amount={order?.total || 0} orderId={order?.id || 0} onSubmit={handleCashSubmit} />;
             case 'cheque':
-                return <ChequeForm onSubmit={handleChequeSubmit} />;
+                return <ChequeForm orderId={order?.id || 0} onSubmit={handleChequeSubmit} />;
             case 'bank':
-                return <BankTransferForm onSubmit={handleBankTransferSubmit} />;
+                return <BankTransferForm orderId={order?.id || 0} onSubmit={handleBankTransferSubmit} />;
             case 'gateway':
-                return <GatewayForm onSubmit={handleGatewaySubmit} />;
+                return <GatewayForm orderId={order?.id || 0}  onSubmit={handleGatewaySubmit} />;
             default:
                 return null;
         }

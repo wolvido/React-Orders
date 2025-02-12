@@ -6,8 +6,7 @@ interface PaymentMethodBase {
 export interface CashPayment extends PaymentMethodBase {
     type: "Cash";
     id: number;
-    amount: number; // Total amount to be paid
-    cashTendered: number; // Cash given by the customer
+    cashTendered: number;
     changeDue: number; // Calculated change
 }
   
@@ -15,14 +14,14 @@ export interface ChequePayment extends PaymentMethodBase {
     type: "Cheque";
     chequeNumber: string;
     bankName: string;
-    amount: number;
+    payment: number;
     remark: string;
     chequeDate: Date;
 }
   
 export interface BankTransferPayment extends PaymentMethodBase {
     type: "Bank Transfer";
-    amount: number;
+    payment: number;
     bankName: string;
     id: number;
     depositDate: Date;
@@ -32,7 +31,7 @@ export interface PaymentGateway extends PaymentMethodBase{
     type: "Payment gateway";
     paymentProvider: string; //gcash, maya, etc..
     id: number;
-    transactionFee: number;
+    payment: number;
 }
   
   // Union of all payment methods

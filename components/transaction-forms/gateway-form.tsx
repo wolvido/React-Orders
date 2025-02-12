@@ -1,5 +1,5 @@
 import PaymentMethod from "@/entities/payment-method";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from 'react-native-paper';
 
@@ -7,28 +7,30 @@ type PaymentGateway = Extract<PaymentMethod, { type: "Payment gateway" }>;
 
 interface GatewayFormProps {
     onSubmit: (data: PaymentGateway) => void;
+    orderId: number;
 }
 
-function GatewayForm({ onSubmit }: GatewayFormProps) {
+function GatewayForm({ onSubmit, orderId }: GatewayFormProps) {
     const [formData, setFormData] = useState<PaymentGateway>({
+        orderId: 0,
         type: "Payment gateway",
         paymentProvider: '',
         id: 0,
-        transactionFee: 0
+        payment: 0
     });
 
     // Add input state to handle decimal input properly
-    const [feeInput, setFeeInput] = useState('0');
+    const [payment, setpayment] = useState('0');
     const [idInput, setIdInput] = useState('');
     const [providerInput, setProviderInput] = useState('');
 
-    const handleFeeChange = (value: string) => {
+    const handlePaymentChange = (value: string) => {
         // Allow empty string, numbers, and one decimal point
         if (value === '' || /^\d*\.?\d*$/.test(value)) {
-            setFeeInput(value);
+            setpayment(value);
             setFormData(prev => ({
                 ...prev,
-                transactionFee: parseFloat(value) || 0
+                payment: parseFloat(value) || 0
             }));
         }
     };
@@ -57,7 +59,7 @@ function GatewayForm({ onSubmit }: GatewayFormProps) {
     };
 
     const isFormValid = 
-        formData.transactionFee >= 0 && 
+        formData.payment >= 0 && 
         formData.paymentProvider.trim() !== '' && 
         formData.id > 0;
 
@@ -81,8 +83,8 @@ function GatewayForm({ onSubmit }: GatewayFormProps) {
             <TextInput
                 mode="outlined"
                 label="Transaction Fee"
-                value={feeInput}
-                onChangeText={handleFeeChange}
+                value={payment}
+                onChangeText={handlePaymentChange}
                 keyboardType="decimal-pad"
             />
 

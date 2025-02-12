@@ -1,5 +1,5 @@
 import PaymentMethod from "@/entities/payment-method";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -9,28 +9,30 @@ type ChequePayment = Extract<PaymentMethod, { type: "Cheque" }>;
 
 interface ChequeFormProps {
     onSubmit: (data: ChequePayment) => void;
+    orderId: number;
 }
 
-function ChequeForm({ onSubmit }: ChequeFormProps) {
+function ChequeForm({ onSubmit, orderId }: ChequeFormProps) {
     const [formData, setFormData] = useState<ChequePayment>({
+        orderId: orderId,
         type: "Cheque",
         chequeNumber: '',
         bankName: '',
-        amount: 0,
+        payment: 0,
         remark: '',
         chequeDate: new Date()
     });
 
     // Add input state to handle decimal input for amount
-    const [amountInput, setAmountInput] = useState('0');
+    const [paymentInput, setPaymentInput] = useState('0');
 
-    const handleAmountChange = (value: string) => {
+    const handlePaymentChange = (value: string) => {
         // Allow empty string, numbers, and one decimal point
         if (value === '' || /^\d*\.?\d*$/.test(value)) {
-            setAmountInput(value);
+            setPaymentInput(value);
             setFormData(prev => ({
                 ...prev,
-                amount: parseFloat(value) || 0
+                payment: parseFloat(value) || 0
             }));
         }
     };
@@ -66,7 +68,7 @@ function ChequeForm({ onSubmit }: ChequeFormProps) {
     const isFormValid = 
         formData.chequeNumber !== '' && 
         formData.bankName !== '' && 
-        formData.amount > 0;
+        formData.payment > 0;
 
     return (
         <View style={{ gap: 10, padding: 16 }}>
@@ -86,8 +88,8 @@ function ChequeForm({ onSubmit }: ChequeFormProps) {
             <TextInput
                 mode="outlined"
                 label="Amount"
-                value={amountInput}
-                onChangeText={handleAmountChange}
+                value={paymentInput}
+                onChangeText={handlePaymentChange}
                 keyboardType="decimal-pad"
             />
             <TextInput

@@ -1,5 +1,5 @@
 import PaymentMethod from "@/entities/payment-method";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
 
@@ -7,16 +7,25 @@ type CashPayment = Extract<PaymentMethod, { type: "Cash" }>;
 
 interface CashFormProps {
     onSubmit: (data: CashPayment) => void;
+    orderId: number;
+    amount: number;
 }
 
-function CashForm({ onSubmit }: CashFormProps) {
+function CashForm({ onSubmit, orderId, amount }: CashFormProps) {
     const [formData, setFormData] = useState<CashPayment>({
         id: Math.floor(Math.random() * 1000000) + 1,
+        orderId: orderId,
         type: "Cash",
-        amountDue: 0,
         cashTendered: 0,
         changeDue: 0
     });
+
+    useEffect(() => {
+        setFormData(prevData => ({
+            ...prevData,
+            amount: amount
+        }));
+    }, [amount]);
 
     // Add input state to handle decimal input properly
     const [inputValues, setInputValues] = useState({
@@ -43,7 +52,7 @@ function CashForm({ onSubmit }: CashFormProps) {
                 if (field === 'amountDue') {
                     newData.changeDue = prevData.cashTendered - numValue;
                 } else if (field === 'cashTendered') {
-                    newData.changeDue = numValue - prevData.amountDue;
+                    newData.changeDue = numValue - amount;
                 }
 
                 return newData;
@@ -60,9 +69,12 @@ function CashForm({ onSubmit }: CashFormProps) {
             <TextInput
                 mode="outlined"
                 label="Amount Due"
-                value={inputValues.amountDue}
+                value={amount.toFixed(2)}
                 onChangeText={(value) => handleInputChange('amountDue', value)}
                 keyboardType="decimal-pad"
+                editable={false}
+                style={{ display: 'none' }}
+
             />
             <TextInput
                 mode="outlined"
@@ -81,7 +93,7 @@ function CashForm({ onSubmit }: CashFormProps) {
             <Button 
                 mode="contained" 
                 onPress={handleSubmit}
-                disabled={formData.cashTendered < formData.amountDue}
+                disabled={formData.cashTendered < amount}
             >
                 Process Payment
             </Button>
