@@ -1,4 +1,5 @@
 interface ProductBase {
+    id: number;
     name: string;
     sellingPrice: number;
     costPrice: number;

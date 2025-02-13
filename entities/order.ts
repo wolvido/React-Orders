@@ -9,11 +9,17 @@ export interface Order{
     orderType: string; //this is user defined, can be anything
     customer: Customer; //can be 'walk in'
     transactionDate: Date;
-    total: number;
+
+    balance: number; //is the remaining balance
+    total: number; //is the total cost
+
     orderStatus: PaymentStatus;
     fulfillmentStatus: Status;
     remarks: string;
     deliveryAddress: string; //can be 'pickup'
     cart: Cart;
     handledBy: string;
+
+    isPaid: boolean;
+    isComplete: boolean;
 }

@@ -34,7 +34,7 @@ export function CartComponent({
     useEffect(() => {
         const initialQuantities = products.reduce((acc, product) => ({
             ...acc,
-            [product.key]: "1"
+            [product.id]: "1"
         }), {});
         setQuantities(initialQuantities);
     }, [products]);
@@ -69,7 +69,7 @@ export function CartComponent({
     }, []);
     
     const handleAddItem = (productId: number) => {
-        const product = products.find(p => p.key === productId);
+        const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
 
         const quantity = parseInt(quantities[productId]);
@@ -123,7 +123,7 @@ export function CartComponent({
                         style={styles.searchBar}
                     />
                 {filteredProducts.map(product => (
-                    <Card key={product.key} style={styles.productCard}>
+                    <Card key={product.id} style={styles.productCard}>
                         <Card.Content>
                             <View style={styles.cardLayout}>
                                 {/* Left side - Product info */}
@@ -147,26 +147,26 @@ export function CartComponent({
                                     <TextInput
                                         mode="outlined"
                                         label="Qty"
-                                        value={quantities[product.key] || ''}
-                                        onChangeText={(text) => handleQuantityChange(text, product.key)}
-                                        onFocus={() => handleQuantityFocus(product.key)}
-                                        onBlur={() => handleQuantityBlur(product.key)}
+                                        value={quantities[product.id] || ''}
+                                        onChangeText={(text) => handleQuantityChange(text, product.id)}
+                                        onFocus={() => handleQuantityFocus(product.id)}
+                                        onBlur={() => handleQuantityBlur(product.id)}
                                         keyboardType="numeric"
                                         style={styles.quantityInput}
                                         maxLength={5}
-                                        error={!!errors[product.key]}
+                                        error={!!errors[product.id]}
                                     />
                                     <Button 
                                         mode="contained" 
-                                        onPress={() => handleAddItem(product.key)}
+                                        onPress={() => handleAddItem(product.id)}
                                     >
                                         Add
                                     </Button>
                                 </View>
                             </View>
-                            {errors[product.key] ? (
+                            {errors[product.id] ? (
                                 <HelperText type="error" visible={true}>
-                                    {errors[product.key]}
+                                    {errors[product.id]}
                                 </HelperText>
                             ) : null}
                         </Card.Content>
@@ -180,7 +180,7 @@ export function CartComponent({
                 <ScrollView>
                     {cart.items.map(item => (
                         <List.Item
-                            key={item.product.key}
+                            key={item.product.id}
                             title={item.product.name}
                             description={() => (
                                 <Text>Quantity: {item.quantity} | Total: ₱{item.total}</Text>

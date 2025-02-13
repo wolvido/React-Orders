@@ -27,7 +27,7 @@ export default function FinalizeOrder() {
             <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
                 <ScrollView 
                     keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={{ 
+                    contentContainerStyle={{
                         paddingBottom: 100 // Add extra padding at bottom
                     }}
                     showsVerticalScrollIndicator={true}

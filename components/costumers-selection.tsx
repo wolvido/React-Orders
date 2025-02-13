@@ -31,9 +31,9 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
                     <List.Section>
                         {customers.map((customer) => (
                             <List.Item
-                                key={customer.id}
+                                key={customer.id+1}
                                 title={customer.name}
-                                description={customer.email}
+                                description={customer.contactNumber}
                                 onPress={() => handleCustomerSelect(customer)}
                                 left={props => <List.Icon {...props} icon="account" />}
                                 right={props => <List.Icon {...props} icon="chevron-right" />}

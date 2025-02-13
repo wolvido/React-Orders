@@ -23,10 +23,10 @@ import { OrderProvider } from '@/context/order-context';
 //react component
 export default function OrdersScreen() {
 
-    const { getOrderbyId } = useOrder();
-    
     const orderRepository = new OrderRepository();
 
+    const { getOrderbyId } = useOrder();
+    
     const [items, setItems] = useState<Order[]>([]);
     const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -35,7 +35,6 @@ export default function OrdersScreen() {
         orderRepository.getAll().then((data) => {
             setItems(data);
         });
-
     }, []);
 
     useEffect(() => {
@@ -45,9 +44,6 @@ export default function OrdersScreen() {
             });
         }
     }, [selectedOrderId]);
-
-    //lets use dummy data for now
-    //const items = orders;
 
     const searchableFields: (keyof Order)[] = [
         'orderType',

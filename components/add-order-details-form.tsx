@@ -5,7 +5,6 @@ import { useCallback, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 import { DatePickerInput } from 'react-native-paper-dates';
-import { dummyCustomers } from '@/dummy-data/dummy-customers';
 import CustomersSelection from './costumers-selection';
 import { Customer } from '@/entities/customers';
 import { Order } from '@/entities/order';
@@ -15,24 +14,23 @@ import { DatePicker } from './date-picker';
 // Define props interface
 interface OrderDetailsFormProps {
     onSubmit: (order: Order) => void;
+    customers: Customer[];
 }
 
-function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
+function OrderDetailsForm({ onSubmit, customers }: OrderDetailsFormProps) {
     //form Handling logic
     const [formData, setFormData] = useState<Order>({
         id: Math.floor(1000000 + Math.random() * 9000000),
-        orderType: {
-            type: "Cash",
-            amountDue: 0,
-            cashTendered: 0,
-            changeDue: 0
-        } as PaymentMethod,
+        referenceNo: Math.floor(1000000 + Math.random() * 9000000), // Added
+        orderType: '',
         customer: {
             id: 0,
-            name: '',
-            email: ''
+            name: 'Walk-in',
+            contactNumber: '',
+            address: ''
         },
         transactionDate: new Date(),
+        balance: 0,
         total: 0,
         orderStatus: PaymentStatus.unPaid,
         fulfillmentStatus: Status.Pending,
@@ -41,9 +39,12 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
         cart: {
             items: [],
             total: 0
-        }
+        },
+        handledBy: '', 
+        isPaid: false,
+        isComplete: false
     });
-
+    
     const handleInputChange = useCallback((field: keyof Order, value: string | Date) => {
         setFormData(prevData => ({
             ...prevData,
@@ -53,7 +54,7 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
   
     const handleSubmit = useCallback(() => {
         // Validate form data here if needed
-        const isValid = formData.customer.id !== 0; // Add more validation as needed
+        const isValid = formData.customer.id !== null; // Add more validation as needed
         
         if (isValid) {
             onSubmit(formData);
@@ -67,6 +68,7 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
     const hideCustomersModal = () => setVisibleCustomers(false);
 
     const handleCustomerSelect = (customer: Customer) => {
+        console.log('Selected Customer:', customer);
         setSelectedCustomer(customer);
         setFormData(prev => ({
             ...prev,
@@ -110,6 +112,20 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
                 onChangeText={(value) => handleInputChange('deliveryAddress', value)}
             />
 
+            <TextInput
+                mode="outlined"
+                label="Handled By"
+                value={formData.handledBy}
+                onChangeText={(value) => handleInputChange('handledBy', value)}
+            />
+
+            <TextInput
+                mode="outlined"
+                label="Order Type"
+                value={formData.orderType}
+                onChangeText={(value) => handleInputChange('orderType', value)}
+            />
+
             <Button 
                 mode="contained"
                 onPress={handleSubmit}
@@ -121,7 +137,7 @@ function OrderDetailsForm({ onSubmit }: OrderDetailsFormProps) {
             <CustomersSelection 
                 visible={visibleCustomers}
                 hideModal={hideCustomersModal}
-                customers={dummyCustomers}
+                customers={customers}
                 onSelectCustomer={handleCustomerSelect}
             />
     </View>

@@ -7,6 +7,7 @@ import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 
 import { OrderRepository } from '@/repositories/order-repository';
+import { Customer } from '@/entities/customers';
 
 //dummy delete later
 //import { orders } from '@/dummy-data/dummy-orders';
@@ -23,6 +24,7 @@ interface OrderContextType {
     initializeOrder: (orderDetails: Partial<Order>) => void;
     updateFulfillmentById: (status: Status, id: number) => void;
     getOrderbyId: (id: number) => Promise<Order | undefined>;
+    getAllCustomers: () => Promise<Customer[]>;
 }
 
 // Create the context
@@ -38,7 +40,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         const newOrder: Order = {
             id: Math.floor(1000000 + Math.random() * 9000000),
             referenceNo: Math.floor(1000000 + Math.random() * 9000000),
-            
             orderType: 'Walk-in',
             customer: {
                 id: 0,
@@ -75,7 +76,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         setCurrentOrder({
             ...currentOrder,
             cart: cart,
-            total: cart.total
+            total: cart.total,
+            balance: cart.total
         });
     };
 
@@ -99,9 +101,18 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         return currentOrder;
     };
 
-    const finalizeOrder = () => {
-        console.log('Order finalized:', currentOrder);
-        setCurrentOrder(null);
+    const finalizeOrder = async () => {
+        if (!currentOrder) return;
+    
+        try {
+            await orderRepository.create(currentOrder);
+            setCurrentOrder(null);
+        } catch (error) {
+
+            console.error('Failed to finalize order:', error);
+            
+            //needs to be handled for user here
+        }
     };
 
     const getOrderbyId = async (id: number): Promise<Order | undefined> => {
@@ -138,6 +149,13 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         //repo call
     };
 
+    const getAllCustomers = async () => {
+        const customers = await orderRepository.getAllCustomers();
+        console.log(customers);
+        return await orderRepository.getAllCustomers();
+       
+    };
+
     const value = {
         currentOrder,
         updatePaymentById,
@@ -148,7 +166,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         finalizeOrder,
         initializeOrder,
         updateFulfillmentById,
-        getOrderbyId
+        getOrderbyId,
+        getAllCustomers
     };
 
     return (

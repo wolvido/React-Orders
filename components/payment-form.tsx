@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { SegmentedButtons, Text, Button } from 'react-native-paper';
+import { SegmentedButtons, Text } from 'react-native-paper';
 import CashForm from './transaction-forms/cash-form';
 import ChequeForm from './transaction-forms/cheque-form';
 import BankTransferForm from './transaction-forms/bank-transfer-form';
 import GatewayForm from './transaction-forms/gateway-form';
 import PaymentMethod from '@/entities/payment-method';
 import { Order } from '@/entities/order';
-
 
 interface PaymentMethodSelectorProps {
     orderId: number;
@@ -23,7 +22,6 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
         const orderData = getOrderById(orderId);
         setOrder(orderData);
     }, [orderId, getOrderById]);
-
 
     const [selectedMethod, setSelectedMethod] = useState('cash');
 
