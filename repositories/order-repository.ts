@@ -1,7 +1,8 @@
-import { DateAdapter } from "@/adapter/date-adapter";
+import { OrderAdapter } from "@/adapter/order-adapter";
 import { Order } from "@/entities/order";
 import PaymentStatus from "@/enums/payment-status";
 import Status from "@/enums/status";
+import app from "@/app.json";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
@@ -20,7 +21,7 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = '';
+        this.baseUrl = app.api.baseUrl + '/Order';
     }
 
     //response handler
@@ -34,26 +35,26 @@ export class OrderRepository implements IOrderRepository {
 
         const data = await response.json();
 
-        // If array
+        //check if data is an array
         if (Array.isArray(data)) {
-            return DateAdapter.adaptOrders(data) as T;
+            const orders = data.map((order: any) => OrderAdapter.adapt(order));
+            return await orders as T;
         }
-        // If single
-        if (data && 'transactionDate' in data) {
-            return DateAdapter.adaptOrder(data) as T;
-        }
-        return await data;
-    }
-
-    async getById(id: number): Promise<Order | null> {
-        const response = await fetch(`${this.baseUrl}/${id}`);
-        return this.handleResponse<Order>(response);
+        
+        return await OrderAdapter.adapt(data) as T;
     }
 
     async getAll(): Promise<Order[]> {
-        const response = await fetch(this.baseUrl);
+        const response = await fetch(`${this.baseUrl}/fetch-orders?page=1&pageSize=999999`);
         return await this.handleResponse<Order[]>(response);
     }
+
+    async getById(id: number): Promise<Order | null> {
+        const response = await fetch(`${this.baseUrl}/fetch-order/${id}`);
+        return this.handleResponse<Order>(response);
+    }
+
+    ///
 
     async create(order: Omit<Order, 'id'>): Promise<Order> {
         const response = await fetch(this.baseUrl, {
