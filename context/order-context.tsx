@@ -6,8 +6,10 @@ import { Cart } from '@/entities/cart';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 
+import { OrderRepository } from '@/repositories/order-repository';
+
 //dummy delete later
-import { orders } from '@/dummy-data/dummy-orders';
+//import { orders } from '@/dummy-data/dummy-orders';
 
 // Define the context type
 interface OrderContextType {
@@ -20,7 +22,7 @@ interface OrderContextType {
     finalizeOrder: () => void;
     initializeOrder: (orderDetails: Partial<Order>) => void;
     updateFulfillmentById: (status: Status, id: number) => void;
-    getOrderbyId: (id: number) => Order;
+    getOrderbyId: (id: number) => Promise<Order | undefined>;
 }
 
 // Create the context
@@ -30,30 +32,34 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 export function OrderProvider({ children }: { children: ReactNode }) {
     const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
 
+    const orderRepository = new OrderRepository();
+
     const initializeOrder = (orderDetails: Partial<Order>) => {
         const newOrder: Order = {
             id: Math.floor(1000000 + Math.random() * 9000000),
-            orderType: {
-                type: "Cash",
-                amountDue: 0,
-                cashTendered: 0,
-                changeDue: 0
-            } as PaymentMethod,
+            referenceNo: Math.floor(1000000 + Math.random() * 9000000),
+            
+            orderType: 'Walk-in',
             customer: {
                 id: 0,
                 name: '',
-                email: ''
+                contactNumber: '',
+                address: ''
             },
             transactionDate: new Date(),
+            balance: 0,
             total: 0,
             orderStatus: PaymentStatus.unPaid,
             fulfillmentStatus: Status.Pending,
             remarks: '',
             deliveryAddress: '',
+            handledBy: '',
             cart: {
                 items: [],
                 total: 0
             },
+            isPaid: false,
+            isComplete: false,
             ...orderDetails
         };
         setCurrentOrder(newOrder);
@@ -98,12 +104,22 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         setCurrentOrder(null);
     };
 
-    const getOrderbyId = (id: number): Order => {
-        //repo call
-        //dummy for now
-        const order = orders.find(order => order.id === id);
+    const getOrderbyId = async (id: number): Promise<Order | undefined> => {
 
-        return (order as Order);
+        try {
+            const order = await orderRepository.getById(id);
+            if (order) {
+                return order;
+
+            } else {
+                return undefined;
+
+            }
+        } catch (error) {
+            console.error('Error fetching order:', error);
+            throw error;
+        }
+        
     };
 
     const updateFulfillmentById = (status: Status, id: number) => {
