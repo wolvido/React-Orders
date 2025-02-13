@@ -47,5 +47,8 @@
       }
     },
     "owner": "winzyl"
+  },
+  "api": {
+    "baseUrl": "http://192.168.110.120:8000/api"
   }
 }
