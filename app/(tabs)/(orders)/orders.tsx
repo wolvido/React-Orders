@@ -24,18 +24,30 @@ import { OrderProvider } from '@/context/order-context';
 export default function OrdersScreen() {
 
     const { getOrderbyId } = useOrder();
+    
+    const orderRepository = new OrderRepository();
 
-    //get the order items from the order repository
-    // const orderRepository = new OrderRepository();
-    // const [items, setItems] = useState<Order[]>([]);
-    // useEffect(() => {
-    //     orderRepository.getAll().then((data) => {
-    //         setItems(data);
-    //     });
-    // }, []);
+    const [items, setItems] = useState<Order[]>([]);
+    const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+    useEffect(() => {
+        orderRepository.getAll().then((data) => {
+            setItems(data);
+        });
+
+    }, []);
+
+    useEffect(() => {
+        if (selectedOrderId) {
+            getOrderbyId(selectedOrderId).then(order => {
+                setSelectedOrder(order || null);
+            });
+        }
+    }, [selectedOrderId]);
 
     //lets use dummy data for now
-    const items = orders;
+    //const items = orders;
 
     const searchableFields: (keyof Order)[] = [
         'orderType',
@@ -75,7 +87,6 @@ export default function OrdersScreen() {
 
     //payment status
     const [showStatusModal, setShowStatusModal] = useState(false);
-    const [selectedOrderId, setSelectedOrderId] = useState(0);
     const [initialStatus, setInitialStatus] = useState<Status>();
     const handleStatusClick = (orderId: number, status: Status) => {
         setSelectedOrderId(orderId);
@@ -140,7 +151,7 @@ export default function OrdersScreen() {
                 </Modal>
             </Portal>
 
-        {showPaymentForm && (
+        {showPaymentForm && selectedOrder && (
             <View>
                 <ScrollView 
                     keyboardShouldPersistTaps="handled"
@@ -155,7 +166,7 @@ export default function OrdersScreen() {
                         <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                         <Appbar.Content title="Add Payment Method" />
                     </Appbar.Header>
-                    <PaymentMethodSelector getOrderById={getOrderbyId} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
+                    <PaymentMethodSelector getOrderById={() => selectedOrder} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
                 </ScrollView>
             </View>
         )}
@@ -197,7 +208,7 @@ export default function OrdersScreen() {
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType.name}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell
