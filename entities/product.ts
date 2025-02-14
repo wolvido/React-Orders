@@ -1,9 +1,9 @@
 interface ProductBase {
     id: number;
     name: string;
-    sellingPrice: number;
-    costPrice: number;
-    category: string;
+    price: number;
+    //costPrice: number;
+    category: string;   
     brand: string;
 }
 

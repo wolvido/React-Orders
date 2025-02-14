@@ -17,7 +17,7 @@ export interface Order{
     fulfillmentStatus: Status;
     remarks: string;
     deliveryAddress: string; //can be 'pickup'
-    cart: Cart;
+    //cart: Cart;
     handledBy: string;
 
     isPaid: boolean;
