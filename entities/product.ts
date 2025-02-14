@@ -11,7 +11,7 @@ export interface Product extends ProductBase {
     stocks: number;
     isBundle: boolean;
     bundleItems: BundleProduct[];
-    unitType: 'CASE' | 'JAR';
+    unitType: string;
 }
 
 export interface BundleProduct extends ProductBase {
