@@ -1,6 +1,5 @@
 import commonStyles from '@/style/common';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { products } from '@/dummy-data/dummy-products';
 import * as React from 'react';
 import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
 import theme from '@/style/theme';
@@ -8,16 +7,34 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/entities/product';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
+import { ProductRepository } from '@/repositories/product-repository';
 
 //react component
 export default function ProductsScreen() {
         const [page, setPage] = useState<number>(0);
-        const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
+        const [numberOfItemsPerPageList] = useState([10, 25, 50, 100]);
         const [itemsPerPage, onItemsPerPageChange] = useState(
-          numberOfItemsPerPageList[0]
+            numberOfItemsPerPageList[0]
         );
+
+        const [itemsLoaded, setItemsLoaded] = useState(10);
+
+        const [items, setItems] = useState<Product[]>([]);
+        const productRepository = new ProductRepository();
+
+        useEffect(() => {
+            const currentLastItem = (page + 1) * itemsPerPage;
+            // If we're close to the end of our loaded items, load more
+            if (currentLastItem >= itemsLoaded) {
+                productRepository.getProductPerPage(1, itemsLoaded * 2).then((data) => {
+                    setItems(data);
+                    setItemsLoaded(itemsLoaded * 2);
+                });
+            }
+        }, [page, itemsPerPage]);
     
-        const items = products;
+        //const items = products;
+
         const from = page * itemsPerPage; 
         const to = Math.min((page + 1) * itemsPerPage, items.length);
       
@@ -67,8 +84,7 @@ export default function ProductsScreen() {
 
             <DataTable.Header>
                 <DataTable.Title>Name</DataTable.Title>
-                <DataTable.Title numeric>Selling Price</DataTable.Title>
-                <DataTable.Title numeric>Cost Price</DataTable.Title>
+                <DataTable.Title numeric>Price</DataTable.Title>
                 <DataTable.Title numeric>Stocks</DataTable.Title>
                 <DataTable.Title numeric>Unit Type</DataTable.Title>
                 <DataTable.Title numeric>Category</DataTable.Title>
@@ -81,10 +97,9 @@ export default function ProductsScreen() {
                     <DataTable>
 
                         {filteredItems.slice(from, to).map((item) => (
-                            <DataTable.Row key={item.key}>
+                            <DataTable.Row key={item.id}>
                                 <DataTable.Cell>{item.name}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.sellingPrice}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.costPrice}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.price}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.category}</DataTable.Cell>
@@ -98,7 +113,9 @@ export default function ProductsScreen() {
             <DataTable.Pagination
                 page={page}
                 numberOfPages={Math.ceil(items.length / itemsPerPage)}
-                onPageChange={(page) => setPage(page)}
+                onPageChange={(newPage) => {
+                    setPage(newPage);
+                }}
                 label={`${from + 1}-${to} of ${items.length}`}
                 numberOfItemsPerPageList={numberOfItemsPerPageList}
                 numberOfItemsPerPage={itemsPerPage}
