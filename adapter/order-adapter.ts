@@ -2,7 +2,6 @@ import { Order } from "@/entities/order";
 import Status from "@/enums/status";
 import PaymentStatus from "@/enums/payment-status";
 // import { Customer } from "@/entities/customers";
-import { Cart } from "@/entities/cart";
 
 // Create interface for the source data
 interface RestaurantOrderDTO {
@@ -75,8 +74,7 @@ export class OrderAdapter {
                 name: dto.customerName,
                 contactNumber: dto.contactNumber || '',
                 address: dto.address || ''
-            },
-            cart: this.createDummyCart() // Placeholder for now
+            }
         };
     }
 
@@ -87,18 +85,10 @@ export class OrderAdapter {
         return dto.balance < dto.total ? PaymentStatus.partialPaid : PaymentStatus.unPaid;
     }
 
-    private static createDummyCart(): Cart {
-        // Implement dummy cart creation here
-
-        return {
-            // Add dummy cart properties
-            
-        } as Cart;
-    }
 
     static reverse(order: Order): RestaurantOrderDTO {
         return {
-            // System fields (defaults)
+            // sys something something
             isDeleted: false,
             sys_CreateTimeStamp: new Date().toISOString(),
             sys_CreateUserStamp: "",
@@ -124,7 +114,7 @@ export class OrderAdapter {
             contactNumber: order.customer.contactNumber || "",
             address: order.customer.address || "",
 
-            // Additional required fields (defaults)
+            // restaurant bullshit
             releaseDate: new Date().toISOString(),
             dueDate: new Date().toISOString(),
             releasedBy: "",
@@ -134,7 +124,7 @@ export class OrderAdapter {
             roomHistoryId: 0,
             roomNumber: 0,
             tableNumber: 0,
-            subtotal: order.total, // Assuming subtotal is same as total if not specified
+            subtotal: order.total, // subtotal is same as total because idk
             discount: 0,
             description: "",
             status: "",
