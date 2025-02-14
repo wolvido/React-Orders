@@ -55,10 +55,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             remarks: '',
             deliveryAddress: '',
             handledBy: '',
-            cart: {
-                items: [],
-                total: 0
-            },
             isPaid: false,
             isComplete: false,
             ...orderDetails
@@ -75,7 +71,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         if (!currentOrder) return;
         setCurrentOrder({
             ...currentOrder,
-            cart: cart,
             total: cart.total,
             balance: cart.total
         });
