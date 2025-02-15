@@ -36,10 +36,6 @@ function OrderDetailsForm({ onSubmit, customers }: OrderDetailsFormProps) {
         fulfillmentStatus: Status.Pending,
         remarks: '',
         deliveryAddress: '',
-        cart: {
-            items: [],
-            total: 0
-        },
         handledBy: '', 
         isPaid: false,
         isComplete: false
