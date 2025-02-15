@@ -6,7 +6,7 @@ import Status from "@/enums/status";
 import app from "@/app.json";
 import { CustomerAdapter } from "@/adapter/customer-adapter";
 import { Cart } from "@/entities/cart";
-import { convertCartToOrderLines } from "@/adapter/cart-adapter";
+import { convertCartToOrderLines, RestaurantOrderLineDTO } from "@/adapter/cart-adapter";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
@@ -27,8 +27,9 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.akongCpUrl + '/Order';
+        //this.baseUrl = app.api.akongCpUrl + '/Order';
         //this.baseUrl = app.api.baseUrl + '/Order';
+        this.baseUrl = app.api.mlangUrl + '/Order';
     }
 
     //response handler
@@ -70,6 +71,31 @@ export class OrderRepository implements IOrderRepository {
         return await CustomerAdapter.adapt(data) as T;
     }
 
+    private async handleResponseOrderLines<T>(response: Response): Promise<T> {
+        if (!response.ok) {
+            if (response.status === 404) {
+                // Return an empty result structure instead of null
+                console.error('Order lines not found 404');
+                return { orderLine: [] } as T;
+            }
+            throw new Error(`HTTP error status: ${response.status}`);
+        }
+    
+        try {
+            const data = await response.json();
+            if (!data) {
+                // Return an empty result structure if data is null
+                console.error('Order lines not found');
+                return { orderLine: [] } as T;
+            }
+            return data as T;
+        } catch (error) {
+            console.error('Error parsing response:', error);
+            // Return an empty result structure on error
+            return { orderLine: [] } as T;
+        }
+    }
+
     async getAll(): Promise<Order[]> {
         const response = await fetch(`${this.baseUrl}/fetch-orders?page=1&pageSize=999999`);
         return await this.handleResponse<Order[]>(response);
@@ -102,12 +128,35 @@ export class OrderRepository implements IOrderRepository {
         return await response.json();
     }
 
-    async createOrderLines(cart: Cart): Promise<{message: string}> {
-        const orderLines = convertCartToOrderLines(cart);
-        console.log('Order Lines:', orderLines);
-
-        return { message: 'Order lines created' };
+    async createOrderLines(cart: Cart): Promise<{orderLine: RestaurantOrderLineDTO[]}> {
+        try {
+            const orderLines = convertCartToOrderLines(cart);
+            console.log('Sending orderLines:', orderLines); // Log what we're sending
+    
+            const response = await fetch(`http://192.168.1.4:8000/api/Orderline/bulk-save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderLines)
+            });
+    
+            console.log('Response status:', response.status); // Log response status
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const responseData = await response.json();
+            console.log('Response data:', responseData); // Log the actual response
+    
+            return responseData;
+        } catch (error) {
+            console.error('Error in createOrderLines:', error);
+            throw error;
+        }
     }
+    
 
     // async update(id: number, orderData: Partial<Order>): Promise<Order> {
     //     const response = await fetch(`${this.baseUrl}/${id}`, {

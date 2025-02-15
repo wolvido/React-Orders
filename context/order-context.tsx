@@ -101,20 +101,24 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     const finalizeOrder = async () => {
+
         if (!currentOrder) return;
     
         try {
+            console.log('Finalizing order:', currentOrder);
             // console.log('Finalizing order:', currentOrder);
             const jsonReturn = await orderRepository.create(currentOrder);
-            
-            setCart({ ...cart, orderId: jsonReturn.orderId });
+
+            const updatedCart = { ...cart, orderId: jsonReturn.orderId };
 
             //here send the cart to repo
-            await orderRepository.createOrderLines(cart);
-
-            setCurrentOrder(null);
+            const result = await orderRepository.createOrderLines(updatedCart);
 
             console.log('Order finalized with ID:', jsonReturn.orderId);
+            console.log('Order lines created:', result.orderLine);
+
+            setCart({ items: [], total: 0, orderId: 0 });
+            setCurrentOrder(null);
 
         } catch (error) {
 
