@@ -11,7 +11,7 @@ export interface IOrderRepository {
     getAll(): Promise<Order[]>;
     getAllCustomers(): Promise<Customer[]>;
 
-    create(order: Omit<Order, 'id'>): Promise<Order>;
+    create(order: Omit<Order, 'id'>): Promise<{orderId: number}>;
     // update(id: number, order: Partial<Order>): Promise<Order>;
     // delete(id: number): Promise<boolean>;
     // getByCustomerId(customerId: number): Promise<Order[]>;
@@ -25,7 +25,8 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.baseUrl + '/Order';
+        this.baseUrl = app.api.akongCpUrl + '/Order';
+        //this.baseUrl = app.api.baseUrl + '/Order';
     }
 
     //response handler
@@ -82,7 +83,7 @@ export class OrderRepository implements IOrderRepository {
         return await this.handleResponseCustomers<Customer[]>(response);
     }
 
-    async create(order: Omit<Order, 'id'>): Promise<Order> {
+    async create(order: Omit<Order, 'id'>): Promise<{orderId: number}> {
         // Convert the order to DTO format before sending
         const orderDto = OrderAdapter.reverse(order as Order);
 
@@ -95,7 +96,8 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify(orderDto)
         });
-        return await this.handleResponse<Order>(response);
+
+        return await response.json();
     }
 
     // async update(id: number, orderData: Partial<Order>): Promise<Order> {
