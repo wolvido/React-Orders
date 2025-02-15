@@ -193,8 +193,8 @@ export function CartComponent({
                     data={filteredProducts}
                     renderItem={renderProductItem}
                     keyExtractor={(item) => item.id.toString()}
-                    initialNumToRender={10}
-                    maxToRenderPerBatch={10}
+                    initialNumToRender={15}
+                    maxToRenderPerBatch={40}
                     windowSize={5}
                     removeClippedSubviews={true}
                     keyboardShouldPersistTaps="handled"

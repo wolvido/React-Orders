@@ -24,7 +24,6 @@ export default function AddItemsScreen() {
         router.push('/finalize-order');
     };
 
-
     return (
         <View style={styles.container}>
             <StepIndicator 
