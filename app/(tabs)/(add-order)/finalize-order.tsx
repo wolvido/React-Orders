@@ -6,6 +6,7 @@ import OrderFormFinal from '@/components/finalize-order-form';
 import { useOrder } from '@/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
+import { ro } from 'react-native-paper-dates';
 
 export default function FinalizeOrder() {
     const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
@@ -19,6 +20,7 @@ export default function FinalizeOrder() {
 
     const handleFinalizeOrder = () => {
         finalizeOrder();
+        router.push('/add-order');
         router.push('/orders');
     }
 
