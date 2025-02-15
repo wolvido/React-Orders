@@ -67,15 +67,15 @@ export function CartComponent({
 
         const quantity = parseInt(quantities[productId]);
 
-        if (quantity > product.stocks) {
-            const errorMessage = `Cannot add ${quantity} items. Only ${product.stocks} available in stock.`;
-            setErrors(prev => ({
-                ...prev,
-                [productId]: errorMessage
-            }));
-            onError?.(errorMessage);
-            return;
-        }
+        // if (quantity > product.stocks) {
+        //     const errorMessage = `Cannot add ${quantity} items. Only ${product.stocks} available in stock.`;
+        //     setErrors(prev => ({
+        //         ...prev,
+        //         [productId]: errorMessage
+        //     }));
+        //     onError?.(errorMessage);
+        //     return;
+        // }
 
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
