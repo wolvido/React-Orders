@@ -8,6 +8,8 @@ import PaymentStatus from '@/enums/payment-status';
 
 import { OrderRepository } from '@/repositories/order-repository';
 import { Customer } from '@/entities/customers';
+import { OrderLineRepository } from '@/repositories/order-line-repository';
+import { CustomerRepository } from '@/repositories/customer-repository';
 
 //dummy delete later
 //import { orders } from '@/dummy-data/dummy-orders';
@@ -37,6 +39,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<Cart>({ items: [], total: 0, orderId: 0 });
 
     const orderRepository = new OrderRepository();
+    const orderLineRepository = new OrderLineRepository();
+    const customerRepository = new CustomerRepository();
 
     const initializeOrder = (orderDetails: Partial<Order>) => {
         const newOrder: Order = {
@@ -111,11 +115,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
             const updatedCart = { ...cart, orderId: jsonReturn.orderId };
 
-            //here send the cart to repo
-            const result = await orderRepository.createOrderLines(updatedCart);
+            const result = await orderLineRepository.createOrderLines(updatedCart);
 
             console.log('Order finalized with ID:', jsonReturn.orderId);
-            console.log('Order lines created:', result.orderLine);
+            console.log('Order lines created:', result);
 
             setCart({ items: [], total: 0, orderId: 0 });
             setCurrentOrder(null);
@@ -125,6 +128,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             console.error('Failed to finalize order:', error);
             
             //needs to be handled for user here
+
         }
     };
 
@@ -163,9 +167,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     const getAllCustomers = async () => {
-        const customers = await orderRepository.getAllCustomers();
-        console.log(customers);
-        return await orderRepository.getAllCustomers();
+        const customers = await customerRepository.getAllCustomers();
+        console.log('customers: '+customers);
+        return customers;
        
     };
 
