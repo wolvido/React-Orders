@@ -34,6 +34,8 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 export function OrderProvider({ children }: { children: ReactNode }) {
     const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
 
+    const [cart, setCart] = useState<Cart>({ items: [], total: 0, orderId: 0 });
+
     const orderRepository = new OrderRepository();
 
     const initializeOrder = (orderDetails: Partial<Order>) => {
@@ -74,6 +76,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             total: cart.total,
             balance: cart.total
         });
+
+        setCart(cart);
     };
 
     const updateRemarks = (remarks: string) => {
@@ -100,8 +104,12 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         if (!currentOrder) return;
     
         try {
-            await orderRepository.create(currentOrder);
+            // console.log('Finalizing order:', currentOrder);
+            const jsonReturn = await orderRepository.create(currentOrder);
             setCurrentOrder(null);
+
+            console.log('Order finalized with ID:', jsonReturn.orderId);
+
         } catch (error) {
 
             console.error('Failed to finalize order:', error);
