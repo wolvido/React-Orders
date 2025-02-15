@@ -49,6 +49,7 @@
     "owner": "winzyl"
   },
   "api": {
-    "baseUrl": "http://192.168.110.120:8000/api"
+    "baseUrl": "http://192.168.110.120:8000/api",
+    "akongCpUrl": "http://192.168.80.247:8000/api"
   }
 }
