@@ -1,7 +1,6 @@
 import { Order } from "@/entities/order";
 import Status from "@/enums/status";
 import PaymentStatus from "@/enums/payment-status";
-// import { Customer } from "@/entities/customers";
 
 // Create interface for the source data
 interface RestaurantOrderDTO {
@@ -84,7 +83,6 @@ export class OrderAdapter {
         }
         return dto.balance < dto.total ? PaymentStatus.partialPaid : PaymentStatus.unPaid;
     }
-
 
     static reverse(order: Order): RestaurantOrderDTO {
         return {
