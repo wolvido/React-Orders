@@ -11,7 +11,7 @@ import { convertCartToOrderLines, RestaurantOrderLineDTO } from "@/adapter/cart-
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
     getAll(): Promise<Order[]>;
-    getAllCustomers(): Promise<Customer[]>;
+    // getAllCustomers(): Promise<Customer[]>;
 
     create(order: Omit<Order, 'id'>): Promise<{orderId: number}>;
     // update(id: number, order: Partial<Order>): Promise<Order>;
@@ -52,24 +52,24 @@ export class OrderRepository implements IOrderRepository {
         return await OrderAdapter.adapt(data) as T;
     }
 
-    private async handleResponseCustomers<T>(response: Response): Promise<T> {
-        if (!response.ok) {
-            if (response.status === 404) {
-                return null as T;
-            }
-            throw new Error(`HTTP error status: ${response.status}`);
-        }
+    // private async handleResponseCustomers<T>(response: Response): Promise<T> {
+    //     if (!response.ok) {
+    //         if (response.status === 404) {
+    //             return null as T;
+    //         }
+    //         throw new Error(`HTTP error status: ${response.status}`);
+    //     }
 
-        const data = await response.json();
+    //     const data = await response.json();
 
-        //check if data is an array
-        if (Array.isArray(data)) {
-            const customers = data.map((customer: any) => CustomerAdapter.adapt(customer));
-            return await customers as T;
-        }
+    //     //check if data is an array
+    //     if (Array.isArray(data)) {
+    //         const customers = data.map((customer: any) => CustomerAdapter.adapt(customer));
+    //         return await customers as T;
+    //     }
         
-        return await CustomerAdapter.adapt(data) as T;
-    }
+    //     return await CustomerAdapter.adapt(data) as T;
+    // }
 
     // private async handleResponseOrderLines<T>(response: Response): Promise<T> {
     //     if (!response.ok) {
@@ -106,10 +106,10 @@ export class OrderRepository implements IOrderRepository {
         return this.handleResponse<Order>(response);
     }
 
-    async getAllCustomers(): Promise<Customer[]> {
-        const response = await fetch(`${this.baseUrl}/fetch-customers`);
-        return await this.handleResponseCustomers<Customer[]>(response);
-    }
+    // async getAllCustomers(): Promise<Customer[]> {
+    //     const response = await fetch(`${this.baseUrl}/fetch-customers`);
+    //     return await this.handleResponseCustomers<Customer[]>(response);
+    // }
 
     async create(order: Omit<Order, 'id'>): Promise<{orderId: number}> {
         // Convert the order to DTO format before sending
