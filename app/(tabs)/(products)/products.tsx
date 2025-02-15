@@ -83,14 +83,14 @@ export default function ProductsScreen() {
             </DataTable.Header>
 
             <DataTable.Header>
-                <DataTable.Title>Name</DataTable.Title>
+                <DataTable.Title style={{ flex: 2 }}>Name</DataTable.Title>
                 <DataTable.Title numeric>Price</DataTable.Title>
                 <DataTable.Title numeric>Stocks</DataTable.Title>
                 <DataTable.Title numeric>Unit Type</DataTable.Title>
                 <DataTable.Title numeric>Category</DataTable.Title>
                 <DataTable.Title numeric>Brand</DataTable.Title>
-                <DataTable.Title numeric>Bundle Quantity</DataTable.Title>
-                <DataTable.Title numeric>Bundle Type</DataTable.Title>
+                {/* <DataTable.Title numeric>Bundle Quantity</DataTable.Title>
+                <DataTable.Title numeric>Bundle Type</DataTable.Title> */}
 
             </DataTable.Header>
 
@@ -100,15 +100,12 @@ export default function ProductsScreen() {
 
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
-                                <DataTable.Cell>{item.id}</DataTable.Cell>
-                                <DataTable.Cell>{item.name}</DataTable.Cell>
+                                <DataTable.Cell style={{ flex: 2 }} >{item.name}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.price}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.category}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
-                                {/* <DataTable.Cell numeric>{item.bundleQuantity}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.bundleType?.name}</DataTable.Cell> */}
                             </DataTable.Row>
                         ))}
                     </DataTable>
