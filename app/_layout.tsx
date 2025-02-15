@@ -11,11 +11,13 @@ import { OrderProvider } from '@/context/order-context';
 import { DeliveryProvider } from '@/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
 import { ScrollView } from 'react-native';
+import { ProductProvider } from '@/context/product-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
     return (
         <AuthProvider>
+            <ProductProvider>
             <PaperProvider theme={theme}>
                 <PurchaseOrderProvider>
                     <OrderProvider>
@@ -39,6 +41,7 @@ export default function RootLayout() {
                     </OrderProvider>
                 </PurchaseOrderProvider>
             </PaperProvider>
+            </ProductProvider>
         </AuthProvider>
     );
 }

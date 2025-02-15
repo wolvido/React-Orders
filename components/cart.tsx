@@ -1,10 +1,11 @@
-import { View, ScrollView, StyleSheet } from "react-native";
-import { Button, Card, TextInput, Text, HelperText, Searchbar, IconButton } from "react-native-paper";
-import { useState, useEffect, useCallback } from "react";
+import { View, StyleSheet } from "react-native";
+import { Button, Card, TextInput, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
+import { useState, useCallback } from "react";
 import useOrientation from "@/hooks/orientation-hook";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
+import { FlatList } from "react-native";
 
 interface CartComponentProps {
     products: Product[];
@@ -17,9 +18,9 @@ interface CartComponentProps {
 }
 
 export function CartComponent({
-    products, 
-    cart, 
-    onAddToCart, 
+    products,
+    cart,
+    onAddToCart,
     onRemoveFromCart,
     onProceed,
     onError,
@@ -29,27 +30,17 @@ export function CartComponent({
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
-    // Add filtered products logic
+
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // useEffect(() => {
-    //     const initialQuantities = products.reduce((acc, product) => ({
-    //         ...acc,
-    //         [product.id]: "1"
-    //     }), {});
-    //     setQuantities(initialQuantities);
-    // }, [products]);
-
     const handleQuantityChange = (text: string, productKey: number) => {
-        // Only allow numbers
         const numericValue = text.replace(/[^0-9]/g, '');
-        setQuantities(prev => ({ 
-            ...prev, 
-            [productKey]: numericValue 
+        setQuantities(prev => ({
+            ...prev,
+            [productKey]: numericValue
         }));
-        // Clear error when user starts typing
         setErrors(prev => ({
             ...prev,
             [productKey]: ''
@@ -57,7 +48,6 @@ export function CartComponent({
     };
 
     const handleQuantityFocus = useCallback((productKey: number) => {
-        // Combine both state updates into one
         requestAnimationFrame(() => {
             setQuantities(prev => ({ ...prev, [productKey]: '' }));
             setErrors(prev => ({ ...prev, [productKey]: '' }));
@@ -65,8 +55,8 @@ export function CartComponent({
     }, []);
 
     const handleQuantityBlur = useCallback((productKey: number) => {
-        setQuantities(prev => ({ 
-            ...prev, 
+        setQuantities(prev => ({
+            ...prev,
             [productKey]: prev[productKey] || '1'
         }));
     }, []);
@@ -76,8 +66,7 @@ export function CartComponent({
         if (!product || !quantities[productId]) return;
 
         const quantity = parseInt(quantities[productId]);
-        
-        // Validate quantity against stock
+
         if (quantity > product.stocks) {
             const errorMessage = `Cannot add ${quantity} items. Only ${product.stocks} available in stock.`;
             setErrors(prev => ({
@@ -104,147 +93,136 @@ export function CartComponent({
             total: product.price * quantity
         };
 
-        // Clear error on successful add
         setErrors(prev => ({
             ...prev,
             [productId]: ''
         }));
-        
+
         onAddToCart(cartItem);
         setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
 
-    if (isLoading) {
-        return (
-        <Text style={styles.loadingText}>Loading...</Text>
-        );
-    }
-    
-    return (
-        <View style={[
-            styles.content,
-            isPortrait && styles.contentPortrait
-        ]}>
-
-            <Searchbar
-                placeholder="Search products"
-                onChangeText={setSearchQuery}
-                value={searchQuery}
-                style={styles.searchBar}
-            />
-
-            {/* Products List */}
-            <ScrollView 
-                style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}
-            >
-
-{filteredProducts.map(product => (
-    <Card key={product.id} style={[
-        styles.productCard,
-        isPortrait && styles.productCardPortrait
-    ]}>
-        <Card.Content style={styles.cardContent}>
-            <View style={styles.cardLayout}>
-                {/* Product name and price */}
-                <View style={styles.productInfo}>
-                    <Text 
-                        variant={isPortrait ? "bodyMedium" : "titleMedium"}
-                        style={[
-                            isPortrait && styles.compactText,
-                            styles.productName
-                        ]}
-                        numberOfLines={1}
-                    >
-                        {product.name} • ₱{product.price}
-                    </Text>
-                </View>
-
-                {/* Stock info */}
-                <View style={styles.stockInfo}>
-                    <Text variant="bodySmall">
-                        Stock: {product.stocks}
-                    </Text>
-                </View>
-
-                {/* Quantity and Add section */}
-                <View style={[
-                    styles.actionSection,
-                    isPortrait && styles.actionSectionPortrait
-                ]}>
-                    <TextInput
-                        mode="outlined"
-                        label="Qty"
-                        value={quantities[product.id] || ''}
-                        onChangeText={(text) => handleQuantityChange(text, product.id)}
-                        onFocus={() => handleQuantityFocus(product.id)}
-                        onBlur={() => handleQuantityBlur(product.id)}
-                        keyboardType="numeric"
-                        style={[
-                            styles.quantityInput,
-                            isPortrait && styles.quantityInputPortrait
-                        ]}
-                        maxLength={5}
-                        error={!!errors[product.id]}
-                    />
-                    {isPortrait ? (
-                        <IconButton
-                            icon="chevron-right"
-                            mode="contained"
-                            size={20}
-                            onPress={() => handleAddItem(product.id)}
-                        />
-                    ) : (
-                        <Button 
-                            mode="contained" 
-                            onPress={() => handleAddItem(product.id)}
+    const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
+        <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
+            <Card.Content style={styles.cardContent}>
+                <View style={styles.cardLayout}>
+                    <View style={styles.productInfo}>
+                        <Text
+                            variant={isPortrait ? "bodyMedium" : "titleMedium"}
+                            style={[isPortrait && styles.compactText, styles.productName]}
+                            numberOfLines={1}
                         >
-                            Add
-                        </Button>
-                    )}
+                            {product.name} • ₱{product.price}
+                        </Text>
+                    </View>
+
+                    <View style={styles.stockInfo}>
+                        <Text variant="bodySmall">
+                            Stock: {product.stocks}
+                        </Text>
+                    </View>
+
+                    <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
+                        <TextInput
+                            mode="outlined"
+                            label="Qty"
+                            value={quantities[product.id] || ''}
+                            onChangeText={(text) => handleQuantityChange(text, product.id)}
+                            onFocus={() => handleQuantityFocus(product.id)}
+                            onBlur={() => handleQuantityBlur(product.id)}
+                            keyboardType="numeric"
+                            style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
+                            maxLength={5}
+                            error={!!errors[product.id]}
+                        />
+                        {isPortrait ? (
+                            <IconButton
+                                icon="chevron-right"
+                                mode="contained"
+                                size={20}
+                                onPress={() => handleAddItem(product.id)}
+                            />
+                        ) : (
+                            <Button
+                                mode="contained"
+                                onPress={() => handleAddItem(product.id)}
+                            >
+                                Add
+                            </Button>
+                        )}
+                    </View>
                 </View>
-            </View>
                 {errors[product.id] && (
                     <HelperText type="error" visible={true}>
                         {errors[product.id]}
                     </HelperText>
                 )}
-        </Card.Content>
+            </Card.Content>
         </Card>
-    ))}
-            {products.length >= 20 && (
-            <View style={styles.loadingText}>
-                <Text>Loading more items...</Text>
-            </View>
-        )}
-            </ScrollView>
+    ), [isPortrait, quantities, errors]);
 
-            {/* Cart */}
-            <View style={[
-                styles.rightPanel,
-                isPortrait && styles.rightPanelPortrait
-            ]}>
+    const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
+        <View key={item.product.id} style={styles.cartItemWrapper}>
+            <Text style={styles.cartItemText} numberOfLines={1}>
+                {item.product.name} ({item.quantity}) • ₱{item.total}
+            </Text>
+            <IconButton
+                icon="close-circle"
+                size={16}
+                onPress={() => onRemoveFromCart(item.product)}
+                style={styles.removeButton}
+            />
+        </View>
+    ), [onRemoveFromCart]);
+
+    if (isLoading) {
+        return <Text style={styles.loadingText}>Loading...</Text>;
+    }
+
+    return (
+        <View style={[styles.content, isPortrait && styles.contentPortrait]}>
+            <View style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}>
+                <Searchbar
+                    placeholder="Search products"
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
+                    style={styles.searchBar}
+                />
+
+                <FlatList
+                    data={filteredProducts}
+                    renderItem={renderProductItem}
+                    keyExtractor={(item) => item.id.toString()}
+                    initialNumToRender={10}
+                    maxToRenderPerBatch={10}
+                    windowSize={5}
+                    removeClippedSubviews={true}
+                    keyboardShouldPersistTaps="handled"
+                    ListEmptyComponent={() => (
+                        <Text style={styles.emptyText}>
+                            {searchQuery ? "No products found" : "No products available"}
+                        </Text>
+                    )}
+                />
+            </View>
+
+            <View style={[styles.rightPanel, isPortrait && styles.rightPanelPortrait]}>
                 <Text variant="headlineMedium">Cart</Text>
-                <ScrollView contentContainerStyle={styles.cartItemsContainer}>
-                    {cart.items.map(item => (
-                        <View key={item.product.id} style={styles.cartItemWrapper}>
-                            <Text style={styles.cartItemText} numberOfLines={1}>
-                                {item.product.name} ({item.quantity}) • ₱{item.total}
-                            </Text>
-                            <IconButton
-                                icon="close-circle"
-                                size={16}
-                                onPress={() => onRemoveFromCart(item.product)}
-                                style={styles.removeButton}
-                            />
-                        </View>
-                    ))}
-                </ScrollView>
+                <FlatList
+                    data={cart.items}
+                    renderItem={renderCartItem}
+                    keyExtractor={(item) => item.product.id.toString()}
+                    contentContainerStyle={styles.cartItemsContainer}
+                    ListEmptyComponent={() => (
+                        <Text style={styles.emptyText}>Cart is empty</Text>
+                    )}
+                />
                 <View style={styles.summaryContainer}>
                     <Text variant="titleLarge" style={styles.total}>
                         Total: ₱{cart.total}
                     </Text>
-                    <Button 
-                        mode="contained" 
+                    <Button
+                        mode="contained"
                         onPress={onProceed}
                         style={isPortrait && styles.proceedButtonPortrait}
                     >
@@ -257,6 +235,11 @@ export function CartComponent({
 }
 
 const styles = StyleSheet.create({
+    emptyText: {
+        textAlign: 'center',
+        padding: 16,
+        color: '#666',
+    },
     cartItemsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
