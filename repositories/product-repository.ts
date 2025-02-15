@@ -15,7 +15,8 @@ export class ProductRepository implements IProductRepository{
 
     constructor() {
         //this.baseUrl = app.api.baseUrl + '/Product';
-        this.baseUrl = app.api.akongCpUrl + '/Product';
+        //this.baseUrl = app.api.akongCpUrl + '/Product';
+        this.baseUrl = app.api.mlangUrl + '/Product';
     }
 
     private async handleResponse<T>(response: Response): Promise<T> {
