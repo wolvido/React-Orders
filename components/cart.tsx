@@ -31,28 +31,6 @@ export function CartComponent({
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
 
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-            setKeyboardVisible(true);
-        }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-            setKeyboardVisible(false);
-        }
-    );
-
-    return () => {
-        keyboardDidShowListener.remove();
-        keyboardDidHideListener.remove();
-    };
-}, []);
-
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -86,19 +64,9 @@ useEffect(() => {
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
-
+    
         const quantity = parseInt(quantities[productId]);
-
-        // if (quantity > product.stocks) {
-        //     const errorMessage = `Cannot add ${quantity} items. Only ${product.stocks} available in stock.`;
-        //     setErrors(prev => ({
-        //         ...prev,
-        //         [productId]: errorMessage
-        //     }));
-        //     onError?.(errorMessage);
-        //     return;
-        // }
-
+    
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
             setErrors(prev => ({
@@ -108,20 +76,18 @@ useEffect(() => {
             onError?.(errorMessage);
             return;
         }
-
+    
         const cartItem: CartItem = {
             product: product,
             quantity: quantity,
             total: product.price * quantity
         };
-
-        setErrors(prev => ({
-            ...prev,
-            [productId]: ''
-        }));
-
-        onAddToCart(cartItem);
-        setQuantities(prev => ({ ...prev, [productId]: "1" }));
+    
+        // Batch the state updates together
+        requestAnimationFrame(() => {
+            onAddToCart(cartItem);
+            setErrors(prev => ({ ...prev, [productId]: '' }));
+        });
     };
 
     const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
@@ -237,33 +203,35 @@ useEffect(() => {
             <View style={[
                 styles.rightPanel, 
                 isPortrait && styles.rightPanelPortrait,
-                isPortrait && isQuantityInputFocused && styles.rightPanelPortraitFocused
             ]}>
-            <Text variant="headlineMedium">Cart</Text>
-            <FlatList
-                data={cart.items}
-                renderItem={renderCartItem}
-                keyExtractor={(item) => item.product.id.toString()}
-                numColumns={2}
-                columnWrapperStyle={styles.cartRow}
-                style={styles.cartList}
-                contentContainerStyle={styles.cartListContent}
-                ListEmptyComponent={() => (
-                    <Text style={styles.emptyText}>Cart is empty</Text>
-                )}
-            />
-        </View>
+                <Text variant="headlineMedium">Cart</Text>
+                <FlatList
+                    data={cart.items}
+                    renderItem={renderCartItem}
+                    keyExtractor={(item) => item.product.id.toString()}
+                    numColumns={2}
+                    columnWrapperStyle={styles.cartRow}
+                    style={styles.cartList}
+                    contentContainerStyle={styles.cartListContent}
+                    ListEmptyComponent={() => (
+                        <Text style={styles.emptyText}>Cart is empty</Text>
+                    )}
+                />
+            </View>
             
-            {!isQuantityInputFocused && (
+
             <View style={styles.summaryContainer}>
                 <Text variant="titleLarge" style={styles.total}>
                     Total: ₱{cart.total}
+                </Text>
+                <Text variant="titleLarge" style={styles.total}>
+                    Quantity: {cart.items.length}
                 </Text>
                 <Button mode="contained" onPress={onProceed}>
                     Proceed
                 </Button>
             </View>
-        )}
+
            
         </View>
     );
@@ -338,6 +306,9 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 3,
         width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         
     },
     emptyText: {
@@ -436,7 +407,7 @@ const styles = StyleSheet.create({
     },
     total: {
         textAlign: 'right',
-        fontSize: 20,
+        fontSize: 20
     },
     errorText: {
         color: '#B00020', 
