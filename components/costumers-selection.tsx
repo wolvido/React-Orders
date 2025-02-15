@@ -1,7 +1,7 @@
 // CustomersSelection.tsx
 import { Customer } from "@/entities/customers";
 import { Portal, List, Button, Text} from 'react-native-paper';
-import { Modal, ScrollView, StyleSheet } from 'react-native';
+import { Modal, StyleSheet, FlatList, View } from 'react-native';
 
 interface CustomersSelectionProps {
     customers: Customer[];
@@ -16,38 +16,54 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
         hideModal();
     };
 
+    const renderItem = ({ item }: { item: Customer }) => (
+        <List.Item
+            key={item.id}
+            title={item.name}
+            description={item.contactNumber}
+            onPress={() => handleCustomerSelect(item)}
+            left={props => <List.Icon {...props} icon="account" />}
+            right={props => <List.Icon {...props} icon="chevron-right" />}
+        />
+    );
+
     return (
         <Portal>
             <Modal
                 visible={visible}
                 onDismiss={hideModal}
                 animationType="slide"
-
             >
-                <Text variant="headlineMedium" style={styles.modalTitle}>
-                    Select Customer
-                </Text>
-                <ScrollView>
-                    <List.Section>
-                        {customers.map((customer) => (
+                <View style={styles.container}>
+                    <Text variant="headlineMedium" style={styles.modalTitle}>
+                        Select Customer
+                    </Text>
+                    
+                    <FlatList
+                        data={customers}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id.toString()}
+                        style={styles.flatList}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        windowSize={5}
+                        removeClippedSubviews={true}
+                        ListEmptyComponent={() => (
                             <List.Item
-                                key={customer.id+1}
-                                title={customer.name}
-                                description={customer.contactNumber}
-                                onPress={() => handleCustomerSelect(customer)}
-                                left={props => <List.Icon {...props} icon="account" />}
-                                right={props => <List.Icon {...props} icon="chevron-right" />}
+                                title="No customers found"
+                                description="No customers available"
                             />
-                        ))}
-                    </List.Section>
-                </ScrollView>
-                <Button
+                        )}
+                    />
+
+                    <Button
                         mode="contained"
                         onPress={hideModal}
                         style={styles.closeButton}
                     >
                         Close
-                </Button>
+                    </Button>
+                </View>
             </Modal>
         </Portal>
     );
@@ -56,8 +72,9 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
-    scrollView: {
+    flatList: {
         flex: 1,
     },
     closeButton: {
@@ -66,6 +83,7 @@ const styles = StyleSheet.create({
     modalTitle: {
         marginBottom: 16,
         textAlign: 'center',
+        marginTop: 16,
     },
 });
 
