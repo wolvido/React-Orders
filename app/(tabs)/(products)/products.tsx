@@ -31,7 +31,6 @@ export default function ProductsScreen() {
                     setItemsLoaded(itemsLoaded * 2);
                 });
             }
-            console.log('items', items);
         }, [page, itemsPerPage]);
     
         //const items = products;
@@ -108,8 +107,8 @@ export default function ProductsScreen() {
                                 <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.category}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.bundleQuantity}</DataTable.Cell>
-                                <DataTable.Cell numeric>{item.bundleType?.name}</DataTable.Cell>
+                                {/* <DataTable.Cell numeric>{item.bundleQuantity}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.bundleType?.name}</DataTable.Cell> */}
                             </DataTable.Row>
                         ))}
                     </DataTable>

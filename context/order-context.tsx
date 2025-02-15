@@ -110,6 +110,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             setCart({ ...cart, orderId: jsonReturn.orderId });
 
             //here send the cart to repo
+            await orderRepository.createOrderLines(cart);
 
             setCurrentOrder(null);
 

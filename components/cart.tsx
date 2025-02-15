@@ -64,8 +64,6 @@ export function CartComponent({
         });
     }, []);
 
-    
-    
     const handleQuantityBlur = useCallback((productKey: number) => {
         setQuantities(prev => ({ 
             ...prev, 

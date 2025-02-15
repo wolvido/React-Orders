@@ -85,4 +85,5 @@ export class ProductRepository implements IProductRepository{
         const response = await fetch(`${this.baseUrl}/fetch-bundleLine/${productId}`);
         return await this.handleResponseBundle<BundleLineDTO>(response);
     }
+
 }

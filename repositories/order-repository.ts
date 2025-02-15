@@ -5,6 +5,8 @@ import PaymentStatus from "@/enums/payment-status";
 import Status from "@/enums/status";
 import app from "@/app.json";
 import { CustomerAdapter } from "@/adapter/customer-adapter";
+import { Cart } from "@/entities/cart";
+import { convertCartToOrderLines } from "@/adapter/cart-adapter";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
@@ -98,6 +100,13 @@ export class OrderRepository implements IOrderRepository {
         });
 
         return await response.json();
+    }
+
+    async createOrderLines(cart: Cart): Promise<{message: string}> {
+        const orderLines = convertCartToOrderLines(cart);
+        console.log('Order Lines:', orderLines);
+
+        return { message: 'Order lines created' };
     }
 
     // async update(id: number, orderData: Partial<Order>): Promise<Order> {
