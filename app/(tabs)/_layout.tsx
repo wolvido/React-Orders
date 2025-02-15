@@ -8,7 +8,7 @@ import { Redirect, Tabs } from 'expo-router';
 
 import { useAuth } from '@/authentication/ctx';
 import useOrientation from '@/hooks/orientation-hook';
-import { View, StyleSheet, Animated, Pressable } from 'react-native';
+import { View, StyleSheet, Animated, Pressable, } from 'react-native';
 import { LandscapeDrawer } from '@/components/landscape-drawer';
 
 export default function TabLayout() {
@@ -53,8 +53,10 @@ export default function TabLayout() {
     ];
 
     return (
+
         <Tabs
         screenOptions={{
+            tabBarHideOnKeyboard: true,
             headerShown: true,
             headerStyle: {
                 backgroundColor: theme.colors.primary,

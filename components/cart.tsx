@@ -1,6 +1,6 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Keyboard } from "react-native";
 import { Button, Card, TextInput, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import useOrientation from "@/hooks/orientation-hook";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
@@ -30,6 +30,28 @@ export function CartComponent({
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
+
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        () => {
+            setKeyboardVisible(true);
+        }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+            setKeyboardVisible(false);
+        }
+    );
+
+    return () => {
+        keyboardDidShowListener.remove();
+        keyboardDidHideListener.remove();
+    };
+}, []);
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -102,6 +124,8 @@ export function CartComponent({
         setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
 
+    const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
+
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
@@ -128,8 +152,9 @@ export function CartComponent({
                             label="Qty"
                             value={quantities[product.id] || ''}
                             onChangeText={(text) => handleQuantityChange(text, product.id)}
-                            onFocus={() => handleQuantityFocus(product.id)}
-                            onBlur={() => handleQuantityBlur(product.id)}
+                            onFocus={() => {handleQuantityFocus(product.id); setIsQuantityInputFocused(true);}}
+                            onBlur={() => {handleQuantityBlur(product.id); setIsQuantityInputFocused(false);}}
+                            
                             keyboardType="numeric"
                             style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                             maxLength={5}
@@ -162,7 +187,7 @@ export function CartComponent({
     ), [isPortrait, quantities, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
-        <View key={item.product.id} style={styles.cartItemWrapper}>
+        <View style={styles.cartItemWrapper}>
             <Text style={styles.cartItemText} numberOfLines={1}>
                 {item.product.name} ({item.quantity}) • ₱{item.total}
             </Text>
@@ -180,8 +205,10 @@ export function CartComponent({
     }
 
     return (
+
         <View style={[styles.content, isPortrait && styles.contentPortrait]}>
-            <View style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}>
+
+            <KeyboardAvoidingView style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}>
                 <Searchbar
                     placeholder="Search products"
                     onChangeText={setSearchQuery}
@@ -189,13 +216,14 @@ export function CartComponent({
                     style={styles.searchBar}
                 />
 
-                <FlatList
+                <FlatList 
+                    style={styles.productsList}
                     data={filteredProducts}
                     renderItem={renderProductItem}
                     keyExtractor={(item) => item.id.toString()}
                     initialNumToRender={15}
                     maxToRenderPerBatch={40}
-                    windowSize={5}
+                    windowSize={3}
                     removeClippedSubviews={true}
                     keyboardShouldPersistTaps="handled"
                     ListEmptyComponent={() => (
@@ -204,37 +232,114 @@ export function CartComponent({
                         </Text>
                     )}
                 />
-            </View>
+            </KeyboardAvoidingView>
 
-            <View style={[styles.rightPanel, isPortrait && styles.rightPanelPortrait]}>
-                <Text variant="headlineMedium">Cart</Text>
-                <FlatList
-                    data={cart.items}
-                    renderItem={renderCartItem}
-                    keyExtractor={(item) => item.product.id.toString()}
-                    contentContainerStyle={styles.cartItemsContainer}
-                    ListEmptyComponent={() => (
-                        <Text style={styles.emptyText}>Cart is empty</Text>
-                    )}
-                />
-                <View style={styles.summaryContainer}>
-                    <Text variant="titleLarge" style={styles.total}>
-                        Total: ₱{cart.total}
-                    </Text>
-                    <Button
-                        mode="contained"
-                        onPress={onProceed}
-                        style={isPortrait && styles.proceedButtonPortrait}
-                    >
-                        Proceed
-                    </Button>
-                </View>
+            <View style={[
+                styles.rightPanel, 
+                isPortrait && styles.rightPanelPortrait,
+                isPortrait && isQuantityInputFocused && styles.rightPanelPortraitFocused
+            ]}>
+            <Text variant="headlineMedium">Cart</Text>
+            <FlatList
+                data={cart.items}
+                renderItem={renderCartItem}
+                keyExtractor={(item) => item.product.id.toString()}
+                numColumns={2}
+                columnWrapperStyle={styles.cartRow}
+                style={styles.cartList}
+                contentContainerStyle={styles.cartListContent}
+                ListEmptyComponent={() => (
+                    <Text style={styles.emptyText}>Cart is empty</Text>
+                )}
+            />
+        </View>
+            
+            {!isQuantityInputFocused && (
+            <View style={styles.summaryContainer}>
+                <Text variant="titleLarge" style={styles.total}>
+                    Total: ₱{cart.total}
+                </Text>
+                <Button mode="contained" onPress={onProceed}>
+                    Proceed
+                </Button>
             </View>
+        )}
+           
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    productsList: {
+        height: 10,
+    },
+    rightPanel: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        width: '50%', // or whatever width you need
+        height: '100%',
+        padding: 10,
+        backgroundColor: 'white', // ensure background is solid
+    },
+    rightPanelPortrait: {
+        width: '100%',
+        height: '40%',
+        bottom: 0,
+        top: 'auto',
+    },
+    rightPanelPortraitFocused: {
+        height: '20%', // Adjust this value as needed
+    },
+    cartList: {
+        flex: 1,
+    },
+    cartListContent: {
+        padding: 4,
+    },
+    cartRow: {
+        justifyContent: 'flex-start',
+        gap: 8,
+    },
+    cartItemWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(183, 163, 163, 0.47)',
+        borderRadius: 16,
+        paddingLeft: 8,
+        paddingRight: 4,
+        flex: 0.48, // slightly less than half to account for gap
+        marginBottom: 8,
+    },
+    cartItemText: {
+        fontSize: 12,
+        flex: 1,
+    },
+    removeButton: {
+        margin: 0,
+        padding: 0,
+    },
+    summaryContainer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        gap: 12,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: -2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 3,
+        width: '100%',
+        
+    },
     emptyText: {
         textAlign: 'center',
         padding: 16,
@@ -245,22 +350,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 4,
         padding: 4,
-    },
-    cartItemWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(183, 163, 163, 0.47)',
-        borderRadius: 16,
-        paddingLeft: 8,
-        paddingRight: 4,
-        maxWidth: '48%', // allows 2 items per row
-    },
-    cartItemText: {
-        fontSize: 12,
-    },
-    removeButton: {
-        margin: 0,
-        padding: 0,
     },
     cardContent: {
         paddingVertical: 4, // minimal padding
@@ -336,10 +425,6 @@ const styles = StyleSheet.create({
         borderRightWidth: 1,
         borderRightColor: '#ccc',
     },
-    rightPanel: {
-        flex: 1,
-        padding: 10,
-    },
     addItemContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -358,22 +443,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 4,
     },
-    summaryContainer: {
-        backgroundColor: 'white',
-        padding: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        gap: 12,
-        // Optional: Add shadow
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 3,
-    },
     proceedButton: {
         paddingVertical: 6,
     },
@@ -390,10 +459,6 @@ const styles = StyleSheet.create({
         borderRightWidth: 0,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-    },
-    rightPanelPortrait: {
-        flex: 1,
-        maxHeight: '40%',
     },
     cartItemTitlePortrait: {
         fontSize: 14,
