@@ -16,7 +16,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cart, setCart] = useState<Cart>({
         items: [],
-        total: 0
+        total: 0,
+        orderId: 0
     });
 
     const calculateTotal = (items: CartItem[]): number => {
@@ -27,7 +28,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setCart(prevCart => {
             // Check if product already exists in cart
             const existingItemIndex = prevCart.items.findIndex(
-                item => item.product.key === cartItem.product.key
+                item => item.product.id === cartItem.product.id
             );
 
             let updatedItems: CartItem[];
@@ -39,7 +40,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                         return {
                             ...item,
                             quantity: item.quantity + cartItem.quantity,
-                            total: (item.quantity + cartItem.quantity) * item.product.sellingPrice
+                            total: (item.quantity + cartItem.quantity) * item.product.price
                         };
                     }
                     return item;
@@ -48,10 +49,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 // Add new item
                 updatedItems = [...prevCart.items, cartItem];
             }
-
             return {
                 items: updatedItems,
-                total: calculateTotal(updatedItems)
+                total: calculateTotal(updatedItems),
+                orderId: prevCart.orderId
             };
         });
     };
@@ -59,12 +60,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const removeFromCart = (product: Product) => {
         setCart(prevCart => {
             const updatedItems = prevCart.items.filter(
-                item => item.product.key !== product.key
+                item => item.product.id !== product.id
             );
 
             return {
                 items: updatedItems,
-                total: calculateTotal(updatedItems)
+                total: calculateTotal(updatedItems),
+                orderId: prevCart.orderId
             };
         });
     };
@@ -76,7 +78,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const emptyCart = () => {
         setCart({
             items: [],
-            total: 0
+            total: 0,
+            orderId: 0
         });
     };
 
