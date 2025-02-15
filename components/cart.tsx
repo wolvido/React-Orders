@@ -1,6 +1,7 @@
 import { View, ScrollView, StyleSheet } from "react-native";
-import { Button, Card, TextInput, Text, List, HelperText, Searchbar } from "react-native-paper";
+import { Button, Card, TextInput, Text, HelperText, Searchbar, IconButton } from "react-native-paper";
 import { useState, useEffect, useCallback } from "react";
+import useOrientation from "@/hooks/orientation-hook";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
@@ -12,6 +13,7 @@ interface CartComponentProps {
     onRemoveFromCart: (product: Product) => void;
     onProceed: () => void;
     onError?: (message: string) => void;
+    isLoading?: boolean;
 }
 
 export function CartComponent({
@@ -20,24 +22,25 @@ export function CartComponent({
     onAddToCart, 
     onRemoveFromCart,
     onProceed,
-    onError 
+    onError,
+    isLoading
 }: CartComponentProps) {
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
-
+    const isPortrait = useOrientation() === 'PORTRAIT';
     // Add filtered products logic
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    useEffect(() => {
-        const initialQuantities = products.reduce((acc, product) => ({
-            ...acc,
-            [product.id]: "1"
-        }), {});
-        setQuantities(initialQuantities);
-    }, [products]);
+    // useEffect(() => {
+    //     const initialQuantities = products.reduce((acc, product) => ({
+    //         ...acc,
+    //         [product.id]: "1"
+    //     }), {});
+    //     setQuantities(initialQuantities);
+    // }, [products]);
 
     const handleQuantityChange = (text: string, productKey: number) => {
         // Only allow numbers
@@ -67,7 +70,7 @@ export function CartComponent({
             [productKey]: prev[productKey] || '1'
         }));
     }, []);
-    
+
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
@@ -98,7 +101,7 @@ export function CartComponent({
         const cartItem: CartItem = {
             product: product,
             quantity: quantity,
-            total: product.sellingPrice * quantity
+            total: product.price * quantity
         };
 
         // Clear error on successful add
@@ -110,108 +113,224 @@ export function CartComponent({
         onAddToCart(cartItem);
         setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
+
+    if (isLoading) {
+        return (
+        <Text style={styles.loadingText}>Loading...</Text>
+        );
+    }
     
     return (
-        <View style={styles.content}>
-            {/* Products List - Left Side */}
+        <View style={[
+            styles.content,
+            isPortrait && styles.contentPortrait
+        ]}>
 
-            <ScrollView style={styles.leftPanel}>
-                <Searchbar
-                        placeholder="Search products"
-                        onChangeText={setSearchQuery}
-                        value={searchQuery}
-                        style={styles.searchBar}
+            <Searchbar
+                placeholder="Search products"
+                onChangeText={setSearchQuery}
+                value={searchQuery}
+                style={styles.searchBar}
+            />
+
+            {/* Products List */}
+            <ScrollView 
+                style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}
+            >
+
+{filteredProducts.map(product => (
+    <Card key={product.id} style={[
+        styles.productCard,
+        isPortrait && styles.productCardPortrait
+    ]}>
+        <Card.Content style={styles.cardContent}>
+            <View style={styles.cardLayout}>
+                {/* Product name and price */}
+                <View style={styles.productInfo}>
+                    <Text 
+                        variant={isPortrait ? "bodyMedium" : "titleMedium"}
+                        style={[
+                            isPortrait && styles.compactText,
+                            styles.productName
+                        ]}
+                        numberOfLines={1}
+                    >
+                        {product.name} • ₱{product.price}
+                    </Text>
+                </View>
+
+                {/* Stock info */}
+                <View style={styles.stockInfo}>
+                    <Text variant="bodySmall">
+                        Stock: {product.stocks}
+                    </Text>
+                </View>
+
+                {/* Quantity and Add section */}
+                <View style={[
+                    styles.actionSection,
+                    isPortrait && styles.actionSectionPortrait
+                ]}>
+                    <TextInput
+                        mode="outlined"
+                        label="Qty"
+                        value={quantities[product.id] || ''}
+                        onChangeText={(text) => handleQuantityChange(text, product.id)}
+                        onFocus={() => handleQuantityFocus(product.id)}
+                        onBlur={() => handleQuantityBlur(product.id)}
+                        keyboardType="numeric"
+                        style={[
+                            styles.quantityInput,
+                            isPortrait && styles.quantityInputPortrait
+                        ]}
+                        maxLength={5}
+                        error={!!errors[product.id]}
                     />
-                {filteredProducts.map(product => (
-                    <Card key={product.id} style={styles.productCard}>
-                        <Card.Content>
-                            <View style={styles.cardLayout}>
-                                {/* Left side - Product info */}
-                                <View style={styles.productInfo}>
-                                    <Text variant="titleMedium">{product.name}</Text>
-                                    <View style={styles.detailsRow}>
-                                        <Text variant="bodyMedium">₱{product.sellingPrice}</Text>
-                                    </View>
-                                    <View style={styles.detailsRow}>
-                                        <View style={styles.pill}>
-                                            <Text variant="bodySmall">Stocks: {product.stocks}</Text>
-                                        </View>
-                                        <View style={styles.pill}>
-                                            <Text variant="bodySmall">Unit: {product.unitType}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-
-                                {/* Right side - Quantity and Add button */}
-                                <View style={styles.actionSection}>
-                                    <TextInput
-                                        mode="outlined"
-                                        label="Qty"
-                                        value={quantities[product.id] || ''}
-                                        onChangeText={(text) => handleQuantityChange(text, product.id)}
-                                        onFocus={() => handleQuantityFocus(product.id)}
-                                        onBlur={() => handleQuantityBlur(product.id)}
-                                        keyboardType="numeric"
-                                        style={styles.quantityInput}
-                                        maxLength={5}
-                                        error={!!errors[product.id]}
-                                    />
-                                    <Button 
-                                        mode="contained" 
-                                        onPress={() => handleAddItem(product.id)}
-                                    >
-                                        Add
-                                    </Button>
-                                </View>
-                            </View>
-                            {errors[product.id] ? (
-                                <HelperText type="error" visible={true}>
-                                    {errors[product.id]}
-                                </HelperText>
-                            ) : null}
-                        </Card.Content>
-                    </Card>
-                ))}
+                    {isPortrait ? (
+                        <IconButton
+                            icon="chevron-right"
+                            mode="contained"
+                            size={20}
+                            onPress={() => handleAddItem(product.id)}
+                        />
+                    ) : (
+                        <Button 
+                            mode="contained" 
+                            onPress={() => handleAddItem(product.id)}
+                        >
+                            Add
+                        </Button>
+                    )}
+                </View>
+            </View>
+                {errors[product.id] && (
+                    <HelperText type="error" visible={true}>
+                        {errors[product.id]}
+                    </HelperText>
+                )}
+        </Card.Content>
+        </Card>
+    ))}
+            {products.length >= 20 && (
+            <View style={styles.loadingText}>
+                <Text>Loading more items...</Text>
+            </View>
+        )}
             </ScrollView>
 
-            {/* Cart - Right Side */}
-            <View style={styles.rightPanel}>
-            <Text variant="headlineMedium">Cart</Text>
-                <ScrollView>
+            {/* Cart */}
+            <View style={[
+                styles.rightPanel,
+                isPortrait && styles.rightPanelPortrait
+            ]}>
+                <Text variant="headlineMedium">Cart</Text>
+                <ScrollView contentContainerStyle={styles.cartItemsContainer}>
                     {cart.items.map(item => (
-                        <List.Item
-                            key={item.product.id}
-                            title={item.product.name}
-                            description={() => (
-                                <Text>Quantity: {item.quantity} | Total: ₱{item.total}</Text>
-                            )}
-                            right={() => (
-                                <Button 
-                                    mode="outlined" 
-                                    onPress={() => onRemoveFromCart(item.product)}
-                                >
-                                    Remove
-                                </Button>
-                            )}
-                        />
+                        <View key={item.product.id} style={styles.cartItemWrapper}>
+                            <Text style={styles.cartItemText} numberOfLines={1}>
+                                {item.product.name} ({item.quantity}) • ₱{item.total}
+                            </Text>
+                            <IconButton
+                                icon="close-circle"
+                                size={16}
+                                onPress={() => onRemoveFromCart(item.product)}
+                                style={styles.removeButton}
+                            />
+                        </View>
                     ))}
                 </ScrollView>
                 <View style={styles.summaryContainer}>
                     <Text variant="titleLarge" style={styles.total}>
                         Total: ₱{cart.total}
                     </Text>
-                    <Button mode="contained" onPress={onProceed}>
-                        Proceed to Finalize
+                    <Button 
+                        mode="contained" 
+                        onPress={onProceed}
+                        style={isPortrait && styles.proceedButtonPortrait}
+                    >
+                        Proceed
                     </Button>
                 </View>
-
-
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    cartItemsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 4,
+        padding: 4,
+    },
+    cartItemWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(183, 163, 163, 0.47)',
+        borderRadius: 16,
+        paddingLeft: 8,
+        paddingRight: 4,
+        maxWidth: '48%', // allows 2 items per row
+    },
+    cartItemText: {
+        fontSize: 12,
+    },
+    removeButton: {
+        margin: 0,
+        padding: 0,
+    },
+    cardContent: {
+        paddingVertical: 4, // minimal padding
+        paddingHorizontal: 8,
+    },
+    cardLayout: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 8,
+    },
+    productCard: {
+        marginBottom: 8,
+    },
+    productCardPortrait: {
+        marginBottom: 4,
+        paddingVertical: 0, // reduced padding
+    },
+    productInfo: {
+        flex: 2,
+        justifyContent: 'center',
+    },
+    productName: {
+        marginBottom: 2,
+    },
+    priceText: {
+        color: '#666',
+    },
+    stockInfo: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    actionSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        flex: 1,
+    },
+    actionSectionPortrait: {
+        gap: 4,
+        justifyContent: 'flex-end',
+    },
+    quantityInput: {
+        width: 80,
+    },
+    quantityInputPortrait: {
+        width: 50,
+        height: 35, // reduced height
+        fontSize: 12,
+    },
+    compactText: {
+        fontSize: 13,
+    },
     detailsRow: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -248,34 +367,13 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     total: {
-        marginVertical: 20,
         textAlign: 'right',
-        fontSize: 27,
+        fontSize: 20,
     },
     errorText: {
         color: '#B00020', 
         fontSize: 12,
         marginTop: 4,
-    },
-    productCard: {
-        marginBottom: 8,
-    },
-    cardLayout: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    productInfo: {
-        flex: 1,
-        marginRight: 16,
-    },
-    actionSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    quantityInput: {
-        width: 80, // Fixed width for quantity
     },
     summaryContainer: {
         backgroundColor: 'white',
@@ -297,8 +395,36 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
     },
     searchBar: {
-        marginBottom: 10,
+        marginTop: 10,
         elevation: 0, // Removes shadow on Android
         borderRadius: 8,
+    },
+    contentPortrait: {
+        flexDirection: 'column',
+    },
+    leftPanelPortrait: {
+        flex: 2,
+        borderRightWidth: 0,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    rightPanelPortrait: {
+        flex: 1,
+        maxHeight: '40%',
+    },
+    cartItemTitlePortrait: {
+        fontSize: 14,
+    },
+    cartItemDescPortrait: {
+        fontSize: 12,
+    },
+    proceedButtonPortrait: {
+        marginTop: 8,
+    },
+    loadingText: {
+        textAlign: 'center',
+        padding: 16,
+        height: '85%',
     }
+    
 });
