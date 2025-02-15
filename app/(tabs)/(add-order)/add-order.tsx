@@ -7,19 +7,40 @@ import { Order } from '@/entities/order';
 import { router } from 'expo-router';
 import { useOrder } from '@/context/order-context';
 import { Customer } from '@/entities/customers';
+import { CustomerRepository } from '@/repositories/customer-repository';
+import { ActivityIndicator } from 'react-native-paper';
 
 //react component
 export default function AddOrderScreen() {
 
+    const customerRepository = new CustomerRepository();
+
     const { initializeOrder, getAllCustomers } = useOrder();
     const [customers, setCustomers] = useState<Customer[]>([]);
 
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        getAllCustomers().then((data) => {
-            setCustomers(data);
-        });
-        console.log(customers);
+        const loadCustomers = async () => {
+            try {
+                setIsLoading(true);
+                const data = await customerRepository.getAllCustomers();
+                console.log('Customers loaded:', data); // Log the data here
+                setCustomers(data);
+            } catch (error) {
+                console.error('Error loading customers:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadCustomers();
     }, []);
+
+    // Add loading state check
+    if (isLoading) {
+        return <ActivityIndicator />;
+    }
 
     const handleOrderSubmit = (order: Order) => {
         console.log('Order submitted:', order);
