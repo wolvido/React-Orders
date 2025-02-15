@@ -1,7 +1,8 @@
 // CustomersSelection.tsx
 import { Customer } from "@/entities/customers";
-import { Portal, List, Button, Text} from 'react-native-paper';
+import { Portal, List, Button, Text, Searchbar} from 'react-native-paper';
 import { Modal, StyleSheet, FlatList, View } from 'react-native';
+import { useState, useCallback } from 'react';
 
 interface CustomersSelectionProps {
     customers: Customer[];
@@ -11,12 +12,19 @@ interface CustomersSelectionProps {
 }
 
 function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }: CustomersSelectionProps) {
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredCustomers = customers.filter(customer => 
+        customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (customer.contactNumber && customer.contactNumber.includes(searchQuery))
+    );
+
     const handleCustomerSelect = (customer: Customer) => {
         onSelectCustomer(customer);
         hideModal();
     };
 
-    const renderItem = ({ item }: { item: Customer }) => (
+    const renderItem = useCallback(({ item }: { item: Customer }) => (
         <List.Item
             key={item.id}
             title={item.name}
@@ -25,7 +33,7 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
             left={props => <List.Icon {...props} icon="account" />}
             right={props => <List.Icon {...props} icon="chevron-right" />}
         />
-    );
+    ), []);
 
     return (
         <Portal>
@@ -38,9 +46,17 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
                     <Text variant="headlineMedium" style={styles.modalTitle}>
                         Select Customer
                     </Text>
+
+                    <Searchbar
+                        placeholder="Search customers..."
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        style={styles.searchBar}
+                        autoCapitalize="none"
+                    />
                     
                     <FlatList
-                        data={customers}
+                        data={filteredCustomers}
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id.toString()}
                         style={styles.flatList}
@@ -48,10 +64,11 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
                         maxToRenderPerBatch={10}
                         windowSize={5}
                         removeClippedSubviews={true}
+                        keyboardShouldPersistTaps="handled"
                         ListEmptyComponent={() => (
                             <List.Item
                                 title="No customers found"
-                                description="No customers available"
+                                description="Try a different search term"
                             />
                         )}
                     />
@@ -85,6 +102,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 16,
     },
+    searchBar: {
+        marginHorizontal: 16,
+        marginBottom: 8,
+    }
 });
 
 export default CustomersSelection;
