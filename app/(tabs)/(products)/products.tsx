@@ -24,13 +24,14 @@ export default function ProductsScreen() {
 
         useEffect(() => {
             const currentLastItem = (page + 1) * itemsPerPage;
-            // If we're close to the end of our loaded items, load more
+            // If close to the end of loaded items, load more
             if (currentLastItem >= itemsLoaded) {
                 productRepository.getProductPerPage(1, itemsLoaded * 2).then((data) => {
                     setItems(data);
                     setItemsLoaded(itemsLoaded * 2);
                 });
             }
+            console.log('items', items);
         }, [page, itemsPerPage]);
     
         //const items = products;
@@ -89,6 +90,8 @@ export default function ProductsScreen() {
                 <DataTable.Title numeric>Unit Type</DataTable.Title>
                 <DataTable.Title numeric>Category</DataTable.Title>
                 <DataTable.Title numeric>Brand</DataTable.Title>
+                <DataTable.Title numeric>Bundle Quantity</DataTable.Title>
+                <DataTable.Title numeric>Bundle Type</DataTable.Title>
 
             </DataTable.Header>
 
@@ -98,12 +101,15 @@ export default function ProductsScreen() {
 
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
+                                <DataTable.Cell>{item.id}</DataTable.Cell>
                                 <DataTable.Cell>{item.name}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.price}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.stocks}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.unitType}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.category}</DataTable.Cell>
                                 <DataTable.Cell numeric>{item.brand}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.bundleQuantity}</DataTable.Cell>
+                                <DataTable.Cell numeric>{item.bundleType?.name}</DataTable.Cell>
                             </DataTable.Row>
                         ))}
                     </DataTable>

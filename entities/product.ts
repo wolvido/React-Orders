@@ -1,20 +1,15 @@
-interface ProductBase {
+export interface Product {
     id: number;
     name: string;
-    price: number;
+    price: number; //also the price of bundle product
     //costPrice: number;
-    category: string;   
+    category: string;
     brand: string;
-}
-
-export interface Product extends ProductBase {
-    stocks: number;
     isBundle: boolean;
-    bundleItems: BundleProduct[];
+    stocks: number;
     unitType: string;
-}
 
-export interface BundleProduct extends ProductBase {
-    bundleQuantity: number;
-    unitType: 'BUNDLE';
+    //bundle
+    bundleType?: Product;
+    bundleQuantity?: number;
 }

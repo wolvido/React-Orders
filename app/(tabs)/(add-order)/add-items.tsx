@@ -16,7 +16,7 @@ const ITEMS_PER_PAGE = 20;
 export default function AddItemsScreen() {
     const productRepository = new ProductRepository();
     const { cart, addToCart, removeFromCart, emptyCart } = useCart();
-    const { getCurrentOrder, updateCart } = useOrder();
+    const { updateCart } = useOrder();
     const [items, setItems] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);

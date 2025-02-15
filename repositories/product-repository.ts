@@ -1,10 +1,13 @@
 import { ProductAdapter } from "@/adapter/product-adapter";
-import { BundleProduct, Product } from "../entities/product";
+import { Product } from "../entities/product";
 import app from "@/app.json";
+import { BundleLineDTO } from "@/adapter/bundleLine-adapter";
 
 export interface IProductRepository {
     getAll(): Promise<Product[]>;
-    getBundleById(id: number): Promise<BundleProduct | null>;
+    getProductPerPage(page: number, pageSize: number): Promise<Product[]>;
+    getBundleById(id: number): Promise<Product | null>;
+    getBundleLine(id: number): Promise<BundleLineDTO | null>;
 }
 
 export class ProductRepository implements IProductRepository{
@@ -38,16 +41,15 @@ export class ProductRepository implements IProductRepository{
 
     //method that checks if product is a bundle then injects its bundle equivalent
     private async injectBundle(product: Product): Promise<Product> {
-        const bundle = await this.getBundleById(product.id);
-        if (bundle) {
-            bundle.category = product.category;
-            bundle.brand = product.brand;
-            if (!product.bundleItems) {
-                product.bundleItems = []; // Initialize if undefined
-            }
-            product.bundleItems.push(bundle);
+        if (product.isBundle) {
+            return product;
         }
-        //isBundle is unnecessary
+
+        const bundle = await this.getBundleById(product.id);
+        const bundleLine = await this.getBundleLine(product.id);
+
+        product.bundleType = bundle ?? undefined;
+        product.bundleQuantity = bundleLine?.quantity;
 
         return product;
     }
@@ -61,14 +63,7 @@ export class ProductRepository implements IProductRepository{
         }
 
         const data = await response.json();
-
-        //check if data is an array
-        if (Array.isArray(data)) {
-            const bundle = data.map((bundle: any) => ProductAdapter.BundleAdapt(bundle));
-            return await bundle as T;
-        }
-
-        return await ProductAdapter.BundleAdapt(data) as T;
+        return await data as T;
     }
 
     async getAll(): Promise<Product[]> {
@@ -81,8 +76,13 @@ export class ProductRepository implements IProductRepository{
         return await this.handleResponse<Product[]>(response);
     }
 
-    async getBundleById(productId: number): Promise<BundleProduct | null> {
-        const response = await fetch(`${this.baseUrl}/fetch-bundle/${productId}`);
-        return await this.handleResponseBundle<BundleProduct>(response);
+    async getBundleById(productId: number): Promise<Product | null> {
+        const response = await fetch(`${this.baseUrl}/fetch-bundle-product/${productId}`);
+        return await this.handleResponse<Product>(response);
+    }
+
+    async getBundleLine(productId: number): Promise<BundleLineDTO | null> {
+        const response = await fetch(`${this.baseUrl}/fetch-bundleLine/${productId}`);
+        return await this.handleResponseBundle<BundleLineDTO>(response);
     }
 }

@@ -63,6 +63,8 @@ export function CartComponent({
             setErrors(prev => ({ ...prev, [productKey]: '' }));
         });
     }, []);
+
+    
     
     const handleQuantityBlur = useCallback((productKey: number) => {
         setQuantities(prev => ({ 

@@ -106,6 +106,11 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         try {
             // console.log('Finalizing order:', currentOrder);
             const jsonReturn = await orderRepository.create(currentOrder);
+            
+            setCart({ ...cart, orderId: jsonReturn.orderId });
+
+            //here send the cart to repo
+
             setCurrentOrder(null);
 
             console.log('Order finalized with ID:', jsonReturn.orderId);
