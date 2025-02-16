@@ -184,35 +184,37 @@ export function ReceiveDeliveryCartComponent({
     };
 
     const renderAvailableItem = ({ item }: { item: ReceivedItem }) => (
-        <Card style={styles.itemCard}>
-            <Card.Content>
-                <Text variant="titleMedium">{item.product.name}</Text>
-                <View style={styles.itemDetails}>
-                    <Text>Available: {item.quantity}</Text>
-                    <View style={styles.inputGroup}>
-                        <TextInput
-                            mode="outlined"
-                            label="Qty"
-                            value={quantities[item.product.id]}
-                            onChangeText={(text) => handleQuantityChange(text, item.product.id)}
-                            keyboardType="numeric"
-                            style={styles.quantityInput}
-                        />
-                        <TextInput
-                            mode="outlined"
-                            label="Price"
-                            value={prices[item.product.id]}
-                            onChangeText={(text) => handlePriceChange(text, item.product.id)}
-                            keyboardType="numeric"
-                            style={styles.priceInput}
-                        />
-                        <Button
-                            mode="contained"
-                            onPress={() => handleAddToCart(item)}
-                        >
-                            Add
-                        </Button>
-                    </View>
+        <Card style={styles.cartItemCard}>
+            <Card.Content style={styles.cartItemContent}>
+                <Text variant="titleMedium" style={styles.cartItemName} numberOfLines={1}>
+                    {item.product.name}
+                </Text>
+                <View style={styles.cartItemInputs}>
+                    <TextInput
+                        mode="outlined"
+                        label="Qty"
+                        value={quantities[item.product.id]}
+                        onChangeText={(text) => handleQuantityChange(text, item.product.id)}
+                        keyboardType="numeric"
+                        style={styles.cartQuantityInput}
+                        dense
+                    />
+                    <TextInput
+                        mode="outlined"
+                        label="₱"
+                        value={prices[item.product.id]}
+                        onChangeText={(text) => handlePriceChange(text, item.product.id)}
+                        keyboardType="numeric"
+                        style={styles.cartPriceInput}
+                        dense
+                    />
+                    <Text style={styles.totalText}>Avail: {item.quantity}</Text>
+                    <IconButton
+                        icon="plus"
+                        size={20}
+                        onPress={() => handleAddToCart(item)}
+                        style={styles.deleteButton}
+                    />
                 </View>
             </Card.Content>
         </Card>
@@ -220,33 +222,36 @@ export function ReceiveDeliveryCartComponent({
 
     const renderCartItem = ({ item }: { item: ReceivedItem }) => (
         <Card style={styles.cartItemCard}>
-            <Card.Content>
-                <View style={styles.cartItemContent}>
-                    <Text variant="titleMedium">{item.product.name}</Text>
-                    <View style={styles.cartItemInputs}>
-                        <TextInput
-                            mode="outlined"
-                            label="Qty"
-                            value={item.quantity.toString()}
-                            onChangeText={(text) => handleQuantityChange(text, item.product.id, true)}
-                            keyboardType="numeric"
-                            style={styles.cartQuantityInput}
-                        />
-                        <TextInput
-                            mode="outlined"
-                            label="Price"
-                            value={(item.total / item.quantity).toString()}
-                            onChangeText={(text) => handlePriceChange(text, item.product.id, true)}
-                            keyboardType="numeric"
-                            style={styles.cartPriceInput}
-                        />
-                        <Text>Total: ₱{item.total}</Text>
-
-                        <IconButton
-                            icon="delete"
-                            onPress={() => handleRemoveFromCart(item)}
-                        />
-                    </View>
+            <Card.Content style={styles.cartItemContent}>
+                <Text variant="titleMedium" style={styles.cartItemName} numberOfLines={1}>
+                    {item.product.name}
+                </Text>
+                <View style={styles.cartItemInputs}>
+                    <TextInput
+                        mode="outlined"
+                        label="Qty"
+                        value={item.quantity.toString()}
+                        onChangeText={(text) => handleQuantityChange(text, item.product.id, true)}
+                        keyboardType="numeric"
+                        style={styles.cartQuantityInput}
+                        dense // Makes the TextInput smaller
+                    />
+                    <TextInput
+                        mode="outlined"
+                        label="₱"
+                        value={(item.total / item.quantity).toString()}
+                        onChangeText={(text) => handlePriceChange(text, item.product.id, true)}
+                        keyboardType="numeric"
+                        style={styles.cartPriceInput}
+                        dense // Makes the TextInput smaller
+                    />
+                    <Text style={styles.totalText}>₱{item.total}</Text>
+                    <IconButton
+                        icon="delete"
+                        size={20} // Smaller icon
+                        onPress={() => handleRemoveFromCart(item)}
+                        style={styles.deleteButton}
+                    />
                 </View>
             </Card.Content>
         </Card>
@@ -302,6 +307,43 @@ export function ReceiveDeliveryCartComponent({
 }
 
 const styles = StyleSheet.create({
+    cartItemCard: {
+        marginBottom: 4, // Reduced margin
+        marginHorizontal: 4,
+    },
+    cartItemContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 8, // Reduced padding
+        gap: 8,
+    },
+    cartItemName: {
+        flex: 1,
+        fontSize: 14, // Smaller font
+        marginRight: 8,
+    },
+    cartItemInputs: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4, // Reduced gap
+    },
+    cartQuantityInput: {
+        width: 50, // Smaller width
+        height: 40, // Explicit height
+        backgroundColor: 'white',
+    },
+    cartPriceInput: {
+        width: 70, // Smaller width
+        height: 40, // Explicit height
+        backgroundColor: 'white',
+    },
+    totalText: {
+        minWidth: 60,
+        textAlign: 'right',
+    },
+    deleteButton: {
+        margin: 0, // Remove margin
+    },
     cartSection: {
         padding: 16,
         backgroundColor: '#f5f5f5',
@@ -368,22 +410,5 @@ const styles = StyleSheet.create({
     },
     priceInput: {
         width: 100,
-    },
-    cartItemCard: {
-        marginBottom: 8,
-    },
-    cartItemContent: {
-        gap: 8,
-    },
-    cartItemInputs: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    cartQuantityInput: {
-        width: 60,
-    },
-    cartPriceInput: {
-        width: 80,
-    },
+    }
 });
