@@ -17,8 +17,6 @@ import { Order } from '@/entities/order';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 
-import { orders } from '@/dummy-data/dummy-orders';
-import { OrderProvider } from '@/context/order-context';
 
 //react component
 export default function OrdersScreen() {
@@ -60,7 +58,7 @@ export default function OrdersScreen() {
     const [page, setPage] = useState<number>(0);
 
     //stores the initial selection for the number of items per page
-    const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
+    const [numberOfItemsPerPageList] = useState([10, 20, 40, 60]);
         //used for the dropdown menu to display the possible options
 
     //switches the page options
@@ -188,14 +186,13 @@ export default function OrdersScreen() {
             </DataTable.Header>
 
             <DataTable.Header>
-                <DataTable.Title style={{flexGrow: 1}}>Order ID</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Order Type</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Customer</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Transaction Date</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Payment Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Total</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 2}}>Action</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Action</DataTable.Title>
             </DataTable.Header>
 
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -203,7 +200,6 @@ export default function OrdersScreen() {
                     <DataTable>
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
-                                <DataTable.Cell style={{flexGrow: 1}}>{item.id}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.orderType}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
@@ -229,7 +225,7 @@ export default function OrdersScreen() {
                                 </DataTable.Cell>
 
                                 <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 2}}>
+                                <DataTable.Cell style={{flexGrow: 3}}>
                                     <Button 
                                         mode="contained" 
                                         onPress={() => handlePaymentClick(item.id)}
