@@ -26,6 +26,8 @@ export function CartComponent({
     onError,
     isLoading
 }: CartComponentProps) {
+
+    
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
@@ -64,7 +66,9 @@ export function CartComponent({
     }, []);
 
     const handleAddItem = (productId: number) => {
+
         const product = products.find(p => p.id === productId);
+
         if (!product || !quantities[productId]) return;
     
         const quantity = parseInt(quantities[productId]);
@@ -156,15 +160,27 @@ export function CartComponent({
 
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
         <View style={styles.cartItemWrapper}>
-            <Text style={styles.cartItemText} numberOfLines={1}>
-            ₱{item.total} ({item.quantity}) • {item.product.name}   
-            </Text>
-            <IconButton
-                icon="close-circle"
-                size={16}
-                onPress={() => onRemoveFromCart(item.product)}
-                style={styles.removeButton}
-            />
+            <View style={styles.cartItemContent}>
+                <View style={styles.cartItemInfo}>
+                    <View style={styles.cartItemRow}>
+                        <Text style={styles.cartItemName} numberOfLines={1}>
+                            {item.product.name}
+                        </Text>
+                        <Text style={styles.cartItemPrice}>
+                            ₱{item.total}
+                        </Text>
+                        <Text style={styles.cartItemQuantity}>
+                            | Quantity: {item.quantity}
+                        </Text>
+                    </View>
+                </View>
+                <IconButton
+                    icon="delete-outline"
+                    size={20}
+                    onPress={() => onRemoveFromCart(item.product)}
+                    style={styles.removeButton}
+                />
+            </View>
         </View>
     ), [onRemoveFromCart]);
 
@@ -183,16 +199,16 @@ export function CartComponent({
                     style={styles.searchBar}
                 />
 
-                <FlatList 
+                <FlatList
                     style={styles.productsList}
                     data={filteredProducts}
                     renderItem={renderProductItem}
                     keyExtractor={(item) => item.id.toString()}
                     initialNumToRender={15}
-                    maxToRenderPerBatch={40}
+                    maxToRenderPerBatch={15}
                     windowSize={3}
                     removeClippedSubviews={true}
-                    keyboardShouldPersistTaps="handled"
+                    keyboardShouldPersistTaps="always"
                     ListEmptyComponent={() => (
                         <Text style={styles.emptyText}>
                             {searchQuery ? "No products found" : "No products available"}
@@ -222,9 +238,9 @@ export function CartComponent({
                         data={cart.items}
                         renderItem={renderCartItem}
                         keyExtractor={(item) => item.product.id.toString()}
-                        numColumns={2}
-                        columnWrapperStyle={styles.cartRow}
                         style={styles.cartList}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
                         contentContainerStyle={styles.cartListContent}
                         ListEmptyComponent={() => (
                             <Text style={styles.emptyText}>Cart is empty</Text>
@@ -258,14 +274,6 @@ const styles = StyleSheet.create({
         borderLeftColor: '#ccc',
         position: 'relative',
     },
-    collapseButtonContainer: {
-        position: 'absolute',
-        top: -30,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        zIndex: 1,
-    },
     cartContent: {
         flex: 1,
         padding: 10,
@@ -276,6 +284,69 @@ const styles = StyleSheet.create({
     },
     cartListContent: {
         padding: 4,
+    },
+    cartItemWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#f5f5f5',
+        borderRadius: 8,
+        padding: 8,
+        marginBottom: 8,
+        width: '100%',
+        borderLeftWidth: 4,
+        borderLeftColor: '#2196F3',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    cartItemContent: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    cartItemInfo: {
+        flex: 1,
+    },
+    cartItemRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        flex: 1,
+    },
+    cartItemName: {
+        fontSize: 14,
+        fontWeight: '500',
+        flex: 1,
+    },
+    cartItemPrice: {
+        fontSize: 14,
+        color: '#666',
+    },
+    cartItemQuantity: {
+        fontSize: 14,
+        color: '#666',
+    },
+    removeButton: {
+        margin: 0,
+    },
+    cartItemDetails: {
+        fontSize: 12,
+        color: '#666',
+    },
+    collapseButtonContainer: {
+        position: 'absolute',
+        top: -30,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        zIndex: 1,
     },
     collapseButton: {
         position: 'absolute',
@@ -305,7 +376,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     rightPanelPortrait: {
-        flex: 0.5, // Take up 40% in portrait mode
+        flex: 1, // cart height in portrait
     },
     rightPanelCollapsed: {
         flex: 0.1, // When collapsed, take minimal space
@@ -321,31 +392,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         gap: 8,
     },
-    cartItemWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(183, 163, 163, 0.47)',
-        borderRadius: 16,
-        paddingLeft: 8,
-        paddingRight: 4,
-        flex: 0.48, // slightly less than half to account for gap
-        marginBottom: 8,
-    },
     cartItemText: {
         fontSize: 12,
         flex: 1,
     },
-    removeButton: {
-        margin: 0,
-        padding: 0,
-    },
     summaryContainer: {
-        position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
         backgroundColor: 'white',
-        padding: 16,
+        padding: 10,
         borderTopWidth: 1,
         borderTopColor: '#e0e0e0',
         gap: 12,
