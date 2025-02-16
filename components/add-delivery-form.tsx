@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, StyleSheet, ScrollView, Modal, FlatList } from 'react-native';
 import { Button, TextInput, Text, List } from 'react-native-paper';
-import { DatePickerInput } from 'react-native-paper-dates';
 import { Supplier } from '@/entities/supplier';
 import { Delivery } from '@/entities/delivery';
 import { DatePicker } from './date-picker';
@@ -14,22 +13,32 @@ interface AddDeliveryFormProps {
 
 export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDeliveryFormProps) => {
     const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
-    const [dueDate, setDueDate] = useState<Date>(new Date());
+    const [creationDate, setCreationDate] = useState<Date>(new Date());
     const [deliveredBy, setDeliveredBy] = useState('');
     const [cost, setCost] = useState('');
     const [receiptNumber, setReceiptNumber] = useState('');
+    const [handledBy, setHandledBy] = useState('');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
     const [showSupplierModal, setShowSupplierModal] = useState(false);
+    const [total, setTotal] = useState(0);
 
     // Populate form when existingDelivery is provided
     useEffect(() => {
         if (existingDelivery) {
             setDeliveryDate(existingDelivery.deliveryDate);
-            setDueDate(existingDelivery.dueDate);
             setDeliveredBy(existingDelivery.deliveredBy);
             setCost(existingDelivery.total.toString());
             setReceiptNumber(existingDelivery.receiptNumber);
             setSupplier(existingDelivery.supplier);
+            setHandledBy(existingDelivery.handledBy);
+            setTotal(existingDelivery.total);
+        }
+
+        setCreationDate(new Date());
+
+        //if supplier only has one value, set it as the supplier
+        if (suppliers.length === 1 && !supplier) {
+            setSupplier(suppliers[0]);
         }
     }, [existingDelivery]);
 
@@ -41,10 +50,12 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
             supplier: supplier,
             deliveryDate: deliveryDate,
             deliveredBy: deliveredBy,
-            total: parseFloat(cost) || 0,
+            total: 0,
+            cost: Number(cost),
             receiptNumber: receiptNumber,
-            dueDate: dueDate,
-            receivedItems: existingDelivery?.receivedItems || { total: 0, items: [] },
+            creationDate: creationDate,
+            handledBy: handledBy,
+            //receivedItems: existingDelivery?.receivedItems || { total: 0, items: [], deliveryId: Date.now() + Math.floor(100000 + Math.random() * 900000) },
         };
 
         onSubmit(newDelivery);
@@ -84,16 +95,18 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     onChange={(d) => d && setDeliveryDate(d)}
                 />
 
-                <DatePicker
-                    label="Due Date"
-                    value={dueDate}
-                    onChange={(d) => d && setDueDate(d)}
-                />
-
                 <TextInput
                     label="Delivered By"
                     value={deliveredBy}
                     onChangeText={setDeliveredBy}
+                    mode="outlined"
+                    style={styles.input}
+                />
+
+                <TextInput
+                    label="Handled By"
+                    value={handledBy}
+                    onChangeText={setHandledBy}
                     mode="outlined"
                     style={styles.input}
                 />
@@ -121,7 +134,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     style={styles.submitButton}
                     disabled={!supplier}
                 >
-                    Submit Delivery
+                    Submit Delivery Form
                 </Button>
             </View>
 
@@ -134,18 +147,22 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     <Text variant="headlineMedium" style={styles.modalTitle}>
                         Select Supplier
                     </Text>
-                    <ScrollView>
-                        {suppliers.map((sup) => (
+                    <FlatList
+                        data={suppliers}
+                        keyExtractor={(item) => item.id.toString()}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        renderItem={({ item }) => (
                             <List.Item
-                                key={sup.id}
-                                title={sup.name}
-                                description={sup.address}
-                                onPress={() => handleSupplierSelect(sup)}
+                                key={item.id}
+                                title={item.name}
+                                description={item.address}
+                                onPress={() => handleSupplierSelect(item)}
                                 right={props => <List.Icon {...props} icon="chevron-right" />}
                             />
-                        ))}
-                    </ScrollView>
-                    
+                        )}
+                        contentContainerStyle={styles.listContent}
+                    />
                     <Button
                         mode="contained"
                         onPress={() => setShowSupplierModal(false)}
@@ -153,7 +170,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     >
                         Close
                     </Button>
-                    
                 </View>
             </Modal>
         </View>
@@ -161,6 +177,21 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
 };
 
 const styles = StyleSheet.create({
+    listContent: {
+        flexGrow: 1,
+    },
+    modalContainer: {
+        flex: 1,
+        padding: 16,
+        backgroundColor: 'white',
+    },
+    modalTitle: {
+        marginBottom: 16,
+        textAlign: 'center',
+    },
+    modalCloseButton: {
+        marginTop: 16,
+    },
     supplierInputContainer: {
         marginBottom: 16,
         position: 'relative',
@@ -216,20 +247,8 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         marginTop: 16,
-    },
-    modalContainer: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: 'white',
-    },
-    modalTitle: {
-        marginBottom: 16,
-        textAlign: 'center',
-    },
-    modalCloseButton: {
-        marginTop: 16,
-    } 
-
+    }
 });
 
 export default AddDeliveryForm;
+
