@@ -31,6 +31,8 @@ export function CartComponent({
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
 
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -102,7 +104,7 @@ export function CartComponent({
                             style={[isPortrait && styles.compactText, styles.productName]}
                             numberOfLines={1}
                         >
-                            {product.name} • ₱{product.price}
+                            ₱{product.price} • {product.name}
                         </Text>
                     </View>
 
@@ -155,7 +157,7 @@ export function CartComponent({
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
         <View style={styles.cartItemWrapper}>
             <Text style={styles.cartItemText} numberOfLines={1}>
-                {item.product.name} ({item.quantity}) • ₱{item.total}
+            ₱{item.total} ({item.quantity}) • {item.product.name}   
             </Text>
             <IconButton
                 icon="close-circle"
@@ -171,10 +173,9 @@ export function CartComponent({
     }
 
     return (
-
         <View style={[styles.content, isPortrait && styles.contentPortrait]}>
 
-            <KeyboardAvoidingView style={[styles.leftPanel, isPortrait && styles.leftPanelPortrait]}>
+            <View style={[styles.content, isPortrait && styles.contentPortrait]}>
                 <Searchbar
                     placeholder="Search products"
                     onChangeText={setSearchQuery}
@@ -198,72 +199,123 @@ export function CartComponent({
                         </Text>
                     )}
                 />
-            </KeyboardAvoidingView>
+            </View>
 
             <View style={[
                 styles.rightPanel, 
                 isPortrait && styles.rightPanelPortrait,
+                isCartCollapsed && styles.rightPanelCollapsed
             ]}>
-                <Text variant="headlineMedium">Cart</Text>
-                <FlatList
-                    data={cart.items}
-                    renderItem={renderCartItem}
-                    keyExtractor={(item) => item.product.id.toString()}
-                    numColumns={2}
-                    columnWrapperStyle={styles.cartRow}
-                    style={styles.cartList}
-                    contentContainerStyle={styles.cartListContent}
-                    ListEmptyComponent={() => (
-                        <Text style={styles.emptyText}>Cart is empty</Text>
-                    )}
+            <View style={styles.collapseButtonContainer}>
+                <IconButton
+                    icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
+                    onPress={() => setIsCartCollapsed(!isCartCollapsed)}
+                    size={20}
+                    mode="contained"
                 />
             </View>
-            
+                
+            {!isCartCollapsed && (
+                <View style={styles.cartContent}>
+                    <Text variant="headlineMedium">Cart</Text>
+                    <FlatList
+                        data={cart.items}
+                        renderItem={renderCartItem}
+                        keyExtractor={(item) => item.product.id.toString()}
+                        numColumns={2}
+                        columnWrapperStyle={styles.cartRow}
+                        style={styles.cartList}
+                        contentContainerStyle={styles.cartListContent}
+                        ListEmptyComponent={() => (
+                            <Text style={styles.emptyText}>Cart is empty</Text>
+                        )}
+                    />
+                </View>
+            )}
+            </View>
 
             <View style={styles.summaryContainer}>
                 <Text variant="titleLarge" style={styles.total}>
                     Total: ₱{cart.total}
                 </Text>
                 <Text variant="titleLarge" style={styles.total}>
-                    Quantity: {cart.items.length}
+                    {/* Quantity: {cart.items.values().next().value?.quantity} */}
+                    Quantity: {cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
                 </Text>
                 <Button mode="contained" onPress={onProceed}>
                     Proceed
                 </Button>
             </View>
-
-           
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    productsList: {
-        height: 10,
-    },
     rightPanel: {
+        flex: 1,
+        backgroundColor: 'white',
+        borderLeftWidth: 1,
+        borderLeftColor: '#ccc',
+        position: 'relative',
+    },
+    collapseButtonContainer: {
         position: 'absolute',
-        top: 0,
+        top: -30,
+        left: 0,
         right: 0,
-        width: '50%', // or whatever width you need
-        height: '100%',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    cartContent: {
+        flex: 1,
         padding: 10,
-        backgroundColor: 'white', // ensure background is solid
-    },
-    rightPanelPortrait: {
-        width: '100%',
-        height: '40%',
-        bottom: 0,
-        top: 'auto',
-    },
-    rightPanelPortraitFocused: {
-        height: '20%', // Adjust this value as needed
+        paddingTop: 15, // Give space for the collapse button
     },
     cartList: {
-        flex: 1,
+        flex: 1, // This ensures the list is scrollable
     },
     cartListContent: {
         padding: 4,
+    },
+    collapseButton: {
+        position: 'absolute',
+        top: -20, // Move it slightly above the panel
+        left: -20, // Pull it slightly to the left
+        zIndex: 1,
+        backgroundColor: 'white', // Add background to make it stand out
+        // Add shadow
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    content: {
+        flex: 1,
+        flexDirection: 'row', // side by side in landscape
+    },
+    contentPortrait: {
+        flexDirection: 'column', // stacked in portrait
+    },
+    leftPanel: {
+        flex: 1,
+        padding: 10,
+    },
+    rightPanelPortrait: {
+        flex: 0.5, // Take up 40% in portrait mode
+    },
+    rightPanelCollapsed: {
+        flex: 0.1, // When collapsed, take minimal space
+    },
+
+    productsList: {
+        height: 10,
+    },
+    rightPanelPortraitFocused: {
+        height: '20%', // Adjust this value as needed
     },
     cartRow: {
         justifyContent: 'flex-start',
@@ -386,16 +438,6 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderRadius: 12,
     },
-    content: {
-        flex: 1,
-        flexDirection: 'row',
-    },
-    leftPanel: {
-        flex: 1,
-        padding: 10,
-        borderRightWidth: 1,
-        borderRightColor: '#ccc',
-    },
     addItemContainer: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -421,9 +463,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         elevation: 0, // Removes shadow on Android
         borderRadius: 8,
-    },
-    contentPortrait: {
-        flexDirection: 'column',
     },
     leftPanelPortrait: {
         flex: 2,
