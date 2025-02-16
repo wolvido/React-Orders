@@ -31,6 +31,9 @@ export function DeliveryCartComponent({
     const [searchQuery, setSearchQuery] = useState('');
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
 
+    // filter out isBundle products
+    products = products.filter(product => !product.isBundle);
+
     // Filter products based on search query
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
