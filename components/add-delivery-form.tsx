@@ -15,7 +15,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
     const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
     const [creationDate, setCreationDate] = useState<Date>(new Date());
     const [deliveredBy, setDeliveredBy] = useState('');
-    const [cost, setCost] = useState('');
     const [receiptNumber, setReceiptNumber] = useState('');
     const [handledBy, setHandledBy] = useState('');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
@@ -27,7 +26,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
         if (existingDelivery) {
             setDeliveryDate(existingDelivery.deliveryDate);
             setDeliveredBy(existingDelivery.deliveredBy);
-            setCost(existingDelivery.total.toString());
             setReceiptNumber(existingDelivery.receiptNumber);
             setSupplier(existingDelivery.supplier);
             setHandledBy(existingDelivery.handledBy);
@@ -51,7 +49,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
             deliveryDate: deliveryDate,
             deliveredBy: deliveredBy,
             total: 0,
-            cost: Number(cost),
             receiptNumber: receiptNumber,
             creationDate: creationDate,
             handledBy: handledBy,
@@ -107,15 +104,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     label="Handled By"
                     value={handledBy}
                     onChangeText={setHandledBy}
-                    mode="outlined"
-                    style={styles.input}
-                />
-
-                <TextInput
-                    label="Cost"
-                    value={cost}
-                    onChangeText={setCost}
-                    keyboardType="numeric"
                     mode="outlined"
                     style={styles.input}
                 />
