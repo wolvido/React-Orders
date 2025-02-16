@@ -37,7 +37,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         productName: receivedDeliveryItem.product.name,
         description: "",
         brand: receivedDeliveryItem.product.brand,
-        unitPrice: receivedDeliveryItem.product.price,
+        unitPrice: receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.price,
         receivedQuantity: receivedDeliveryItem.quantity,
         itemType: "",
         itemCode: "",
