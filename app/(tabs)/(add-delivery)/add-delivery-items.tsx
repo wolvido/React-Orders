@@ -1,14 +1,18 @@
 import { DeliveryCartComponent } from "@/components/delivery-cart";
 import { useDeliveryCart } from "@/context/delivery-cart-context";
 import { View, StyleSheet } from "react-native";
-import { products } from "@/dummy-data/dummy-products";
+
 import StepIndicator from "@/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
 import { useDelivery } from "@/context/delivery-context";
-import { Button } from "react-native-paper";
+
 import { router } from "expo-router";
 
+import { useProducts } from "@/context/product-context";
+
 export default function AddDeliveryItemsScreen() {
+
+    const { products } = useProducts();
 
     const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
 
@@ -16,8 +20,8 @@ export default function AddDeliveryItemsScreen() {
 
         const handleProceed = () => {
             updateReceivedDelivery(getDelivery());
-            finalizeDelivery();
-            clearDelivery();
+            finalizeDelivery(getDelivery());
+            //clearDelivery();
 
             router.push("/");
         };
@@ -33,6 +37,7 @@ export default function AddDeliveryItemsScreen() {
                 onRemoveFromDelivery={removeFromDelivery}
                 onProceed={handleProceed}
             />
+
         </View>
     )
 }

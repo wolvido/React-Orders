@@ -2,17 +2,29 @@ import { ScrollView, View } from 'react-native';
 import StepIndicator from '@/components/order-step-indicator';
 import deliverySteps from './delivery-steps-label';
 import AddDeliveryForm from '@/components/add-delivery-form';
-import { dummySuppliers } from '@/dummy-data/dummy-suppliers';
 import { router } from "expo-router";
 import { Delivery } from '@/entities/delivery';
 import { useDelivery } from '@/context/delivery-context';
+import { DeliveryRepository } from '@/repositories/delivery-repository';
+import { Supplier } from '@/entities/supplier';
+import { useEffect, useState } from 'react';
 
 //react component
 export default function AddDeliveryScreen() {
 
+    const deliveryRepository = new DeliveryRepository();
+    const [ suppliers, setSuppliers ] = useState<Supplier[]>([]);
+
+    useEffect(() => {
+        deliveryRepository.getAllSuppliers().then((suppliers) => {
+            setSuppliers(suppliers);
+        });
+    });
+
     const { initializeDelivery } = useDelivery();
 
     function onSubmit(delivery: Delivery) {
+        console.log('Delivery:', delivery);
         initializeDelivery(delivery);
         router.push('./add-delivery-items');
     }
@@ -29,7 +41,7 @@ export default function AddDeliveryScreen() {
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                <AddDeliveryForm suppliers={dummySuppliers} onSubmit={onSubmit}/>
+                <AddDeliveryForm suppliers={suppliers} onSubmit={onSubmit}/>
             </ScrollView>
         </View>
     );

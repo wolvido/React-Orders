@@ -17,7 +17,8 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     const [delivery, setDelivery] = useState<ReceivedDelivery >(
         {
             items: [],
-            total: 0
+            total: 0,
+            deliveryId: 0
         }
     );
 
@@ -26,10 +27,12 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     };
 
     const addToDelivery = (receivedItem: ReceivedItem) => {
+        console.log(receivedItem);
+
         setDelivery(prevDelivery => {
             // Check if product already exists in delivery
             const existingItemIndex = prevDelivery.items.findIndex(
-                item => item.product.key === receivedItem.product.key
+                item => item.product.id === receivedItem.product.id
             );
 
             let updatedItems: ReceivedItem[];
@@ -38,22 +41,29 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
                 // Update existing item
                 updatedItems = prevDelivery.items.map((item, index) => {
                     if (index === existingItemIndex) {
+                        const priceToUse = receivedItem.manualPrice ?? item.product.price;
                         return {
                             ...item,
                             quantity: item.quantity + receivedItem.quantity,
-                            total: (item.quantity + receivedItem.quantity) * item.product.costPrice
+                            manualPrice: receivedItem.manualPrice, 
+                            total: (item.quantity + receivedItem.quantity) * priceToUse
                         };
                     }
                     return item;
                 });
             } else {
                 // Add new item
-                updatedItems = [...prevDelivery.items, receivedItem];
+                const itemToAdd = {
+                    ...receivedItem,
+                    total: receivedItem.quantity * (receivedItem.manualPrice ?? receivedItem.product.price)
+                };
+                updatedItems = [...prevDelivery.items, itemToAdd];
             }
 
             return {
                 items: updatedItems,
-                total: calculateTotal(updatedItems)
+                total: calculateTotal(updatedItems),
+                deliveryId: prevDelivery.deliveryId
             };
         });
     };
@@ -61,12 +71,13 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     const removeFromDelivery = (product: Product) => {
         setDelivery(prevDelivery => {
             const updatedItems = prevDelivery.items.filter(
-                item => item.product.key !== product.key
+                item => item.product.id !== product.id
             );
 
             return {
                 items: updatedItems,
-                total: calculateTotal(updatedItems)
+                total: calculateTotal(updatedItems),
+                deliveryId: prevDelivery.deliveryId
             };
         });
     };
@@ -79,7 +90,8 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     const clearDelivery = () => {
         setDelivery({
             items: [],
-            total: 0
+            total: 0,
+            deliveryId: 0
         });
     };
 

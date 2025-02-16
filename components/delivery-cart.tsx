@@ -27,6 +27,8 @@ export function DeliveryCartComponent({
     const isPortrait = useOrientation() === 'PORTRAIT';
 
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
+    const [prices, setPrices] = useState<{ [key: number]: string }>({});
+
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
@@ -38,6 +40,18 @@ export function DeliveryCartComponent({
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const handlePriceChange = (text: string, productId: number) => {
+        const numericValue = text.replace(/[^0-9]/g, '');
+        setPrices(prev => ({
+            ...prev,
+            [productId]: numericValue
+        }));
+        setErrors(prev => ({
+            ...prev,
+            [productId]: ''
+        }));
+    }
 
     const handleQuantityChange = (text: string, productId: number) => {
         const numericValue = text.replace(/[^0-9]/g, '');
@@ -54,8 +68,10 @@ export function DeliveryCartComponent({
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
-
+    
         const quantity = parseInt(quantities[productId]);
+        const customPrice = prices[productId] ? parseInt(prices[productId]) : product.price;
+        console.log(customPrice);
         
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
@@ -66,13 +82,14 @@ export function DeliveryCartComponent({
             onError?.(errorMessage);
             return;
         }
-
+    
         const receivedItem: ReceivedItem = {
             product: product,
             quantity: quantity,
-            total: product.price * quantity
+            manualPrice: customPrice,
+            total: customPrice * quantity  // Use custom price here
         };
-
+    
         onAddToDelivery(receivedItem);
         setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
@@ -87,17 +104,26 @@ export function DeliveryCartComponent({
                             style={[isPortrait && styles.compactText, styles.productName]}
                             numberOfLines={1}
                         >
-                            ₱{product.price} • {product.name}
+                            ₱{prices[product.id] || product.price} • {product.name}
                         </Text>
                     </View>
-
+    
                     <View style={styles.stockInfo}>
                         <Text variant="bodySmall">
                             Stock: {product.stocks}
                         </Text>
                     </View>
-
+    
                     <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
+                        <TextInput
+                            mode="outlined"
+                            label="Price"
+                            value={prices[product.id]}
+                            onChangeText={(text) => handlePriceChange(text, product.id)}
+                            keyboardType="numeric"
+                            style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
+                            maxLength={10}
+                        />
                         <TextInput
                             mode="outlined"
                             label="Qty"
@@ -132,7 +158,7 @@ export function DeliveryCartComponent({
                 )}
             </Card.Content>
         </Card>
-    ), [isPortrait, quantities, errors]);
+    ), [isPortrait, quantities, prices, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: ReceivedItem }) => (
         <View style={styles.cartItemWrapper}>
@@ -239,6 +265,20 @@ export function DeliveryCartComponent({
 }
 
 const styles = StyleSheet.create({
+    priceInput: {
+        width: 80,
+    },
+    priceInputPortrait: {
+        width: 50,
+        height: 35,
+        fontSize: 12,
+    },
+    actionSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        flex: 1,
+    },
     rightPanel: {
         flex: 1,
         backgroundColor: 'white',
@@ -432,12 +472,6 @@ const styles = StyleSheet.create({
     stockInfo: {
         flex: 1,
         alignItems: 'center',
-    },
-    actionSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        flex: 1,
     },
     actionSectionPortrait: {
         gap: 4,
