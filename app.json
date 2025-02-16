@@ -44,10 +44,10 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e36012da-bf2c-47d5-b766-681b49b8bb60"
+        "projectId": "a05cd3b3-2d7b-43eb-ac93-dca3a330a57b"
       }
     },
-    "owner": "winzyl"
+    "owner": "winzyl2"
   },
   "api": {
     "baseUrl": "http://192.168.110.120:8000/api",
