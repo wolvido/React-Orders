@@ -1,9 +1,10 @@
-import { View, ScrollView, StyleSheet } from "react-native";
-import { Button, Card, TextInput, Text, List, HelperText, Searchbar } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { Button, Card, TextInput, Text, List, HelperText, Searchbar, IconButton, Surface } from "react-native-paper";
 import { useState, useEffect, useCallback } from "react";
 import { ReceivedDelivery } from "@/entities/received-delivery";
 import { Product } from "@/entities/product";
 import { ReceivedItem } from "@/entities/received-item";
+import { FlatList } from "react-native";
 
 interface DeliveryCartComponentProps {
     products: Product[];
@@ -14,62 +15,38 @@ interface DeliveryCartComponentProps {
     onError?: (message: string) => void;
 }
 
-export function DeliveryCartComponent({ 
-    products, 
-    delivery, 
-    onAddToDelivery, 
+export function DeliveryCartComponent({
+    products,
+    delivery,
+    onAddToDelivery,
     onRemoveFromDelivery,
     onProceed,
-    onError 
+    onError
 }: DeliveryCartComponentProps) {
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
 
     // Filter products based on search query
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    
 
-    useEffect(() => {
-        const initialQuantities = products.reduce((acc, product) => ({
-            ...acc,
-            [product.key]: "1"
-        }), {});
-        setQuantities(initialQuantities);
-    }, [products]);
-
-    const handleQuantityChange = (text: string, productKey: number) => {
-        // Only allow numbers
+    const handleQuantityChange = (text: string, productId: number) => {
         const numericValue = text.replace(/[^0-9]/g, '');
-        setQuantities(prev => ({ 
-            ...prev, 
-            [productKey]: numericValue 
+        setQuantities(prev => ({
+            ...prev,
+            [productId]: numericValue
         }));
-        // Clear error when user starts typing
         setErrors(prev => ({
             ...prev,
-            [productKey]: ''
+            [productId]: ''
         }));
     };
 
-    const handleQuantityFocus = useCallback((productKey: number) => {
-        requestAnimationFrame(() => {
-            setQuantities(prev => ({ ...prev, [productKey]: '' }));
-            setErrors(prev => ({ ...prev, [productKey]: '' }));
-        });
-    }, []);
-    
-    const handleQuantityBlur = useCallback((productKey: number) => {
-        setQuantities(prev => ({ 
-            ...prev, 
-            [productKey]: prev[productKey] || '1'
-        }));
-    }, []);
-    
     const handleAddItem = (productId: number) => {
-        const product = products.find(p => p.key === productId);
+        const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
 
         const quantity = parseInt(quantities[productId]);
@@ -87,207 +64,211 @@ export function DeliveryCartComponent({
         const receivedItem: ReceivedItem = {
             product: product,
             quantity: quantity,
-            total: product.costPrice * quantity
+            total: product.price * quantity
         };
 
-        // Clear error on successful add
-        setErrors(prev => ({
-            ...prev,
-            [productId]: ''
-        }));
-        
         onAddToDelivery(receivedItem);
         setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
-    
-    return (
-        <View style={styles.content}>
-            {/* Products List - Left Side */}
-            <ScrollView style={styles.leftPanel}>
-                <Searchbar
-                        placeholder="Search products"
-                        onChangeText={setSearchQuery}
-                        value={searchQuery}
-                        style={styles.searchBar}
+
+    const renderProductItem = ({ item: product }: { item: Product }) => (
+        <Surface style={styles.productCard} elevation={1}>
+            <View style={styles.productContent}>
+                <View style={styles.productInfo}>
+                    <Text variant="titleMedium">{product.name}</Text>
+                    <Text variant="bodyMedium">₱{product.price}</Text>
+                    <View style={styles.productMeta}>
+                        <Text variant="bodySmall">Stock: {product.stocks}</Text>
+                        <Text variant="bodySmall">Unit: {product.unitType}</Text>
+                    </View>
+                </View>
+                <View style={styles.productActions}>
+                    <TextInput
+                        mode="outlined"
+                        label="Qty"
+                        value={quantities[product.id] || ''}
+                        onChangeText={(text) => handleQuantityChange(text, product.id)}
+                        keyboardType="numeric"
+                        style={styles.quantityInput}
+                        error={!!errors[product.id]}
                     />
-                {filteredProducts.map(product => (
-                    <Card key={product.key} style={styles.productCard}>
-                        <Card.Content>
-                            <View style={styles.cardLayout}>
-                                {/* Left side - Product info */}
-                                <View style={styles.productInfo}>
-                                    <Text variant="titleMedium">{product.name}</Text>
-                                    <View style={styles.detailsRow}>
-                                        <Text variant="bodyMedium">₱{product.costPrice}</Text>
-                                    </View>
-                                    <View style={styles.detailsRow}>
-                                        <View style={styles.pill}>
-                                            <Text variant="bodySmall">Current Stock: {product.stocks}</Text>
-                                        </View>
-                                        <View style={styles.pill}>
-                                            <Text variant="bodySmall">Unit: {product.unitType}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-
-                                {/* Right side - Quantity and Add button */}
-                                <View style={styles.actionSection}>
-                                    <TextInput
-                                        mode="outlined"
-                                        label="Qty"
-                                        value={quantities[product.key] || ''}
-                                        onChangeText={(text) => handleQuantityChange(text, product.key)}
-                                        onFocus={() => handleQuantityFocus(product.key)}
-                                        onBlur={() => handleQuantityBlur(product.key)}
-                                        keyboardType="numeric"
-                                        style={styles.quantityInput}
-                                        maxLength={5}
-                                        error={!!errors[product.key]}
-                                    />
-                                    <Button 
-                                        mode="contained" 
-                                        onPress={() => handleAddItem(product.key)}
-                                    >
-                                        Add
-                                    </Button>
-                                </View>
-                            </View>
-                            {errors[product.key] ? (
-                                <HelperText type="error" visible={true}>
-                                    {errors[product.key]}
-                                </HelperText>
-                            ) : null}
-                        </Card.Content>
-                    </Card>
-                ))}
-            </ScrollView>
-
-            {/* Delivery Items - Right Side */}
-            <View style={styles.rightPanel}>
-                <Text variant="headlineMedium">Items</Text>
-                <ScrollView>
-                    {delivery.items.map(item => (
-                        <List.Item
-                            key={item.product.key}
-                            title={item.product.name}
-                            description={() => (
-                                <Text>Quantity: {item.quantity} | Total: ₱{item.total}</Text>
-                            )}
-                            right={() => (
-                                <Button 
-                                    mode="outlined" 
-                                    onPress={() => onRemoveFromDelivery(item.product)}
-                                >
-                                    Remove
-                                </Button>
-                            )}
-                        />
-                    ))}
-                </ScrollView>
-
-                <View style={styles.summaryContainer}>
-                    <Text variant="titleLarge" style={styles.total}>
-                        Total: ₱{delivery.total}
-                    </Text>
-                    <Button mode="contained" onPress={onProceed}>
-                        Proceed to Finalize
+                    <Button
+                        mode="contained"
+                        onPress={() => handleAddItem(product.id)}
+                    >
+                        Add
                     </Button>
                 </View>
-                
             </View>
+            {errors[product.id] && (
+                <HelperText type="error" visible={true}>
+                    {errors[product.id]}
+                </HelperText>
+            )}
+        </Surface>
+    );
+
+    const renderCartItem = ({ item }: { item: ReceivedItem }) => (
+        <Surface style={styles.cartItem} elevation={1}>
+            <View style={styles.cartItemContent}>
+                <View style={styles.cartItemInfo}>
+                    <Text variant="titleMedium">{item.product.name}</Text>
+                    <Text variant="bodyMedium">
+                        {item.quantity} x ₱{item.product.price} = ₱{item.total}
+                    </Text>
+                </View>
+                <IconButton
+                    icon="delete"
+                    mode="outlined"
+                    onPress={() => onRemoveFromDelivery(item.product)}
+                />
+            </View>
+        </Surface>
+    );
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.mainContent}>
+                <Searchbar
+                    placeholder="Search products"
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
+                    style={styles.searchBar}
+                />
+                <FlatList
+                    data={filteredProducts}
+                    renderItem={renderProductItem}
+                    keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={styles.productList}
+                    initialNumToRender={10}
+                    maxToRenderPerBatch={10}
+                />
+            </View>
+
+            <Surface style={[styles.cart, isCartCollapsed && styles.cartCollapsed]}>
+                <View style={styles.cartHeader}>
+                    <Text variant="titleMedium">Delivery Cart</Text>
+                    <IconButton
+                        icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
+                        onPress={() => setIsCartCollapsed(!isCartCollapsed)}
+                    />
+                </View>
+                
+                {!isCartCollapsed && (
+                    <>
+                        <FlatList
+                            data={delivery.items}
+                            renderItem={renderCartItem}
+                            keyExtractor={(item) => item.product.id.toString()}
+                            style={styles.cartList}
+                        />
+                        <Surface style={styles.cartFooter} elevation={1}>
+                            <Text variant="headlineSmall">
+                                Total: ₱{delivery.total}
+                            </Text>
+                            <Button 
+                                mode="contained" 
+                                onPress={onProceed}
+                                style={styles.checkoutButton}
+                            >
+                                Proceed to Finalize
+                            </Button>
+                        </Surface>
+                    </>
+                )}
+            </Surface>
         </View>
     );
 }
 
-
 const styles = StyleSheet.create({
-    detailsRow: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 8,
-        marginTop: 4,
-    },
-    pill: {
-        backgroundColor: 'white',
-        paddingHorizontal: 8,
-        paddingVertical: 2,
-        borderRadius: 12,
-    },
-    content: {
+    container: {
         flex: 1,
-        flexDirection: 'row',
+        backgroundColor: '#f5f5f5',
     },
-    leftPanel: {
+    mainContent: {
         flex: 1,
-        padding: 10,
-        borderRightWidth: 1,
-        borderRightColor: '#ccc',
+        padding: 12, // Slightly reduced padding
     },
-    rightPanel: {
-        flex: 1,
-        padding: 10,
+    searchBar: {
+        marginBottom: 12, // Reduced margin
+        elevation: 2,
     },
-    addItemContainer: {
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginTop: 10,
-    },
-    quantityContainer: {
-        flex: 1,
-        marginRight: 10,
-    },
-    total: {
-        marginVertical: 20,
-        textAlign: 'right',
-        fontSize: 27,
-    },
-    errorText: {
-        color: '#B00020', 
-        fontSize: 12,
-        marginTop: 4,
+    productList: {
+        gap: 6, // Reduced gap between items
     },
     productCard: {
-        marginBottom: 8,
+        padding: 8, // Reduced padding
+        borderRadius: 6, // Smaller border radius
+        backgroundColor: 'white',
     },
-    cardLayout: {
+    productContent: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     productInfo: {
         flex: 1,
-        marginRight: 16,
+        gap: 2, // Reduced gap
     },
-    actionSection: {
+    productMeta: {
+        flexDirection: 'row',
+        gap: 6, // Smaller spacing
+    },
+    productActions: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+        gap: 6,
     },
     quantityInput: {
-        width: 80, // Fixed width for quantity
+        width: 60, // Smaller input
+        height: 35, // Reduced height
+        fontSize: 12, // Smaller font
     },
-    summaryContainer: {
+
+    cart: {
         backgroundColor: 'white',
-        padding: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        gap: 12,
-        // Optional: Add shadow
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 3,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        elevation: 6,
+        maxHeight: '45%', // Slightly smaller
     },
-    proceedButton: {
-        paddingVertical: 6,
-    },    
-    searchBar: {
-        marginBottom: 10,
-        elevation: 0,
-        borderRadius: 8,
+    cartCollapsed: {
+        maxHeight: 48, // Reduced height when collapsed
+    },
+    cartHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 8, // Reduced vertical padding
+        paddingHorizontal: 12,
+        borderBottomWidth: 0.5, // Smaller border
+        borderBottomColor: '#d0d0d0',
+    },
+    cartList: {
+        maxHeight: '100%',
+    },
+    cartItem: {
+        marginHorizontal: 12,
+        marginVertical: 2, // Smaller margin
+        padding: 8, // Reduced padding
+        borderRadius: 6, // Smaller radius
+    },
+    cartItemContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    cartItemInfo: {
+        flex: 1,
+    },
+    cartFooter: {
+        padding: 12, // Reduced padding
+        borderTopWidth: 0.5, // Thinner border
+        borderTopColor: '#d0d0d0',
+        gap: 6, // Smaller spacing
+    },
+    checkoutButton: {
+        marginTop: 6,
     },
 });
