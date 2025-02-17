@@ -5,7 +5,5 @@ export interface Supplier {
     name: string;
     address: string;
     contactNumber: string;
-    email: string;
-    remarks: string;
-    products: Product[];
+    contactPerson: string;
 }
