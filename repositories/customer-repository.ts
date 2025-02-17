@@ -10,9 +10,9 @@ export class CustomerRepository implements ICustomerRepository {
     private baseUrl: string;
 
     constructor() {
-        //this.baseUrl = app.api.akongCpUrl + '/Customer';
+        this.baseUrl = app.api.main + '/Customer';
         //this.baseUrl = app.api.baseUrl + '/Customer';
-        this.baseUrl = app.api.mlangUrl + '/Customer';
+        //this.baseUrl = app.api.mlangUrl + '/Customer';
     }
 
     private async handleResponseCustomers<T>(response: Response): Promise<T> {

@@ -13,7 +13,7 @@ export class DeliveryRepository implements IDeliveryRepository{
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.akongCpUrl + '/Delivery';
+        this.baseUrl = app.api.main + '/Delivery';
     }
 
     private async handleResponse<T>(response: Response): Promise<T> {

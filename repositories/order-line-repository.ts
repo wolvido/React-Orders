@@ -10,7 +10,8 @@ export class OrderLineRepository implements IOrderLineRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.mlangUrl + '/OrderLine';
+        //this.baseUrl = app.api.mlangUrl + '/OrderLine';
+        this.baseUrl = app.api.main + '/OrderLine';
     }
 
     async createOrderLines(cart: Cart): Promise<RestaurantOrderLineDTO[]> {

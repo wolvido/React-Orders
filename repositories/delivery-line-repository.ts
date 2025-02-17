@@ -10,7 +10,7 @@ export class DeliveryLineRepository implements IDeliveryLineRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.akongCpUrl + '/Deliveryline';
+        this.baseUrl = app.api.main + '/Deliveryline';
     }
 
     async createDeliveryLines(receivedDelivery: ReceivedDelivery): Promise<DeliveryLineDTO[]> {
