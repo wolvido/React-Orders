@@ -34,14 +34,14 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
 
     const handleBankTransferSubmit = (data: Extract<PaymentMethod, { type: "Bank Transfer" }>) => {
 
-        //how to create a PaymentMethod object
         const paymentMethod: PaymentMethod = {
             type: "Bank Transfer",
             payment: data.payment,
             bankName: data.bankName,
             id: data.id,
             depositDate: data.depositDate,
-            orderId: orderId
+            orderId: orderId,
+            balance: data.payment
         };
         
         onPaymentSubmit(paymentMethod);
@@ -53,7 +53,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             paymentProvider: data.paymentProvider,
             id: data.id,
             payment: data.payment,
-            orderId: orderId
+            orderId: orderId,
+            balance: data.payment
         };
 
         onPaymentSubmit(paymentMethod);
@@ -67,7 +68,9 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             payment: data.payment,
             remark: data.remark,
             chequeDate: data.chequeDate,
-            orderId: orderId
+            orderId: orderId,
+            balance: data.payment,
+            id: data.id
         };
 
         onPaymentSubmit(paymentMethod);
@@ -79,7 +82,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             id: data.id,
             cashTendered: data.cashTendered,
             changeDue: data.changeDue,
-            orderId: orderId
+            orderId: orderId,
+            balance: data.cashTendered - data.changeDue
         };
 
         onPaymentSubmit(paymentMethod);
@@ -88,13 +92,13 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
     const renderForm = () => {
         switch (selectedMethod) {
             case 'cash':
-                return <CashForm amount={order?.total || 0} orderId={order?.id || 0} onSubmit={handleCashSubmit} />;
+                return <CashForm orderBalance={order?.balance || 0} amount={order?.total || 0} orderId={order?.id || 0} onSubmit={handleCashSubmit} />;
             case 'cheque':
-                return <ChequeForm orderId={order?.id || 0} onSubmit={handleChequeSubmit} />;
+                return <ChequeForm orderBalance={order?.balance || 0} orderId={order?.id || 0} onSubmit={handleChequeSubmit} />;
             case 'bank':
-                return <BankTransferForm orderId={order?.id || 0} onSubmit={handleBankTransferSubmit} />;
+                return <BankTransferForm orderBalance={order?.balance || 0} orderId={order?.id || 0} onSubmit={handleBankTransferSubmit} />;
             case 'gateway':
-                return <GatewayForm orderId={order?.id || 0}  onSubmit={handleGatewaySubmit} />;
+                return <GatewayForm orderBalance={order?.balance || 0} orderId={order?.id || 0}  onSubmit={handleGatewaySubmit} />;
             default:
                 return null;
         }
@@ -143,7 +147,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
                         }}>
                             <Text variant="titleMedium" style={{ color: '#666' }}>Balance Due</Text>
                             <Text variant="headlineSmall" style={{ color: '#2196F3' }}>
-                                ₱{(order?.total || 0).toFixed(2)}
+                                ₱{(order?.balance || 0).toFixed(2)}
                             </Text>
                         </View>
                     </View>
