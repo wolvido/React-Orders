@@ -9,15 +9,17 @@ interface CashFormProps {
     onSubmit: (data: CashPayment) => void;
     orderId: number;
     amount: number;
+    orderBalance: number;
 }
 
-function CashForm({ onSubmit, orderId, amount }: CashFormProps) {
+function CashForm({ onSubmit, orderId, amount, orderBalance }: CashFormProps) {
     const [formData, setFormData] = useState<CashPayment>({
-        id: Math.floor(Math.random() * 1000000) + 1,
+        id: 0,
         orderId: orderId,
         type: "Cash",
         cashTendered: 0,
-        changeDue: 0
+        changeDue: 0,
+        balance: orderBalance
     });
 
     useEffect(() => {

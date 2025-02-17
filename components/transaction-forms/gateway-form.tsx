@@ -8,15 +8,17 @@ type PaymentGateway = Extract<PaymentMethod, { type: "Payment gateway" }>;
 interface GatewayFormProps {
     onSubmit: (data: PaymentGateway) => void;
     orderId: number;
+    orderBalance: number;
 }
 
-function GatewayForm({ onSubmit, orderId }: GatewayFormProps) {
+function GatewayForm({ onSubmit, orderId, orderBalance }: GatewayFormProps) {
     const [formData, setFormData] = useState<PaymentGateway>({
-        orderId: 0,
+        orderId: orderId,
         type: "Payment gateway",
         paymentProvider: '',
         id: 0,
-        payment: 0
+        payment: 0,
+        balance: orderBalance
     });
 
     // Add input state to handle decimal input properly

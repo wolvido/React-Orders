@@ -10,9 +10,10 @@ type ChequePayment = Extract<PaymentMethod, { type: "Cheque" }>;
 interface ChequeFormProps {
     onSubmit: (data: ChequePayment) => void;
     orderId: number;
+    orderBalance: number;
 }
 
-function ChequeForm({ onSubmit, orderId }: ChequeFormProps) {
+function ChequeForm({ onSubmit, orderId, orderBalance }: ChequeFormProps) {
     const [formData, setFormData] = useState<ChequePayment>({
         orderId: orderId,
         type: "Cheque",
@@ -20,7 +21,9 @@ function ChequeForm({ onSubmit, orderId }: ChequeFormProps) {
         bankName: '',
         payment: 0,
         remark: '',
-        chequeDate: new Date()
+        chequeDate: new Date(),
+        balance: orderBalance,
+        id: 0
     });
 
     // Add input state to handle decimal input for amount

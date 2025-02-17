@@ -10,16 +10,18 @@ type BankTransferPayment = Extract<PaymentMethod, { type: "Bank Transfer" }>;
 interface BankTransferFormProps {
     onSubmit: (data: BankTransferPayment) => void;
     orderId: number;
+    orderBalance: number;
 }
 
-function BankTransferForm({ onSubmit, orderId }: BankTransferFormProps) {
+function BankTransferForm({ onSubmit, orderId, orderBalance }: BankTransferFormProps) {
     const [formData, setFormData] = useState<BankTransferPayment>({
         orderId: orderId,
         type: "Bank Transfer",
         payment: 0,
         bankName: '',
         id: 0,
-        depositDate: new Date()
+        depositDate: new Date(),
+        balance: orderBalance,
     });
 
 
