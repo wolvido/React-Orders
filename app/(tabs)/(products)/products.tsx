@@ -8,9 +8,13 @@ import { Product } from '@/entities/product';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 import { ProductRepository } from '@/repositories/product-repository';
+import { useProducts } from '@/context/product-context';
 
 //react component
 export default function ProductsScreen() {
+        
+        const { products } = useProducts();
+
         const [page, setPage] = useState<number>(0);
         const [numberOfItemsPerPageList] = useState([10, 25, 50, 100]);
         const [itemsPerPage, onItemsPerPageChange] = useState(
@@ -23,15 +27,8 @@ export default function ProductsScreen() {
         const productRepository = new ProductRepository();
 
         useEffect(() => {
-            const currentLastItem = (page + 1) * itemsPerPage;
-            // If close to the end of loaded items, load more
-            if (currentLastItem >= itemsLoaded) {
-                productRepository.getProductPerPage(1, itemsLoaded * 2).then((data) => {
-                    setItems(data);
-                    setItemsLoaded(itemsLoaded * 2);
-                });
-            }
-        }, [page, itemsPerPage]);
+            setItems(products);
+        }, []);
     
         //const items = products;
 
@@ -44,7 +41,8 @@ export default function ProductsScreen() {
 
         //search
         const searchableFields: (keyof Product)[] = [
-            'name'
+            'name',
+            'brand'
         ];
         const { searchQuery, setSearchQuery, filteredItems } = useSearch<Product>(
             items,
