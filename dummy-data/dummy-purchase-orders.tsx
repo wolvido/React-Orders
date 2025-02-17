@@ -5,7 +5,6 @@ import { dummySuppliers } from "./dummy-suppliers";
 import { products } from "./dummy-products";
 
 export const purchaseOrders: PurchaseOrder[] = [
-    // Existing purchase order
     {
         id: 1,
         remarks: "Awaiting shipment confirmation",
@@ -14,12 +13,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Delivered,
         paymentStatus: PaymentStatus.paid,
         delivery:{
-            receiptNumber: "123456",
-            dueDate: new Date("2024-01-15"),
-            id: 1,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[0],
-            deliveryDate: new Date("2021-01-01"),
-            deliveredBy: "John Doe",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 3000,
                 items: [
@@ -38,12 +37,12 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 1,
                         total: 500,
                     },
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 1500,
+            total: 0,
         }
     },
-    // New purchase orders
     {
         id: 2,
         remarks: "Rush order",
@@ -52,12 +51,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
-            receiptNumber: "PO-789012",
-            dueDate: new Date("2024-02-01"),
-            id: 2,
+            receiptNumber: "",
+            dueDate: new Date(0),
+            id: 0,
             supplier: dummySuppliers[1],
-            deliveryDate: new Date("2024-01-20"),
-            deliveredBy: "Mike Wilson",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 4500,
                 items: [
@@ -71,9 +70,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 4,
                         total: 2000,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 4500,
+            total: 0,
         }
     },
     {
@@ -84,12 +84,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.partialPaid,
         delivery:{
-            receiptNumber: "PO-345678",
-            dueDate: new Date("2024-03-15"),
-            id: 3,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[2],
-            deliveryDate: new Date("2024-03-01"),
-            deliveredBy: "Sarah Johnson",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 7800,
                 items: [
@@ -103,9 +103,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 7,
                         total: 2800,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 7800,
+            total: 0,
         }
     },
     {
@@ -116,12 +117,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
-            receiptNumber: "PO-901234",
-            dueDate: new Date("2024-02-28"),
-            id: 4,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[0],
-            deliveryDate: new Date("2024-02-15"),
-            deliveredBy: "Robert Chen",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 6200,
                 items: [
@@ -135,9 +136,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 4,
                         total: 2200,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 6200,
+            total: 0,
         }
     },
     {
@@ -148,12 +150,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
-            receiptNumber: "PO-567890",
-            dueDate: new Date("2024-01-30"),
-            id: 5,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[1],
-            deliveryDate: new Date("2024-01-25"),
-            deliveredBy: "Lisa Wong",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 9300,
                 items: [
@@ -167,9 +169,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 8,
                         total: 3300,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 9300,
+            total: 0,
         }
     },
     {
@@ -180,12 +183,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Delivered,
         paymentStatus: PaymentStatus.paid,
         delivery:{
-            receiptNumber: "PO-123789",
-            dueDate: new Date("2024-04-15"),
-            id: 6,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[2],
-            deliveryDate: new Date("2024-04-01"),
-            deliveredBy: "David Martinez",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 5500,
                 items: [
@@ -199,9 +202,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 5,
                         total: 2500,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 5500,
+            total: 0,
         }
     },
     {
@@ -212,12 +216,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
-            receiptNumber: "PO-456123",
-            dueDate: new Date("2024-02-10"),
-            id: 7,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[0],
-            deliveryDate: new Date("2024-02-05"),
-            deliveredBy: "Emma Davis",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 4100,
                 items: [
@@ -231,9 +235,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 4,
                         total: 1600,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 4100,
+            total: 0,
         }
     },
     {
@@ -244,12 +249,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.unPaid,
         delivery:{
-            receiptNumber: "PO-789456",
-            dueDate: new Date("2024-03-30"),
-            id: 8,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[1],
-            deliveryDate: new Date("2024-03-20"),
-            deliveredBy: "James Wilson",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 7200,
                 items: [
@@ -263,9 +268,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 6,
                         total: 2700,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 7200,
+            total: 0,
         }
     },
     {
@@ -276,12 +282,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Pending,
         paymentStatus: PaymentStatus.partialPaid,
         delivery:{
-            receiptNumber: "PO-234567",
-            dueDate: new Date("2024-05-15"),
-            id: 9,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[2],
-            deliveryDate: new Date("2024-05-01"),
-            deliveredBy: "Maria Garcia",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 8800,
                 items: [
@@ -295,9 +301,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 12,
                         total: 4800,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 8800,
+            total: 0,
         }
     },
     {
@@ -308,12 +315,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Delivered,
         paymentStatus: PaymentStatus.paid,
         delivery:{
-            receiptNumber: "PO-345912",
-            dueDate: new Date("2024-02-20"),
-            id: 10,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[0],
-            deliveryDate: new Date("2024-02-15"),
-            deliveredBy: "Tom Anderson",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 6700,
                 items: [
@@ -327,9 +334,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 8,
                         total: 3200,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 6700,
+            total: 0,
         }
     },
     {
@@ -340,12 +348,12 @@ export const purchaseOrders: PurchaseOrder[] = [
         status: Status.Delivered,
         paymentStatus: PaymentStatus.paid,
         delivery:{
-            receiptNumber: "PO-678234",
-            dueDate: new Date("2024-12-20"),
-            id: 11,
+            receiptNumber: "",
+            dueDate: new Date(),
+            id: 0,
             supplier: dummySuppliers[1],
-            deliveryDate: new Date("2024-12-15"),
-            deliveredBy: "Chris Lee",
+            deliveryDate: new Date(),
+            deliveredBy: "",
             receivedItems: {
                 total: 9900,
                 items: [
@@ -359,10 +367,10 @@ export const purchaseOrders: PurchaseOrder[] = [
                         quantity: 6,
                         total: 2400,
                     }
-                ]
+                ],
+                deliveryId: 0
             },
-            total: 9900,
+            total: 0,
         }
     }
 ];
-
