@@ -21,10 +21,7 @@ export default function ProductsScreen() {
             numberOfItemsPerPageList[0]
         );
 
-        const [itemsLoaded, setItemsLoaded] = useState(10);
-
         const [items, setItems] = useState<Product[]>([]);
-        const productRepository = new ProductRepository();
 
         useEffect(() => {
             setItems(products);

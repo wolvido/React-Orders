@@ -27,6 +27,7 @@ interface OrderContextType {
     updateFulfillmentById: (status: Status, id: number) => void;
     getOrderbyId: (id: number) => Promise<Order | undefined>;
     getAllCustomers: () => Promise<Customer[]>;
+    setOrder: (order: Order) => void;
 }
 
 // Create the context
@@ -150,6 +151,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         
     };
 
+    const setOrder = (order: Order) => {
+        setCurrentOrder(order);
+    };
+
     const updateFulfillmentById = (status: Status, id: number) => {
         // const order:Order = getOrderbyId(id);
         // if (!currentOrder) return;
@@ -184,7 +189,8 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         initializeOrder,
         updateFulfillmentById,
         getOrderbyId,
-        getAllCustomers
+        getAllCustomers,
+        setOrder
     };
 
     return (

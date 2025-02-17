@@ -87,4 +87,9 @@ export class ProductRepository implements IProductRepository{
         return await this.handleResponseBundle<BundleLineDTO>(response);
     }
 
+    async getProductById(productId: number): Promise<Product | null> {
+        const response = await fetch(`${this.baseUrl}/fetch-product/${productId}`);
+        return await this.handleResponse<Product>(response);
+    }
+
 }

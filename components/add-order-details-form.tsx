@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -15,30 +15,42 @@ import { DatePicker } from './date-picker';
 interface OrderDetailsFormProps {
     onSubmit: (order: Order) => void;
     customers: Customer[];
+    order?: Order;
 }
 
-function OrderDetailsForm({ onSubmit, customers }: OrderDetailsFormProps) {
+function OrderDetailsForm({ onSubmit, customers, order }: OrderDetailsFormProps) {
     //form Handling logic
+    useEffect(() => {
+        if (order?.customer) {
+            const defaultCustomer = order.customer;
+            setSelectedCustomer(defaultCustomer);
+            setFormData(prev => ({
+                ...prev,
+                customer: defaultCustomer
+            }));
+        }
+    }, [customers]);
+
     const [formData, setFormData] = useState<Order>({
-        id: Math.floor(1000000 + Math.random() * 9000000),
-        referenceNo: Math.floor(1000000 + Math.random() * 9000000), // Added
-        orderType: '',
+        id: order?.id || Math.floor(1000000 + Math.random() * 9000000),
+        referenceNo: order?.referenceNo || Math.floor(1000000 + Math.random() * 9000000), // Added
+        orderType: order?.orderType || '',
         customer: {
-            id: 0,
-            name: 'Walk-in',
-            contactNumber: '',
-            address: ''
+            id: order?.customer.id || 0,
+            name: order?.customer.name || 'Walk-in',
+            contactNumber: order?.customer.contactNumber || '',
+            address: order?.customer.address || ''
         },
-        transactionDate: new Date(),
-        balance: 0,
-        total: 0,
-        orderStatus: PaymentStatus.unPaid,
-        fulfillmentStatus: Status.Pending,
-        remarks: '',
-        deliveryAddress: '',
-        handledBy: '', 
-        isPaid: false,
-        isComplete: false
+        transactionDate: order?.transactionDate || new Date(),
+        balance: order?.balance || 0,
+        total: order?.total || 0,
+        orderStatus: order?.orderStatus || PaymentStatus.unPaid,
+        fulfillmentStatus: order?.fulfillmentStatus || Status.Pending,
+        remarks: order?.remarks || '',
+        deliveryAddress: order?.deliveryAddress || '',
+        handledBy: order?.handledBy || '', 
+        isPaid: order?.isPaid || false,
+        isComplete: order?.isPaid || false
     });
     
     const handleInputChange = useCallback((field: keyof Order, value: string | Date) => {
@@ -122,6 +134,15 @@ function OrderDetailsForm({ onSubmit, customers }: OrderDetailsFormProps) {
                 onChangeText={(value) => handleInputChange('orderType', value)}
             />
 
+            {(formData.remarks !== null && formData.remarks !== undefined && formData.remarks !== "") && (
+                <TextInput
+                    mode="outlined"
+                    label="Remarks"
+                    value={formData.remarks}
+                    onChangeText={(value) => handleInputChange('remarks', value)}
+                />
+            )}
+            
             <Button 
                 mode="contained"
                 onPress={handleSubmit}

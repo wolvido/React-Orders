@@ -1,22 +1,22 @@
-import { Stack } from 'expo-router';
+// import { Stack } from 'expo-router';
 
-export default function PurchaseOrders() {
+// export default function PurchaseOrders() {
     
-    return (
+//     return (
         
-        <Stack
-            screenOptions={{
-                headerStyle: {
-                    // backgroundColor: 'blue',
-                },
-                headerShown: false,
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                },
-            }}>
+//         <Stack
+//             screenOptions={{
+//                 headerStyle: {
+//                     // backgroundColor: 'blue',
+//                 },
+//                 headerShown: false,
+//                 headerTintColor: '#fff',
+//                 headerTitleStyle: {
+//                     fontWeight: 'bold',
+//                 },
+//             }}>
 
-            <Stack.Screen name="purchase-orders"  options={{ title: "Purchase Orders" }}/> 
-        </Stack>
-    );
-}
+//             <Stack.Screen name="purchase-orders"  options={{ title: "Purchase Orders" }}/> 
+//         </Stack>
+//     );
+// }

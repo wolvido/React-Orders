@@ -17,7 +17,7 @@ import { Order } from '@/entities/order';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 import { PaymentRepository } from '@/repositories/payment-repository';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 
 
 //react component
@@ -27,7 +27,7 @@ export default function OrdersScreen() {
 
     const paymentRepository = new PaymentRepository();
 
-    const { getOrderbyId } = useOrder();
+    const { getOrderbyId, setOrder } = useOrder();
     
     const [items, setItems] = useState<Order[]>([]);
     const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
@@ -111,8 +111,6 @@ export default function OrdersScreen() {
 
     const handlePaymentSubmit = (paymentMethod: PaymentMethod) => {
         // Handle the payment method data here
-        console.log('Payment Method:', paymentMethod);
-
         if (paymentMethod.type === "Cash") {
             const cashPayment: CashPayment = paymentMethod;
             paymentRepository.createCashPayment(cashPayment);
@@ -143,6 +141,24 @@ export default function OrdersScreen() {
         // Do something with the new status
         updateFulfillmentById(status, selectedOrderId);
     };
+
+    //handle update order
+    const [updateOrder, setUpdateOrder] = useState<Order | null>(null);
+
+    const handleUpdateOrder = async (id: number) => {
+        const order = await getOrderbyId(id);
+        if (order) {
+            setUpdateOrder(order);
+        }
+    };
+
+    // Add this useEffect
+    useEffect(() => {
+        if (updateOrder) {
+            setOrder(updateOrder);
+            router.push('/update-order');
+        }
+    }, [updateOrder]);
 
     if (items.length === 0) {
         return (
@@ -226,9 +242,9 @@ export default function OrdersScreen() {
                 <DataTable.Title style={{flexGrow: 3}}>Customer</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Transaction Date</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 3}}>Payment Status</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title>
+                {/* <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title> */}
                 <DataTable.Title style={{flexGrow: 3}}>Total</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Action</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 3}}>Actions</DataTable.Title>
             </DataTable.Header>
 
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -247,7 +263,7 @@ export default function OrdersScreen() {
                                     {item.orderStatus.toString()}
                                 </DataTable.Cell>
 
-                                <DataTable.Cell
+                                {/* <DataTable.Cell
                                     style={{flexGrow: 3}}
                                 >
                                     <Button 
@@ -258,9 +274,9 @@ export default function OrdersScreen() {
                                         {item.fulfillmentStatus}
                                     </Button>
 
-                                </DataTable.Cell>
+                                </DataTable.Cell> */}
 
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.total}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 3}}>{`₱`+item.total}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 3}}>
                                     <Button 
                                         mode="contained" 
@@ -270,6 +286,14 @@ export default function OrdersScreen() {
                                         Add Pay
                                     </Button>
                                 </DataTable.Cell>
+                                {/* <DataTable.Cell>
+                                    <Button 
+                                        mode="contained" 
+                                        onPress={() => handleUpdateOrder(item.id)}
+                                    >
+                                        Update
+                                    </Button>
+                                </DataTable.Cell> */}
                             </DataTable.Row>
                         ))}
                     </DataTable>

@@ -1,3 +1,4 @@
+import { CartItem } from "@/entities/cart-item";
 import { Cart } from "../entities/cart";
 
 export interface RestaurantOrderLineDTO {
@@ -66,4 +67,47 @@ export function convertCartToOrderLines(cart: Cart): RestaurantOrderLineDTO[] {
     console.log('Order Lines:', orderLines);
 
     return orderLines;
+}
+
+export function convertOrderLinesToCart(orderLines: RestaurantOrderLineDTO[]): Cart {
+    if (!orderLines || orderLines.length === 0) {
+        return {
+            items: [],
+            total: 0,
+            orderId: 0
+        };
+    }
+
+    try {
+        const cartItems: CartItem[] = orderLines.map(line => ({
+            product: {
+                id: line.productId,
+                name: line.productName,
+                price: line.productPrice,
+                category: line.category,
+                brand: '', // Since this isn't in OrderLineDTO, defaulting to empty
+                isBundle: line.isBundle,
+                stocks: 0, // Since this isn't in OrderLineDTO, defaulting to 0
+                unitType: '', // Since this isn't in OrderLineDTO, defaulting to empty
+                // Bundle properties are optional, so we don't need to include them
+            },
+            quantity: line.quantity,
+            total: parseFloat((line.productPrice * line.quantity).toFixed(2))
+        }));
+
+        const cartTotal = cartItems.reduce((sum, item) => sum + item.total, 0);
+
+        return {
+            items: cartItems,
+            total: cartTotal,
+            orderId: orderLines[0]?.restaurantOrderId || 0
+        };
+    } catch (error) {
+        console.error('Error converting order lines to cart:', error);
+        return {
+            items: [],
+            total: 0,
+            orderId: 0
+        };
+    }
 }

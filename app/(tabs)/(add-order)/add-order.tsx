@@ -25,7 +25,6 @@ export default function AddOrderScreen() {
             try {
                 setIsLoading(true);
                 const data = await customerRepository.getAllCustomers();
-                console.log('Customers loaded:', data); // Log the data here
                 setCustomers(data);
             } catch (error) {
                 console.error('Error loading customers:', error);

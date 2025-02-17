@@ -45,15 +45,14 @@ export default function TabLayout() {
             label: 'Add Order',
             icon: 'cart-plus' as const,
         },
-        {
-            name: '(purchase-orders)',
-            label: 'Purchase Orders',
-            icon: 'format-list-checkbox' as const,
-        },
+        // {
+        //     name: '(purchase-orders)',
+        //     label: 'Purchase Orders',
+        //     icon: 'format-list-checkbox' as const,
+        // },
     ];
 
     return (
-
         <Tabs
         screenOptions={{
             tabBarHideOnKeyboard: true,

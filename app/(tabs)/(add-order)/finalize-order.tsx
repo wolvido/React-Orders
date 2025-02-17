@@ -7,9 +7,11 @@ import { useOrder } from '@/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { ro } from 'react-native-paper-dates';
+import { useProducts } from '@/context/product-context';
 
 export default function FinalizeOrder() {
     const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
+    const { refreshProducts } = useProducts();
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
@@ -20,6 +22,7 @@ export default function FinalizeOrder() {
 
     const handleFinalizeOrder = () => {
         finalizeOrder();
+        refreshProducts();
         router.push('/add-order');
         router.push('/orders');
     }

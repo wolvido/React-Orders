@@ -31,7 +31,6 @@ interface CustomerDTO {
 // Create the adapter
 export class CustomerAdapter {
     static adapt(dto: CustomerDTO): Customer {
-        console.log('dtoCustomer: '+dto);
         return {
             id: dto.customerID,
             name: dto.fullName,
