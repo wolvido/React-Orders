@@ -27,14 +27,11 @@ export function CartComponent({
     isLoading
 }: CartComponentProps) {
 
-    
     const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
-
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
-
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -66,9 +63,7 @@ export function CartComponent({
     }, []);
 
     const handleAddItem = (productId: number) => {
-
         const product = products.find(p => p.id === productId);
-
         if (!product || !quantities[productId]) return;
     
         const quantity = parseInt(quantities[productId]);
@@ -83,18 +78,66 @@ export function CartComponent({
             return;
         }
     
-        const cartItem: CartItem = {
-            product: product,
-            quantity: quantity,
-            total: product.price * quantity
-        };
+        // Check if product has a bundle type and bundle quantity
+        if (product.bundleType && product.bundleQuantity) {
+            // Get current quantity in cart
+            const existingCartItem = cart.items.find(item => item.product.id === product.id);
+            const existingQuantity = existingCartItem ? existingCartItem.quantity : 0;
+            const newTotalQuantity = existingQuantity + quantity;
     
-        // Batch the state updates together
-        requestAnimationFrame(() => {
+            // Check if adding this quantity will reach or exceed bundle quantity
+            if (newTotalQuantity >= product.bundleQuantity) {
+                // Calculate bundles and remaining items
+                const bundlesCount = Math.floor(newTotalQuantity / product.bundleQuantity);
+                const remainingItems = newTotalQuantity % product.bundleQuantity;
+    
+                // Remove existing individual items
+                if (existingCartItem) {
+                    onRemoveFromCart(product);
+                }
+    
+                // Add bundle(s)
+                const bundleCartItem: CartItem = {
+                    product: product.bundleType,
+                    quantity: bundlesCount,
+                    total: product.bundleType.price * bundlesCount
+                };
+                onAddToCart(bundleCartItem);
+    
+                // Add remaining items if any
+                if (remainingItems > 0) {
+                    const remainingCartItem: CartItem = {
+                        product: product,
+                        quantity: remainingItems,
+                        total: product.price * remainingItems
+                    };
+                    onAddToCart(remainingCartItem);
+                }
+            } else {
+                // Not enough for a bundle yet, just add normally
+                const cartItem: CartItem = {
+                    product: product,
+                    quantity: quantity,
+                    total: product.price * quantity
+                };
+                onAddToCart(cartItem);
+            }
+        } else {
+            // Regular non-bundle product
+            const cartItem: CartItem = {
+                product: product,
+                quantity: quantity,
+                total: product.price * quantity
+            };
             onAddToCart(cartItem);
+        }
+    
+        // Clear errors
+        requestAnimationFrame(() => {
             setErrors(prev => ({ ...prev, [productId]: '' }));
         });
     };
+    
 
     const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
 
@@ -159,7 +202,10 @@ export function CartComponent({
     ), [isPortrait, quantities, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
-        <View style={styles.cartItemWrapper}>
+        <View style={[
+            styles.cartItemWrapper,
+            { borderLeftColor: item.product.isBundle ? '#FFD700' : '#2196F3' } // Yellow for bundle, Blue for non-bundle
+        ]}>
             <View style={styles.cartItemContent}>
                 <View style={styles.cartItemInfo}>
                     <View style={styles.cartItemRow}>
