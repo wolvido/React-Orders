@@ -4,18 +4,20 @@ import * as React from 'react';
 import { DataTable, Searchbar, Button, Portal, Modal, Appbar } from 'react-native-paper';
 import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PaymentStatus from '@/enums/payment-status';
 import { View, Text, ScrollView } from 'react-native';
 import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
 import Status from '@/enums/status'
-import PaymentMethod from '@/entities/payment-method';
+import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/entities/payment-method';
 import { useOrder } from '@/context/order-context';
 import { OrderRepository } from '@/repositories/order-repository';
 import { Order } from '@/entities/order';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
+import { PaymentRepository } from '@/repositories/payment-repository';
+import { useFocusEffect } from 'expo-router';
 
 
 //react component
@@ -23,17 +25,29 @@ export default function OrdersScreen() {
 
     const orderRepository = new OrderRepository();
 
+    const paymentRepository = new PaymentRepository();
+
     const { getOrderbyId } = useOrder();
     
     const [items, setItems] = useState<Order[]>([]);
     const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-    useEffect(() => {
-        orderRepository.getAll().then((data) => {
-            setItems(data);
-        });
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            console.log('Orders screen focused - fetching orders');
+            orderRepository.getAll().then((data) => {
+                setItems(data);
+                console.log('Orders refreshed:', data.length);
+            });
+
+            //will be very slow in the future
+
+            return () => {
+                console.log('Orders screen unfocused');
+            };
+        }, []) 
+    );
 
     useEffect(() => {
         if (selectedOrderId) {
@@ -98,6 +112,28 @@ export default function OrdersScreen() {
     const handlePaymentSubmit = (paymentMethod: PaymentMethod) => {
         // Handle the payment method data here
         console.log('Payment Method:', paymentMethod);
+
+        if (paymentMethod.type === "Cash") {
+            const cashPayment: CashPayment = paymentMethod;
+            paymentRepository.createCashPayment(cashPayment);
+            console.log('Cash Payment Result:', cashPayment);
+        }
+        if (paymentMethod.type === "Cheque") {
+            const chequePayment: ChequePayment = paymentMethod;
+            paymentRepository.createChequePayment(chequePayment);
+            console.log('Cheque Payment Result:', chequePayment);
+        }
+        if (paymentMethod.type === "Bank Transfer") {
+            const bankTransferPayment: BankTransferPayment = paymentMethod;
+            const result = paymentRepository.createBankTransferPayment(bankTransferPayment);
+            console.log('Bank Transfer Payment Result:', result);
+        }
+        if (paymentMethod.type === "Payment Gateway") {
+            const paymentGatewayPayment: PaymentGateway = paymentMethod;
+            paymentRepository.createPaymentGateway(paymentGatewayPayment);
+            console.log('Payment Gateway Payment Result:', paymentGatewayPayment);
+        }
+
         updatePaymentById(paymentMethod, selectedOrderId);
         //hide the payment form
         setShowPaymentForm(false);
