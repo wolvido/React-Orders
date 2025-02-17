@@ -16,21 +16,33 @@ export function EmptyState({
 }: EmptyStateProps) {
     return (
         <Surface style={styles.emptyContainer} elevation={0}>
-            {loading && (
-                <ActivityIndicator 
-                    size="large" 
-                    color={theme.colors.primary} 
-                    style={styles.spinner} 
-                />
+            {loading ? (
+                <>
+                    <ActivityIndicator 
+                        size="large" 
+                        color={theme.colors.primary} 
+                        style={styles.spinner} 
+                    />
+                    <Text variant="headlineSmall" style={styles.emptyText}>
+                        {title}
+                    </Text>
+                    <Text variant="bodyMedium" style={styles.emptySubtext}>
+                        {subtitle}
+                    </Text>
+                </>
+            ) : (
+                <>
+                    <Text variant="headlineSmall" style={styles.emptyText}>
+                        {title}
+                    </Text>
+                    <Text variant="bodyMedium" style={styles.emptySubtext}>
+                        {subtitle}
+                    </Text>
+                </>
             )}
-            <Text variant="headlineSmall" style={styles.emptyText}>
-                {title}
-            </Text>
-            <Text variant="bodyMedium" style={styles.emptySubtext}>
-                {subtitle}
-            </Text>
         </Surface>
     );
+    
 }
 
 const styles = StyleSheet.create({
@@ -42,7 +54,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     emptyText: {
-        marginTop: 16,
         color: theme.colors.primary,
         textAlign: 'center',
     },
@@ -53,6 +64,7 @@ const styles = StyleSheet.create({
         opacity: 0.8,
     },
     spinner: {
-        marginBottom: 16,
+        marginBottom: 24, // Adjust this value to fine-tune vertical spacing
     },
 });
+
