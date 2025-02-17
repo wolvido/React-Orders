@@ -17,7 +17,7 @@ import { EmptyState } from '@/components/empty-state';
 
 export default function PurchaseOrdersScreen() {
     const [page, setPage] = useState<number>(0);
-    const [numberOfItemsPerPageList] = useState([7, 8, 9, 10, 11, 12]);
+    const [numberOfItemsPerPageList] = useState([10, 20, 40, 60]);
     const [itemsPerPage, onItemsPerPageChange] = useState(
         numberOfItemsPerPageList[0]
     );
@@ -32,7 +32,6 @@ export default function PurchaseOrdersScreen() {
     useEffect(() => {
         setPage(0);
     }, [itemsPerPage]);
-
 
     const handleReceiveOrder = (order: PurchaseOrder) => {
         initializePurchaseOrder(order);
@@ -61,7 +60,6 @@ export default function PurchaseOrdersScreen() {
         );
     }
     
-
     return (
         <View style={styles.container}>
             <DataTable.Header style={commonStyles.extraHeader}>
@@ -83,14 +81,13 @@ export default function PurchaseOrdersScreen() {
             </DataTable.Header>
 
             <DataTable.Header>
-                <DataTable.Title style={{ flexGrow: 1 }}>ID</DataTable.Title>
                 <DataTable.Title style={{ flexGrow: 3 }}>Supplier</DataTable.Title>
                 <DataTable.Title style={{ flexGrow: 3 }}>Transaction Date</DataTable.Title>
                 <DataTable.Title style={{ flexGrow: 3 }}>Expected Del. Date</DataTable.Title>
                 <DataTable.Title style={{ flexGrow: 2 }}>Expected Total</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Prepared By</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 4 }}>Prepared By</DataTable.Title>
                 <DataTable.Title style={{ flexGrow: 3 }}>Status</DataTable.Title>
-                <DataTable.Title style={{ flexGrow: 3 }}>Action</DataTable.Title>
+                <DataTable.Title style={{ flexGrow: 4 }}>Action</DataTable.Title>
             </DataTable.Header>
 
             <View style={styles.tableContainer}>
@@ -98,12 +95,11 @@ export default function PurchaseOrdersScreen() {
                     <DataTable>
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row style={styles.table__row} key={item.id}>
-                                <DataTable.Cell style={{ flexGrow: 1 }}>{item.id}</DataTable.Cell>
                                 <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.supplier.name}</DataTable.Cell>
                                 <DataTable.Cell style={{ flexGrow: 3 }}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{ flexGrow: 3 }}>{item.delivery.deliveryDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{ flexGrow: 2 }}>{item.delivery.total}</DataTable.Cell>
-                                <DataTable.Cell style={{ flexGrow: 3 }}>{item.preparedBy}</DataTable.Cell>
+                                <DataTable.Cell style={{ flexGrow: 4 }}>{item.preparedBy}</DataTable.Cell>
                                 <DataTable.Cell
                                     style={{ flexGrow: 3 }}
                                     textStyle={{
@@ -111,7 +107,7 @@ export default function PurchaseOrdersScreen() {
                                     }}>
                                     {item.status}
                                 </DataTable.Cell>
-                                <DataTable.Cell style={{ flexGrow: 3 }}>
+                                <DataTable.Cell style={{ flexGrow: 4 }}>
                                     <Button 
                                         mode="contained" 
                                         onPress={() => handleReceiveOrder(item)}
@@ -121,7 +117,7 @@ export default function PurchaseOrdersScreen() {
                                         ]}
                                         disabled={item.status.toLowerCase() === 'cancelled'  || item.status.toLowerCase() === 'fulfilled'}
                                     >
-                                        Receive
+                                        Receive PO
                                     </Button>
                                 </DataTable.Cell>
                             </DataTable.Row>

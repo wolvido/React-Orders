@@ -2,13 +2,10 @@
 import StepIndicator from "@/components/order-step-indicator";
 import receivePOSteps from "./receive-PO-steps";
 import { View } from "react-native";
-import PurchaseOrderForm from "@/components/purchase-order-form";
 import { ReceiveDeliveryCartComponent } from "@/components/receive-delivery-cart";
-import { purchaseOrders } from "@/dummy-data/dummy-purchase-orders";
 import { ReceivedDelivery } from "@/entities/received-delivery";
 import { usePurchaseOrder } from "@/context/purchase-order-context";
 import { router } from "expo-router";
-import { Button } from "react-native-paper";
 
 
 export default function AddPurchaseOrderItemsScreen() {
@@ -25,7 +22,7 @@ export default function AddPurchaseOrderItemsScreen() {
         <View>
             <StepIndicator currentStep={2} backPath="./receive-order" steps={receivePOSteps}/>
             <ReceiveDeliveryCartComponent 
-                receivedDelivery={purchaseOrder?.delivery?.receivedItems ?? { total: 0, items: [] }}
+                receivedDelivery={purchaseOrder?.delivery?.receivedItems ?? { total: 0, items: [], deliveryId: 0 }}
                 onProceed={handleDeliveryFinalized}
                 onError={(message) => {
                     console.error(message);
