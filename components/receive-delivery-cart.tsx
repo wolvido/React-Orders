@@ -308,7 +308,7 @@ export function ReceiveDeliveryCartComponent({
 
 const styles = StyleSheet.create({
     cartItemCard: {
-        marginBottom: 4, // Reduced margin
+        marginBottom: 1, // Reduced margin
         marginHorizontal: 4,
     },
     cartItemContent: {
@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 8, // Reduced padding
         gap: 8,
+        height: 60, // Explicit height
     },
     cartItemName: {
         flex: 1,
