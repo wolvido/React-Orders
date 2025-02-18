@@ -164,6 +164,20 @@ export default function OrdersScreen() {
     }, [updateOrder]);
 
     if (items.length === 0) {
+        //if portrait
+        if (window.innerWidth < window.innerHeight) {
+            return (
+                <View style = {{ marginTop: 20 }}>
+                    <EmptyState
+                        title="Awaiting Data..."
+                        subtitle="No orders available at the moment"
+                        loading={true}
+                    />
+                </View>
+            );
+        }
+        
+
         return (
             <View>
                 <EmptyState
