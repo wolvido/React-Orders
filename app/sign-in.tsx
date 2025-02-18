@@ -15,8 +15,6 @@ export default function SignInScreen() {
     if (!isAuthenticated) {
         return(
             <View style={{  flex: 1, height: '100%'}}>
-                <Text>Api connection: {App.api.main}</Text>
-                <Text>http enabled</Text>
                 <LoginScreen/>
             </View>
         )

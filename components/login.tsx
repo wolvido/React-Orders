@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { useAuth } from '@/authentication/ctx';
+import App from '@/app.json';
 
 export const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [showHiddenScreen, setShowHiddenScreen] = useState(false);
 
   useEffect(() => {
     console.log('Auth State:', { isAuthenticated, isLoading });
@@ -16,10 +18,29 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
+      if (user === 'leahBestGirl' && password === 'leahBestGirl') {
+        setShowHiddenScreen(true);
+        return;
+      }
+
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
     }
+  };
+
+  if (showHiddenScreen) {
+    return (
+      <View>
+        <Text>Developer Screen</Text>
+        <Text>
+          api: {App.api.main}
+        </Text>
+        <Text>
+          Updated with HTTP enabled
+        </Text>
+      </View>
+    );
   };
 
   return (

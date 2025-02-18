@@ -39,7 +39,6 @@ export class OrderRepository implements IOrderRepository {
         return await OrderAdapter.adapt(data) as T;
     }
 
-
     async getAll(): Promise<Order[]> {
         console.log('from repository-Fetching orders...');
         try{
