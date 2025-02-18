@@ -41,8 +41,26 @@ export class OrderRepository implements IOrderRepository {
 
 
     async getAll(): Promise<Order[]> {
-        const response = await fetch(`${this.baseUrl}/fetch-orders?page=1&pageSize=999999`);
-        return await this.handleResponse<Order[]>(response);
+        console.log('from repository-Fetching orders...');
+        try{
+            console.log('no error test');
+            const response = await fetch(`${this.baseUrl}/fetch-orders?page=1&pageSize=999999`);
+            console.log('response:');
+
+            if (!response.ok) {
+                console.log('resonse not ok');
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log('response ok');
+            
+
+            const data = await this.handleResponse<Order[]>(response);
+            return data;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            console.log('Error in getAll:');
+            throw new Error(`Failed to fetch orders: ${errorMessage}`);
+        }
     }
 
     async getById(id: number): Promise<Order | null> {
@@ -66,6 +84,8 @@ export class OrderRepository implements IOrderRepository {
             },
             body: JSON.stringify(orderDto)
         });
+
+        console.log('Response status:', response.status)
 
         return await response.json();
     }
