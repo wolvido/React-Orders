@@ -47,15 +47,19 @@
         "projectId": "a05cd3b3-2d7b-43eb-ac93-dca3a330a57b"
       }
     },
-    "owner": "winzyl2"
+    "owner": "winzyl2",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a05cd3b3-2d7b-43eb-ac93-dca3a330a57b"
+    }
   },
   "api": {
     "baseUrl": "http://192.168.110.120:8000/api",
     "akongCpUrl": "http://192.168.80.247:8000/api",
     "mlangUrl": "http://192.168.1.4:8000/api",
-
     "main": "http://192.168.1.200:8000/api",
-
     "sirJerick": "http://192.168.1.200:8000/api"
   }
 }
