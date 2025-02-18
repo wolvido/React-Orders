@@ -38,7 +38,7 @@ export const LoginScreen = () => {
         <TextInput
           mode="outlined"
           label="Username"
-          placeholder="Enter username"
+          placeholder="Enter your username"
           value={user}
           onChangeText={setUser}
           autoCapitalize="none"
@@ -49,7 +49,7 @@ export const LoginScreen = () => {
         <TextInput
           mode="outlined"
           label="Password"
-          placeholder="Enter password"
+          placeholder="Enter your password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={secureTextEntry}

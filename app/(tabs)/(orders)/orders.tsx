@@ -176,7 +176,6 @@ export default function OrdersScreen() {
                 </View>
             );
         }
-        
 
         return (
             <View>
