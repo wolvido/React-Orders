@@ -18,10 +18,13 @@ import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
 import { PaymentRepository } from '@/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
+import app from '@/app.json';
 
 
 //react component
 export default function OrdersScreen() {
+
+    console.log("current api:"+ app.api.main);
 
     const orderRepository = new OrderRepository();
 
