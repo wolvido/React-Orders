@@ -12,36 +12,39 @@ import { DeliveryProvider } from '@/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
 import { ScrollView } from 'react-native';
 import { ProductProvider } from '@/context/product-context';
+import { ApiProvider } from '@/context/dev-mode-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
     return (
-        <AuthProvider>
-            <ProductProvider>
-            <PaperProvider theme={theme}>
-                <PurchaseOrderProvider>
-                    <OrderProvider>
-                        <DeliveryProvider>
-                            <CartProvider>
-                                    <Stack
-                                        screenOptions={{
-                                        headerStyle: {
-                                            backgroundColor: 'green'
-                                        },
-                                        headerTintColor: '#fff',
-                                        headerShown: false,
-                                        headerTitleStyle: {
-                                            fontWeight: 'bold',
-                                        },
-                                        }}>
-                                        
-                                    </Stack>
-                            </CartProvider>
-                        </DeliveryProvider>
-                    </OrderProvider>
-                </PurchaseOrderProvider>
-            </PaperProvider>
-            </ProductProvider>
-        </AuthProvider>
+        <ApiProvider>
+            <AuthProvider>
+                <ProductProvider>
+                    <PaperProvider theme={theme}>
+                        <PurchaseOrderProvider>
+                            <OrderProvider>
+                                <DeliveryProvider>
+                                    <CartProvider>
+                                            <Stack
+                                                screenOptions={{
+                                                headerStyle: {
+                                                    backgroundColor: 'green'
+                                                },
+                                                headerTintColor: '#fff',
+                                                headerShown: false,
+                                                headerTitleStyle: {
+                                                    fontWeight: 'bold',
+                                                },
+                                                }}>
+                                                
+                                            </Stack>
+                                    </CartProvider>
+                                </DeliveryProvider>
+                            </OrderProvider>
+                        </PurchaseOrderProvider>
+                    </PaperProvider>
+                </ProductProvider>
+            </AuthProvider>
+        </ApiProvider> 
     );
 }
