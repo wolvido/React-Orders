@@ -47,7 +47,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 });
             } else {
                 // Add new item
-                updatedItems = [...prevCart.items, cartItem];
+                updatedItems = [cartItem, ...prevCart.items];
             }
             return {
                 items: updatedItems,

@@ -57,7 +57,7 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
                     ...receivedItem,
                     total: receivedItem.quantity * (receivedItem.manualPrice ?? receivedItem.product.price)
                 };
-                updatedItems = [...prevDelivery.items, itemToAdd];
+                updatedItems = [itemToAdd, ...prevDelivery.items];
             }
 
             return {
