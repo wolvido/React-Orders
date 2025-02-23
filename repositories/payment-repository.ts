@@ -27,14 +27,30 @@ export class PaymentRepository implements IPaymentRepository {
 
     async createCashPayment(payment: CashPayment): Promise<{paymentId: number}> {
         const paymentDto = convertCashPaymentToPaymentDTO(payment);
-        const response = await fetch(`${this.baseUrl}/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paymentDto)
-        });
-        return await response.json();
+
+        try{
+            const response = await fetch(`${this.baseUrl}/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(paymentDto)
+            });
+
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log('cash payment response ok');
+
+            return await response.json();
+        }
+        catch(error){
+            console.log('cash payment error', error);
+            console.log(paymentDto);
+
+            return {paymentId: 0};
+        }
+
     }
 
     async createChequePayment(payment: ChequePayment): Promise<{paymentId: number}> {
