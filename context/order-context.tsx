@@ -129,7 +129,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             console.error('Failed to finalize order:', error);
             
             //needs to be handled for user here
-
         }
     };
 
