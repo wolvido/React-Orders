@@ -1,5 +1,6 @@
 import { convertReceivedDeliveryToDeliveryLines, DeliveryLineDTO } from "@/adapter/received-delivery-adapter";
 import app from "@/app.json";
+import { useApi } from "@/context/dev-mode-context";
 import { ReceivedDelivery } from "@/entities/received-delivery";
 
 export interface IDeliveryLineRepository {
@@ -10,7 +11,15 @@ export class DeliveryLineRepository implements IDeliveryLineRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.main + '/Deliveryline';
+
+        const { getApiUrl, hasApiUrl } = useApi();
+
+        if (hasApiUrl()) {
+            this.baseUrl = getApiUrl() + '/Deliveryline';
+        }
+        else{
+            this.baseUrl = app.api.main + '/Deliveryline';
+        }
     }
 
     async createDeliveryLines(receivedDelivery: ReceivedDelivery): Promise<DeliveryLineDTO[]> {

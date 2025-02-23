@@ -1,5 +1,6 @@
 import { CustomerAdapter } from "@/adapter/customer-adapter";
 import app from "@/app.json";
+import { useApi } from "@/context/dev-mode-context";
 import { Customer } from "@/entities/customers";
 
 export interface ICustomerRepository {
@@ -10,9 +11,14 @@ export class CustomerRepository implements ICustomerRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.main + '/Customer';
-        //this.baseUrl = app.api.baseUrl + '/Customer';
-        //this.baseUrl = app.api.mlangUrl + '/Customer';
+        const { getApiUrl, hasApiUrl } = useApi();
+
+        if (hasApiUrl()) {
+            this.baseUrl = getApiUrl() + '/Customer';
+        }
+        else{
+            this.baseUrl = app.api.main + '/Customer';
+        }
     }
 
     private async handleResponseCustomers<T>(response: Response): Promise<T> {

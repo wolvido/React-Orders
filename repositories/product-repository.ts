@@ -2,6 +2,7 @@ import { ProductAdapter } from "@/adapter/product-adapter";
 import { Product } from "../entities/product";
 import app from "@/app.json";
 import { BundleLineDTO } from "@/adapter/bundleLine-adapter";
+import { useApi } from "@/context/dev-mode-context";
 
 export interface IProductRepository {
     getAll(): Promise<Product[]>;
@@ -14,9 +15,15 @@ export class ProductRepository implements IProductRepository{
     private baseUrl: string;
 
     constructor() {
-        //this.baseUrl = app.api.baseUrl + '/Product';
-        this.baseUrl = app.api.main + '/Product';
-        //this.baseUrl = app.api.mlangUrl + '/Product';
+
+        const { getApiUrl, hasApiUrl } = useApi();
+
+        if (hasApiUrl()) {
+            this.baseUrl = getApiUrl() + '/Product';
+        }
+        else{
+            this.baseUrl = app.api.main + '/Product';
+        }
     }
 
     private async handleResponse<T>(response: Response): Promise<T> {
@@ -68,8 +75,22 @@ export class ProductRepository implements IProductRepository{
     }
 
     async getAll(): Promise<Product[]> {
-        const response = await fetch(`${this.baseUrl}/fetch-products?page=1&pageSize=999999`);
+        console.log('from repository-Fetching [products]...');
+        try {
+            const response = await fetch(`${this.baseUrl}/fetch-products?page=1&pageSize=99999`);
+            if (!response.ok) {
+                console.log('response not ok');
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log('products response ok');
+
         return await this.handleResponse<Product[]>(response);
+
+        }
+        catch (error) {
+            console.error('Error in getAll Products:', error);
+            throw error;
+        }
     }
 
     async getProductPerPage(page: number, pageSize: number): Promise<Product[]> {

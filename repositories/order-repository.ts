@@ -1,6 +1,7 @@
 import { OrderAdapter } from "@/adapter/order-adapter";
 import { Order } from "@/entities/order";
 import app from "@/app.json";
+import { useApi } from "@/context/dev-mode-context";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
@@ -14,9 +15,15 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = app.api.main + '/Order';
-        //this.baseUrl = app.api.baseUrl + '/Order';
-        //this.baseUrl = app.api.mlangUrl + '/Order';
+
+        const { getApiUrl, hasApiUrl } = useApi();
+
+        if (hasApiUrl()) {
+            this.baseUrl = getApiUrl() + '/Order';
+        }
+        else{
+            this.baseUrl = app.api.main + '/Order';
+        }
     }
 
     //response handler
@@ -42,12 +49,9 @@ export class OrderRepository implements IOrderRepository {
     async getAll(): Promise<Order[]> {
         console.log('from repository-Fetching orders...');
         try{
-            console.log('no error test');
             const response = await fetch(`${this.baseUrl}/fetch-orders?page=1&pageSize=999999`);
-            console.log('response:');
-
             if (!response.ok) {
-                console.log('resonse not ok');
+                console.log('response not ok');
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             console.log('response ok');

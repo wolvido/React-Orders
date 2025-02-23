@@ -2,6 +2,7 @@ import { convertCartToOrderLines, convertOrderLinesToCart, RestaurantOrderLineDT
 import app from "@/app.json";
 import { Cart } from "@/entities/cart";
 import { ProductRepository } from "./product-repository";
+import { useApi } from "@/context/dev-mode-context";
 
 export interface IOrderLineRepository {
     createOrderLines(cart: Cart): Promise<RestaurantOrderLineDTO[]>;
@@ -13,8 +14,15 @@ export class OrderLineRepository implements IOrderLineRepository {
     productRepository = new ProductRepository();
 
     constructor() {
-        //this.baseUrl = app.api.mlangUrl + '/OrderLine';
-        this.baseUrl = app.api.main + '/OrderLine';
+
+        const { getApiUrl, hasApiUrl } = useApi();
+
+        if (hasApiUrl()) {
+            this.baseUrl = getApiUrl() + '/OrderLine';
+        }
+        else {
+            this.baseUrl = app.api.main + '/OrderLine';
+        }
     }
 
     async getCart(orderId: number): Promise<Cart> {
