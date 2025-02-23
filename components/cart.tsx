@@ -6,6 +6,7 @@ import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
 import { FlatList } from "react-native";
+import ProductQuantityForm from "@/components/product-quantity-form";
 
 interface CartComponentProps {
     products: Product[];
@@ -27,7 +28,7 @@ export function CartComponent({
     isLoading
 }: CartComponentProps) {
 
-    const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
+    //const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
@@ -36,23 +37,9 @@ export function CartComponent({
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleQuantityChange = (text: string, productKey: number) => {
-        const numericValue = text.replace(/[^0-9]/g, '');
-        setQuantities(prev => ({
-            ...prev,
-            [productKey]: numericValue
-        }));
-        setErrors(prev => ({
-            ...prev,
-            [productKey]: ''
-        }));
-    };
-
-    const handleAddItem = (productId: number) => {
+    const handleAddItem = (productId: number, quantity: number) => {
         const product = products.find(p => p.id === productId);
-        if (!product || !quantities[productId]) return;
-    
-        const quantity = parseInt(quantities[productId]);
+        if (!product) return;
     
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
@@ -143,34 +130,13 @@ export function CartComponent({
                             Stock: {product.stocks}
                         </Text>
                     </View>
-
-                    <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
-                        <TextInput
-                            mode="outlined"
-                            label="Qty"
-                            value={quantities[product.id] || ''}
-                            onChangeText={(text) => handleQuantityChange(text, product.id)}
-                            keyboardType="numeric"
-                            style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
-                            maxLength={5}
-                            error={!!errors[product.id]}
+                        <ProductQuantityForm
+                            productId={product.id}
+                            onAdd={handleAddItem}
+                            error={errors[product.id]}
+                            isPortrait={isPortrait}
                         />
-                        {isPortrait ? (
-                            <IconButton
-                                icon="chevron-right"
-                                mode="contained"
-                                size={20}
-                                onPress={() => handleAddItem(product.id)}
-                            />
-                        ) : (
-                            <Button
-                                mode="contained"
-                                onPress={() => handleAddItem(product.id)}
-                            >
-                                Add
-                            </Button>
-                        )}
-                    </View>
+
                 </View>
                 {errors[product.id] && (
                     <HelperText type="error" visible={true}>
@@ -179,10 +145,10 @@ export function CartComponent({
                 )}
             </Card.Content>
         </Card>
-    ), [isPortrait, quantities, errors]);
+    ), [isPortrait, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => {
-        console.log('Rendering cart item:', item.product.id);
+        //console.log('Rendering cart item:', item.product.id);
         return(
             <View style={[
                 styles.cartItemWrapper,
