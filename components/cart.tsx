@@ -138,7 +138,6 @@ export function CartComponent({
         });
     };
     
-
     //const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
@@ -202,6 +201,7 @@ export function CartComponent({
     ), [isPortrait, quantities, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
+        console.log('Rendering cart item:', item.product.id),
         <View style={[
             styles.cartItemWrapper,
             { borderLeftColor: item.product.isBundle ? '#FFD700' : '#2196F3' } // Yellow for bundle, Blue for non-bundle
@@ -255,7 +255,6 @@ export function CartComponent({
                     windowSize={5}
                     removeClippedSubviews={true}
                     keyboardShouldPersistTaps="always"
-                    extraData={[searchQuery, quantities, errors]} //experimental
                     ListEmptyComponent={() => (
                         <Text style={styles.emptyText}>
                             {searchQuery ? "No products found" : "No products available"}
