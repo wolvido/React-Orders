@@ -32,11 +32,6 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    // Initial load
-    useEffect(() => {
-        loadProducts();
-    }, []);
-
     const refreshProducts = async () => {
         await loadProducts();
     };
