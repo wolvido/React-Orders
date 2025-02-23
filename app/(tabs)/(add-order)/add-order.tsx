@@ -15,31 +15,22 @@ export default function AddOrderScreen() {
 
     const customerRepository = new CustomerRepository();
 
-    const { initializeOrder, getAllCustomers } = useOrder();
+    const { initializeOrder } = useOrder();
     const [customers, setCustomers] = useState<Customer[]>([]);
-
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const loadCustomers = async () => {
-            try {
-                setIsLoading(true);
-                const data = await customerRepository.getAllCustomers();
-                setCustomers(data);
-            } catch (error) {
-                console.error('Error loading customers:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadCustomers();
+        customerRepository.getAllCustomers().then((customers) => {
+            setCustomers(customers);
+            setIsLoading(false);
+        });
     }, []);
 
+
     // Add loading state check
-    if (isLoading) {
-        return <ActivityIndicator />;
-    }
+    // if (isLoading) {
+    //     return <ActivityIndicator />;
+    // }
 
     const handleOrderSubmit = (order: Order) => {
         console.log('Order submitted:', order);
