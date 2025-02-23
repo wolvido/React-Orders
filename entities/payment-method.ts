@@ -1,8 +1,8 @@
 interface PaymentMethodBase {
     type: string; // Discriminator property
-    orderId: number;
+    orderId: number; //id of the Order
     balance: number;
-    id: number;
+    id: number; //id of the payment
 }
 
 export interface CashPayment extends PaymentMethodBase {
