@@ -116,13 +116,13 @@ export default function OrdersScreen() {
         // Handle the payment method data
         if (paymentMethod.type === "Cash") {
             const cashPayment: CashPayment = paymentMethod;
-            paymentRepository.createCashPayment(cashPayment);
-            console.log('Cash Payment Result:', cashPayment);
+            const result = paymentRepository.createCashPayment(cashPayment);
+            console.log('Cash Payment Result:', result);
         }
         if (paymentMethod.type === "Cheque") {
             const chequePayment: ChequePayment = paymentMethod;
-            paymentRepository.createChequePayment(chequePayment);
-            console.log('Cheque Payment Result:', chequePayment);
+            const result = paymentRepository.createChequePayment(chequePayment);
+            console.log('Cheque Payment Result:', result);
         }
         if (paymentMethod.type === "Bank Transfer") {
             const bankTransferPayment: BankTransferPayment = paymentMethod;
@@ -131,11 +131,11 @@ export default function OrdersScreen() {
         }
         if (paymentMethod.type === "Payment Gateway") {
             const paymentGatewayPayment: PaymentGateway = paymentMethod;
-            paymentRepository.createPaymentGateway(paymentGatewayPayment);
-            console.log('Payment Gateway Payment Result:', paymentGatewayPayment);
+            const result = paymentRepository.createPaymentGateway(paymentGatewayPayment);
+            console.log('Payment Gateway Payment Result:', result);
         }
 
-        updatePaymentById(paymentMethod, selectedOrderId);
+        //updatePaymentById(paymentMethod, selectedOrderId);
         //hide the payment form
         setShowPaymentForm(false);
     };
@@ -230,7 +230,7 @@ export default function OrdersScreen() {
                     </Appbar.Header>
 
                     <PaymentMethodSelector getOrderById={() => selectedOrder} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
-                        
+
                 </ScrollView>
             </View>
         )}
