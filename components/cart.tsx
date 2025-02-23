@@ -48,19 +48,19 @@ export function CartComponent({
         }));
     };
 
-    const handleQuantityFocus = useCallback((productKey: number) => {
-        requestAnimationFrame(() => {
-            setQuantities(prev => ({ ...prev, [productKey]: '' }));
-            setErrors(prev => ({ ...prev, [productKey]: '' }));
-        });
-    }, []);
+    // const handleQuantityFocus = useCallback((productKey: number) => {
+    //     requestAnimationFrame(() => {
+    //         setQuantities(prev => ({ ...prev, [productKey]: '' }));
+    //         setErrors(prev => ({ ...prev, [productKey]: '' }));
+    //     });
+    // }, []);
 
-    const handleQuantityBlur = useCallback((productKey: number) => {
-        setQuantities(prev => ({
-            ...prev,
-            [productKey]: prev[productKey] || '1'
-        }));
-    }, []);
+    // const handleQuantityBlur = useCallback((productKey: number) => {
+    //     setQuantities(prev => ({
+    //         ...prev,
+    //         [productKey]: prev[productKey] || '1'
+    //     }));
+    // }, []);
 
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.id === productId);
@@ -139,7 +139,7 @@ export function CartComponent({
     };
     
 
-    const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
+    //const [isQuantityInputFocused, setIsQuantityInputFocused] = useState(false);
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
@@ -167,8 +167,8 @@ export function CartComponent({
                             label="Qty"
                             value={quantities[product.id] || ''}
                             onChangeText={(text) => handleQuantityChange(text, product.id)}
-                            onFocus={() => {handleQuantityFocus(product.id); setIsQuantityInputFocused(true);}}
-                            onBlur={() => {handleQuantityBlur(product.id); setIsQuantityInputFocused(false);}}
+                            //onFocus={() => {handleQuantityFocus(product.id); setIsQuantityInputFocused(true);}}
+                            //onBlur={() => {handleQuantityBlur(product.id);}}
                             
                             keyboardType="numeric"
                             style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
