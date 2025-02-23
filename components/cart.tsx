@@ -252,9 +252,10 @@ export function CartComponent({
                     keyExtractor={(item) => item.id.toString()}
                     initialNumToRender={15}
                     maxToRenderPerBatch={15}
-                    windowSize={3}
+                    windowSize={5}
                     removeClippedSubviews={true}
                     keyboardShouldPersistTaps="always"
+                    extraData={[searchQuery, quantities, errors]} //experimental
                     ListEmptyComponent={() => (
                         <Text style={styles.emptyText}>
                             {searchQuery ? "No products found" : "No products available"}
