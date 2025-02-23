@@ -113,7 +113,7 @@ export default function OrdersScreen() {
     };
 
     const handlePaymentSubmit = (paymentMethod: PaymentMethod) => {
-        // Handle the payment method data here
+        // Handle the payment method data
         if (paymentMethod.type === "Cash") {
             const cashPayment: CashPayment = paymentMethod;
             paymentRepository.createCashPayment(cashPayment);
@@ -228,7 +228,9 @@ export default function OrdersScreen() {
                         <Appbar.BackAction onPress={() => setShowPaymentForm(false)} />
                         <Appbar.Content title="Add Payment Method" />
                     </Appbar.Header>
+
                     <PaymentMethodSelector getOrderById={() => selectedOrder} orderId={selectedOrderId} onPaymentSubmit={handlePaymentSubmit}/>
+                        
                 </ScrollView>
             </View>
         )}
