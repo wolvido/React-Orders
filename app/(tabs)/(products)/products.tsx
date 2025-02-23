@@ -13,21 +13,29 @@ import { useProducts } from '@/context/product-context';
 //react component
 export default function ProductsScreen() {
         
-        const { products } = useProducts();
+        const { products, refreshProducts } = useProducts();
 
         const [page, setPage] = useState<number>(0);
         const [numberOfItemsPerPageList] = useState([10, 25, 50, 100]);
         const [itemsPerPage, onItemsPerPageChange] = useState(
             numberOfItemsPerPageList[0]
         );
-
         const [items, setItems] = useState<Product[]>([]);
 
         useEffect(() => {
+            refreshProducts();
             setItems(products);
+            console.log('Products loaded:', products.length);
         }, []);
     
-        //const items = products;
+        //check if items is empty, if empty call refresh products
+        useEffect(() => {
+            if (items.length === 0) {
+                refreshProducts();
+                console.log('Products refreshed:', products.length);
+            }
+        }, [items]);
+
 
         const from = page * itemsPerPage; 
         const to = Math.min((page + 1) * itemsPerPage, items.length);
