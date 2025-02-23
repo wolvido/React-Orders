@@ -60,15 +60,15 @@ function CustomersSelection({ customers, visible, hideModal, onSelectCustomer }:
                         renderItem={renderItem}
                         keyExtractor={(item) => item.id.toString()}
                         style={styles.flatList}
-                        initialNumToRender={10}
-                        maxToRenderPerBatch={10}
+                        initialNumToRender={15}
+                        maxToRenderPerBatch={20}
                         windowSize={5}
                         removeClippedSubviews={true}
                         keyboardShouldPersistTaps="handled"
                         ListEmptyComponent={() => (
                             <List.Item
-                                title="No customers found"
-                                description="Try a different search term"
+                                title="Customers Loading..."
+                                description="Please wait"
                             />
                         )}
                     />
