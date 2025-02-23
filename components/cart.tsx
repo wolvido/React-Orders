@@ -48,20 +48,6 @@ export function CartComponent({
         }));
     };
 
-    // const handleQuantityFocus = useCallback((productKey: number) => {
-    //     requestAnimationFrame(() => {
-    //         setQuantities(prev => ({ ...prev, [productKey]: '' }));
-    //         setErrors(prev => ({ ...prev, [productKey]: '' }));
-    //     });
-    // }, []);
-
-    // const handleQuantityBlur = useCallback((productKey: number) => {
-    //     setQuantities(prev => ({
-    //         ...prev,
-    //         [productKey]: prev[productKey] || '1'
-    //     }));
-    // }, []);
-
     const handleAddItem = (productId: number) => {
         const product = products.find(p => p.id === productId);
         if (!product || !quantities[productId]) return;
@@ -166,9 +152,6 @@ export function CartComponent({
                             label="Qty"
                             value={quantities[product.id] || ''}
                             onChangeText={(text) => handleQuantityChange(text, product.id)}
-                            //onFocus={() => {handleQuantityFocus(product.id); setIsQuantityInputFocused(true);}}
-                            //onBlur={() => {handleQuantityBlur(product.id);}}
-                            
                             keyboardType="numeric"
                             style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                             maxLength={5}
@@ -251,7 +234,7 @@ export function CartComponent({
                     data={filteredProducts}
                     renderItem={renderProductItem}
                     keyExtractor={(item) => item.id.toString()}
-                    initialNumToRender={15}
+                    initialNumToRender={10}
                     maxToRenderPerBatch={15}
                     windowSize={5}
                     removeClippedSubviews={true}
