@@ -4,6 +4,8 @@ import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { useAuth } from '@/authentication/ctx';
 import App from '@/app.json';
+import { useApi } from '@/context/dev-mode-context';
+import { useProducts } from '@/context/product-context';
 
 export const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
@@ -12,17 +14,22 @@ export const LoginScreen = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [showHiddenScreen, setShowHiddenScreen] = useState(false);
 
+  const { refreshProducts } = useProducts();
+
+  const { setApiUrl } = useApi();
+
   useEffect(() => {
     console.log('Auth State:', { isAuthenticated, isLoading });
   }, [isAuthenticated, isLoading]);
 
   const handleLogin = async () => {
     try {
-      if (user === 'leahBestGirl' && password === 'leahBestGirl') {
+      if (user === 'winzyl' && password === 'leahbestgirl') {
         setShowHiddenScreen(true);
         return;
       }
 
+      refreshProducts();
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
@@ -31,17 +38,35 @@ export const LoginScreen = () => {
 
   if (showHiddenScreen) {
     return (
-      <View>
-        <Text>Developer Screen</Text>
-        <Text>
-          api: {App.api.main}
-        </Text>
-        <Text>
-          Updated with HTTP enabled
-        </Text>
+      <View style={styles.devContainer}>
+        <Text variant="headlineMedium" style={styles.devTitle}>Developer Screen</Text>
+        
+        {Object.entries(App.api).map(([name, url]) => (
+          <Surface key={name} style={styles.apiCard} elevation={2}>
+            <Text variant="titleMedium">
+              {name.charAt(0).toUpperCase() + name.slice(1).replace(/([A-Z])/g, ' $1')}
+            </Text>
+            <Text variant="bodySmall" numberOfLines={1}>{url}</Text>
+            <Button 
+              mode="contained" 
+              onPress={() => setApiUrl(url)}
+              style={styles.apiButton}
+            >
+              Set as Active
+            </Button>
+          </Surface>
+        ))}
+
+        <Button 
+          mode="contained" 
+          onPress={() => setShowHiddenScreen(false)}
+          style={styles.apiButton}
+        >
+          Back to Login
+        </Button>
       </View>
     );
-  };
+  }
 
   return (
     <KeyboardAvoidingView 
@@ -108,6 +133,25 @@ export const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  devContainer: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#f5f5f5',
+  },
+  devTitle: {
+    marginBottom: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  apiCard: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 8,
+    backgroundColor: 'white',
+  },
+  apiButton: {
+    marginTop: 8,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
