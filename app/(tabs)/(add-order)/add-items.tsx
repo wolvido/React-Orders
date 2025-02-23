@@ -15,12 +15,12 @@ import { useProducts } from "@/context/product-context";
 export default function AddItemsScreen() {
 
     const { products, isLoading } = useProducts();
-    const { cart, addToCart, removeFromCart, emptyCart } = useCart();
+    const { cart, addToCart, removeFromCart } = useCart();
     const { updateCart } = useOrder();
 
     const handleProceed = () => {
         updateCart(cart);
-        emptyCart();
+        //emptyCart();
         router.push('/finalize-order');
     };
 

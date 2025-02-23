@@ -6,12 +6,13 @@ import OrderFormFinal from '@/components/finalize-order-form';
 import { useOrder } from '@/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { ro } from 'react-native-paper-dates';
 import { useProducts } from '@/context/product-context';
+import { useCart } from '@/context/cart-context';
 
 export default function FinalizeOrder() {
     const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
     const { refreshProducts } = useProducts();
+    const { emptyCart } = useCart();
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
@@ -23,6 +24,7 @@ export default function FinalizeOrder() {
     const handleFinalizeOrder = () => {
         finalizeOrder();
         refreshProducts();
+        emptyCart();
         router.push('/add-order');
         router.push('/orders');
     }
