@@ -200,9 +200,9 @@ export function CartComponent({
         </Card>
     ), [isPortrait, quantities, errors]);
 
-    const renderCartItem = useCallback(({ item }: { item: CartItem }) => (
-        console.log('Rendering cart item:', item.product.id),
-        <View style={[
+    const renderCartItem = useCallback(({ item }: { item: CartItem }) => {
+        console.log('Rendering cart item:', item.product.id);
+        return( <View style={[
             styles.cartItemWrapper,
             { borderLeftColor: item.product.isBundle ? '#FFD700' : '#2196F3' } // Yellow for bundle, Blue for non-bundle
         ]}>
@@ -228,7 +228,8 @@ export function CartComponent({
                 />
             </View>
         </View>
-    ), [onRemoveFromCart]);
+        );
+    }, [onRemoveFromCart]);
 
     if (isLoading) {
         return <Text style={styles.loadingText}>Loading...</Text>;
