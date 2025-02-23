@@ -47,9 +47,9 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
         onPaymentSubmit(paymentMethod);
     };
 
-    const handleGatewaySubmit = (data: Extract<PaymentMethod, { type: "Payment gateway" }>) => {
+    const handleGatewaySubmit = (data: Extract<PaymentMethod, { type: "Payment Gateway" }>) => {
         const paymentMethod: PaymentMethod = {
-            type: "Payment gateway",
+            type: "Payment Gateway",
             paymentProvider: data.paymentProvider,
             id: data.id,
             payment: data.payment,

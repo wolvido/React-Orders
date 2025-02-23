@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from 'react-native-paper';
 
-type PaymentGateway = Extract<PaymentMethod, { type: "Payment gateway" }>;
+type PaymentGateway = Extract<PaymentMethod, { type: "Payment Gateway" }>;
 
 interface GatewayFormProps {
     onSubmit: (data: PaymentGateway) => void;
@@ -14,7 +14,7 @@ interface GatewayFormProps {
 function GatewayForm({ onSubmit, orderId, orderBalance }: GatewayFormProps) {
     const [formData, setFormData] = useState<PaymentGateway>({
         orderId: orderId,
-        type: "Payment gateway",
+        type: "Payment Gateway",
         paymentProvider: '',
         id: 0,
         payment: 0,
