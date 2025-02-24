@@ -22,6 +22,8 @@ function BankTransferForm({ onSubmit, orderId, orderBalance }: BankTransferFormP
         id: 0,
         depositDate: new Date(),
         balance: orderBalance,
+        customerId: 0,
+        referenceNumber: ""
     });
 
 
@@ -41,14 +43,11 @@ function BankTransferForm({ onSubmit, orderId, orderBalance }: BankTransferFormP
     };
 
     const handleIdChange = (value: string) => {
-        // Only allow numbers
-        if (value === '' || /^\d*$/.test(value)) {
-            setIdInput(value);
-            setFormData(prev => ({
-                ...prev,
-                id: parseInt(value) || 0
-            }));
-        }
+        setIdInput(value);
+        setFormData(prev => ({
+            ...prev,
+            referenceNumber: value
+        }));
     };
 
     const handleBankNameChange = (value: string) => {

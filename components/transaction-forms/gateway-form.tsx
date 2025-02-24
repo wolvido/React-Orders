@@ -18,7 +18,9 @@ function GatewayForm({ onSubmit, orderId, orderBalance }: GatewayFormProps) {
         paymentProvider: '',
         id: 0,
         payment: 0,
-        balance: orderBalance
+        balance: orderBalance,
+        customerId: 0,
+        referenceNumber: ""
     });
 
     // Add input state to handle decimal input properly
@@ -38,14 +40,11 @@ function GatewayForm({ onSubmit, orderId, orderBalance }: GatewayFormProps) {
     };
 
     const handleIdChange = (value: string) => {
-        // Only allow numbers
-        if (value === '' || /^\d*$/.test(value)) {
-            setIdInput(value);
-            setFormData(prev => ({
-                ...prev,
-                id: parseInt(value) || 0
-            }));
-        }
+        setIdInput(value);
+        setFormData(prev => ({
+            ...prev,
+            referenceNumber: value
+        }));
     };
 
     const handleProviderChange = (value: string) => {

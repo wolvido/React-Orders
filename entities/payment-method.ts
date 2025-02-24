@@ -3,6 +3,8 @@ interface PaymentMethodBase {
     orderId: number; //id of the Order
     balance: number;
     id: number; //id of the payment
+    customerId: number;
+
 }
 
 export interface CashPayment extends PaymentMethodBase {
@@ -25,12 +27,14 @@ export interface BankTransferPayment extends PaymentMethodBase {
     payment: number;
     bankName: string;
     depositDate: Date;
+    referenceNumber: string;
 }
 
 export interface PaymentGateway extends PaymentMethodBase{
     type: "Payment Gateway";
     paymentProvider: string; //gcash, maya, etc..
     payment: number;
+    referenceNumber: string;
 }
   
   // Union of all payment methods

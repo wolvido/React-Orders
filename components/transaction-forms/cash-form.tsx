@@ -19,7 +19,8 @@ function CashForm({ onSubmit, orderId, amount, orderBalance }: CashFormProps) {
         type: "Cash",
         cashTendered: 0,
         changeDue: 0,
-        balance: orderBalance
+        balance: orderBalance,
+        customerId: 0
     });
 
     useEffect(() => {

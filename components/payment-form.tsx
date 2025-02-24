@@ -41,7 +41,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             id: data.id,
             depositDate: data.depositDate,
             orderId: orderId,
-            balance: data.payment
+            balance: data.payment,
+            customerId: order?.customer.id || 0
         };
         
         onPaymentSubmit(paymentMethod);
@@ -54,7 +55,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             id: data.id,
             payment: data.payment,
             orderId: orderId,
-            balance: data.payment
+            balance: data.payment,
+            customerId: order?.customer.id || 0
         };
 
         onPaymentSubmit(paymentMethod);
@@ -70,7 +72,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             chequeDate: data.chequeDate,
             orderId: orderId,
             balance: data.payment,
-            id: data.id
+            id: data.id,
+            customerId: order?.customer.id || 0
         };
 
         onPaymentSubmit(paymentMethod);
@@ -83,7 +86,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             cashTendered: data.cashTendered,
             changeDue: data.changeDue,
             orderId: orderId,
-            balance: data.cashTendered - data.changeDue
+            balance: data.cashTendered - data.changeDue,
+            customerId: order?.customer.id || 0
         };
 
         onPaymentSubmit(paymentMethod);

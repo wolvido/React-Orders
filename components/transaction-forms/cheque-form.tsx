@@ -23,7 +23,8 @@ function ChequeForm({ onSubmit, orderId, orderBalance }: ChequeFormProps) {
         remark: '',
         chequeDate: new Date(),
         balance: orderBalance,
-        id: 0
+        id: 0,
+        customerId: 0
     });
 
     // Add input state to handle decimal input for amount
