@@ -62,7 +62,7 @@ function GatewayForm({ onSubmit, orderId, orderBalance }: GatewayFormProps) {
     const isFormValid = 
         formData.payment >= 0 && 
         formData.paymentProvider.trim() !== '' && 
-        formData.id > 0;
+        formData.referenceNumber !== '';
 
     return (
         <View style={{ gap: 10, padding: 16 }}>

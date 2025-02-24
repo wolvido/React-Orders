@@ -119,7 +119,7 @@ export default function OrdersScreen() {
             const result = paymentRepository.createCashPayment(cashPayment);
             console.log(
                 'Cash Payment Result:', 
-                result.then(value => value.paymentId)
+                result.then(value => console.log(value.paymentId))
             );
         }
         if (paymentMethod.type === "Cheque") {
@@ -127,7 +127,7 @@ export default function OrdersScreen() {
             const result = paymentRepository.createChequePayment(chequePayment);
             console.log(
                 'Cheque Payment Result:', 
-                result.then(value => value.paymentId)
+                result.then(value => console.log(value.paymentId))
             );
         }
         if (paymentMethod.type === "Bank Transfer") {
@@ -135,7 +135,7 @@ export default function OrdersScreen() {
             const result = paymentRepository.createBankTransferPayment(bankTransferPayment);
             console.log(
                 'Bank Transfer Payment Result:', 
-                result.then(value => value.paymentId)
+                result.then(value => console.log(value.paymentId))
             );
         }
         if (paymentMethod.type === "Payment Gateway") {
@@ -143,7 +143,7 @@ export default function OrdersScreen() {
             const result = paymentRepository.createPaymentGateway(paymentGatewayPayment);
             console.log(
                 'Payment Gateway Payment Result:', 
-                result.then(value => value.paymentId)
+                result.then(value => console.log(value.paymentId))
             );
         }
 

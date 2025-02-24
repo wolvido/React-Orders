@@ -73,7 +73,7 @@ function BankTransferForm({ onSubmit, orderId, orderBalance }: BankTransferFormP
     const isFormValid = 
         formData.payment > 0 && 
         formData.bankName.trim() !== '' && 
-        formData.id > 0;
+        formData.referenceNumber !== '';
 
     return (
         <View style={{ gap: 10, padding: 16 }}>

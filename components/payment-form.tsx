@@ -134,7 +134,7 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
                         </View>
     
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text variant="labelLarge" style={{ color: '#666' }}>Date</Text>
+                            <Text variant="labelLarge" style={{ color: '#666' }}>Order Date</Text>
                             <Text variant="bodyLarge">
                                 {order?.transactionDate 
                                     ? new Date(order.transactionDate).toLocaleDateString() 
