@@ -33,7 +33,6 @@ function OrderDetailsForm({ onSubmit, customers, order }: OrderDetailsFormProps)
 
     const [formData, setFormData] = useState<Order>({
         id: order?.id || Math.floor(1000000 + Math.random() * 9000000),
-        referenceNo: order?.referenceNo || Math.floor(1000000 + Math.random() * 9000000), // Added
         orderType: order?.orderType || '',
         customer: {
             id: order?.customer.id || 0,

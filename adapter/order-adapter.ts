@@ -56,7 +56,6 @@ export class OrderAdapter {
     static adapt(dto: RestaurantOrderDTO): Order {
         return {
             id: dto.restaurantOrderId || 0,
-            referenceNo: dto.restaurantOrderId || 0,
             orderType: dto.orderType,
             transactionDate: new Date(dto.orderDate),
             balance: dto.balance,

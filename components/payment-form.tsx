@@ -123,8 +123,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
                         </View>
     
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text variant="labelLarge" style={{ color: '#666' }}>Reference No</Text>
-                            <Text variant="bodyLarge">{order?.referenceNo || 'N/A'}</Text>
+                            <Text variant="labelLarge" style={{ color: '#666' }}>Order ID</Text>
+                            <Text variant="bodyLarge">{order?.id || 'N/A'}</Text>
                         </View>
     
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

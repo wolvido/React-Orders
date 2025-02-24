@@ -46,7 +46,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     const initializeOrder = (orderDetails: Partial<Order>) => {
         const newOrder: Order = {
             id: Math.floor(1000000 + Math.random() * 9000000),
-            referenceNo: Math.floor(1000000 + Math.random() * 9000000),
             orderType: 'Walk-in',
             customer: {
                 id: 0,

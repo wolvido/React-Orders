@@ -5,7 +5,7 @@ import { Cart } from "./cart";
 
 export interface Order{
     id: number;
-    referenceNo: number;
+    //referenceNo: number;
     orderType: string; //this is user defined, can be anything
     customer: Customer; //can be 'walk in'
     transactionDate: Date;
