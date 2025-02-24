@@ -26,7 +26,7 @@ const ProductQuantityForm = memo(({
     };
 
     return (
-        <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
+        <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
             <TextInput
                 mode="outlined"
                 label="Qty"
@@ -60,6 +60,9 @@ export default ProductQuantityForm;
 
 
 const styles = StyleSheet.create({
+    actionSectionLandscape: {
+        marginEnd: 20
+    },
     actionSection: {
         flexDirection: 'row',
         alignItems: 'center',

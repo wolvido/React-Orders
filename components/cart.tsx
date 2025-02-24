@@ -112,6 +112,7 @@ export function CartComponent({
     };
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
+        
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
@@ -155,26 +156,26 @@ export function CartComponent({
                 { borderLeftColor: item.product.isBundle ? '#FFD700' : '#2196F3' } // Yellow for bundle, Blue for non-bundle
             ]}>
             <View style={styles.cartItemContent}>
-                    <View style={styles.cartItemInfo}>
-                        <View style={styles.cartItemRow}>
-                            <Text style={styles.cartItemName} numberOfLines={1}>
-                                {item.product.name}
-                            </Text>
-                            <Text style={styles.cartItemPrice}>
-                                ₱{item.total}
-                            </Text>
-                            <Text style={styles.cartItemQuantity}>
-                                | Quantity: {item.quantity}
-                            </Text>
-                        </View>
+                <View style={styles.cartItemInfo}>
+                    <View style={styles.cartItemRow}>
+                        <Text style={styles.cartItemName} numberOfLines={1}>
+                            {item.product.name}
+                        </Text>
+                        <Text style={styles.cartItemPrice}>
+                            ₱{item.total}
+                        </Text>
+                        <Text style={styles.cartItemQuantity}>
+                            | Quantity: {item.quantity}
+                        </Text>
                     </View>
-                    <IconButton
-                        icon="delete-outline"
-                        size={20}
-                        onPress={() => onRemoveFromCart(item.product)}
-                        style={styles.removeButton}
-                    />
                 </View>
+                <IconButton
+                    icon="delete-outline"
+                    size={20}
+                    onPress={() => onRemoveFromCart(item.product)}
+                    style={styles.removeButton}
+                />
+            </View>
             </View>
         );
     }, [onRemoveFromCart]);
@@ -183,85 +184,134 @@ export function CartComponent({
         return <Text style={styles.loadingText}>Loading...</Text>;
     }
 
-    return (
-        <View style={[styles.content, isPortrait && styles.contentPortrait]}>
+    const SearchSection = () => (
+        <Searchbar
+            placeholder="Search products"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            style={styles.searchBar}
+        />
+    );
 
-            <View style={[styles.content, isPortrait && styles.contentPortrait]}>
-                <Searchbar
-                    placeholder="Search products"
-                    onChangeText={setSearchQuery}
-                    value={searchQuery}
-                    style={styles.searchBar}
-                />
+    const ProductList = () => (
+        <FlatList
+            style={[styles.productsList]}
+            data={filteredProducts}
+            renderItem={renderProductItem}
+            keyExtractor={(item) => item.id.toString()}
+            initialNumToRender={10}
+            maxToRenderPerBatch={15}
+            windowSize={5}
+            removeClippedSubviews={true}
+            keyboardShouldPersistTaps="always"
+            ListEmptyComponent={() => (
+                <Text style={styles.emptyText}>
+                    {searchQuery ? "No products found" : "No products available"}
+                </Text>
+            )}
+        />
+    );
 
-                <FlatList
-                    style={styles.productsList}
-                    data={filteredProducts}
-                    renderItem={renderProductItem}
-                    keyExtractor={(item) => item.id.toString()}
-                    initialNumToRender={10}
-                    maxToRenderPerBatch={15}
-                    windowSize={5}
-                    removeClippedSubviews={true}
-                    keyboardShouldPersistTaps="always"
-                    ListEmptyComponent={() => (
-                        <Text style={styles.emptyText}>
-                            {searchQuery ? "No products found" : "No products available"}
-                        </Text>
-                    )}
-                />
-            </View>
-
-            <View style={[
-                styles.rightPanel, 
-                isPortrait && styles.rightPanelPortrait,
-                isCartCollapsed && styles.rightPanelCollapsed
-            ]}>
-                <View style={styles.collapseButtonContainer}>
+    const CartSection = () => (
+        <View style={[
+            styles.rightPanel,
+            styles.rightPanelPortrait,
+            isCartCollapsed && styles.rightPanelCollapsed
+        ]}>
+            <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
+                {isPortrait && (
                     <IconButton
-                        icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
-                        onPress={() => setIsCartCollapsed(!isCartCollapsed)}
-                        size={20}
-                        mode="contained"
+                    icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
+                    onPress={() => setIsCartCollapsed(!isCartCollapsed)}
+                    size={20}
+                    mode="contained"
+                    />
+                )}
+
+                {!isPortrait && (
+                    <IconButton
+                    icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
+                    onPress={() => setIsCartCollapsed(!isCartCollapsed)}
+                    size={20}
+                    mode="contained"
+                    />
+                )}
+
+            </View>
+            
+            {!isCartCollapsed && (
+                <View style={styles.cartContent}>
+                    <Text variant="headlineMedium">Cart</Text>
+                    <FlatList
+                        data={cart.items}
+                        renderItem={renderCartItem}
+                        keyExtractor={(item) => item.product.id.toString()}
+                        style={styles.cartList}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        contentContainerStyle={styles.cartListContent}
+                        ListEmptyComponent={() => (
+                            <Text style={styles.emptyText}>Cart is empty</Text>
+                        )}
                     />
                 </View>
-                
-                {!isCartCollapsed && (
-                    <View style={styles.cartContent}>
-                        <Text variant="headlineMedium">Cart</Text>
-                        <FlatList
-                            data={cart.items}
-                            renderItem={renderCartItem}
-                            keyExtractor={(item) => item.product.id.toString()}
-                            style={styles.cartList}
-                            initialNumToRender={10}
-                            maxToRenderPerBatch={10}
-                            contentContainerStyle={styles.cartListContent}
-                            ListEmptyComponent={() => (
-                                <Text style={styles.emptyText}>Cart is empty</Text>
-                            )}
-                        />
-                    </View>
-                )}
+            )}
+        </View>
+    );
+
+    const SummarySection = () => (
+        <View style={styles.summaryContainer}>
+            <Text variant="titleLarge" style={styles.total}>
+                Total: ₱{cart.total}
+            </Text>
+            <Text variant="titleLarge" style={styles.total}>
+                Quantity: {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+            </Text>
+            <Button mode="contained" onPress={onProceed}>
+                Proceed
+            </Button>
+        </View>
+    );
+
+    return (
+        <View style={[styles.content, styles.contentPortrait]}>
+            <View style={[styles.content, isPortrait && styles.contentPortrait, !isPortrait && styles.landscapeContentPortrait]}>
+                <View style={[ styles.mainContentPortrait]}>
+                    <SearchSection />
+                    <ProductList />
+                </View>
+                <CartSection />
             </View>
 
-            <View style={styles.summaryContainer}>
-                <Text variant="titleLarge" style={styles.total}>
-                    Total: ₱{cart.total}
-                </Text>
-                <Text variant="titleLarge" style={styles.total}>
-                    {/* Quantity: {cart.items.values().next().value?.quantity} */}
-                    Quantity: {cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
-                </Text>
-                <Button mode="contained" onPress={onProceed}>
-                    Proceed
-                </Button>
-            </View>
+
+            <SummarySection />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    landscapeContentPortrait:{
+        gap: 10,
+    },
+    landscapeCollapseButtonContainer:{
+        position: 'absolute',
+        top: 0,
+        right: 650,
+        left: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1,
+    },
+    mainContent:{
+        flex: 1,
+        padding: 10,
+    },
+    mainContentPortrait:{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+    },
     rightPanel: {
         flex: 1,
         backgroundColor: 'white',
