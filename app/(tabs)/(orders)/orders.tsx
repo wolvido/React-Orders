@@ -117,22 +117,34 @@ export default function OrdersScreen() {
         if (paymentMethod.type === "Cash") {
             const cashPayment: CashPayment = paymentMethod;
             const result = paymentRepository.createCashPayment(cashPayment);
-            console.log('Cash Payment Result:', result);
+            console.log(
+                'Cash Payment Result:', 
+                result.then(value => value.paymentId)
+            );
         }
         if (paymentMethod.type === "Cheque") {
             const chequePayment: ChequePayment = paymentMethod;
             const result = paymentRepository.createChequePayment(chequePayment);
-            console.log('Cheque Payment Result:', result);
+            console.log(
+                'Cheque Payment Result:', 
+                result.then(value => value.paymentId)
+            );
         }
         if (paymentMethod.type === "Bank Transfer") {
             const bankTransferPayment: BankTransferPayment = paymentMethod;
             const result = paymentRepository.createBankTransferPayment(bankTransferPayment);
-            console.log('Bank Transfer Payment Result:', result);
+            console.log(
+                'Bank Transfer Payment Result:', 
+                result.then(value => value.paymentId)
+            );
         }
         if (paymentMethod.type === "Payment Gateway") {
             const paymentGatewayPayment: PaymentGateway = paymentMethod;
             const result = paymentRepository.createPaymentGateway(paymentGatewayPayment);
-            console.log('Payment Gateway Payment Result:', result);
+            console.log(
+                'Payment Gateway Payment Result:', 
+                result.then(value => value.paymentId)
+            );
         }
 
         //updatePaymentById(paymentMethod, selectedOrderId);
