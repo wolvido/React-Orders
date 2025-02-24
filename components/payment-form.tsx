@@ -26,10 +26,10 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
     const [selectedMethod, setSelectedMethod] = useState('cash');
 
     const paymentMethods = [
-        { value: 'cash', label: 'Cash' },
-        { value: 'cheque', label: 'Cheque' },
-        { value: 'bank', label: 'Bank Transfer' },   
-        { value: 'gateway', label: 'Payment Gateway'  },
+        { value: 'cash', label: 'Cash'},
+        { value: 'cheque', label: 'Cheque'},
+        { value: 'bank', label: 'Bank Transfer'},
+        { value: 'gateway', label: 'Payment Gateway'},
     ];
 
     const handleBankTransferSubmit = (data: Extract<PaymentMethod, { type: "Bank Transfer" }>) => {
@@ -42,7 +42,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             depositDate: data.depositDate,
             orderId: orderId,
             balance: data.payment,
-            customerId: order?.customer.id || 0
+            customerId: order?.customer.id || 0,
+            referenceNumber: data.referenceNumber
         };
         
         onPaymentSubmit(paymentMethod);
@@ -56,7 +57,8 @@ function PaymentMethodSelector({ orderId, onPaymentSubmit, getOrderById  }: Paym
             payment: data.payment,
             orderId: orderId,
             balance: data.payment,
-            customerId: order?.customer.id || 0
+            customerId: order?.customer.id || 0,
+            referenceNumber: data.referenceNumber
         };
 
         onPaymentSubmit(paymentMethod);
