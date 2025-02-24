@@ -112,7 +112,6 @@ export function CartComponent({
     };
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
-        
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
