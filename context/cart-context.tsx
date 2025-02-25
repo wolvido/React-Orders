@@ -9,6 +9,7 @@ interface CartContextType {
     removeFromCart: (product: Product) => void;
     getCart: () => Cart;
     emptyCart: () => void;
+    BundleProductToCart: (product: Product, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -24,31 +25,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return items.reduce((sum, item) => sum + item.total, 0);
     };
 
+    const cartItemUpdater = (prevItems: CartItem[], newItem: CartItem): CartItem[] => {
+        const existingItemIndex = prevItems.findIndex(
+            item => item.product.id === newItem.product.id
+        );
+    
+        if (existingItemIndex >= 0) {
+            return prevItems.map((item, index) =>
+                index === existingItemIndex
+                    ? {
+                        ...item,
+                        quantity: item.quantity + newItem.quantity,
+                        total: (item.quantity + newItem.quantity) * item.product.price
+                    }
+                    : item
+            );
+        } else {
+            return [newItem, ...prevItems];
+        }
+    };
+
     const addToCart = (cartItem: CartItem) => {
         setCart(prevCart => {
-            // Check if product already exists in cart
-            const existingItemIndex = prevCart.items.findIndex(
-                item => item.product.id === cartItem.product.id
-            );
-
-            let updatedItems: CartItem[];
-
-            if (existingItemIndex >= 0) {
-                // Update existing item
-                updatedItems = prevCart.items.map((item, index) => {
-                    if (index === existingItemIndex) {
-                        return {
-                            ...item,
-                            quantity: item.quantity + cartItem.quantity,
-                            total: (item.quantity + cartItem.quantity) * item.product.price
-                        };
-                    }
-                    return item;
-                });
-            } else {
-                // Add new item
-                updatedItems = [cartItem, ...prevCart.items];
-            }
+            const updatedItems = cartItemUpdater(prevCart.items, cartItem);
             return {
                 items: updatedItems,
                 total: calculateTotal(updatedItems),
@@ -57,7 +56,66 @@ export function CartProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    /**
+
+     * @param product 
+     * @param quantity 
+     * @remarks
+     * converts product and quantity into its bundle equivalent and adds it to the cart as a cart item
+     * if no bundle equivalent is found, the product is directly converted to a cart item with the given quantity
+     */
+    const BundleProductToCart = (product: Product, quantity: number) => {
+        setCart(prevCart => {
+            let updatedItems = prevCart.items.filter(item => item.product.id !== product.id);
+    
+            const existingCartItem = prevCart.items.find(item => item.product.id === product.id);
+            const existingQuantity = existingCartItem ? existingCartItem.quantity : 0;
+            const newTotalQuantity = existingQuantity + quantity;
+    
+            if (product.bundleType && product.bundleQuantity) {
+                if (newTotalQuantity >= product.bundleQuantity) {
+                    const bundlesCount = Math.floor(newTotalQuantity / product.bundleQuantity);
+                    const remainingItems = newTotalQuantity % product.bundleQuantity;
+    
+                    updatedItems = cartItemUpdater(updatedItems, {
+                        product: product.bundleType,
+                        quantity: bundlesCount,
+                        total: product.bundleType.price * bundlesCount
+                    });
+    
+                    if (remainingItems > 0) {
+                        updatedItems = cartItemUpdater(updatedItems, {
+                            product: product,
+                            quantity: remainingItems,
+                            total: product.price * remainingItems
+                        });
+                    }
+                } else {
+                    updatedItems = cartItemUpdater(updatedItems, {
+                        product: product,
+                        quantity: newTotalQuantity,
+                        total: product.price * newTotalQuantity
+                    });
+                }
+            } else {
+                updatedItems = cartItemUpdater(updatedItems, {
+                    product: product,
+                    quantity: newTotalQuantity,
+                    total: product.price * newTotalQuantity
+                });
+            }
+    
+            return {
+                items: updatedItems,
+                total: calculateTotal(updatedItems),
+                orderId: prevCart.orderId
+            };
+        });
+    };
+    
+
     const removeFromCart = (product: Product) => {
+        console.log('Removing product from cart:', product);
         setCart(prevCart => {
             const updatedItems = prevCart.items.filter(
                 item => item.product.id !== product.id
@@ -89,7 +147,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
             addToCart,
             removeFromCart,
             getCart,
-            emptyCart
+            emptyCart,
+            BundleProductToCart
         }}>
             {children}
         </CartContext.Provider>

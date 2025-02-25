@@ -15,7 +15,7 @@ import { useProducts } from "@/context/product-context";
 export default function AddItemsScreen() {
 
     const { products, isLoading } = useProducts();
-    const { cart, addToCart, removeFromCart } = useCart();
+    const { cart, addToCart, removeFromCart, BundleProductToCart } = useCart();
     const { updateCart } = useOrder();
 
     const handleProceed = () => {
@@ -37,6 +37,7 @@ export default function AddItemsScreen() {
                 cart={cart}
                 onAddToCart={addToCart}
                 onRemoveFromCart={removeFromCart}
+                onBundleProductToCart={BundleProductToCart}
                 onProceed={handleProceed}
                 isLoading={isLoading}
             />

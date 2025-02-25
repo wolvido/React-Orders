@@ -12,6 +12,7 @@ interface CartComponentProps {
     products: Product[];
     cart: Cart;
     onAddToCart: (cartItem: CartItem) => void;
+    onBundleProductToCart: (product: Product, quantity: number) => void;
     onRemoveFromCart: (product: Product) => void;
     onProceed: () => void;
     onError?: (message: string) => void;
@@ -23,6 +24,7 @@ export function CartComponent({
     cart,
     onAddToCart,
     onRemoveFromCart,
+    onBundleProductToCart,
     onProceed,
     onError,
     isLoading
@@ -41,7 +43,8 @@ export function CartComponent({
     const handleAddItem = (productId: number, quantity: number) => {
         const product = products.find(p => p.id === productId);
         if (!product) return;
-    
+
+        //validation
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
             setErrors(prev => ({
@@ -51,61 +54,9 @@ export function CartComponent({
             onError?.(errorMessage);
             return;
         }
-    
-        // Check if product has a bundle type and bundle quantity
-        if (product.bundleType && product.bundleQuantity) {
-            // Get current quantity in cart
-            const existingCartItem = cart.items.find(item => item.product.id === product.id);
-            const existingQuantity = existingCartItem ? existingCartItem.quantity : 0;
-            const newTotalQuantity = existingQuantity + quantity;
-    
-            // Check if adding this quantity will reach or exceed bundle quantity
-            if (newTotalQuantity >= product.bundleQuantity) {
-                // Calculate bundles and remaining items
-                const bundlesCount = Math.floor(newTotalQuantity / product.bundleQuantity);
-                const remainingItems = newTotalQuantity % product.bundleQuantity;
-    
-                // Remove existing individual items
-                if (existingCartItem) {
-                    onRemoveFromCart(product);
-                }
-    
-                // Add bundle(s)
-                const bundleCartItem: CartItem = {
-                    product: product.bundleType,
-                    quantity: bundlesCount,
-                    total: product.bundleType.price * bundlesCount
-                };
-                onAddToCart(bundleCartItem);
-    
-                // Add remaining items if any
-                if (remainingItems > 0) {
-                    const remainingCartItem: CartItem = {
-                        product: product,
-                        quantity: remainingItems,
-                        total: product.price * remainingItems
-                    };
-                    onAddToCart(remainingCartItem);
-                }
-            } else {
-                // Not enough for a bundle yet, just add normally
-                const cartItem: CartItem = {
-                    product: product,
-                    quantity: quantity,
-                    total: product.price * quantity
-                };
-                onAddToCart(cartItem);
-            }
-        } else {
-            // Regular non-bundle product
-            const cartItem: CartItem = {
-                product: product,
-                quantity: quantity,
-                total: product.price * quantity
-            };
-            onAddToCart(cartItem);
-        }
-    
+
+        onBundleProductToCart(product, quantity);
+
         // Clear errors
         requestAnimationFrame(() => {
             setErrors(prev => ({ ...prev, [productId]: '' }));
