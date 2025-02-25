@@ -33,6 +33,7 @@ export function CartComponent({
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+    
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -183,34 +184,6 @@ export function CartComponent({
         return <Text style={styles.loadingText}>Loading...</Text>;
     }
 
-    const SearchSection = () => (
-        <Searchbar
-            placeholder="Search products"
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-            style={styles.searchBar}
-        />
-    );
-
-    const ProductList = () => (
-        <FlatList
-            style={[styles.productsList]}
-            data={filteredProducts}
-            renderItem={renderProductItem}
-            keyExtractor={(item) => item.id.toString()}
-            initialNumToRender={10}
-            maxToRenderPerBatch={15}
-            windowSize={5}
-            removeClippedSubviews={true}
-            keyboardShouldPersistTaps="always"
-            ListEmptyComponent={() => (
-                <Text style={styles.emptyText}>
-                    {searchQuery ? "No products found" : "No products available"}
-                </Text>
-            )}
-        />
-    );
-
     const CartSection = () => (
         <View style={[
             styles.rightPanel,
@@ -235,7 +208,6 @@ export function CartComponent({
                     mode="contained"
                     />
                 )}
-
             </View>
             
             {!isCartCollapsed && (
@@ -275,13 +247,35 @@ export function CartComponent({
     return (
         <View style={[styles.content, styles.contentPortrait]}>
             <View style={[styles.content, isPortrait && styles.contentPortrait, !isPortrait && styles.landscapeContentPortrait]}>
+                    
+                    {/* <ProductList /> */}
                 <View style={[ styles.mainContentPortrait]}>
-                    <SearchSection />
-                    <ProductList />
+                    <Searchbar
+                        placeholder="Search products"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        style={styles.searchBar}
+                    />
+                    <FlatList
+                        style={[styles.productsList]}
+                        data={filteredProducts}
+                        renderItem={renderProductItem}
+                        keyExtractor={(item) => item.id.toString()}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={15}
+                        windowSize={5}
+                        removeClippedSubviews={false}
+                        keyboardShouldPersistTaps="always"
+                        ListEmptyComponent={() => (
+                            <Text style={styles.emptyText}>
+                                {searchQuery ? "No products found" : "No products available"}
+                            </Text>
+                        )}
+                    />
                 </View>
+
                 <CartSection />
             </View>
-
 
             <SummarySection />
         </View>
