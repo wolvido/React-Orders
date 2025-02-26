@@ -16,12 +16,11 @@ export default function AddDeliveryItemsScreen() {
 
     const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
 
-    const{ delivery, addToDelivery, removeFromDelivery, getDelivery, clearDelivery} = useDeliveryCart();
+    const{ delivery, addToDelivery, removeFromDelivery, getDelivery} = useDeliveryCart();
 
         const handleProceed = () => {
             updateReceivedDelivery(getDelivery());
             finalizeDelivery(getDelivery());
-            //clearDelivery();
 
             router.push("/");
         };

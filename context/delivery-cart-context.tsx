@@ -41,7 +41,7 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
                 // Update existing item
                 updatedItems = prevDelivery.items.map((item, index) => {
                     if (index === existingItemIndex) {
-                        const priceToUse = receivedItem.manualPrice ?? item.product.price;
+                        const priceToUse = receivedItem.manualPrice ?? item.product.costPrice;
                         return {
                             ...item,
                             quantity: item.quantity + receivedItem.quantity,
@@ -55,7 +55,7 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
                 // Add new item
                 const itemToAdd = {
                     ...receivedItem,
-                    total: receivedItem.quantity * (receivedItem.manualPrice ?? receivedItem.product.price)
+                    total: receivedItem.quantity * (receivedItem.manualPrice ?? receivedItem.product.costPrice)
                 };
                 updatedItems = [itemToAdd, ...prevDelivery.items];
             }

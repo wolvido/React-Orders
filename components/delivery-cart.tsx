@@ -6,6 +6,7 @@ import { Product } from "@/entities/product";
 import { ReceivedItem } from "@/entities/received-item";
 import { FlatList } from "react-native";
 import useOrientation from "@/hooks/orientation-hook";
+import DeliveryProductForm from "./delivery-product-form";
 
 interface DeliveryCartComponentProps {
     products: Product[];
@@ -25,10 +26,6 @@ export function DeliveryCartComponent({
     onError
 }: DeliveryCartComponentProps) {
     const isPortrait = useOrientation() === 'PORTRAIT';
-
-    const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
-    const [prices, setPrices] = useState<{ [key: number]: string }>({});
-
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
@@ -41,36 +38,14 @@ export function DeliveryCartComponent({
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handlePriceChange = (text: string, productId: number) => {
-        const numericValue = text.replace(/[^0-9]/g, '');
-        setPrices(prev => ({
-            ...prev,
-            [productId]: numericValue
-        }));
-        setErrors(prev => ({
-            ...prev,
-            [productId]: ''
-        }));
-    }
-
-    const handleQuantityChange = (text: string, productId: number) => {
-        const numericValue = text.replace(/[^0-9]/g, '');
-        setQuantities(prev => ({
-            ...prev,
-            [productId]: numericValue
-        }));
-        setErrors(prev => ({
-            ...prev,
-            [productId]: ''
-        }));
-    };
-
-    const handleAddItem = (productId: number) => {
+    const handleAddItem = (productId: number, quantity: number, price?: number) => {
         const product = products.find(p => p.id === productId);
-        if (!product || !quantities[productId]) return;
+
+        // Check if product exists or quantity is valid
+        if (!product || !quantity) return;
     
-        const quantity = parseInt(quantities[productId]);
-        const customPrice = prices[productId] ? parseInt(prices[productId]) : product.price;
+        //const quantity = parseInt(quantities[productId]);
+        const customPrice = price ? price : product.costPrice;
         console.log(customPrice);
         
         if (quantity < 1) {
@@ -80,7 +55,7 @@ export function DeliveryCartComponent({
                 [productId]: errorMessage
             }));
             onError?.(errorMessage);
-            return;
+            return
         }
     
         const receivedItem: ReceivedItem = {
@@ -91,7 +66,7 @@ export function DeliveryCartComponent({
         };
     
         onAddToDelivery(receivedItem);
-        setQuantities(prev => ({ ...prev, [productId]: "1" }));
+        //setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
@@ -104,7 +79,7 @@ export function DeliveryCartComponent({
                             style={[isPortrait && styles.compactText, styles.productName]}
                             numberOfLines={1}
                         >
-                            ₱{prices[product.id] || product.price} • {product.name}
+                            default price: ₱{product.costPrice} • {product.name}
                         </Text>
                     </View>
     
@@ -113,43 +88,14 @@ export function DeliveryCartComponent({
                             Stock: {product.stocks}
                         </Text>
                     </View>
-    
-                    <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
-                        <TextInput
-                            mode="outlined"
-                            label="Price"
-                            value={prices[product.id]}
-                            onChangeText={(text) => handlePriceChange(text, product.id)}
-                            keyboardType="numeric"
-                            style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
-                            maxLength={10}
-                        />
-                        <TextInput
-                            mode="outlined"
-                            label="Qty"
-                            value={quantities[product.id] || ''}
-                            onChangeText={(text) => handleQuantityChange(text, product.id)}
-                            keyboardType="numeric"
-                            style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
-                            maxLength={5}
-                            error={!!errors[product.id]}
-                        />
-                        {isPortrait ? (
-                            <IconButton
-                                icon="chevron-right"
-                                mode="contained"
-                                size={20}
-                                onPress={() => handleAddItem(product.id)}
-                            />
-                        ) : (
-                            <Button
-                                mode="contained"
-                                onPress={() => handleAddItem(product.id)}
-                            >
-                                Add
-                            </Button>
-                        )}
-                    </View>
+
+                    <DeliveryProductForm
+                        productId={product.id}
+                        onAdd={handleAddItem}
+                        error={errors[product.id]}
+                        isPortrait={isPortrait}
+                    />
+
                 </View>
                 {errors[product.id] && (
                     <HelperText type="error" visible={true}>
@@ -158,7 +104,7 @@ export function DeliveryCartComponent({
                 )}
             </Card.Content>
         </Card>
-    ), [isPortrait, quantities, prices, errors]);
+    ), [isPortrait, errors]);
 
     const renderCartItem = useCallback(({ item }: { item: ReceivedItem }) => (
         <View style={styles.cartItemWrapper}>

@@ -37,7 +37,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         productName: receivedDeliveryItem.product.name,
         description: "",
         brand: receivedDeliveryItem.product.brand,
-        unitPrice: receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.price,
+        unitPrice: receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.costPrice,
         receivedQuantity: receivedDeliveryItem.quantity,
         itemType: "",
         itemCode: "",
@@ -45,7 +45,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         units: "",
         remarks: "",
         deliveredBy: "",
-        totalPrice: (receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.price) * receivedDeliveryItem.quantity,
+        totalPrice: (receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.costPrice) * receivedDeliveryItem.quantity,
         vehicleId: 0,
         vehicleName: "",
         
