@@ -24,16 +24,16 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      if (user === 'baseurl'){
-        setApiUrl(App.api.baseUrl);
-      }
+      // if (user === 'baseurl'){
+      //   setApiUrl(App.api.baseUrl);
+      // }
 
-      if (user === 'winzyl' && password === 'leahbestgirl') {
+      if (user === 'winzyl') {
         setShowHiddenScreen(true);
         return;
       }
 
-      await refreshProducts();
+      refreshProducts();
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
