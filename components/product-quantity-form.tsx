@@ -41,7 +41,7 @@ const ProductQuantityForm = memo(({
                 <IconButton
                     icon="chevron-right"
                     mode="contained"
-                    size={20}
+                    size={25}
                     onPress={handleAdd}
                 />
             ) : (
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
         width: 80,
     },
     quantityInputPortrait: {
-        width: 50,
-        height: 35, // reduced height
+        width: 80,
+        height: 40, // reduced height
         fontSize: 12,
     },
     
