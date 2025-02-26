@@ -150,6 +150,12 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                             />
                         )}
                         contentContainerStyle={styles.listContent}
+                        ListEmptyComponent={() => (
+                            <List.Item
+                                title="Suppliers Loading..."
+                                description="Please wait"
+                            />
+                        )}
                     />
                     <Button
                         mode="contained"
