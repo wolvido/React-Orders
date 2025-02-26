@@ -10,7 +10,7 @@ import updateOrderSteps from "./update-order-labels";
 export default function UpdateOrderItemsScreen() {
 
     const { products, isLoading } = useProducts();
-    const { cart, addToCart, removeFromCart, emptyCart } = useCart();
+    const { cart, addToCart, removeFromCart, emptyCart, BundleProductToCart } = useCart();
     const { updateCart } = useOrder();
 
     const handleProceed = () => {
@@ -29,6 +29,7 @@ export default function UpdateOrderItemsScreen() {
             <CartComponent
                 products={products}
                 cart={cart}
+                onBundleProductToCart={BundleProductToCart}
                 onAddToCart={addToCart}
                 onRemoveFromCart={removeFromCart}
                 onProceed={handleProceed}
