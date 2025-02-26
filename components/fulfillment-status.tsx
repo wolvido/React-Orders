@@ -18,8 +18,7 @@ export default function StatusForm({ defaultStatus, onStatusChange }: StatusForm
 
     const statusOptions = [
         { value: Status.Delivered, label: 'Fulfilled' },
-        { value: Status.Pending, label: 'Pending' },
-        { value: Status.Cancelled, label: 'Cancelled' },
+        { value: Status.Pending, label: 'Pending' }
     ];
 
     return (
