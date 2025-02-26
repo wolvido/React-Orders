@@ -24,6 +24,10 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
+      if (user === 'baseurl'){
+        setApiUrl(App.api.baseUrl);
+      }
+
       if (user === 'winzyl' && password === 'leahbestgirl') {
         setShowHiddenScreen(true);
         return;
