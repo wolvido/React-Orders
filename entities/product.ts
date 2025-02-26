@@ -2,7 +2,7 @@ export interface Product {
     id: number;
     name: string;
     price: number; //also the price of bundle product
-    //costPrice: number;
+    costPrice: number;
     category: string;
     brand: string;
     isBundle: boolean;

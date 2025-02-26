@@ -84,6 +84,7 @@ export function convertOrderLinesToCart(orderLines: RestaurantOrderLineDTO[]): C
                 id: line.productId,
                 name: line.productName,
                 price: line.productPrice,
+                costPrice: 0, // Since this isn't in OrderLineDTO, defaulting to 0
                 category: line.category,
                 brand: '', // Since this isn't in OrderLineDTO, defaulting to empty
                 isBundle: line.isBundle,
