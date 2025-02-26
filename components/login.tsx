@@ -33,7 +33,7 @@ export const LoginScreen = () => {
         return;
       }
 
-      refreshProducts();
+      await refreshProducts();
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
