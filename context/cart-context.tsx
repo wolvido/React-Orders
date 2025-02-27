@@ -57,9 +57,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-
-     * @param product 
-     * @param quantity 
+     * @param product
+     * @param quantity
      * @remarks
      * converts product and quantity into its bundle equivalent and adds it to the cart as a cart item
      * if no bundle equivalent is found, the product is directly converted to a cart item with the given quantity
