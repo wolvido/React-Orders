@@ -58,7 +58,15 @@ const DeliveryProductForm = memo(({
     };
 
     return (
-        <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait]}>
+        <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
+            {!isPortrait && (
+                <Button
+                    mode="contained"
+                    onPress={handleAdd}
+                >
+                    Add
+                </Button>
+            )}
             <TextInput
                 mode="outlined"
                 label="Price"
@@ -79,20 +87,13 @@ const DeliveryProductForm = memo(({
                 maxLength={5}
                 error={!!error || !!localError && !quantity}
             />
-            {isPortrait ? (
+            {isPortrait && (
                 <IconButton
                     icon="chevron-right"
                     mode="contained"
                     size={20}
                     onPress={handleAdd}
                 />
-            ) : (
-                <Button
-                    mode="contained"
-                    onPress={handleAdd}
-                >
-                    Add
-                </Button>
             )}
         </View>
     );
@@ -101,6 +102,9 @@ const DeliveryProductForm = memo(({
 export default DeliveryProductForm;
 
 const styles = StyleSheet.create({
+    actionSectionLandscape: {
+        flex: 3
+    },
     priceInput: {
         width: 80,
     },

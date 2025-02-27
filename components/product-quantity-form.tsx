@@ -27,6 +27,14 @@ const ProductQuantityForm = memo(({
 
     return (
         <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
+            {!isPortrait && (
+                <Button
+                    mode="contained"
+                    onPress={handleAdd}
+                >
+                    Add
+                </Button>
+            )}
             <TextInput
                 mode="outlined"
                 label="Qty"
@@ -37,20 +45,13 @@ const ProductQuantityForm = memo(({
                 maxLength={5}
                 error={!!error}
             />
-            {isPortrait ? (
+            {isPortrait && (
                 <IconButton
                     icon="chevron-right"
                     mode="contained"
                     size={25}
                     onPress={handleAdd}
                 />
-            ) : (
-                <Button
-                    mode="contained"
-                    onPress={handleAdd}
-                >
-                    Add
-                </Button>
             )}
         </View>
     );

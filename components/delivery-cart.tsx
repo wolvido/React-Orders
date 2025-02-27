@@ -67,17 +67,31 @@ export function DeliveryCartComponent({
         onAddToDelivery(receivedItem);
     };
 
+
+    const deliveryProductForm = (productId: number) => {
+        return (
+            <DeliveryProductForm
+                productId={productId}
+                onAdd={handleAddItem}
+                error={errors[productId]}
+                isPortrait={isPortrait}
+            />
+        );
+    }
+
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
+                    {!isPortrait && deliveryProductForm(product.id)}
+
                     <View style={styles.productInfo}>
                         <Text
-                            variant={isPortrait ? "bodyMedium" : "titleMedium"}
+                            variant={"bodyMedium"}
                             style={[isPortrait && styles.compactText, styles.productName]}
-                            numberOfLines={1}
+                            numberOfLines={2}
                         >
-                            default price: ₱{product.costPrice} • {product.name}
+                            BasePrice : ₱{product.costPrice} • {product.name}
                         </Text>
                     </View>
     
@@ -87,12 +101,7 @@ export function DeliveryCartComponent({
                         </Text>
                     </View>
 
-                    <DeliveryProductForm
-                        productId={product.id}
-                        onAdd={handleAddItem}
-                        error={errors[product.id]}
-                        isPortrait={isPortrait}
-                    />
+                    {isPortrait && deliveryProductForm(product.id)}
 
                 </View>
                 {errors[product.id] && (
@@ -136,13 +145,24 @@ export function DeliveryCartComponent({
             isPortrait && styles.rightPanelPortrait,
             isCartCollapsed && styles.rightPanelCollapsed
         ]}>
-            <View style={styles.collapseButtonContainer}>
-                <IconButton
+            <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
+                {isPortrait && (
+                    <IconButton
                     icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
                     onPress={() => setIsCartCollapsed(!isCartCollapsed)}
                     size={20}
                     mode="contained"
-                />
+                    />
+                )}
+
+                {!isPortrait && (
+                    <IconButton
+                    icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
+                    onPress={() => setIsCartCollapsed(!isCartCollapsed)}
+                    size={20}
+                    mode="contained"
+                    />
+                )}
             </View>
                 
             {!isCartCollapsed && (
@@ -180,8 +200,11 @@ export function DeliveryCartComponent({
     );
 
     return (
-        <View style={[styles.content, isPortrait && styles.contentPortrait]}>
-            <View style={[styles.content, isPortrait && styles.contentPortrait]}>
+        <View style={[styles.content, styles.contentPortrait]}>
+
+            <View style={[styles.content, isPortrait && styles.contentPortrait, !isPortrait && styles.landscapeContentPortrait]}>
+
+                {/* <ProductList /> */}
                 <View style={[styles.mainContentPortrait]}>
                     <Searchbar
                         placeholder="Search products"
@@ -210,31 +233,34 @@ export function DeliveryCartComponent({
 
                 <CartSection/>
             </View>
-            
+
             <SummarySection />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    landscapeContentPortrait:{
+        gap: 10,
+    },
+    landscapeCollapseButtonContainer:{
+        position: 'absolute',
+        top: 0,
+        right: 650,
+        left: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1,
+    },
+    mainContent:{
+        flex: 1,
+        padding: 10,
+    },
     mainContentPortrait:{
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-start',
-    },
-    priceInput: {
-        width: 80,
-    },
-    priceInputPortrait: {
-        width: 50,
-        height: 35,
-        fontSize: 12,
-    },
-    actionSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        flex: 1,
     },
     rightPanel: {
         flex: 1,
@@ -348,9 +374,8 @@ const styles = StyleSheet.create({
         flex: 1, // cart height in portrait
     },
     rightPanelCollapsed: {
-        flex: 0.1, // When collapsed, take minimal space
+        flex: 0.01, // When collapsed, take minimal space
     },
-
     productsList: {
         height: 10,
     },
@@ -402,6 +427,7 @@ const styles = StyleSheet.create({
     cardContent: {
         paddingVertical: 4, // minimal padding
         paddingHorizontal: 8,
+        //paddingRight: 130
     },
     cardLayout: {
         flexDirection: 'row',
@@ -411,10 +437,12 @@ const styles = StyleSheet.create({
     },
     productCard: {
         marginBottom: 8,
+        //paddingRight: 140
     },
     productCardPortrait: {
         marginBottom: 4,
         paddingVertical: 0, // reduced padding
+        paddingRight: 0
     },
     productInfo: {
         flex: 2,
@@ -429,6 +457,12 @@ const styles = StyleSheet.create({
     stockInfo: {
         flex: 1,
         alignItems: 'center',
+    },
+    actionSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        flex: 1,
     },
     actionSectionPortrait: {
         gap: 4,

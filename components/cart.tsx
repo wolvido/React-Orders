@@ -63,19 +63,33 @@ export function CartComponent({
         });
     };
 
+    const productQuantityForm = (productId: number) => {
+        return (
+            <ProductQuantityForm
+                productId={productId}
+                onAdd={handleAddItem}
+                error={errors[productId]}
+                isPortrait={isPortrait}
+            />
+        );
+    };
+
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
+
+                    {!isPortrait && productQuantityForm(product.id)}
+
                     <View style={styles.productInfo}>
                         <Text
-                            variant={isPortrait ? "bodyMedium" : "titleMedium"}
+                            variant={"bodyMedium"}
                             style={[isPortrait && styles.compactText, styles.productName]}
-                            numberOfLines={1}
+                            numberOfLines={2}
                         >
                             ₱{product.price} • {product.name}
                         </Text>
-                    </View>
+                    </View> 
 
                     <View style={styles.stockInfo}>
                         <Text variant="bodySmall">
@@ -83,12 +97,7 @@ export function CartComponent({
                         </Text>
                     </View>
 
-                    <ProductQuantityForm
-                        productId={product.id}
-                        onAdd={handleAddItem}
-                        error={errors[product.id]}
-                        isPortrait={isPortrait}
-                    />
+                    {isPortrait && productQuantityForm(product.id)}
 
                 </View>
                 {errors[product.id] && (
@@ -110,24 +119,24 @@ export function CartComponent({
             <View style={styles.cartItemContent}>
                 <View style={styles.cartItemInfo}>
                     <View style={styles.cartItemRow}>
-                        <Text style={styles.cartItemName} numberOfLines={1}>
-                            {item.product.name}
-                        </Text>
-                        <Text style={styles.cartItemPrice}>
-                            ₱{item.total}
-                        </Text>
-                        <Text style={styles.cartItemQuantity}>
-                            | Quantity: {item.quantity}
-                        </Text>
+                            <Text style={styles.cartItemName} numberOfLines={1}>
+                                {item.product.name}
+                            </Text>
+                            <Text style={styles.cartItemPrice}>
+                                ₱{item.total}
+                            </Text>
+                            <Text style={styles.cartItemQuantity}>
+                                | Quantity: {item.quantity}
+                            </Text>
+                        </View>
                     </View>
+                    <IconButton
+                        icon="delete-outline"
+                        size={20}
+                        onPress={() => onRemoveFromCart(item.product)}
+                        style={styles.removeButton}
+                    />
                 </View>
-                <IconButton
-                    icon="delete-outline"
-                    size={20}
-                    onPress={() => onRemoveFromCart(item.product)}
-                    style={styles.removeButton}
-                />
-            </View>
             </View>
         );
     }, [onRemoveFromCart]);
@@ -198,9 +207,10 @@ export function CartComponent({
 
     return (
         <View style={[styles.content, styles.contentPortrait]}>
+
             <View style={[styles.content, isPortrait && styles.contentPortrait, !isPortrait && styles.landscapeContentPortrait]}>
                     
-                    {/* <ProductList /> */}
+                {/* <ProductList /> */}
                 <View style={[ styles.mainContentPortrait]}>
                     <Searchbar
                         placeholder="Search products"
@@ -369,9 +379,8 @@ const styles = StyleSheet.create({
         flex: 1, // cart height in portrait
     },
     rightPanelCollapsed: {
-        flex: 0.1, // When collapsed, take minimal space
+        flex: 0.01, // When collapsed, take minimal space
     },
-
     productsList: {
         height: 10,
     },
