@@ -43,10 +43,6 @@ export function DeliveryCartComponent({
 
         // Check if product exists or quantity is valid
         if (!product || !quantity) return;
-    
-        //const quantity = parseInt(quantities[productId]);
-        const customPrice = price ? price : product.costPrice;
-        console.log(customPrice);
         
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
@@ -57,6 +53,10 @@ export function DeliveryCartComponent({
             onError?.(errorMessage);
             return
         }
+
+        //const quantity = parseInt(quantities[productId]);
+        const customPrice = price ? price : product.costPrice;
+        console.log(customPrice);
     
         const receivedItem: ReceivedItem = {
             product: product,
@@ -64,9 +64,7 @@ export function DeliveryCartComponent({
             manualPrice: customPrice,
             total: customPrice * quantity  // Use custom price here
         };
-    
         onAddToDelivery(receivedItem);
-        //setQuantities(prev => ({ ...prev, [productId]: "1" }));
     };
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
@@ -132,40 +130,12 @@ export function DeliveryCartComponent({
         </View>
     ), [onRemoveFromDelivery]);
 
-    return (
-        <View style={[styles.content, isPortrait && styles.contentPortrait]}>
-
-            <View style={[styles.content, isPortrait && styles.contentPortrait]}>
-                <Searchbar
-                    placeholder="Search products"
-                    onChangeText={setSearchQuery}
-                    value={searchQuery}
-                    style={styles.searchBar}
-                />
-
-                <FlatList
-                    style={styles.productsList}
-                    data={filteredProducts}
-                    renderItem={renderProductItem}
-                    keyExtractor={(item) => item.id.toString()}
-                    initialNumToRender={15}
-                    maxToRenderPerBatch={15}
-                    windowSize={3}
-                    removeClippedSubviews={true}
-                    keyboardShouldPersistTaps="always"
-                    ListEmptyComponent={() => (
-                        <Text style={styles.emptyText}>
-                            {searchQuery ? "No products found" : "No products available"}
-                        </Text>
-                    )}
-                />
-            </View>
-
-            <View style={[
-                styles.rightPanel, 
-                isPortrait && styles.rightPanelPortrait,
-                isCartCollapsed && styles.rightPanelCollapsed
-            ]}>
+    const CartSection = () => (
+        <View style={[
+            styles.rightPanel, 
+            isPortrait && styles.rightPanelPortrait,
+            isCartCollapsed && styles.rightPanelCollapsed
+        ]}>
             <View style={styles.collapseButtonContainer}>
                 <IconButton
                     icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
@@ -192,25 +162,66 @@ export function DeliveryCartComponent({
                     />
                 </View>
             )}
-            </View>
+        </View>
+    );
 
-            <View style={styles.summaryContainer}>
-                <Text variant="titleLarge" style={styles.total}>
-                    Total: ₱{delivery.total}
-                </Text>
-                <Text variant="titleLarge" style={styles.total}>
-                    {/* Quantity: {cart.items.values().next().value?.quantity} */}
-                    Quantity: {delivery.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
-                </Text>
-                <Button mode="contained" onPress={onProceed}>
-                    Proceed
-                </Button>
+    const SummarySection = () => (
+        <View style={styles.summaryContainer}>
+            <Text variant="titleLarge" style={styles.total}>
+                Total: ₱{delivery.total}
+            </Text>
+            <Text variant="titleLarge" style={styles.total}>
+                Quantity: {delivery.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
+            </Text>
+            <Button mode="contained" onPress={onProceed}>
+                Proceed
+            </Button>
+        </View>
+    );
+
+    return (
+        <View style={[styles.content, isPortrait && styles.contentPortrait]}>
+            <View style={[styles.content, isPortrait && styles.contentPortrait]}>
+                <View style={[styles.mainContentPortrait]}>
+                    <Searchbar
+                        placeholder="Search products"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        style={styles.searchBar}
+                    />
+
+                    <FlatList
+                        style={styles.productsList}
+                        data={filteredProducts}
+                        renderItem={renderProductItem}
+                        keyExtractor={(item) => item.id.toString()}
+                        initialNumToRender={15}
+                        maxToRenderPerBatch={15}
+                        windowSize={3}
+                        removeClippedSubviews={true}
+                        keyboardShouldPersistTaps="always"
+                        ListEmptyComponent={() => (
+                            <Text style={styles.emptyText}>
+                                {searchQuery ? "No products found" : "No products available"}
+                            </Text>
+                        )}
+                    />
+                </View>
+
+                <CartSection/>
             </View>
+            
+            <SummarySection />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    mainContentPortrait:{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+    },
     priceInput: {
         width: 80,
     },

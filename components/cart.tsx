@@ -82,12 +82,13 @@ export function CartComponent({
                             Stock: {product.stocks}
                         </Text>
                     </View>
-                        <ProductQuantityForm
-                            productId={product.id}
-                            onAdd={handleAddItem}
-                            error={errors[product.id]}
-                            isPortrait={isPortrait}
-                        />
+
+                    <ProductQuantityForm
+                        productId={product.id}
+                        onAdd={handleAddItem}
+                        error={errors[product.id]}
+                        isPortrait={isPortrait}
+                    />
 
                 </View>
                 {errors[product.id] && (
