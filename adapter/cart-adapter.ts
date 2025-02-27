@@ -7,7 +7,7 @@ export interface RestaurantOrderLineDTO {
     sys_CreateUserStamp: string;
     sys_LastEditedTimeStamp: string;
     sys_LastEditedUserStamp: string;
-    sys_DeletedTimeStamp: string;
+    sys_DeletedTimeStamp: string | null;
     sys_DeletedUserStamp: string;
     state: number;
     isDtoSelected: boolean;
@@ -46,7 +46,7 @@ export function convertCartToOrderLines(cart: Cart): RestaurantOrderLineDTO[] {
         sys_CreateUserStamp: "",
         sys_LastEditedTimeStamp: new Date().toISOString(),
         sys_LastEditedUserStamp: "",
-        sys_DeletedTimeStamp: new Date().toISOString(),
+        sys_DeletedTimeStamp: null,
         sys_DeletedUserStamp: "",
         state: 0,
         isDtoSelected: false,
