@@ -13,6 +13,7 @@ import { PurchaseOrderProvider } from '@/context/purchase-order-context';
 import { ScrollView } from 'react-native';
 import { ProductProvider } from '@/context/product-context';
 import { ApiProvider } from '@/context/dev-mode-context';
+import { SupplierProvider } from '@/context/supplier-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {
@@ -20,29 +21,31 @@ export default function RootLayout() {
         <ApiProvider>
             <AuthProvider>
                 <ProductProvider>
-                    <PaperProvider theme={theme}>
-                        <PurchaseOrderProvider>
-                            <OrderProvider>
-                                <DeliveryProvider>
-                                    <CartProvider>
-                                            <Stack
-                                                screenOptions={{
-                                                headerStyle: {
-                                                    backgroundColor: 'green'
-                                                },
-                                                headerTintColor: '#fff',
-                                                headerShown: false,
-                                                headerTitleStyle: {
-                                                    fontWeight: 'bold',
-                                                },
-                                                }}>
-                                                
-                                            </Stack>
-                                    </CartProvider>
-                                </DeliveryProvider>
-                            </OrderProvider>
-                        </PurchaseOrderProvider>
-                    </PaperProvider>
+                    <SupplierProvider>
+                        <PaperProvider theme={theme}>
+                            <PurchaseOrderProvider>
+                                <OrderProvider>
+                                    <DeliveryProvider>
+                                        <CartProvider>
+                                                <Stack
+                                                    screenOptions={{
+                                                    headerStyle: {
+                                                        backgroundColor: 'green'
+                                                    },
+                                                    headerTintColor: '#fff',
+                                                    headerShown: false,
+                                                    headerTitleStyle: {
+                                                        fontWeight: 'bold',
+                                                    },
+                                                    }}>
+                                                    
+                                                </Stack>
+                                        </CartProvider>
+                                    </DeliveryProvider>
+                                </OrderProvider>
+                            </PurchaseOrderProvider>
+                        </PaperProvider>
+                    </SupplierProvider>
                 </ProductProvider>
             </AuthProvider>
         </ApiProvider> 

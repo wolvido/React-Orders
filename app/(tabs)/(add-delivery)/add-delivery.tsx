@@ -8,18 +8,21 @@ import { useDelivery } from '@/context/delivery-context';
 import { DeliveryRepository } from '@/repositories/delivery-repository';
 import { Supplier } from '@/entities/supplier';
 import { useEffect, useState } from 'react';
+import { useSuppliers } from '@/context/supplier-context';
 
 //react component
 export default function AddDeliveryScreen() {
 
-    const deliveryRepository = new DeliveryRepository();
-    const [ suppliers, setSuppliers ] = useState<Supplier[]>([]);
+    const { suppliers } = useSuppliers();
 
-    useEffect(() => {
-        deliveryRepository.getAllSuppliers().then((suppliers) => {
-            setSuppliers(suppliers);
-        });
-    });
+    //const deliveryRepository = new DeliveryRepository();
+    //const [ suppliers, setSuppliers ] = useState<Supplier[]>([]);
+
+    // useEffect(() => {
+    //     deliveryRepository.getAllSuppliers().then((suppliers) => {
+    //         setSuppliers(suppliers);
+    //     });
+    // });
 
     const { initializeDelivery } = useDelivery();
 

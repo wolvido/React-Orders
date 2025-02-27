@@ -6,6 +6,7 @@ import { useAuth } from '@/authentication/ctx';
 import App from '@/app.json';
 import { useApi } from '@/context/dev-mode-context';
 import { useProducts } from '@/context/product-context';
+import { useSuppliers } from '@/context/supplier-context';
 
 export const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
@@ -15,6 +16,7 @@ export const LoginScreen = () => {
   const [showHiddenScreen, setShowHiddenScreen] = useState(false);
 
   const { refreshProducts } = useProducts();
+  const { refreshSuppliers } = useSuppliers();
 
   const { setApiUrl } = useApi();
 
@@ -34,6 +36,7 @@ export const LoginScreen = () => {
       }
 
       refreshProducts();
+      refreshSuppliers();
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
