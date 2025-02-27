@@ -44,7 +44,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         rawMaterialId: 0,
         units: "",
         remarks: "",
-        deliveredBy: "",
+        deliveredBy: receivedDelivery.deliveredBy,
         totalPrice: (receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.costPrice) * receivedDeliveryItem.quantity,
         vehicleId: 0,
         vehicleName: "",

@@ -65,11 +65,19 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
         return delivery;
     };
 
+    /**
+     * 
+     * @param receivedDelivery 
+     * @returns 
+     */
     const finalizeDelivery = async (receivedDelivery: ReceivedDelivery) => {
         if (!delivery) {
             console.error('No delivery to finalize');
             return;
         }
+
+        //assign deliveredBy to receivedDelivery lines
+        receivedDelivery.deliveredBy = delivery.deliveredBy;
 
         try{
 
@@ -89,17 +97,11 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
             console.log('Delivery finalized with ID:', jsonReturn.deliveryId);
             console.log('Delivery lines created:', resultDeliveryLines);
 
-            // console.log('Finalized Delivery:', updatedDelivery);
-            // console.log('Finalized Received Delivery:', updatedReceivedDelivery);
-            // console.log('delivery items:', updatedReceivedDelivery.items);
             setDelivery(null);
             setReceivedDelivery(null);
         } catch (error) {
             console.error('Error finalizing delivery:', error); 
-
-    
         };
-
 
     };
 

@@ -4,4 +4,5 @@ export interface ReceivedDelivery{
     total: number;
     items: ReceivedItem[];
     deliveryId: number;
+    deliveredBy: string;
 }
