@@ -17,11 +17,18 @@ const ProductQuantityForm = memo(({
 }: ProductQuantityFormProps) => {
     const [quantity, setQuantity] = useState('');
 
+    const handleQuantityChange = (text: string) => {
+        // Remove any non-numeric characters
+        const numericValue = text.replace(/[^0-9]/g, '');
+        setQuantity(numericValue);
+    };
+
     const handleAdd = () => {
         const numericValue = parseInt(quantity);
+
         if (numericValue) {
             onAdd(productId, numericValue);
-            setQuantity(''); // Optional: clear after submit
+            setQuantity('');
         }
     };
 
@@ -39,7 +46,7 @@ const ProductQuantityForm = memo(({
                 mode="outlined"
                 label="Qty"
                 value={quantity}
-                onChangeText={setQuantity}
+                onChangeText={handleQuantityChange}
                 keyboardType="numeric"
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
