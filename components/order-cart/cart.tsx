@@ -33,7 +33,6 @@ export function CartComponent({
     isLoading
 }: CartComponentProps) {
 
-    //const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
     const isPortrait = useOrientation() === 'PORTRAIT';
@@ -112,87 +111,9 @@ export function CartComponent({
         </Card>
     ), [isPortrait, errors]);
 
-    // const renderCartItem = useCallback(({ item }: { item: CartItem }) => {
-    //     //console.log('Rendering cart item:', item.product.id);
-    //     return(
-    //         <View style={[
-    //             styles.cartItemWrapper,
-    //             { borderLeftColor: item.product.isBundle ? '#FFD700' : '#2196F3' } // Yellow for bundle, Blue for non-bundle
-    //         ]}>
-    //         <View style={styles.cartItemContent}>
-    //             <View style={styles.cartItemInfo}>
-    //                 <View style={styles.cartItemRow}>
-    //                         <Text style={styles.cartItemName} numberOfLines={1}>
-    //                             {item.product.name}
-    //                         </Text>
-    //                         <Text style={styles.cartItemPrice}>
-    //                             ₱{item.total}
-    //                         </Text>
-    //                         <Text style={styles.cartItemQuantity}>
-    //                             | Quantity: {item.quantity}
-    //                         </Text>
-    //                     </View>
-    //                 </View>
-    //                 <IconButton
-    //                     icon="delete-outline"
-    //                     size={20}
-    //                     onPress={() => onRemoveFromCart(item.product)}
-    //                     style={styles.removeButton}
-    //                 />
-    //             </View>
-    //         </View>
-    //     );
-    // }, [onRemoveFromCart]);
-
     if (isLoading) {
         return <Text style={styles.loadingText}>Loading...</Text>;
     }
-
-    // const CartSection = () => (
-    //     <View style={[
-    //         styles.rightPanel,
-    //         styles.rightPanelPortrait,
-    //         isCartCollapsed && styles.rightPanelCollapsed
-    //     ]}>
-    //         <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
-    //             {isPortrait && (
-    //                 <IconButton
-    //                 icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
-    //                 onPress={() => setIsCartCollapsed(!isCartCollapsed)}
-    //                 size={20}
-    //                 mode="contained"
-    //                 />
-    //             )}
-
-    //             {!isPortrait && (
-    //                 <IconButton
-    //                 icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
-    //                 onPress={() => setIsCartCollapsed(!isCartCollapsed)}
-    //                 size={20}
-    //                 mode="contained"
-    //                 />
-    //             )}
-    //         </View>
-            
-    //         {!isCartCollapsed && (
-    //             <View style={styles.cartContent}>
-    //                 <Text variant="headlineMedium">Cart</Text>
-    //                 <FlatList
-    //                     data={cart.items}
-    //                     renderItem={renderCartItem}
-    //                     keyExtractor={(item) => item.product.id.toString()}
-    //                     style={styles.cartList}
-    //                     initialNumToRender={10}
-    //                     maxToRenderPerBatch={10}
-    //                     contentContainerStyle={styles.cartListContent}
-    //                     ListEmptyComponent={() => (
-    //                         <Text style={styles.emptyText}>Cart is empty</Text>
-    //                     )}
-    //                 />
-    //             </View>
-    //         )}
-    //     </View>
-    // );
 
     return (
         <View style={[styles.content, styles.contentPortrait]}>
