@@ -6,7 +6,7 @@ import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
 import { FlatList } from "react-native";
-import ProductQuantityForm from "@/components/product-quantity-form";
+import ProductQuantityForm from "@/components/order-cart/product-quantity-form";
 
 interface CartComponentProps {
     products: Product[];
