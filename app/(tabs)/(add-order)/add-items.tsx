@@ -4,12 +4,8 @@ import StepIndicator from "@/components/order-step-indicator";
 import { router } from "expo-router";
 import { useCart } from "@/context/cart-context";
 import { CartComponent } from "@/components/order-cart/cart";
-import { Pagination } from "@/components/pagination";
 import orderSteps from "./order-steps-label";
 import { useOrder } from "@/context/order-context";
-import { useEffect, useState } from "react";
-import { ProductRepository } from "@/repositories/product-repository";
-import { Product } from "@/entities/product";
 import { useProducts } from "@/context/product-context";
 
 export default function AddItemsScreen() {
@@ -20,7 +16,6 @@ export default function AddItemsScreen() {
 
     const handleProceed = () => {
         updateCart(cart);
-        //emptyCart();
         router.push('/finalize-order');
     };
 
