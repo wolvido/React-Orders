@@ -7,6 +7,7 @@ import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
 import { FlatList } from "react-native";
 import ProductQuantityForm from "@/components/order-cart/product-quantity-form";
+import { SummaryPanel } from "./summary-panel";
 
 interface CartComponentProps {
     products: Product[];
@@ -191,20 +192,6 @@ export function CartComponent({
         </View>
     );
 
-    const SummarySection = () => (
-        <View style={styles.summaryContainer}>
-            <Text variant="titleLarge" style={styles.total}>
-                Total: ₱{cart.total}
-            </Text>
-            <Text variant="titleLarge" style={styles.total}>
-                Quantity: {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
-            </Text>
-            <Button mode="contained" onPress={onProceed}>
-                Proceed
-            </Button>
-        </View>
-    );
-
     return (
         <View style={[styles.content, styles.contentPortrait]}>
 
@@ -239,7 +226,11 @@ export function CartComponent({
                 <CartSection />
             </View>
 
-            <SummarySection />
+            <SummaryPanel
+                total={cart.total}
+                quantity={cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+                onProceed={onProceed}
+            />
         </View>
     );
 }
@@ -395,29 +386,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         flex: 1,
     },
-    summaryContainer: {
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'white',
-        padding: 10,
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        gap: 12,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: -2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 3,
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        
-    },
     emptyText: {
         textAlign: 'center',
         padding: 16,
@@ -501,10 +469,6 @@ const styles = StyleSheet.create({
     quantityContainer: {
         flex: 1,
         marginRight: 10,
-    },
-    total: {
-        textAlign: 'right',
-        fontSize: 20
     },
     errorText: {
         color: '#B00020', 
