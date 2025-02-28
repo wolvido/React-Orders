@@ -36,7 +36,6 @@ export default function ProductsScreen() {
             }
         }, [items]);
 
-
         const from = page * itemsPerPage; 
         const to = Math.min((page + 1) * itemsPerPage, items.length);
       
