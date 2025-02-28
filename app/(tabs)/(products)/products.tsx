@@ -7,53 +7,43 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/entities/product';
 import { useSearch } from '@/hooks/search-filter';
 import { EmptyState } from '@/components/empty-state';
-import { ProductRepository } from '@/repositories/product-repository';
 import { useProducts } from '@/context/product-context';
 
 //react component
 export default function ProductsScreen() {
-        
-        const { products, refreshProducts } = useProducts();
 
-        const [page, setPage] = useState<number>(0);
-        const [numberOfItemsPerPageList] = useState([10, 25, 50, 100]);
-        const [itemsPerPage, onItemsPerPageChange] = useState(
-            numberOfItemsPerPageList[0]
-        );
-        const [items, setItems] = useState<Product[]>([]);
+    const { products, refreshProducts } = useProducts();
+    const [page, setPage] = useState<number>(0);
+    const [numberOfItemsPerPageList] = useState([10, 25, 50, 100]);
+    const [itemsPerPage, onItemsPerPageChange] = useState(
+        numberOfItemsPerPageList[0]
+    );
 
-        useEffect(() => {
+    useEffect(() => {
+        if (products.length === 0) {
             refreshProducts();
-            setItems(products);
-            console.log('Products loaded:', products.length);
-        }, []);
+            console.log('Products refreshed:', products.length);
+        }
+    }, [products]);
+
+    const from = page * itemsPerPage; 
+    const to = Math.min((page + 1) * itemsPerPage, products.length);
     
-        //check if items is empty, if empty call refresh products
-        useEffect(() => {
-            if (items.length === 0) {
-                refreshProducts();
-                console.log('Products refreshed:', products.length);
-            }
-        }, [items]);
+    useEffect(() => {
+        setPage(0);
+    }, [itemsPerPage]);
 
-        const from = page * itemsPerPage; 
-        const to = Math.min((page + 1) * itemsPerPage, items.length);
-      
-        useEffect(() => {
-          setPage(0);
-        }, [itemsPerPage]);
+    //search
+    const searchableFields: (keyof Product)[] = [
+        'name',
+        'brand'
+    ];
+    const { searchQuery, setSearchQuery, filteredItems } = useSearch<Product>(
+        products,
+        searchableFields
+    );
 
-        //search
-        const searchableFields: (keyof Product)[] = [
-            'name',
-            'brand'
-        ];
-        const { searchQuery, setSearchQuery, filteredItems } = useSearch<Product>(
-            items,
-            searchableFields
-        );
-
-    if (items.length === 0) {
+    if (products.length === 0) {
         return (
             <View>
                 <EmptyState
@@ -116,11 +106,11 @@ export default function ProductsScreen() {
             {/* the table controller */}
             <DataTable.Pagination
                 page={page}
-                numberOfPages={Math.ceil(items.length / itemsPerPage)}
+                numberOfPages={Math.ceil(products.length / itemsPerPage)}
                 onPageChange={(newPage) => {
                     setPage(newPage);
                 }}
-                label={`${from + 1}-${to} of ${items.length}`}
+                label={`${from + 1}-${to} of ${products.length}`}
                 numberOfItemsPerPageList={numberOfItemsPerPageList}
                 numberOfItemsPerPage={itemsPerPage}
                 onItemsPerPageChange={onItemsPerPageChange}

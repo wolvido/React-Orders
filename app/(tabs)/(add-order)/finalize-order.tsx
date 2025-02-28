@@ -8,11 +8,13 @@ import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useProducts } from '@/context/product-context';
 import { useCart } from '@/context/cart-context';
+import { useState } from 'react';
 
 export default function FinalizeOrder() {
     const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
     const { refreshProducts } = useProducts();
     const { emptyCart } = useCart();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
@@ -21,12 +23,22 @@ export default function FinalizeOrder() {
         updateRemarks(formData.remarks);
     };
 
-    const handleFinalizeOrder = () => {
-        finalizeOrder();
-        refreshProducts();
-        emptyCart();
-        router.push('/add-order');
-        router.push('/orders');
+    const handleFinalizeOrder = async () => {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
+        try {
+            await finalizeOrder();
+            await refreshProducts();
+            emptyCart();
+            router.push('/add-order');
+            router.push('/orders');
+        } catch (error) {
+            // Handle error if needed
+            console.error('Error finalizing order:', error);
+            setIsSubmitting(false); // Re-enable button on error
+        }
     }
 
     return (
@@ -46,11 +58,15 @@ export default function FinalizeOrder() {
                         <OrderFormFinal onFormChange={handleFormChange} />
                     </View>
 
-                    <Button mode="contained" onPress={handleFinalizeOrder}>
-                        Finalize Order
+                    <Button 
+                        mode="contained" 
+                        onPress={handleFinalizeOrder}
+                        disabled={isSubmitting} // Disable button while submitting
+                        loading={isSubmitting} // Show loading indicator while submitting
+                    >
+                        {isSubmitting ? 'Finalizing Order...' : 'Finalize Order'}
                     </Button>
                 </ScrollView>
-
         </View>
     );
 
