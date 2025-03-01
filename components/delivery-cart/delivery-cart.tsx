@@ -105,6 +105,7 @@ export function DeliveryCartComponent({
                     {isPortrait && deliveryProductForm(product.id)}
 
                 </View>
+                
                 {errors[product.id] && (
                     <HelperText type="error" visible={true}>
                         {errors[product.id]}
@@ -113,78 +114,6 @@ export function DeliveryCartComponent({
             </Card.Content>
         </Card>
     ), [isPortrait, errors]);
-
-    // const renderCartItem = useCallback(({ item }: { item: ReceivedItem }) => (
-    //     <View style={styles.cartItemWrapper}>
-    //         <View style={styles.cartItemContent}>
-    //             <View style={styles.cartItemInfo}>
-    //                 <View style={styles.cartItemRow}>
-    //                     <Text style={styles.cartItemName} numberOfLines={1}>
-    //                         {item.product.name}
-    //                     </Text>
-    //                     <Text style={styles.cartItemPrice}>
-    //                         ₱{item.total}
-    //                     </Text>
-    //                     <Text style={styles.cartItemQuantity}>
-    //                         | Quantity: {item.quantity}
-    //                     </Text>
-    //                 </View>
-    //             </View>
-    //             <IconButton
-    //                 icon="delete-outline"
-    //                 size={20}
-    //                 onPress={() => onRemoveFromDelivery(item.product)}
-    //                 style={styles.removeButton}
-    //             />
-    //         </View>
-    //     </View>
-    // ), [onRemoveFromDelivery]);
-
-    // const CartSection = () => (
-    //     <View style={[
-    //         styles.rightPanel, 
-    //         isPortrait && styles.rightPanelPortrait,
-    //         isCartCollapsed && styles.rightPanelCollapsed
-    //     ]}>
-    //         <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
-    //             {isPortrait && (
-    //                 <IconButton
-    //                     icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
-    //                     onPress={() => setIsCartCollapsed(!isCartCollapsed)}
-    //                     size={20}
-    //                     mode="contained"
-    //                 />
-    //             )}
-
-    //             {!isPortrait && (
-    //                 <IconButton
-    //                     icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
-    //                     onPress={() => setIsCartCollapsed(!isCartCollapsed)}
-    //                     size={20}
-    //                     mode="contained"
-    //                 />
-    //             )}
-    //         </View>
-
-    //         {!isCartCollapsed && (
-    //             <View style={styles.cartContent}>
-    //                 <Text variant="headlineMedium">Cart</Text>
-    //                 <FlatList
-    //                     data={delivery.items}
-    //                     renderItem={renderCartItem}
-    //                     keyExtractor={(item) => item.product.id.toString()}
-    //                     style={styles.cartList}
-    //                     initialNumToRender={10}
-    //                     maxToRenderPerBatch={10}
-    //                     contentContainerStyle={styles.cartListContent}
-    //                     ListEmptyComponent={() => (
-    //                         <Text style={styles.emptyText}>Cart is empty</Text>
-    //                     )}
-    //                 />
-    //             </View>
-    //         )}
-    //     </View>
-    // );
 
     const SummarySection = () => (
         <View style={styles.summaryContainer}>
