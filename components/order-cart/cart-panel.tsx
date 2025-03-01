@@ -3,6 +3,7 @@ import { Text, IconButton } from "react-native-paper";
 import { FlatList } from "react-native";
 import { CartItem } from "@/entities/cart-item";
 import styles from "./cart-styles";
+import { CollapseButton } from "../collapse-button";
 
 interface CartPanelProps {
     items: CartItem[];
@@ -19,7 +20,7 @@ export function CartPanel({
     onToggleCollapse,
     onRemoveFromCart
 }: CartPanelProps) {
-    
+
     const renderCartItem = ({ item }: { item: CartItem }) => (
         <View style={[
             styles.cartItemWrapper,
@@ -55,23 +56,11 @@ export function CartPanel({
             styles.rightPanelPortrait,
             isCartCollapsed && styles.rightPanelCollapsed
         ]}>
-            <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
-                {isPortrait ? (
-                    <IconButton
-                        icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
-                        onPress={onToggleCollapse}
-                        size={20}
-                        mode="contained"
-                    />
-                ) : (
-                    <IconButton
-                        icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
-                        onPress={onToggleCollapse}
-                        size={20}
-                        mode="contained"
-                    />
-                )}
-            </View>
+            <CollapseButton
+                isPortrait={isPortrait}
+                isCartCollapsed={isCartCollapsed}
+                onToggleCollapse={onToggleCollapse}
+            />
             
             {!isCartCollapsed && (
                 <View style={styles.cartContent}>

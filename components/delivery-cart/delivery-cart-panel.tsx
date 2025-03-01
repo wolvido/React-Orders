@@ -4,6 +4,7 @@ import { FlatList } from "react-native";
 import { ReceivedItem } from "@/entities/received-item";
 import styles from "./delivery-styles";
 import { Product } from "@/entities/product";
+import { CollapseButton } from "../collapse-button";
 
 interface DeliveryCartPanelProps {
     items: ReceivedItem[];
@@ -53,25 +54,11 @@ export function DeliveryCartPanel({
             isPortrait && styles.rightPanelPortrait,
             isCartCollapsed && styles.rightPanelCollapsed
         ]}>
-            <View style={[isPortrait && styles.collapseButtonContainer, !isPortrait && styles.landscapeCollapseButtonContainer]}>
-                {isPortrait && (
-                    <IconButton
-                        icon={isCartCollapsed ? "chevron-up" : "chevron-down"}
-                        onPress={onToggleCollapse}
-                        size={20}
-                        mode="contained"
-                    />
-                )}
-
-                {!isPortrait && (
-                    <IconButton
-                        icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
-                        onPress={onToggleCollapse}
-                        size={20}
-                        mode="contained"
-                    />
-                )}
-            </View>
+            <CollapseButton
+                isPortrait={isPortrait}
+                isCartCollapsed={isCartCollapsed}
+                onToggleCollapse={onToggleCollapse}
+            />
 
             {!isCartCollapsed && (
                 <View style={styles.cartContent}>

@@ -4,16 +4,6 @@ export default StyleSheet.create({
     landscapeContentPortrait:{
         gap: 10,
     },
-    landscapeCollapseButtonContainer:{
-        position: 'absolute',
-        top: 0,
-        right: 650,
-        left: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1,
-    },
     mainContent:{
         flex: 1,
         padding: 10,
@@ -95,14 +85,6 @@ export default StyleSheet.create({
     cartItemDetails: {
         fontSize: 12,
         color: '#666',
-    },
-    collapseButtonContainer: {
-        position: 'absolute',
-        top: -30,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        zIndex: 1,
     },
     collapseButton: {
         position: 'absolute',
