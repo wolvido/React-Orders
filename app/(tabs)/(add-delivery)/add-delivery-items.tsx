@@ -1,4 +1,4 @@
-import { DeliveryCartComponent } from "@/components/delivery-cart";
+import { DeliveryCartComponent } from "@/components/delivery-cart/delivery-cart";
 import { useDeliveryCart } from "@/context/delivery-cart-context";
 import { View, StyleSheet } from "react-native";
 
