@@ -19,6 +19,7 @@ export function CartPanel({
     onToggleCollapse,
     onRemoveFromCart
 }: CartPanelProps) {
+    
     const renderCartItem = ({ item }: { item: CartItem }) => (
         <View style={[
             styles.cartItemWrapper,
