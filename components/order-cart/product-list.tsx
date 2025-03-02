@@ -40,12 +40,8 @@ export function ProductList({
             return;
         }
 
+        setErrors(prev => ({ ...prev, [productId]: '' }));
         onAddToCart(product, quantity);
-
-        // Clear errors
-        requestAnimationFrame(() => {
-            setErrors(prev => ({ ...prev, [productId]: '' }));
-        });
     };
 
     const productQuantityForm = (productId: number) => {
