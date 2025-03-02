@@ -9,6 +9,7 @@ import useOrientation from "@/hooks/orientation-hook";
 import DeliveryProductForm from "./delivery-product-form";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
+import { SummaryPanel } from "../summary-panel";
 
 interface DeliveryCartComponentProps {
     products: Product[];
@@ -115,20 +116,6 @@ export function DeliveryCartComponent({
         </Card>
     ), [isPortrait, errors]);
 
-    const SummarySection = () => (
-        <View style={styles.summaryContainer}>
-            <Text variant="titleLarge" style={styles.total}>
-                Total: ₱{delivery.total}
-            </Text>
-            <Text variant="titleLarge" style={styles.total}>
-                Quantity: {delivery.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
-            </Text>
-            <Button mode="contained" onPress={onProceed}>
-                Proceed
-            </Button>
-        </View>
-    );
-
     return (
         <View style={[styles.content, styles.contentPortrait]}>
 
@@ -169,7 +156,11 @@ export function DeliveryCartComponent({
                 />
             </View>
 
-            <SummarySection />
+            <SummaryPanel
+                total={delivery.total}
+                quantity={delivery.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
+                onProceed={onProceed}
+            />
         </View>
     );
 }

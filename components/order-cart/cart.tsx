@@ -5,7 +5,7 @@ import useOrientation from "@/hooks/orientation-hook";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
-import { SummaryPanel } from "./summary-panel";
+import { SummaryPanel } from "../summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
