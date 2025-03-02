@@ -4,22 +4,27 @@ import { FlatList } from "react-native";
 import { CartItem } from "@/entities/cart-item";
 import styles from "./cart-styles";
 import { CollapseButton } from "../collapse-button";
+import { useState } from "react";
 
 interface CartPanelProps {
     items: CartItem[];
     isPortrait: boolean;
-    isCartCollapsed: boolean;
-    onToggleCollapse: () => void;
     onRemoveFromCart: (cartItem: CartItem) => void;
+    collapsible?: boolean;
 }
 
 export function CartPanel({
     items,
     isPortrait,
-    isCartCollapsed,
-    onToggleCollapse,
-    onRemoveFromCart
+    onRemoveFromCart,
+    collapsible
 }: CartPanelProps) {
+
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+
+    const onToggleCollapse = () => {
+        setIsCartCollapsed(!isCartCollapsed);
+    };
 
     const renderCartItem = ({ item }: { item: CartItem }) => (
         <View style={[
@@ -56,12 +61,15 @@ export function CartPanel({
             styles.rightPanelPortrait,
             isCartCollapsed && styles.rightPanelCollapsed
         ]}>
-            <CollapseButton
-                isPortrait={isPortrait}
-                isCartCollapsed={isCartCollapsed}
-                onToggleCollapse={onToggleCollapse}
-            />
             
+            {collapsible && (
+                <CollapseButton
+                    isPortrait={isPortrait}
+                    isCartCollapsed={isCartCollapsed}
+                    onToggleCollapse={onToggleCollapse}
+                />
+            )}
+
             {!isCartCollapsed && (
                 <View style={styles.cartContent}>
                     <Text variant="headlineMedium">Cart</Text>

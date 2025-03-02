@@ -5,22 +5,27 @@ import { ReceivedItem } from "@/entities/received-item";
 import styles from "./delivery-styles";
 import { Product } from "@/entities/product";
 import { CollapseButton } from "../collapse-button";
+import { useState } from "react";
 
 interface DeliveryCartPanelProps {
     items: ReceivedItem[];
     isPortrait: boolean;
-    isCartCollapsed: boolean;
-    onToggleCollapse: () => void;
     onRemoveFromDelivery: (product: Product) => void;
+    collapsible?: boolean;
 }
 
 export function DeliveryCartPanel({
     items,
     isPortrait,
-    isCartCollapsed,
-    onToggleCollapse,
-    onRemoveFromDelivery
+    onRemoveFromDelivery,
+    collapsible
 }: DeliveryCartPanelProps) {
+
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+    
+    const onToggleCollapse = () => {
+        setIsCartCollapsed(!isCartCollapsed);
+    } 
 
     const renderCartItem = ({ item }: { item: ReceivedItem }) => (
         <View style={styles.cartItemWrapper}>
@@ -54,11 +59,13 @@ export function DeliveryCartPanel({
             isPortrait && styles.rightPanelPortrait,
             isCartCollapsed && styles.rightPanelCollapsed
         ]}>
-            <CollapseButton
-                isPortrait={isPortrait}
-                isCartCollapsed={isCartCollapsed}
-                onToggleCollapse={onToggleCollapse}
-            />
+            {collapsible && (
+                <CollapseButton
+                    isPortrait={isPortrait}
+                    isCartCollapsed={isCartCollapsed}
+                    onToggleCollapse={onToggleCollapse}
+                />
+            )}
 
             {!isCartCollapsed && (
                 <View style={styles.cartContent}>

@@ -30,7 +30,7 @@ export function DeliveryCartComponent({
     const isPortrait = useOrientation() === 'PORTRAIT';
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
-    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+    
 
     // filter out isBundle products
     products = products.filter(product => !product.isBundle);
@@ -164,9 +164,8 @@ export function DeliveryCartComponent({
                 <DeliveryCartPanel
                     items={delivery.items}
                     isPortrait={isPortrait}
-                    isCartCollapsed={isCartCollapsed}
-                    onToggleCollapse={() => setIsCartCollapsed(!isCartCollapsed)}
                     onRemoveFromDelivery={onRemoveFromDelivery}
+                    collapsible={true}
                 />
             </View>
 

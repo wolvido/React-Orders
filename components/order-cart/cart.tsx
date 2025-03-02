@@ -33,7 +33,6 @@ export function CartComponent({
 }: CartComponentProps) {
 
     const isPortrait = useOrientation() === 'PORTRAIT';
-    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
 
     if (isLoading) {
         return <Text style={styles.loadingText}>Loading...</Text>;
@@ -51,9 +50,8 @@ export function CartComponent({
                 <CartPanel
                     items={cart.items}
                     isPortrait = {isPortrait}
-                    isCartCollapsed={isCartCollapsed}
-                    onToggleCollapse={() => setIsCartCollapsed(!isCartCollapsed)}
                     onRemoveFromCart={(cartItem) => onRemoveFromCart(cartItem.product)}
+                    collapsible = {true}
                 />
             </View>
             <SummaryPanel
