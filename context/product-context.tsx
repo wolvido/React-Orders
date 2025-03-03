@@ -1,4 +1,3 @@
-// context/product-context.tsx
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '@/entities/product';
 import { ProductRepository } from '@/repositories/product-repository';
@@ -8,6 +7,8 @@ interface ProductContextType {
     isLoading: boolean;
     error: string | null;
     refreshProducts: () => Promise<void>;
+    reduceStock: (productId: number, quantity: number) => { success: boolean; error?: string };
+    increaseStock: (productId: number, quantity: number) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -36,12 +37,57 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         await loadProducts();
     };
 
+    const reduceStock = (productId: number, quantity: number) => {
+        const product = products.find(p => p.id === productId);
+        
+        if (!product) {
+            return { success: false, error: 'Product not found' };
+        }
+
+        if (product.stocks < quantity) {
+            return { 
+                success: false, 
+                error: `Insufficient stock. Only ${product.stocks} available.` 
+            };
+        }
+
+        setProducts(prevProducts => {
+            return prevProducts.map(product => {
+                if (product.id === productId) {
+                    return {
+                        ...product,
+                        stocks: product.stocks - quantity
+                    };
+                }
+                return product;
+            });
+        });
+
+        return { success: true };
+    };
+
+    const increaseStock = (productId: number, quantity: number) => {
+        setProducts(prevProducts => {
+            return prevProducts.map(product => {
+                if (product.id === productId) {
+                    return {
+                        ...product,
+                        stocks: product.stocks + quantity
+                    };
+                }
+                return product;
+            });
+        });
+    };
+
     return (
         <ProductContext.Provider value={{
             products,
             isLoading,
             error,
-            refreshProducts
+            refreshProducts,
+            reduceStock,
+            increaseStock
         }}>
             {children}
         </ProductContext.Provider>
