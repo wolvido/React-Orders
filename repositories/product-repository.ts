@@ -56,8 +56,12 @@ export class ProductRepository implements IProductRepository{
         const bundle = await this.getBundleById(product.id);
         const bundleLine = await this.getBundleLine(product.id);
 
-        product.bundleType = bundle ?? undefined;
         product.bundleQuantity = bundleLine?.quantity;
+        product.bundleType = bundle ?? undefined;
+        if (product.bundleType) {
+            product.bundleType.bundleQuantity = bundleLine?.quantity;
+            product.bundleType.originalProductId = product.id;
+        }
 
         return product;
     }

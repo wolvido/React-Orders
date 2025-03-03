@@ -12,4 +12,5 @@ export interface Product {
     //bundle
     bundleType?: Product;
     bundleQuantity?: number;
+    originalProductId?: number;
 }
