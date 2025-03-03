@@ -109,7 +109,7 @@ export class OrderAdapter {
             customerId: order.customer.id,
             customerName: order.customer.name,
             contactNumber: order.customer.contactNumber || "",
-            address: order.customer.address || "",
+            address: order.deliveryAddress || order.customer.address ,
 
             // restaurant bullshit
             releaseDate: new Date().toISOString(),
