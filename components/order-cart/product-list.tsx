@@ -27,7 +27,7 @@ export function ProductList({
 
     const handleAddItem = (productId: number, quantity: number) => {
         const product = products.find(p => p.id === productId);
-        if (!product) return;
+        if (!product) return { success: false };
 
         //validation
         if (quantity < 1) {
@@ -37,11 +37,23 @@ export function ProductList({
                 [productId]: errorMessage
             }));
             onError?.(errorMessage);
-            return;
+            return { success: false };
+        }
+
+        if (product.stocks < quantity) {
+            const errorMessage = `Insufficient stock. Only ${product.stocks} available.`;
+            setErrors(prev => ({
+                ...prev,
+                [productId]: errorMessage
+            }));
+            onError?.(errorMessage);
+            return { success: false };
         }
 
         setErrors(prev => ({ ...prev, [productId]: '' }));
         onAddToCart(product, quantity);
+
+        return {success: true};
     };
 
     const productQuantityForm = (productId: number) => {

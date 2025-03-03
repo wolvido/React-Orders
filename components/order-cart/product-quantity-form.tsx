@@ -4,7 +4,7 @@ import { Button, IconButton, TextInput } from "react-native-paper";
 
 interface ProductQuantityFormProps {
     productId: number;
-    onAdd: (productId: number, quantity: number) => void;
+    onAdd: (productId: number, quantity: number) => {success: boolean};
     error?: string;
     isPortrait?: boolean;
 }
@@ -25,10 +25,13 @@ const ProductQuantityForm = memo(({
 
     const handleAdd = () => {
         const numericValue = parseInt(quantity);
-
         if (numericValue) {
-            onAdd(productId, numericValue);
-            setQuantity('');
+            const result = onAdd(productId, numericValue);
+            console.log(result.success);
+
+            if (result.success) {
+                setQuantity('');
+            }
         }
     };
 
