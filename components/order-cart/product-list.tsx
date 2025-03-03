@@ -7,7 +7,7 @@ import styles from "./cart-styles";
 
 interface ProductListProps {
     products: Product[];
-    onAddToCart: (product: Product, quantity: number) => void;
+    onAddToCart: (product: Product, quantity: number) => {success: boolean};
     onError?: (message: string) => void;
     isPortrait: boolean;
 }
@@ -51,9 +51,9 @@ export function ProductList({
         }
 
         setErrors(prev => ({ ...prev, [productId]: '' }));
-        onAddToCart(product, quantity);
+        const result = onAddToCart(product, quantity);
 
-        return {success: true};
+        return result;
     };
 
     const productQuantityForm = (productId: number) => {

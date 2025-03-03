@@ -6,11 +6,11 @@ import { createContext, useContext, ReactNode, useState } from 'react';
 
 interface CartContextType {
     cart: Cart;
-    addToCart: (item: CartItem) => void;
+    addToCart: (item: CartItem) => {success: boolean, error?: string};
     removeFromCart: (product: Product) => void;
     getCart: () => Cart;
     emptyCart: () => void;
-    BundleProductToCart: (product: Product, quantity: number) => void;
+    BundleProductToCart: (product: Product, quantity: number) => {success: boolean, error?: string};
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -63,6 +63,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 orderId: prevCart.orderId
             };
         });
+
+        return { success: true };
     };
 
     /**
@@ -125,6 +127,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 orderId: prevCart.orderId
             };
         });
+
+        return { success: true };
     };
     
     const removeFromCart = (product: Product) => {

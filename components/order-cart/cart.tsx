@@ -14,7 +14,7 @@ interface CartComponentProps {
     products: Product[];
     cart: Cart;
     onAddToCart: (cartItem: CartItem) => void;
-    onBundleProductToCart: (product: Product, quantity: number) => void;
+    onBundleProductToCart: (product: Product, quantity: number) => {success: boolean, error?: string};
     onRemoveFromCart: (product: Product) => void;
     onProceed: () => void;
     onError?: (message: string) => void;
