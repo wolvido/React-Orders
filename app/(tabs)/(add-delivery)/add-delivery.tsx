@@ -6,12 +6,13 @@ import { router } from "expo-router";
 import { Delivery } from '@/entities/delivery';
 import { useDelivery } from '@/context/delivery-context';
 import { useSuppliers } from '@/context/supplier-context';
+import { useAuth } from '@/authentication/auth-context';
 
 //react component
 export default function AddDeliveryScreen() {
 
+    const { user } = useAuth();
     const { suppliers } = useSuppliers();
-
     const { initializeDelivery } = useDelivery();
 
     function onSubmit(delivery: Delivery) {
@@ -32,7 +33,7 @@ export default function AddDeliveryScreen() {
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                <AddDeliveryForm suppliers={suppliers} onSubmit={onSubmit}/>
+                <AddDeliveryForm suppliers={suppliers} onSubmit={onSubmit} currentUser={user || undefined}/>
             </ScrollView>
         </View>
     );

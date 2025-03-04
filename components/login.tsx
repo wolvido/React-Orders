@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
-import { useAuth } from '@/authentication/ctx';
+import { useAuth } from '@/authentication/auth-context';
 import App from '@/app.json';
 import { useApi } from '@/context/dev-mode-context';
 import { useProducts } from '@/context/product-context';

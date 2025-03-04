@@ -3,7 +3,7 @@ import { Slot, Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import theme from '@/style/theme';
 
-import { AuthProvider } from '@/authentication/ctx';
+import { AuthProvider } from '@/authentication/auth-context';
 
 import {enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/context/cart-context';

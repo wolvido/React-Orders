@@ -9,14 +9,15 @@ interface AddDeliveryFormProps {
     suppliers: Supplier[];
     onSubmit: (delivery: Delivery) => void;
     existingDelivery?: Delivery; // Optional delivery to edit
+    currentUser?: { username: string };
 }
 
-export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDeliveryFormProps) => {
+export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, currentUser }: AddDeliveryFormProps) => {
     const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
     const [creationDate, setCreationDate] = useState<Date>(new Date());
     const [deliveredBy, setDeliveredBy] = useState('');
     const [receiptNumber, setReceiptNumber] = useState('');
-    const [handledBy, setHandledBy] = useState('');
+    const [handledBy, setHandledBy] = useState(currentUser?.username || '');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
     const [showSupplierModal, setShowSupplierModal] = useState(false);
     const [total, setTotal] = useState(0);
@@ -44,7 +45,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
         if (!supplier) return;
 
         const newDelivery: Delivery = {
-            id: existingDelivery?.id || Date.now() + Math.floor(100000 + Math.random() * 900000),
+            id: existingDelivery?.id || 0,
             supplier: supplier,
             deliveryDate: deliveryDate,
             deliveredBy: deliveredBy,
@@ -52,7 +53,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
             receiptNumber: receiptNumber,
             creationDate: creationDate,
             handledBy: handledBy,
-            //receivedItems: existingDelivery?.receivedItems || { total: 0, items: [], deliveryId: Date.now() + Math.floor(100000 + Math.random() * 900000) },
         };
 
         onSubmit(newDelivery);
@@ -106,6 +106,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery }: AddDe
                     onChangeText={setHandledBy}
                     mode="outlined"
                     style={styles.input}
+                    editable={!handledBy}
                 />
 
                 <TextInput

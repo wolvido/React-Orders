@@ -1,6 +1,6 @@
 import { LoginScreen } from "@/components/login";
 import { View, Text} from "react-native";
-import { useAuth } from '@/authentication/ctx';
+import { useAuth } from '@/authentication/auth-context';
 import { Redirect } from "expo-router";
 import App from "@/app.json";
 

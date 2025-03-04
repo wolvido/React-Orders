@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Validate credentials before accepting
       if (!username || !password) {
         throw new Error('Username and password are required');
-      }
+      };
   
       // Modified mock user to use username
       const mockUser = { 

@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import theme from '@/style/theme';
 import { Redirect, Tabs } from 'expo-router';
 
-import { useAuth } from '@/authentication/ctx';
+import { useAuth } from '@/authentication/auth-context';
 import useOrientation from '@/hooks/orientation-hook';
 import { View, StyleSheet, Animated, Pressable, } from 'react-native';
 import { LandscapeDrawer } from '@/components/landscape-drawer';

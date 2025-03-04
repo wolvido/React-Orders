@@ -8,12 +8,13 @@ import { router } from 'expo-router';
 import { useOrder } from '@/context/order-context';
 import { Customer } from '@/entities/customers';
 import { CustomerRepository } from '@/repositories/customer-repository';
-import { ActivityIndicator } from 'react-native-paper';
+import { useAuth } from '@/authentication/auth-context';
 
 //react component
 export default function AddOrderScreen() {
 
     const customerRepository = new CustomerRepository();
+    const { user } = useAuth();
 
     const { initializeOrder } = useOrder();
     const [customers, setCustomers] = useState<Customer[]>([]);
@@ -25,12 +26,6 @@ export default function AddOrderScreen() {
             setIsLoading(false);
         });
     }, []);
-
-
-    // Add loading state check
-    // if (isLoading) {
-    //     return <ActivityIndicator />;
-    // }
 
     const handleOrderSubmit = (order: Order) => {
         console.log('Order submitted:', order);
@@ -50,7 +45,7 @@ export default function AddOrderScreen() {
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                <OrderDetailsForm onSubmit={handleOrderSubmit} customers={customers} />
+                <OrderDetailsForm currentUser={user || undefined} onSubmit={handleOrderSubmit} customers={customers} />
             </ScrollView>
         </View>
     );

@@ -16,9 +16,10 @@ interface OrderDetailsFormProps {
     onSubmit: (order: Order) => void;
     customers: Customer[];
     order?: Order;
+    currentUser?: { username: string };
 }
 
-function OrderDetailsForm({ onSubmit, customers, order }: OrderDetailsFormProps) {
+function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDetailsFormProps) {
     //form Handling logic
     useEffect(() => {
         if (order?.customer) {
@@ -47,7 +48,7 @@ function OrderDetailsForm({ onSubmit, customers, order }: OrderDetailsFormProps)
         fulfillmentStatus: order?.fulfillmentStatus || Status.Pending,
         remarks: order?.remarks || '',
         deliveryAddress: order?.deliveryAddress || '',
-        handledBy: order?.handledBy || '', 
+        handledBy: order?.handledBy || currentUser?.username || '', 
         isPaid: order?.isPaid || false,
         isComplete: order?.isPaid || false
     });
@@ -124,6 +125,7 @@ function OrderDetailsForm({ onSubmit, customers, order }: OrderDetailsFormProps)
                 label="Handled By"
                 value={formData.handledBy}
                 onChangeText={(value) => handleInputChange('handledBy', value)}
+                editable={!formData.handledBy}
             />
 
             <TextInput
