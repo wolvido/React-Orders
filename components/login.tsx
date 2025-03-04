@@ -1,6 +1,6 @@
 // src/screens/LoginScreen.tsx
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { useAuth } from '@/authentication/ctx';
 import App from '@/app.json';
@@ -45,7 +45,7 @@ export const LoginScreen = () => {
 
   if (showHiddenScreen) {
     return (
-      <View style={styles.devContainer}>
+      <ScrollView style={styles.devContainer}>
         <Text variant="headlineMedium" style={styles.devTitle}>Developer Screen</Text>
         
         {Object.entries(App.api).map(([name, url]) => (
@@ -71,7 +71,7 @@ export const LoginScreen = () => {
         >
           Back to Login
         </Button>
-      </View>
+      </ScrollView>
     );
   }
 
