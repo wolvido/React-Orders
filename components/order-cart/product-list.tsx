@@ -1,14 +1,17 @@
 import { View, StyleSheet, FlatList } from "react-native";
-import { Card, Text, HelperText, Searchbar } from "react-native-paper";
+import { Card, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
 import { useState, useCallback } from "react";
 import { Product } from "@/entities/product";
 import ProductQuantityForm from "@/components/order-cart/product-quantity-form";
 import styles from "./cart-styles";
+import theme from "@/style/theme";
 
 interface ProductListProps {
     products: Product[];
     onAddToCart: (product: Product, quantity: number) => {success: boolean};
     onError?: (message: string) => void;
+    onUpdateProducts: () => Promise<void>;
+    isLoading?: boolean;
     isPortrait: boolean;
 }
 
@@ -16,7 +19,9 @@ export function ProductList({
     products,
     onAddToCart,
     onError,
-    isPortrait
+    isPortrait,
+    onUpdateProducts,
+    isLoading
 }: ProductListProps) {
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
@@ -100,14 +105,49 @@ export function ProductList({
         </Card>
     ), [isPortrait, errors]);
 
+    const onRefresh = async () => {
+        console.log('Refreshing products...');
+        await onUpdateProducts();
+    };
+
+    const refreshButton = (
+        <IconButton
+            icon="refresh"
+            size={24}
+            onPress={onRefresh}
+            style={styles.refreshButton}
+            mode = "contained"
+        />
+    );
+
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <View style={styles.loadingCard}>
+                    <ActivityIndicator
+                        size="large"
+                        color={theme.colors.primary}
+                    />
+                    <Text style={styles.loadingText}>Updating Items...</Text>
+                </View>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.mainContentPortrait}>
-            <Searchbar
-                placeholder="Search products"
-                onChangeText={setSearchQuery}
-                value={searchQuery}
-                style={styles.searchBar}
-            />
+            <View style={styles.searchContainer}>
+                {!isPortrait && refreshButton}
+
+                <Searchbar
+                    placeholder="Search products"
+                    onChangeText={setSearchQuery}
+                    value={searchQuery}
+                    style={styles.searchBar}
+                />
+                
+                {isPortrait && refreshButton}
+            </View>
             <FlatList
                 style={styles.productsList}
                 data={filteredProducts}

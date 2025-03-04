@@ -9,12 +9,14 @@ interface ProductContextType {
     refreshProducts: () => Promise<void>;
     reduceStock: (productId: number, quantity: number) => { success: boolean; error?: string };
     increaseStock: (productId: number, quantity: number) => void;
+    updateProducts: () => Promise<void>;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export function ProductProvider({ children }: { children: ReactNode }) {
     const [products, setProducts] = useState<Product[]>([]);
+    const [stockChanges, setStockChanges] = useState<Record<number, number>>({}); 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const productRepository = new ProductRepository();
@@ -34,6 +36,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     const refreshProducts = async () => {
+        setStockChanges({}); 
         await loadProducts();
     };
 
@@ -51,6 +54,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             };
         }
 
+        //keep track of stock changes
+        setStockChanges(prev => ({
+            ...prev,
+            [productId]: (prev[productId] || 0) - quantity
+        }));
+
         setProducts(prevProducts => {
             return prevProducts.map(product => {
                 if (product.id === productId) {
@@ -67,6 +76,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     const increaseStock = (productId: number, quantity: number) => {
+        //keep track of stock changes
+        setStockChanges(prev => ({
+            ...prev,
+            [productId]: (prev[productId] || 0) + quantity
+        }));
+
         setProducts(prevProducts => {
             return prevProducts.map(product => {
                 if (product.id === productId) {
@@ -80,6 +95,33 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    /**
+     * safely updates the products but retains the local product stock changes
+     */
+    const updateProducts = async () => {
+        try {
+            setIsLoading(true);
+            setError(null);
+            const newData = await productRepository.getAll();
+            
+            // Apply the stored changes to the new data
+            const updatedProducts = newData.map(product => {
+                const stockChange = stockChanges[product.id] || 0;
+                return {
+                    ...product,
+                    stocks: product.stocks + stockChange
+                };
+            });
+
+            setProducts(updatedProducts);
+        } catch (err) {
+            setError('Failed to update products');
+            console.error('Error updating products:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <ProductContext.Provider value={{
             products,
@@ -87,7 +129,8 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             error,
             refreshProducts,
             reduceStock,
-            increaseStock
+            increaseStock,
+            updateProducts
         }}>
             {children}
         </ProductContext.Provider>

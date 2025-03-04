@@ -10,7 +10,7 @@ import { useProducts } from "@/context/product-context";
 
 export default function AddItemsScreen() {
 
-    const { products, isLoading } = useProducts();
+    const { products, isLoading, updateProducts } = useProducts();
     const { cart, addToCart, removeFromCart, BundleProductToCart } = useCart();
     const { updateCart } = useOrder();
 
@@ -35,6 +35,7 @@ export default function AddItemsScreen() {
                 onBundleProductToCart={BundleProductToCart}
                 onProceed={handleProceed}
                 isLoading={isLoading}
+                onUpdateProducts={updateProducts}
             />
         </View>
     );

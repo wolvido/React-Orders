@@ -17,6 +17,7 @@ interface CartComponentProps {
     onBundleProductToCart: (product: Product, quantity: number) => {success: boolean, error?: string};
     onRemoveFromCart: (product: Product) => void;
     onProceed: () => void;
+    onUpdateProducts: () => Promise<void>;
     onError?: (message: string) => void;
     isLoading?: boolean;
 }
@@ -29,14 +30,15 @@ export function CartComponent({
     onBundleProductToCart,
     onProceed,
     onError,
+    onUpdateProducts,
     isLoading
 }: CartComponentProps) {
 
     const isPortrait = useOrientation() === 'PORTRAIT';
 
-    if (isLoading) {
-        return <Text style={styles.loadingText}>Loading...</Text>;
-    }
+    // if (isLoading) {
+    //     return <Text style={styles.loadingText}>Loading...</Text>;
+    // }
 
     return (
         <View style={[styles.content, styles.contentPortrait]}>
@@ -46,6 +48,8 @@ export function CartComponent({
                     onAddToCart={onBundleProductToCart}
                     onError={onError}
                     isPortrait={isPortrait}
+                    onUpdateProducts={onUpdateProducts}
+                    isLoading={isLoading}
                 />
                 <CartPanel
                     items={cart.items}

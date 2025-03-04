@@ -1,6 +1,18 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 8,
+        gap: 8,
+        marginTop: 10,
+    },
+    refreshButton: {
+        // borderColor: '#2196F3',
+        // borderWidth: 1,
+
+    },
     landscapeContentPortrait:{
         gap: 10,
     },
@@ -226,9 +238,9 @@ export default StyleSheet.create({
         paddingVertical: 6,
     },
     searchBar: {
-        marginTop: 10,
         elevation: 0, // Removes shadow on Android
         borderRadius: 8,
+        width: '92%',
     },
     leftPanelPortrait: {
         flex: 2,
@@ -246,9 +258,31 @@ export default StyleSheet.create({
         marginTop: 8,
     },
     loadingText: {
+        fontSize: 16,
+        fontWeight: '500',
         textAlign: 'center',
-        padding: 16,
-        height: '85%',
-    }
+    },
+    loadingContainer: {
+        marginTop: 5,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',  // Semi-transparent background
+    },
+    loadingCard: {
+        backgroundColor: 'white',
+        padding: 24,
+        borderRadius: 12,
+        alignItems: 'center',
+        gap: 16,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
     
 });
