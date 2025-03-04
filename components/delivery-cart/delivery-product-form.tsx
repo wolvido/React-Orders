@@ -76,6 +76,10 @@ const DeliveryProductForm = memo(({
                 style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
                 maxLength={10}
                 error={!!error || !!localError && !price}
+                focusable={true}
+                autoComplete="off"
+                importantForAutofill="no"
+                textContentType="none"
             />
             <TextInput
                 mode="outlined"
@@ -86,6 +90,10 @@ const DeliveryProductForm = memo(({
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
                 error={!!error || !!localError && !quantity}
+                focusable={true}
+                autoComplete="off"
+                importantForAutofill="no"
+                textContentType="none"
             />
             {isPortrait && (
                 <IconButton

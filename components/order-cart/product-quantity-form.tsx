@@ -54,6 +54,10 @@ const ProductQuantityForm = memo(({
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
                 error={!!error}
+                focusable={true}
+                autoComplete="off"
+                importantForAutofill="no"
+                textContentType="none"
             />
             {isPortrait && (
                 <IconButton
