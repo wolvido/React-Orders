@@ -20,7 +20,7 @@ export default function UpdateOrderItemsScreen() {
 
     return (
         <View style={styles.container}>
-            <StepIndicator 
+            <StepIndicator
                 currentStep={2}
                 backPath="./add-order" 
                 steps={updateOrderSteps}

@@ -39,17 +39,16 @@ export default function OrdersScreen() {
     useFocusEffect(
         useCallback(() => {
             console.log('Orders screen focused - fetching orders');
+            //will be very slow in the future
             orderRepository.getAll().then((data) => {
                 setItems(data);
                 console.log('Orders refreshed:', data.length);
             });
 
-            //will be very slow in the future
-
             return () => {
                 console.log('Orders screen unfocused');
             };
-        }, []) 
+        }, [])
     );
 
     useEffect(() => {
