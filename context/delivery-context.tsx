@@ -9,7 +9,7 @@ interface DeliveryContextType {
     initializeDelivery: (newDelivery: Delivery) => void;
     updateReceivedDelivery: (receivedDelivery: ReceivedDelivery) => void;
     getDelivery: () => Delivery | null;
-    finalizeDelivery: (receivedDelivery: ReceivedDelivery) => void;
+    finalizeDelivery: (receivedDelivery: ReceivedDelivery) => Promise<{success: boolean, message: string} | undefined>;
 }
 
 const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined);
@@ -49,16 +49,7 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
             total: receivedDelivery.total
         });
 
-        // const updatedDelivery: Delivery = {
-        //     ...delivery,
-        //     total: receivedDelivery.total
-        // };
-
         setReceivedDelivery(receivedDelivery);
-
-        // console.log('Received Delivery:', receivedDelivery.total)
-        // console.log('Delivery:', delivery);
-        // console.log('Updated Delivery:', updatedDelivery);
     };
 
     const getDelivery = () => {
@@ -73,14 +64,16 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
     const finalizeDelivery = async (receivedDelivery: ReceivedDelivery) => {
         if (!delivery) {
             console.error('No delivery to finalize');
-            return;
+            return {
+                success: false,
+                message: 'No delivery to finalize'
+            };
         }
 
         //assign deliveredBy to receivedDelivery lines
         receivedDelivery.deliveredBy = delivery.deliveredBy;
 
         try{
-
             const updatedDelivery: Delivery = {
                 ...delivery,
                 total: receivedDelivery.total
@@ -88,9 +81,10 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
 
             const jsonReturn = await deliveryRepository.createDelivery(updatedDelivery);
 
-            console.log('Delivery finalized with ID:', jsonReturn.deliveryId);
-
-            const updatedReceivedDelivery: ReceivedDelivery ={...receivedDelivery, deliveryId: jsonReturn.deliveryId};
+            const updatedReceivedDelivery: ReceivedDelivery ={
+                ...receivedDelivery, 
+                deliveryId: jsonReturn.deliveryId
+            };
 
             const resultDeliveryLines = await deliveryLineRepository.createDeliveryLines(updatedReceivedDelivery);
 
@@ -99,10 +93,21 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
 
             setDelivery(null);
             setReceivedDelivery(null);
+
+            if ((jsonReturn.deliveryId > 0) && (resultDeliveryLines.length > 0)) {
+                return {
+                    success: true,
+                    message: 'Delivery Finalized with ID: ' + jsonReturn.deliveryId
+                };
+            }
+
         } catch (error) {
             console.error('Error finalizing delivery:', error); 
+            return {
+                success: false,
+                message: `Error finalizing delivery: ${error instanceof Error ? error.message : 'Unknown error'}`
+            };
         };
-
     };
 
     const value = {
