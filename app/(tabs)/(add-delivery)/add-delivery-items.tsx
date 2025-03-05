@@ -1,13 +1,10 @@
 import { DeliveryCartComponent } from "@/components/delivery-cart/delivery-cart";
 import { useDeliveryCart } from "@/context/delivery-cart-context";
-import { View, StyleSheet, Alert, Modal, ActivityIndicator } from "react-native";
-
+import { View, StyleSheet, Alert, Modal, ActivityIndicator, Text } from "react-native";
 import StepIndicator from "@/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
 import { useDelivery } from "@/context/delivery-context";
-
 import { router } from "expo-router";
-
 import { useProducts } from "@/context/product-context";
 import { useState } from "react";
 
@@ -16,12 +13,20 @@ export default function AddDeliveryItemsScreen() {
     const { products } = useProducts();
     const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
     const{ delivery, addToDelivery, removeFromDelivery, getDelivery} = useDeliveryCart();
+    const { refreshProducts } = useProducts();
 
     const handleProceed = async () => {
         setIsLoading(true);
         try {
             updateReceivedDelivery(getDelivery());
             const deliveryResult = await finalizeDelivery(getDelivery());
+
+            try {
+                await refreshProducts();
+            } catch (refreshError) {
+                console.error('Failed to refresh products:', refreshError);
+                // show warning to the user that the product list may be outdated
+            }
             
             setIsLoading(false);
 
@@ -32,7 +37,7 @@ export default function AddDeliveryItemsScreen() {
                     [
                         { 
                             text: "OK", 
-                            onPress: () => router.push("/") 
+                            onPress: () => router.push("/(tabs)/(products)/products") 
                         }
                     ]
                 );
@@ -74,6 +79,7 @@ export default function AddDeliveryItemsScreen() {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
+                        <Text>Updating Products...</Text>
                         <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 </View>
