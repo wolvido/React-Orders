@@ -8,6 +8,7 @@ import OrderDetailsForm from "@/components/add-order-details-form";
 import { Customer } from "@/entities/customers";
 import { CustomerRepository } from "@/repositories/customer-repository";
 import { router } from "expo-router";
+import { useAuth } from "@/authentication/auth-context";
 
 
 export default function UpdateOrderScreen(){
@@ -16,6 +17,7 @@ export default function UpdateOrderScreen(){
     const { getCurrentOrder } = useOrder();
     const [ order, setOrder ] = useState<Order | undefined>(undefined);
     const [ customers, setCustomers ] = useState<Customer[]>([]);
+    const { user } = useAuth();
 
     //set order to current order
     useEffect(() => {
@@ -63,6 +65,7 @@ export default function UpdateOrderScreen(){
                         order={order}
                         customers={customers} 
                         onSubmit={handleOrderSubmit}
+                        currentUser={user || undefined}
                     />
                 ) : (
                     <ActivityIndicator size="large" />

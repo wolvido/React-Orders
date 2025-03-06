@@ -48,7 +48,7 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
         fulfillmentStatus: order?.fulfillmentStatus || Status.Pending,
         remarks: order?.remarks || '',
         deliveryAddress: order?.deliveryAddress || '',
-        handledBy: order?.handledBy || currentUser?.username || '', 
+        handledBy: currentUser?.username || order?.handledBy || '', 
         isPaid: order?.isPaid || false,
         isComplete: order?.isPaid || false
     });
