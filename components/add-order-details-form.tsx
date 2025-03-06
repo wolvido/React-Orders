@@ -4,11 +4,9 @@ import { TextInput, Button, Text } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
-import { DatePickerInput } from 'react-native-paper-dates';
 import CustomersSelection from './costumers-selection';
 import { Customer } from '@/entities/customers';
 import { Order } from '@/entities/order';
-import PaymentMethod from '@/entities/payment-method';
 import { DatePicker } from './date-picker';
 
 // Define props interface

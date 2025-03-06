@@ -19,6 +19,7 @@ import { EmptyState } from '@/components/empty-state';
 import { PaymentRepository } from '@/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
 import app from '@/app.json';
+import { OrdersList } from '@/components/orders-list';
 
 
 //react component
@@ -273,115 +274,11 @@ export default function OrdersScreen() {
         )}
 
         {!showPaymentForm && (
-        <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <DataTable.Header style={commonStyles.extraHeader}>
-                <Searchbar
-                    placeholder="Search..."
-                    onChangeText={setSearchQuery}
-                    value={searchQuery}
-                    mode='view'
-                    style = {commonStyles.searchBar}
-                    inputStyle = {commonStyles.searchBar}
-                    theme={{
-                        colors: {
-                            elevation: {
-                                level3: theme.colors.accent,  // This changes the inner background
-                            },
-                        },
-                    }}
+                <OrdersList 
+                    items={items}
+                    onPaymentClick={handlePaymentClick}
+                    onUpdateOrder={handleUpdateOrder}
                 />
-            </DataTable.Header>
-
-            <DataTable.Header>
-                <DataTable.Title style={{flexGrow: 3}}>Order Type</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Customer</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Transaction Date</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Payment Status</DataTable.Title>
-                {/* <DataTable.Title style={{flexGrow: 3}}>Fulfillment Status</DataTable.Title> */}
-                <DataTable.Title style={{flexGrow: 3}}>Total</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 3}}>Actions</DataTable.Title>
-            </DataTable.Header>
-
-            <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <DataTable>
-                        {filteredItems.slice(from, to).map((item) => (
-                            <DataTable.Row key={item.id}>
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.orderType}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.customer.name}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 3}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
-                                <DataTable.Cell
-                                    style={{flexGrow: 3}}
-                                    textStyle = {
-                                        {color: getPaymentStatusColor(item.orderStatus)}
-                                    }>
-                                    {item.orderStatus.toString()}
-                                </DataTable.Cell>
-
-                                {/* <DataTable.Cell
-                                    style={{flexGrow: 3}}
-                                >
-                                    <Button 
-                                        mode="outlined" 
-                                        onPress={() => handleStatusClick(item.id, item.fulfillmentStatus)}
-                                        textColor = {getStatusColor(item.fulfillmentStatus)}
-                                        >
-                                        {item.fulfillmentStatus}
-                                    </Button>
-
-                                </DataTable.Cell> */}
-
-                                <DataTable.Cell style={{flexGrow: 3}}>{`₱`+item.total}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 3}}>
-                                    <Button 
-                                        mode="contained" 
-                                        onPress={() => handlePaymentClick(item.id)}
-                                        disabled={item.orderStatus === PaymentStatus.paid}
-                                    >
-                                        Add Pay
-                                    </Button>
-                                </DataTable.Cell>
-                                <DataTable.Cell>
-                                    <Button 
-                                        mode="contained" 
-                                        onPress={() => handleUpdateOrder(item.id)}
-                                    >
-                                        Update
-                                    </Button>
-                                </DataTable.Cell>
-                            </DataTable.Row>
-                        ))}
-                    </DataTable>
-                </ScrollView>
-                {/* the table controller */}
-                <DataTable.Pagination
-                    page={page}
-                    numberOfPages={Math.ceil(items.length / itemsPerPage)}
-                    onPageChange={(page) => setPage(page)}
-                    label={`${from + 1}-${to} of ${items.length}`}
-                    numberOfItemsPerPageList={numberOfItemsPerPageList}
-                    numberOfItemsPerPage={itemsPerPage}
-                    onItemsPerPageChange={onItemsPerPageChange}
-                    showFastPaginationControls
-                    selectPageDropdownLabel={'Rows per page'}
-                    dropdownItemRippleColor={'white'}
-                    theme={{
-                        colors: {
-                            elevation: {
-                                level2: theme.colors.accent,
-                            },
-                            primary: 'black',
-                        },
-                    }}
-                    style={{
-                        backgroundColor: 'white',
-                        borderTopWidth: 1,
-                        borderTopColor: '#e0e0e0'
-                    }}
-                />
-
-            </View>
-        </View>
         )}
 
         </View>
