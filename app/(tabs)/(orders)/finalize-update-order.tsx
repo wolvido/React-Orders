@@ -1,7 +1,6 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
-import OrderForm from '@/components/finalize-order-form';
 import StepIndicator from '@/components/order-step-indicator';
-import orderSteps from './order-steps-label';
+import orderSteps from './update-order-labels';
 import OrderFormFinal from '@/components/finalize-order-form';
 import { useOrder } from '@/context/order-context';
 import { Button } from 'react-native-paper';
@@ -10,11 +9,11 @@ import { useProducts } from '@/context/product-context';
 import { useCart } from '@/context/cart-context';
 import { useState } from 'react';
 
-export default function FinalizeOrder() {
-    const { updateDeliveryAddress, updateRemarks, finalizeOrder} = useOrder();
+export default function FinalizeUpdateOrder(){
+    const { updateDeliveryAddress, updateRemarks, finalizeOrderUpdate, getCurrentOrder} = useOrder();
     const { refreshProducts } = useProducts();
     const { emptyCart } = useCart();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
 
     const handleFormChange = (formData: { remarks: string; deliveryAddress: string }) => {
         // Update delivery address
@@ -23,25 +22,25 @@ export default function FinalizeOrder() {
         updateRemarks(formData.remarks);
     };
 
+    const currentOrder = getCurrentOrder();
+
     const handleFinalizeOrder = async () => {
         if (isSubmitting) return;
 
         setIsSubmitting(true);
 
         try {
-            await finalizeOrder();
+            await finalizeOrderUpdate();
             await refreshProducts();
             emptyCart();
-            router.push('/add-order');
             router.push('/orders');
         } catch (error) {
             // Handle error if needed
-            console.error('Error finalizing order:', error);
+            console.error('Error finalizing update order:', error);
             setIsSubmitting(false); // Re-enable button on error
         }
-    }
+    };
 
-    
     return (
         <View style={styles.container}>
             <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
@@ -56,7 +55,13 @@ export default function FinalizeOrder() {
                 >
 
                     <View style={styles.content}>
-                        <OrderFormFinal onFormChange={handleFormChange} />
+                        <OrderFormFinal 
+                            onFormChange={handleFormChange}
+                            existingData={{ 
+                                remarks: currentOrder?.remarks ?? '', 
+                                deliveryAddress: currentOrder?.deliveryAddress ?? '' 
+                            }} 
+                        />
                     </View>
 
                     <Button 
@@ -72,8 +77,6 @@ export default function FinalizeOrder() {
     );
 
 }
-
-
 
 const styles = StyleSheet.create({
     container: {

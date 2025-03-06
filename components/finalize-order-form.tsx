@@ -4,12 +4,13 @@ import { useState } from 'react';
 
 interface OrderFormProps {
     onFormChange: (data: { remarks: string; deliveryAddress: string }) => void;
+    existingData?: { remarks: string; deliveryAddress: string };
 }
 
-export default function OrderFormFinal({ onFormChange }: OrderFormProps) {
+export default function OrderFormFinal({ onFormChange, existingData }: OrderFormProps) {
     const [isPickup, setIsPickup] = useState(false);
-    const [remarks, setRemarks] = useState('');
-    const [deliveryAddress, setDeliveryAddress] = useState('');
+    const [remarks, setRemarks] = useState(existingData?.remarks || '');
+    const [deliveryAddress, setDeliveryAddress] = useState(existingData?.deliveryAddress || '');
 
     const handlePickupToggle = (isPickupSelected: boolean) => {
         setIsPickup(isPickupSelected);

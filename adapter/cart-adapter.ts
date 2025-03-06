@@ -52,7 +52,7 @@ export function convertCartToOrderLines(cart: Cart): RestaurantOrderLineDTO[] {
         isDtoSelected: false,
         
         // Other required fields with default values
-        restaurantOrderLineId: 0,
+        restaurantOrderLineId: cartItem.id || 0,
         restaurantOrderId: cart.orderId,
         productSubmenuId: 0,
         rootBundleId: 0,
@@ -80,6 +80,7 @@ export function convertOrderLinesToCart(orderLines: RestaurantOrderLineDTO[]): C
 
     try {
         const cartItems: CartItem[] = orderLines.map(line => ({
+            id: line.restaurantOrderLineId,
             product: {
                 id: line.productId,
                 name: line.productName,

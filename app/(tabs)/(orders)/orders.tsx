@@ -1,7 +1,7 @@
 import commonStyles from '@/style/common';
 import theme from '@/style/theme';
 import * as React from 'react';
-import { DataTable, Searchbar, Button, Portal, Modal, Appbar } from 'react-native-paper';
+import { DataTable, Searchbar, Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
 import getStatusColor from '@/hooks/status-color-hook';
 import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
 import { useState, useEffect, useCallback } from 'react';
@@ -27,7 +27,6 @@ export default function OrdersScreen() {
     console.log("current api:"+ app.api.main);
 
     const orderRepository = new OrderRepository();
-
     const paymentRepository = new PaymentRepository();
 
     const { getOrderbyId, setOrder } = useOrder();
@@ -35,6 +34,7 @@ export default function OrdersScreen() {
     const [items, setItems] = useState<Order[]>([]);
     const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [ isLoading, setIsLoading ] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
@@ -63,6 +63,7 @@ export default function OrdersScreen() {
         'orderType',
         'customer',
     ];
+
     const { searchQuery, setSearchQuery, filteredItems } = useSearch<Order>(
         items,
         searchableFields
@@ -160,12 +161,16 @@ export default function OrdersScreen() {
     const [updateOrder, setUpdateOrder] = useState<Order | null>(null);
 
     const handleUpdateOrder = async (id: number) => {
+        setIsLoading(true);
+
         const order = await getOrderbyId(id);
         if (order) {
             setUpdateOrder(order);
-        }
-    };
+        }   
 
+        setIsLoading(false);
+    };
+    
     // Add this useEffect
     useEffect(() => {
         if (updateOrder) {
@@ -201,6 +206,27 @@ export default function OrdersScreen() {
 
     return (
         <View style={{ flex: 1 }}>
+            <Portal>
+                <Modal
+                    visible={isLoading}
+                    dismissable={false}
+                    contentContainerStyle={{
+                        backgroundColor: 'transparent',
+                        padding: 20,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                    style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)'  // This creates the dark overlay
+                    }}
+                >
+                    <Card style={{ padding: 20, alignItems: 'center' }}>
+                        <ActivityIndicator size="large" color={theme.colors.primary} />
+                        <Text style={{ marginTop: 10 }}>Loading...</Text>
+                    </Card>
+                </Modal>
+            </Portal>
+
             <Portal>
                 <Modal
                     visible={showStatusModal}
@@ -315,14 +341,14 @@ export default function OrdersScreen() {
                                         Add Pay
                                     </Button>
                                 </DataTable.Cell>
-                                {/* <DataTable.Cell>
+                                <DataTable.Cell>
                                     <Button 
                                         mode="contained" 
                                         onPress={() => handleUpdateOrder(item.id)}
                                     >
                                         Update
                                     </Button>
-                                </DataTable.Cell> */}
+                                </DataTable.Cell>
                             </DataTable.Row>
                         ))}
                     </DataTable>

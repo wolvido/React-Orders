@@ -33,7 +33,7 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
     }, [customers]);
 
     const [formData, setFormData] = useState<Order>({
-        id: order?.id || Math.floor(1000000 + Math.random() * 9000000),
+        id: order?.id || 0,
         orderType: order?.orderType || '',
         customer: {
             id: order?.customer.id || 0,

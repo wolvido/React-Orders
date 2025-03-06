@@ -5,7 +5,6 @@ import PaymentMethod from '@/entities/payment-method';
 import { Cart } from '@/entities/cart';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
-
 import { OrderRepository } from '@/repositories/order-repository';
 import { Customer } from '@/entities/customers';
 import { OrderLineRepository } from '@/repositories/order-line-repository';
@@ -23,6 +22,7 @@ interface OrderContextType {
     updateDeliveryAddress: (address: string) => void;
     getCurrentOrder: () => Order | null;
     finalizeOrder: () => void;
+    finalizeOrderUpdate: () => void;
     initializeOrder: (orderDetails: Partial<Order>) => void;
     updateFulfillmentById: (status: Status, id: number) => void;
     getOrderbyId: (id: number) => Promise<Order | undefined>;
@@ -45,7 +45,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     const initializeOrder = (orderDetails: Partial<Order>) => {
         const newOrder: Order = {
-            id: Math.floor(1000000 + Math.random() * 9000000),
+            id: 0,
             orderType: 'Walk-in',
             customer: {
                 id: 0,
@@ -110,7 +110,9 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     
         try {
             console.log('Finalizing order:', currentOrder);
-            // console.log('Finalizing order:', currentOrder);
+
+            currentOrder.id = 0;
+
             const jsonReturn = await orderRepository.create(currentOrder);
 
             const updatedCart = { ...cart, orderId: jsonReturn.orderId };
@@ -119,6 +121,48 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
             console.log('Order finalized with ID:', jsonReturn.orderId);
             console.log('Order lines created:', result);
+
+            setCart({ items: [], total: 0, orderId: 0 });
+            setCurrentOrder(null);
+
+        } catch (error) {
+
+            console.error('Failed to finalize order:', error);
+            
+            //needs to be handled for user here
+        }
+    };
+
+    const finalizeOrderUpdate = async () => {
+        if (!currentOrder) return;
+    
+        try {
+            console.log('Finalizing order update:', currentOrder);
+
+            const existingCart = await orderLineRepository.getCart(currentOrder.id);
+
+            //new cart items
+            const newCartItems = cart.items.filter((item) => item.id === 0);
+            if (newCartItems.length > 0){
+                await orderLineRepository.createOrderLines({ items: newCartItems, total: cart.total, orderId: currentOrder.id });
+            }
+            
+            //updated cart items
+            const updatedCartItems = cart.items.filter((item) => item.id !== 0);
+            if (updatedCartItems.length > 0){
+                await orderLineRepository.updateOrderLines({ items: updatedCartItems, total: cart.total, orderId: currentOrder.id });
+            }
+
+            //deleted items
+            const deletedCartItems = existingCart.items.filter((item) => !cart.items.some((i) => i.id === item.id));
+            if (deletedCartItems.length > 0)
+            {
+                console.log('Deleted items from context:', deletedCartItems);
+
+                await orderLineRepository.deleteOrderLines({ items: deletedCartItems, total: cart.total, orderId: currentOrder.id });
+            }
+            
+            await orderRepository.update(currentOrder);
 
             setCart({ items: [], total: 0, orderId: 0 });
             setCurrentOrder(null);
@@ -184,6 +228,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         updateDeliveryAddress,
         getCurrentOrder,
         finalizeOrder,
+        finalizeOrderUpdate,
         initializeOrder,
         updateFulfillmentById,
         getOrderbyId,

@@ -177,7 +177,8 @@ export function ReceiveDeliveryCartComponent({
         const selectedDelivery: ReceivedDelivery = {
             items: cartItems,
             total: cartTotal,
-            deliveryId: 0
+            deliveryId: 0,
+            deliveredBy: ''
         };
 
         onProceed(selectedDelivery);

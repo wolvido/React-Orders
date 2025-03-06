@@ -2,7 +2,7 @@ import StepIndicator from "@/components/order-step-indicator";
 import { useOrder } from "@/context/order-context";
 import { Order } from "@/entities/order";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import orderUpdateSteps from "./update-order-labels";
 import OrderDetailsForm from "@/components/add-order-details-form";
 import { Customer } from "@/entities/customers";
@@ -17,6 +17,7 @@ export default function UpdateOrderScreen(){
     const [ order, setOrder ] = useState<Order | undefined>(undefined);
     const [ customers, setCustomers ] = useState<Customer[]>([]);
 
+    //set order to current order
     useEffect(() => {
         const currentOrder = getCurrentOrder();
         if (currentOrder) {
@@ -25,6 +26,7 @@ export default function UpdateOrderScreen(){
         }
     }, [getCurrentOrder]);
 
+    //load customers
     useEffect(() => {
         const loadCustomers = async () => {
             try {
@@ -47,15 +49,26 @@ export default function UpdateOrderScreen(){
     return (
         <View>
             <StepIndicator currentStep={1} steps={orderUpdateSteps} />
-            {order ? (
-                <OrderDetailsForm 
-                    order={order}
-                    customers={customers} 
-                    onSubmit={handleOrderSubmit}
-                />
-            ) : (
-                <ActivityIndicator size="large" />
-            )}
+            <ScrollView
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{
+                    paddingBottom: 100 // Add extra padding at bottom
+                }}
+                showsVerticalScrollIndicator={true}
+                keyboardDismissMode="interactive"
+                automaticallyAdjustKeyboardInsets={true}
+            >
+                {order ? (
+                    <OrderDetailsForm 
+                        order={order}
+                        customers={customers} 
+                        onSubmit={handleOrderSubmit}
+                    />
+                ) : (
+                    <ActivityIndicator size="large" />
+                )}
+            </ScrollView>
+            
         </View>
     );
 

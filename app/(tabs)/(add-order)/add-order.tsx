@@ -45,7 +45,11 @@ export default function AddOrderScreen() {
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                <OrderDetailsForm currentUser={user || undefined} onSubmit={handleOrderSubmit} customers={customers} />
+                <OrderDetailsForm 
+                    currentUser={user || undefined} 
+                    onSubmit={handleOrderSubmit} 
+                    customers={customers} 
+                />
             </ScrollView>
         </View>
     );

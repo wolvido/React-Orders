@@ -6,8 +6,6 @@ const getStatusColor = (status: Status) => {
         return '#2ecc71';  // Green
       case Status.Pending:
         return '#f1c40f';  // Yellow
-      case Status.Cancelled:
-        return '#e74c3c';  // Red
       default:
         return 'black';
     }

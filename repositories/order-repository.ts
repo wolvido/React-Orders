@@ -6,8 +6,7 @@ import { useApi } from "@/context/dev-mode-context";
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
     getAll(): Promise<Order[]>;
-    // getAllCustomers(): Promise<Customer[]>;
-
+    update(order: Order): Promise<void>;
     create(order: Omit<Order, 'id'>): Promise<{orderId: number}>;
 }
 
@@ -71,14 +70,30 @@ export class OrderRepository implements IOrderRepository {
         return this.handleResponse<Order>(response);
     }
 
-    // async getAllCustomers(): Promise<Customer[]> {
-    //     const response = await fetch(`${this.baseUrl}/fetch-customers`);
-    //     return await this.handleResponseCustomers<Customer[]>(response);
-    // }
+    async update(order: Order): Promise<void> {
+        const oldOrder = await fetch(`${this.baseUrl}/fetch-order/${order.id}`);
+        const oldOrderData = await oldOrder.json();
+
+        const orderDto = OrderAdapter.reverse(order);
+
+        orderDto.sys_CreateTimeStamp = oldOrderData.sys_CreateTimeStamp;
+
+        const response = await fetch(this.baseUrl+'/update/'+order.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderDto)
+        });
+
+        console.log('Order Update response status:', response.status)
+    }
 
     async create(order: Omit<Order, 'id'>): Promise<{orderId: number}> {
         // Convert the order to DTO format before sending
         const orderDto = OrderAdapter.reverse(order as Order);
+
+        orderDto.restaurantOrderId = 0;
         
         const response = await fetch(this.baseUrl+'/create', {
             method: 'POST',
@@ -92,4 +107,6 @@ export class OrderRepository implements IOrderRepository {
 
         return await response.json();
     }
+
+
 }

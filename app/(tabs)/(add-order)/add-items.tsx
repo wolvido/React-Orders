@@ -7,17 +7,22 @@ import { CartComponent } from "@/components/order-cart/cart";
 import orderSteps from "./order-steps-label";
 import { useOrder } from "@/context/order-context";
 import { useProducts } from "@/context/product-context";
+import { useEffect } from "react";
 
 export default function AddItemsScreen() {
 
     const { products, isLoading, updateProducts } = useProducts();
-    const { cart, addToCart, removeFromCart, BundleProductToCart } = useCart();
+    const { cart, addToCart, removeFromCart, BundleProductToCart, emptyCart } = useCart();
     const { updateCart } = useOrder();
 
     const handleProceed = () => {
         updateCart(cart);
         router.push('/finalize-order');
     };
+
+    useEffect(() => {
+        emptyCart();
+    }, []);
 
     return (
         <View style={styles.container}>

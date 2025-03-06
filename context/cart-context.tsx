@@ -9,6 +9,7 @@ interface CartContextType {
     addToCart: (item: CartItem) => {success: boolean, error?: string};
     removeFromCart: (product: Product) => void;
     getCart: () => Cart;
+    setCart: (cart: Cart) => void;
     emptyCart: () => void;
     BundleProductToCart: (product: Product, quantity: number) => {success: boolean, error?: string};
 }
@@ -96,28 +97,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     updatedItems = cartItemUpdater(updatedItems, {
                         product: product.bundleType,
                         quantity: bundlesCount,
-                        total: product.bundleType.price * bundlesCount
+                        total: product.bundleType.price * bundlesCount,
+                        id: existingCartItem?.id || 0
                     });
     
                     if (remainingItems > 0) {
                         updatedItems = cartItemUpdater(updatedItems, {
                             product: product,
                             quantity: remainingItems,
-                            total: product.price * remainingItems
+                            total: product.price * remainingItems,
+                            id: existingCartItem?.id || 0
                         });
                     }
                 } else {
                     updatedItems = cartItemUpdater(updatedItems, {
                         product: product,
                         quantity: newTotalQuantity,
-                        total: product.price * newTotalQuantity
+                        total: product.price * newTotalQuantity,
+                        id: existingCartItem?.id || 0
                     });
                 }
             } else {
                 updatedItems = cartItemUpdater(updatedItems, {
                     product: product,
                     quantity: newTotalQuantity,
-                    total: product.price * newTotalQuantity
+                    total: product.price * newTotalQuantity,
+                    id: existingCartItem?.id || 0
                 });
             }
     
@@ -139,6 +144,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     
             if (itemIndex === -1) {
                 console.error('Item not found in cart');
+                console.error('Product Id:', product.id);
+                console.error('Product Name:', product.name);
                 return prevCart;
             }
 
@@ -199,6 +206,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             addToCart,
             removeFromCart,
             getCart,
+            setCart,
             emptyCart,
             BundleProductToCart
         }}>

@@ -97,7 +97,7 @@ export class OrderAdapter {
             isDtoSelected: false,
 
             // Mapped fields from Order
-            restaurantOrderId: 0,
+            restaurantOrderId: order.id || 0,
             orderType: order.orderType,
             orderDate: order.transactionDate.toISOString(),
             balance: order.balance,
@@ -135,5 +135,58 @@ export class OrderAdapter {
             drNo: ""
         };
     }
+
+    // static adaptOrderUpdate(order: Order): RestaurantOrderDTO {
+    //     return {
+    //         // sys something something
+    //         isDeleted: false,
+    //         sys_CreateTimeStamp: new Date().toISOString(),
+    //         sys_CreateUserStamp: "",
+    //         sys_LastEditedTimeStamp: new Date().toISOString(),
+    //         sys_LastEditedUserStamp: "",
+    //         sys_DeletedTimeStamp: null,
+    //         sys_DeletedUserStamp: "",
+    //         state: 0,
+    //         isDtoSelected: false,
+
+    //         // Mapped fields from Order
+    //         restaurantOrderId: order.id || 0,
+    //         orderType: order.orderType,
+    //         orderDate: order.transactionDate.toISOString(),
+    //         balance: order.balance,
+    //         total: order.total,
+    //         isPaid: order.isPaid,
+    //         isComplete: order.isComplete,
+    //         handledBy: order.handledBy,
+    //         note: order.remarks,
+    //         customerId: order.customer.id,
+    //         customerName: order.customer.name,
+    //         contactNumber: order.customer.contactNumber || "",
+    //         address: order.deliveryAddress || order.customer.address ,
+
+    //         // restaurant bullshit
+    //         releaseDate: new Date().toISOString(),
+    //         dueDate: new Date().toISOString(),
+    //         releasedBy: "",
+    //         isGrouped: false,
+    //         diningType: "",
+    //         preparedBy: "",
+    //         roomHistoryId: 0,
+    //         roomNumber: 0,
+    //         tableNumber: 0,
+    //         subtotal: order.total, // subtotal is same as total because idk
+    //         discount: 0,
+    //         description: "",
+    //         status: "",
+    //         servedTime: new Date().toISOString(),
+    //         salesAgentId: 0,
+    //         salesAgentName: "",
+    //         invoiceNumber: "",
+    //         bulkShipment: 0,
+    //         deliveryFee: 0,
+    //         otherFee: 0,
+    //         drNo: ""
+    //     };
+    // }
 
 }
