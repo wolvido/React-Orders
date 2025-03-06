@@ -1,4 +1,4 @@
-import { DataTable, Searchbar, Button, List  } from 'react-native-paper';
+import { DataTable, Searchbar, Button, List, Menu  } from 'react-native-paper';
 import { View, ScrollView, useWindowDimensions } from 'react-native';
 import { Order } from '@/entities/order';
 import commonStyles from '@/style/common';
@@ -19,6 +19,13 @@ interface OrdersListProps {
 export const OrdersList = ({ items, onPaymentClick, onUpdateOrder }: OrdersListProps) => {
     const { width, height } = useWindowDimensions();
     const isPortrait = height > width;
+
+    // Add state to track which row's menu is open
+    const [menuVisible, setMenuVisible] = useState<number | null>(null);
+
+    // Toggle menu for a specific row
+    const openMenu = (id: number) => setMenuVisible(id);
+    const closeMenu = () => setMenuVisible(null);
 
     const searchableFields: (keyof Order)[] = [
         'orderType',
@@ -92,33 +99,42 @@ export const OrdersList = ({ items, onPaymentClick, onUpdateOrder }: OrdersListP
                                 
                                 {isPortrait ? (
                                     <DataTable.Cell style={{flexGrow: 3}}>
-                                        <List.Accordion
-                                            title="Actions"
-                                            style={{ 
-                                                padding: 0,
-                                                backgroundColor: '#f2f2f2'
-                                            }}
-                                            left={props => <List.Icon {...props} icon="menu" />}
-                                            right={props => <List.Icon {...props} icon="blank" />}
+                                        <Menu
+                                            visible={menuVisible === item.id}
+                                            onDismiss={closeMenu}
+                                            anchor={
+                                                <Button 
+                                                    mode="contained"
+                                                    icon="menu"
+                                                    compact
+                                                    style={{ backgroundColor: '#f2f2f2' }}
+                                                    textColor="black"
+                                                    onPress={() => openMenu(item.id)}
+                                                >
+                                                    Actions
+                                                </Button>
+                                            }
+                                            style={{ marginTop: 40 }} // Adjust to position correctly
                                         >
-                                            <List.Item
-                                                title="Add Pay"
-                                                onPress={() => onPaymentClick(item.id)}
-                                                disabled={item.orderStatus === PaymentStatus.paid}
-                                                
-                                                left={props => <List.Icon {...props} icon="cash-plus" />}
-                                                style={{
-                                                    borderBottomWidth: 1,
-                                                    borderBottomColor: '#e0e0e0',
-                                                    display: item.orderStatus === PaymentStatus.paid ? 'none' : 'flex'
-                                                }}
+                                            {item.orderStatus !== PaymentStatus.paid && (
+                                                <Menu.Item 
+                                                    onPress={() => {
+                                                        closeMenu();
+                                                        onPaymentClick(item.id);
+                                                    }} 
+                                                    title="Add Pay"
+                                                    leadingIcon="cash-plus"
+                                                />
+                                            )}
+                                            <Menu.Item 
+                                                onPress={() => {
+                                                    closeMenu();
+                                                    onUpdateOrder(item.id);
+                                                }} 
+                                                title="Update" 
+                                                leadingIcon="pencil"
                                             />
-                                            <List.Item
-                                                title="Update"
-                                                onPress={() => onUpdateOrder(item.id)}
-                                                left={props => <List.Icon {...props} icon="pencil" />}
-                                            />
-                                        </List.Accordion>
+                                        </Menu>
                                     </DataTable.Cell>
                                 ) : (
                                     <>
