@@ -13,8 +13,8 @@ export function useProductHook() {
         return reduceStock(productId, quantity);
     };
 
-    const handleIncreaseStock = (productId: number, quantity: number) => {
-        return increaseStock(productId, quantity);
+    const handleIncreaseStock = (productId: number, quantity: number, isBundleId?:boolean) => {
+        return increaseStock(productId, quantity, isBundleId);
     };
 
     return {

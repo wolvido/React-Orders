@@ -138,6 +138,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     
     const removeFromCart = (product: Product) => {
         setCart(prevCart => {
+
             const itemIndex = prevCart.items.findIndex(item => 
                 item.product.id === product.id
             );
@@ -171,8 +172,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                     increaseStock(cartItem.product.originalProductId, removedBundleQuantity);
                 }
                 else{
-                    increaseStock(cartItem.product.id, removedBundleQuantity);
-                    console.error('Original Product Id not found');
+                    increaseStock(cartItem.product.id, removedBundleQuantity, true);
                 }
             }
             else{

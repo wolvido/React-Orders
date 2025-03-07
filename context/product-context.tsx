@@ -8,7 +8,7 @@ interface ProductContextType {
     error: string | null;
     refreshProducts: () => Promise<void>;
     reduceStock: (productId: number, quantity: number) => { success: boolean; error?: string };
-    increaseStock: (productId: number, quantity: number) => void;
+    increaseStock: (productId: number, quantity: number, isBundleId?: boolean) => void;
     updateProducts: () => Promise<void>;
 }
 
@@ -75,7 +75,20 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         return { success: true };
     };
 
-    const increaseStock = (productId: number, quantity: number) => {
+    /**
+     * increases the stock of a product by a given quantity
+     * @param productId 
+     * @param quantity 
+     * @param isBundleId determines if the product id is from a bundle product, also converts quantity, into bundle quantity
+     */
+    const increaseStock = (productId: number, quantity: number, isBundleId?: boolean) => {
+
+        if(isBundleId){
+            const bundleProduct = products.find(p => p.id === productId);
+            productId = bundleProduct?.originalProductId || 0;
+            quantity = (bundleProduct?.bundleQuantity || 1) * quantity;
+        }
+
         //keep track of stock changes
         setStockChanges(prev => ({
             ...prev,
