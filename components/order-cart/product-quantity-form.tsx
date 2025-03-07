@@ -27,7 +27,7 @@ const ProductQuantityForm = memo(({
         const numericValue = parseInt(quantity);
         if (numericValue) {
             const result = onAdd(productId, numericValue);
-            console.log(result.success);
+            console.log("quantity form Add to cart:", result.success);
 
             if (result.success) {
                 setQuantity('');
