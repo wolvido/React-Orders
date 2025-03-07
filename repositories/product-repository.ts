@@ -50,8 +50,6 @@ export class ProductRepository implements IProductRepository{
     //method that checks if product is a bundle then injects its bundle equivalent
     private async injectBundle(product: Product): Promise<Product> {
         if (product.isBundle) {
-            const bundleLine = await this.getBundleLine(product.id);
-            product.bundleQuantity = bundleLine?.quantity || 0;
             return product;
         }
 
