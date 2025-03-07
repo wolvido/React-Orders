@@ -41,28 +41,42 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     const reduceStock = (productId: number, quantity: number) => {
-        const product = products.find(p => p.id === productId);
-        
-        if (!product) {
+        const productIndex = products.findIndex(p => p.id === productId);
+        if (productIndex === -1) {
             return { success: false, error: 'Product not found' };
         }
+    
+        const product = products[productIndex];
 
-        if (product.stocks < quantity) {
-            return { 
-                success: false, 
-                error: `Insufficient stock. Only ${product.stocks} available.` 
-            };
+        console.log("is Bundle?", product.isBundle);
+        
+        const targetProductId = product.isBundle ? (product.originalProductId || productId) : productId;
+
+        const targetProduct = product.isBundle ? 
+            products.find(p => p.id === targetProductId) : 
+            product;
+
+        quantity = product.isBundle ? (product.bundleQuantity || 1) * quantity : quantity;
+    
+        if (!targetProduct) {
+            return { success: false, error: 'Target product not found' };
         }
 
-        //keep track of stock changes
+        // Keep track of stock changes
         setStockChanges(prev => ({
             ...prev,
-            [productId]: (prev[productId] || 0) - quantity
+            [targetProductId]: (prev[targetProductId] || 0) - quantity
         }));
-
+    
+        // Update products
         setProducts(prevProducts => {
             return prevProducts.map(product => {
-                if (product.id === productId) {
+                if (product.id === targetProductId) {
+                    //prevent negative stock
+                    const newStock = product.stocks - quantity;
+                    if (newStock < 0) {
+                        return product;
+                    }
                     return {
                         ...product,
                         stocks: product.stocks - quantity
@@ -71,9 +85,10 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                 return product;
             });
         });
-
+    
         return { success: true };
     };
+    
 
     /**
      * increases the stock of a product by a given quantity
