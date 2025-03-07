@@ -34,6 +34,10 @@ export function ProductList({
         const product = products.find(p => p.id === productId);
         if (!product) return { success: false };
 
+        const targetProduct = product.isBundle ? 
+            products.find(p => p.id === product.originalProductId) : 
+            product;
+
         //validation
         if (quantity < 1) {
             const errorMessage = 'Quantity must be at least 1';
@@ -45,13 +49,22 @@ export function ProductList({
             return { success: false };
         }
 
-        if (product.stocks < quantity) {
-            const errorMessage = `Insufficient stock. Only ${product.stocks} available.`;
+        if (!targetProduct) {
+            const errorMessage = 'Bundle product not found';
             setErrors(prev => ({
                 ...prev,
                 [productId]: errorMessage
             }));
             onError?.(errorMessage);
+            return { success: false };
+        }
+
+        if (targetProduct.stocks < (quantity * (targetProduct.bundleQuantity || 1))) {
+            const errorMessage = `Insufficient stock. Only ${targetProduct.stocks} available.`;
+            setErrors(prev => ({
+                ...prev,
+                [productId]: errorMessage
+            }));
             return { success: false };
         }
 
