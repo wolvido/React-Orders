@@ -39,8 +39,28 @@ export class ProductRepository implements IProductRepository{
         //check if data is an array
         if (Array.isArray(data)) {
             const products = data.map((product: any) => ProductAdapter.adapt(product));
-            products.forEach(async product => await this.injectBundle(product));
-            return await products as T;
+            
+            // Filter out bundle products
+            const filteredProducts = products.filter(product => !product.isBundle);
+            
+            // IMPORTANT: Wait for all injectBundle operations to complete
+            const enhancedProducts = await Promise.all(
+                filteredProducts.map(product => this.injectBundle(product))
+            );
+            
+            // Now extract bundle types after all promises have resolved
+            const bundleTypes = Array.from(
+                new Map(
+                    enhancedProducts
+                        .filter(product => product.bundleType !== undefined)
+                        .map(product => [product.bundleType!.id, product.bundleType!])
+                ).values()
+            );
+            
+            // Add bundleTypes to products
+            const allProducts = [...enhancedProducts, ...bundleTypes];
+            
+            return allProducts as T;
         }
 
         const product = await ProductAdapter.adapt(data);
@@ -104,7 +124,14 @@ export class ProductRepository implements IProductRepository{
 
     async getBundleById(productId: number): Promise<Product | null> {
         const response = await fetch(`${this.baseUrl}/fetch-bundle-product/${productId}`);
-        return await this.handleResponse<Product>(response);
+        const quantity = await this.getBundleQuantityById(productId);
+        const bundle =  await this.handleResponse<Product>(response);
+
+        if (bundle) {
+            bundle.bundleQuantity = quantity;
+        }
+
+        return bundle;
     }
 
     async getBundleLine(productId: number): Promise<BundleLineDTO | null> {
@@ -115,6 +142,11 @@ export class ProductRepository implements IProductRepository{
     async getProductById(productId: number): Promise<Product | null> {
         const response = await fetch(`${this.baseUrl}/fetch-product/${productId}`);
         return await this.handleResponse<Product>(response);
+    }
+
+    async getBundleQuantityById(productId: number): Promise<number> {
+        const response = await this.getBundleLine(productId);
+        return response?.quantity || 0;
     }
 
 }
