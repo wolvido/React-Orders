@@ -90,7 +90,14 @@ export function ProductList({
 
                     <View style={styles.stockInfo}>
                         <Text variant="bodySmall">
-                            Stock: {product.stocks}
+                            {product.isBundle ? (
+                                // <Text style={{ color: 'rgb(192, 163, 2)' }}>
+                                //     Bundle
+                                // </Text>
+                                `Bundle: ${product.bundleQuantity} pieces`
+                            ) : (
+                                `Stock: ${product.stocks}`
+                            )}
                         </Text>
                     </View>
 
