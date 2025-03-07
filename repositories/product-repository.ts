@@ -56,6 +56,8 @@ export class ProductRepository implements IProductRepository{
                         .map(product => [product.bundleType!.id, product.bundleType!])
                 ).values()
             );
+
+            console.log('bundleType sample:', bundleTypes[0]);
             
             // Add bundleTypes to products
             const allProducts = [...enhancedProducts, ...bundleTypes];
