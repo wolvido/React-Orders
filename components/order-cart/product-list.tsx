@@ -8,7 +8,7 @@ import theme from "@/style/theme";
 
 interface ProductListProps {
     products: Product[];
-    onAddToCart: (product: Product, quantity: number) => {success: boolean};
+    onAddToCart: (product: Product, quantity: number) => {success: boolean, error?: string};
     onError?: (message: string) => void;
     onUpdateProducts: () => Promise<void>;
     isLoading?: boolean;
@@ -59,17 +59,26 @@ export function ProductList({
             return { success: false };
         }
 
-        if (targetProduct.stocks < (quantity * (product.isBundle ? targetProduct.bundleQuantity ||1 : 1))) {
-            const errorMessage = `Insufficient stock. Only ${targetProduct.stocks} available.`;
-            setErrors(prev => ({
-                ...prev,
-                [productId]: errorMessage
-            }));
-            return { success: false };
-        }
+        // if (targetProduct.stocks < (quantity * (product.isBundle ? targetProduct.bundleQuantity ||1 : 1))) {
+        //     const errorMessage = `Insufficient stock. Only ${targetProduct.stocks} available.`;
+        //     setErrors(prev => ({
+        //         ...prev,
+        //         [productId]: errorMessage
+        //     }));
+        //     return { success: false };
+        // }
 
         setErrors(prev => ({ ...prev, [productId]: '' }));
         const result = onAddToCart(product, quantity);
+
+        if (!result.success) {
+            const errorMessage = 'Failed to add item to cart';
+            setErrors(prev => ({
+                ...prev,
+                [productId]: result.error || errorMessage
+            }));
+            onError?.(errorMessage);
+        }
 
         return result;
     };

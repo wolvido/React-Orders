@@ -47,11 +47,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         }
     
         const product = products[productIndex];
-
-        console.log("is Bundle?", product.isBundle);
-        
         const targetProductId = product.isBundle ? (product.originalProductId || productId) : productId;
-
         const targetProduct = product.isBundle ? 
             products.find(p => p.id === targetProductId) : 
             product;
@@ -60,6 +56,16 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     
         if (!targetProduct) {
             return { success: false, error: 'Target product not found' };
+        }
+
+        console.log("product name", product.name);
+        console.log("stock snapshot", targetProduct?.stocks);
+        console.log("quantity", quantity);
+
+        // Check if there's enough stock
+        if (targetProduct.stocks < quantity) {
+            console.error(`Insufficient stock. Only ${targetProduct.stocks} available. triggered in reduceStock`);
+            return { success: false, error: `Insufficient stock. Only ${targetProduct.stocks} available.` };
         }
 
         // Keep track of stock changes
