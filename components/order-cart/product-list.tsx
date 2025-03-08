@@ -32,34 +32,8 @@ export function ProductList({
 
     const handleAddItem = (productId: number, quantity: number) => {
         const product = products.find(p => p.id === productId);
-        if (!product) return { success: false };
-
-        const targetProduct = product.isBundle ? 
-            products.find(p => p.id === product.originalProductId) : 
-            product;
-
-        //validation
-        if (quantity < 1) {
-            const errorMessage = 'Quantity must be at least 1';
-            setErrors(prev => ({
-                ...prev,
-                [productId]: errorMessage
-            }));
-            onError?.(errorMessage);
-            return { success: false };
-        }
-
-        if (!targetProduct) {
-            const errorMessage = 'Bundle product not found';
-            setErrors(prev => ({
-                ...prev,
-                [productId]: errorMessage
-            }));
-            onError?.(errorMessage);
-            return { success: false };
-        }
+        if (!product) return { success: false, error: 'Product not found' };
         
-        setErrors(prev => ({ ...prev, [productId]: '' }));
         const result = onAddToCart(product, quantity);
 
         if (!result.success) {
@@ -69,6 +43,10 @@ export function ProductList({
                 [productId]: result.error || errorMessage
             }));
             onError?.(errorMessage);
+        }
+        else{
+            //clear errors on success
+            setErrors(prev => ({ ...prev, [productId]: '' }));
         }
 
         return result;

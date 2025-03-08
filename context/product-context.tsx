@@ -47,6 +47,8 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         }
     
         const product = products[productIndex];
+
+        //swap out with the original product if the product is bundled
         const targetProductId = product.isBundle ? (product.originalProductId || productId) : productId;
         const targetProduct = product.isBundle ? 
             products.find(p => p.id === targetProductId) : 
@@ -62,9 +64,14 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         console.log("stock snapshot", targetProduct?.stocks);
         console.log("quantity", quantity);
 
+        if (quantity < 1) {
+            console.log(`Invalid quantity: ${quantity}. triggered in reduceStock`);
+            return { success: false, error: 'Quantity must be at least 1' };
+        }
+
         // Check if there's enough stock
         if (targetProduct.stocks < quantity) {
-            console.error(`Insufficient stock. Only ${targetProduct.stocks} available. triggered in reduceStock`);
+            console.log(`Insufficient stock. Only ${targetProduct.stocks} available. triggered in reduceStock`);
             return { success: false, error: `Insufficient stock. Only ${targetProduct.stocks} available.` };
         }
 
