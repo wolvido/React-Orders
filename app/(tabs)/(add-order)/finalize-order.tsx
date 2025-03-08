@@ -40,12 +40,11 @@ export default function FinalizeOrder() {
             setIsSubmitting(false); // Re-enable button on error
         }
     }
-
     
     return (
         <View style={styles.container}>
             <StepIndicator currentStep={3} backPath='./add-items' steps={orderSteps}/>
-                <ScrollView 
+                <ScrollView
                     keyboardShouldPersistTaps="handled"
                     contentContainerStyle={{
                         paddingBottom: 100 // Add extra padding at bottom
@@ -59,7 +58,7 @@ export default function FinalizeOrder() {
                         <OrderFormFinal onFormChange={handleFormChange} />
                     </View>
 
-                    <Button 
+                    <Button
                         mode="contained" 
                         onPress={handleFinalizeOrder}
                         disabled={isSubmitting} // Disable button while submitting
