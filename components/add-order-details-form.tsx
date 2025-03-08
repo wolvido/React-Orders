@@ -111,12 +111,12 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
                 </Button>
             </View>
 
-            <TextInput
+            {/* <TextInput
                 mode="outlined"
                 label="Delivery Address"
                 value={formData.deliveryAddress}
                 onChangeText={(value) => handleInputChange('deliveryAddress', value)}
-            />
+            /> */}
 
             <TextInput
                 mode="outlined"

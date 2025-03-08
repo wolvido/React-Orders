@@ -86,6 +86,12 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     const updateRemarks = (remarks: string) => {
         if (!currentOrder) return;
+        if (remarks === '') {
+            return;
+        }
+        console.log('delivery remarks input:', remarks);
+        console.log('current remarks:', currentOrder.deliveryAddress);
+
         setCurrentOrder({
             ...currentOrder,
             remarks
@@ -94,6 +100,12 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
     const updateDeliveryAddress = (address: string) => {
         if (!currentOrder) return;
+        if (address === '') {
+            return;
+        }
+        console.log('delivery address input:', address);
+        console.log('current delivery address:', currentOrder.deliveryAddress);
+
         setCurrentOrder({
             ...currentOrder,
             deliveryAddress: address
@@ -105,15 +117,16 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     const finalizeOrder = async () => {
-
-        if (!currentOrder) return;
+        const orderToFinalize = currentOrder;
+        if (!orderToFinalize) return;
     
         try {
-            console.log('Finalizing order:', currentOrder);
+            console.log('Finalizing order:', orderToFinalize);
 
-            currentOrder.id = 0;
+            orderToFinalize.id = 0;
 
-            const jsonReturn = await orderRepository.create(currentOrder);
+            const jsonReturn = await orderRepository.create(orderToFinalize);
+            console.log('order address:', orderToFinalize.deliveryAddress);
 
             const updatedCart = { ...cart, orderId: jsonReturn.orderId };
 
