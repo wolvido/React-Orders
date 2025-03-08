@@ -49,6 +49,10 @@ export function ProductList({
             setErrors(prev => ({ ...prev, [productId]: '' }));
         }
 
+        //why does product list handle the passing of product and setting errors?
+            //because product list has access to the products
+            //and the errors, when a product is passed
+
         return result;
     };
 
