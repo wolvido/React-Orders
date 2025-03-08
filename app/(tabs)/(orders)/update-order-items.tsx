@@ -9,7 +9,6 @@ import { useProducts } from "@/context/product-context";
 import updateOrderSteps from "./update-order-labels";
 import { OrderLineRepository } from "@/repositories/order-line-repository";
 import { useEffect, useState } from "react";
-import { Cart } from "@/entities/cart";
 import { ActivityIndicator } from "react-native-paper";
 
 export default function UpdateOrderItemsScreen() {
@@ -20,7 +19,6 @@ export default function UpdateOrderItemsScreen() {
     const orderLineRepository = new OrderLineRepository();
 
     useEffect(() => {
-        emptyCart();
 
         const currentOrder = getCurrentOrder();
         if (currentOrder) {
