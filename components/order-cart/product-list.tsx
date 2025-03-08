@@ -59,7 +59,7 @@ export function ProductList({
             return { success: false };
         }
 
-        if (targetProduct.stocks < (quantity * (targetProduct.bundleQuantity || 1))) {
+        if (targetProduct.stocks < (quantity * (product.isBundle ? targetProduct.bundleQuantity ||1 : 1))) {
             const errorMessage = `Insufficient stock. Only ${targetProduct.stocks} available.`;
             setErrors(prev => ({
                 ...prev,
