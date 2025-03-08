@@ -103,7 +103,7 @@ export class OrderRepository implements IOrderRepository {
             body: JSON.stringify(orderDto)
         });
 
-        console.log('Response status:', response.status)
+        console.log('Create Order Response status:', response.status)
 
         return await response.json();
     }
