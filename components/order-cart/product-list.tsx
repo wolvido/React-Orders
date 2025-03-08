@@ -58,16 +58,7 @@ export function ProductList({
             onError?.(errorMessage);
             return { success: false };
         }
-
-        // if (targetProduct.stocks < (quantity * (product.isBundle ? targetProduct.bundleQuantity ||1 : 1))) {
-        //     const errorMessage = `Insufficient stock. Only ${targetProduct.stocks} available.`;
-        //     setErrors(prev => ({
-        //         ...prev,
-        //         [productId]: errorMessage
-        //     }));
-        //     return { success: false };
-        // }
-
+        
         setErrors(prev => ({ ...prev, [productId]: '' }));
         const result = onAddToCart(product, quantity);
 
