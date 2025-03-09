@@ -79,7 +79,7 @@ export class OrderLineRepository implements IOrderLineRepository {
             }
     
             const responseData = await response.json();
-            console.log('Response data:', responseData); // Log the actual response
+            //console.log('Create orderline Response data:', responseData); // Log the actual response
     
             return responseData;
         } catch (error) {
@@ -97,11 +97,14 @@ export class OrderLineRepository implements IOrderLineRepository {
 
             //for every order lines, set created date to existing order lines created date
             orderLines.forEach((orderLine) => {
-                const existingOrderLine = existingOrderLinesData.find((existingOrderLine: any) => existingOrderLine.productId === orderLine.productId);
+
+                const existingOrderLine = existingOrderLinesData.find((existingOrderLine: RestaurantOrderLineDTO) => existingOrderLine.productId === orderLine.productId);
+
                 if (existingOrderLine) {
                     orderLine.sys_CreateTimeStamp = existingOrderLine.sys_CreateTimeStamp;     
                 } else {
                     console.error('existing order line not found for product:', orderLine.productId);
+                    console.error('existing order line not found id:', orderLine.restaurantOrderLineId);
                 }
             });
 
@@ -123,7 +126,7 @@ export class OrderLineRepository implements IOrderLineRepository {
             }
     
             const responseData = await response.json();
-            console.log('Update OrderLine Response:', responseData); // Log the actual response
+            //console.log('Update OrderLine Response:', responseData); // Log the actual response
     
         } catch (error) {
             console.error('Error in updateOrderLines:', error);
@@ -159,7 +162,7 @@ export class OrderLineRepository implements IOrderLineRepository {
             }
 
             const responseData = await response.json();
-            console.log('Delete OrderLine response:', responseData);
+            //console.log('Delete OrderLine response:', responseData);
 
         } catch (error) {
             console.error('Error in deleteOrderLines:', error);

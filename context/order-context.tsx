@@ -154,15 +154,20 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
             const existingCart = await orderLineRepository.getCart(currentOrder.id);
 
+            console.log('old cart from context log:', existingCart);
+            console.log('New cart from context log:', cart);
+
             //new cart items
             const newCartItems = cart.items.filter((item) => item.id === 0);
             if (newCartItems.length > 0){
+                console.log('created items from context:', newCartItems)
                 await orderLineRepository.createOrderLines({ items: newCartItems, total: cart.total, orderId: currentOrder.id });
             }
             
             //updated cart items
             const updatedCartItems = cart.items.filter((item) => item.id !== 0);
             if (updatedCartItems.length > 0){
+                console.log('updated items from context:', updatedCartItems);
                 await orderLineRepository.updateOrderLines({ items: updatedCartItems, total: cart.total, orderId: currentOrder.id });
             }
 

@@ -23,7 +23,6 @@ export default function UpdateOrderScreen(){
     useEffect(() => {
         const currentOrder = getCurrentOrder();
         if (currentOrder) {
-            console.log('Loading order into update form:', currentOrder);
             setOrder(currentOrder);
         }
     }, [getCurrentOrder]);

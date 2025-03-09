@@ -30,7 +30,6 @@ export interface RestaurantOrderLineDTO {
 }
 
 export function convertCartToOrderLines(cart: Cart): RestaurantOrderLineDTO[] {
-    console.log('Converting cart to order lines:', cart);
     const orderLines: RestaurantOrderLineDTO[] = cart.items.map(cartItem => ({
         // Product-related fields
         productId: cartItem.product.id,

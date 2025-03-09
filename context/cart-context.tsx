@@ -34,6 +34,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             item => item.product.id === newItem.product.id
         );
     
+        // If the item already exists in the cart, update the quantity and total of the existing item
         if (existingItemIndex >= 0) {
             return prevItems.map((item, index) =>
                 index === existingItemIndex
@@ -90,17 +91,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
             const newTotalQuantity = existingQuantity + quantity;
     
             if (product.bundleType && product.bundleQuantity) {
+
+                //if the individual quantity exceeds its bundle quantity, convert into its bundle equivalent
                 if (newTotalQuantity >= product.bundleQuantity) {
+
+                    //divide the individual quantity into bundles
                     const bundlesCount = Math.floor(newTotalQuantity / product.bundleQuantity);
+
+                    //get the remaining quantity after converting to bundles
                     const remainingItems = newTotalQuantity % product.bundleQuantity;
-    
+
+                    //add the bundle and its bundle quantity to the cart
                     updatedItems = cartItemUpdater(updatedItems, {
                         product: product.bundleType,
                         quantity: bundlesCount,
                         total: product.bundleType.price * bundlesCount,
-                        id: existingCartItem?.id || 0
+                        id: 0 //0 because it is a new item, will not conflict because cart-context uses id to check and remove
+
                     });
-    
+
+                    //add the remaining items to the cart that was not enough for a bundle
                     if (remainingItems > 0) {
                         updatedItems = cartItemUpdater(updatedItems, {
                             product: product,
@@ -108,7 +118,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
                             total: product.price * remainingItems,
                             id: existingCartItem?.id || 0
                         });
+                        console.log('individual id after bundle', existingCartItem?.id);
                     }
+
                 } else {
                     updatedItems = cartItemUpdater(updatedItems, {
                         product: product,
