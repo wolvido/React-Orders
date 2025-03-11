@@ -50,6 +50,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    /**
+     * Depreceated, use BundleProductToCart instead
+     */
     const addToCart = (cartItem: CartItem) => {
         // First check stock availability
         const stockResult = reduceStock(cartItem.product.id, cartItem.quantity);
@@ -85,7 +88,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         setCart(prevCart => {
             let updatedItems = prevCart.items.filter(item => item.product.id !== product.id);
-    
             const existingCartItem = prevCart.items.find(item => item.product.id === product.id);
             const existingQuantity = existingCartItem ? existingCartItem.quantity : 0;
             const newTotalQuantity = existingQuantity + quantity;
@@ -107,7 +109,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
                         quantity: bundlesCount,
                         total: product.bundleType.price * bundlesCount,
                         id: 0 //0 because it is a new item, will not conflict because cart-context uses id to check and remove
-
                     });
 
                     //add the remaining items to the cart that was not enough for a bundle

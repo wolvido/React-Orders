@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '@/entities/product';
+import { ProductSchema } from '@/entities/product-schema';
 import { ProductRepository } from '@/repositories/product-repository';
+import { ProductSchemaRepository } from '@/repositories/product-schema-repository';
 
 interface ProductContextType {
     products: Product[];
@@ -10,6 +12,9 @@ interface ProductContextType {
     reduceStock: (productId: number, quantity: number) => { success: boolean; error?: string };
     increaseStock: (productId: number, quantity: number, isBundleId?: boolean) => void;
     updateProducts: () => Promise<void>;
+    loadProductSchemas: () => Promise<void>;
+    applySchema: (productSchema: ProductSchema) => void;
+    productSchemas: ProductSchema[];
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -19,7 +24,11 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     const [stockChanges, setStockChanges] = useState<Record<number, number>>({}); 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [productSchemas, setProductSchemas] = useState<ProductSchema[]>([]);
+
     const productRepository = new ProductRepository();
+
+    const productSchemaRepository = new ProductSchemaRepository();
 
     const loadProducts = async () => {
         try {
@@ -102,12 +111,11 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         return { success: true };
     };
     
-
     /**
      * increases the stock of a product by a given quantity
      * @param productId 
      * @param quantity 
-     * @param isBundleId determines if the product id is from a bundle product, also converts quantity, into bundle quantity
+     * @param isBundleId determines if the product id is from a bundle product, also converts quantity into bundle quantity
      */
     const increaseStock = (productId: number, quantity: number, isBundleId?: boolean) => {
 
@@ -137,7 +145,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-     * safely updates the products but retains the local product stock changes
+     * safely updates the products by retaining the local product stock changes
      */
     const updateProducts = async () => {
         try {
@@ -163,6 +171,57 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const loadProductSchemas = async () => {
+        try {
+            setIsLoading(true);
+            const data = await productSchemaRepository.getAll();
+            setProductSchemas(data);
+        } catch (err) {
+            console.error('Error loading product schemas:', err);
+            throw err;
+        }
+    }
+
+    const applySchema = (productSchema: ProductSchema) => {
+        const { type, selectionType, modifyingValue } = productSchema;
+        console.log('Applying schema context:', productSchema);
+
+        if (selectionType === 'All') {
+            console.log('Applying schema to all products...');
+
+            //if fixed
+            if (type === 'Fixed') {
+                console.log('Applying fixed schema...');
+                setProducts(prevProducts => {
+                    return prevProducts.map(product => {
+                        return {
+                            ...product,
+                            price: product.price - modifyingValue
+                        };
+                    });
+                });
+            }
+
+            //if percentage
+            if (type === 'Percentage') {
+                console.log('Applying percentage schema...');
+                setProducts(prevProducts => {
+                    return prevProducts.map(product => {
+                        return {
+                            ...product,
+                            price: product.price * (1 - modifyingValue / 100)
+                        };
+                    });
+                });
+            }
+
+        } else if (selectionType === 'Selected') {
+            console.log('Applying schema to selected products...');
+            // Apply schema to selected products
+            // This is a placeholder for future implementation
+        }
+    };
+
     return (
         <ProductContext.Provider value={{
             products,
@@ -171,7 +230,10 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             refreshProducts,
             reduceStock,
             increaseStock,
-            updateProducts
+            updateProducts,
+            loadProductSchemas,
+            applySchema,
+            productSchemas
         }}>
             {children}
         </ProductContext.Provider>

@@ -43,12 +43,12 @@ export class ProductRepository implements IProductRepository{
             // Filter out bundle products
             const filteredProducts = products.filter(product => !product.isBundle);
             
-            // IMPORTANT: Wait for all injectBundle operations to complete
+            // Wait for all injectBundle operations to complete
             const enhancedProducts = await Promise.all(
                 filteredProducts.map(product => this.injectBundle(product))
             );
             
-            // Now extract bundle types after all promises have resolved
+            // extract bundle types after all promises have resolved
             const bundleTypes = Array.from(
                 new Map(
                     enhancedProducts

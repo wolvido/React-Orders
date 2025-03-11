@@ -1,10 +1,12 @@
 import { View, StyleSheet, FlatList } from "react-native";
 import { Card, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Product } from "@/entities/product";
 import ProductQuantityForm from "@/components/order-cart/product-quantity-form";
 import styles from "./cart-styles";
 import theme from "@/style/theme";
+import { ProductSchemaMenu } from "./product-schema-menu";
+import { ProductSchema } from "@/entities/product-schema";
 
 interface ProductListProps {
     products: Product[];
@@ -13,6 +15,8 @@ interface ProductListProps {
     onUpdateProducts: () => Promise<void>;
     isLoading?: boolean;
     isPortrait: boolean;
+    productSchemas?: ProductSchema[];
+    onSchemaSelect?: (schema: ProductSchema) => void;
 }
 
 export function ProductList({
@@ -21,8 +25,11 @@ export function ProductList({
     onError,
     isPortrait,
     onUpdateProducts,
-    isLoading
+    isLoading,
+    productSchemas,
+    onSchemaSelect
 }: ProductListProps) {
+
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,38 +37,24 @@ export function ProductList({
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleAddItem = (productId: number, quantity: number) => {
-        const product = products.find(p => p.id === productId);
-        if (!product) return { success: false, error: 'Product not found' };
-        
-        const result = onAddToCart(product, quantity);
-
-        if (!result.success) {
-            const errorMessage = 'Failed to add item to cart';
-            setErrors(prev => ({
-                ...prev,
-                [productId]: result.error || errorMessage
-            }));
-            onError?.(errorMessage);
-        }
-        else{
-            //clear errors on success
-            setErrors(prev => ({ ...prev, [productId]: '' }));
-        }
-
-        //why does product list handle the passing of product and setting errors?
-            //because product list has access to the products
-            //and the errors, when a product is passed
-
-        return result;
+    const handleError = (productId: number, error: string) => {
+        setErrors(prev => ({
+            ...prev,
+            [productId]: error
+        }));
     };
 
-    const productQuantityForm = (productId: number) => {
+    useEffect(() => {
+        console.log('Product list updated');
+        console.log('Products list sample:', products[0]);
+    }, [products]);
+
+    const productQuantityForm = (product: Product) => {
         return (
             <ProductQuantityForm
-                productId={productId}
-                onAdd={handleAddItem}
-                error={errors[productId]}
+                product={product}
+                onAdd={onAddToCart}
+                onError={(error) => handleError(product.id, error)}
                 isPortrait={isPortrait}
             />
         );
@@ -71,8 +64,7 @@ export function ProductList({
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
-                    {!isPortrait && productQuantityForm(product.id)}
-
+                    {!isPortrait && productQuantityForm(product)}
                     <View style={styles.productInfo}>
                         <Text
                             variant={"bodyMedium"}
@@ -95,8 +87,7 @@ export function ProductList({
                             )}
                         </Text>
                     </View>
-
-                    {isPortrait && productQuantityForm(product.id)}
+                    {isPortrait && productQuantityForm(product)}
                 </View>
                 {errors[product.id] && (
                     <HelperText type="error" visible={true}>
@@ -140,6 +131,13 @@ export function ProductList({
         <View style={styles.mainContentPortrait}>
             <View style={styles.searchContainer}>
                 {!isPortrait && refreshButton}
+
+                {productSchemas && onSchemaSelect && 
+                    <ProductSchemaMenu
+                        schemas={productSchemas}
+                        onSchemaSelect={onSchemaSelect}
+                    />
+                }
 
                 <Searchbar
                     placeholder="Search products"

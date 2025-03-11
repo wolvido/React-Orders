@@ -1,19 +1,20 @@
 import { memo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, IconButton, TextInput } from "react-native-paper";
+import { Product } from "@/entities/product";
 
 interface ProductQuantityFormProps {
-    productId: number;
-    onAdd: (productId: number, quantity: number) => {success: boolean};
-    error?: string;
+    product: Product;
+    onAdd: (product: Product, quantity: number) => {success: boolean, error?: string};
     isPortrait?: boolean;
+    onError?: (message: string) => void;
 }
 
 const ProductQuantityForm = memo(({ 
-    productId, 
+    product,
     onAdd,
-    error,
-    isPortrait 
+    onError,
+    isPortrait
 }: ProductQuantityFormProps) => {
     const [quantity, setQuantity] = useState('');
 
@@ -23,15 +24,24 @@ const ProductQuantityForm = memo(({
         setQuantity(numericValue);
     };
 
-    const handleAdd = () => {
-        const numericValue = parseInt(quantity);
-        if (numericValue) {
-            const result = onAdd(productId, numericValue);
+    const handleAdd = (product: Product, quantityString: string) => {
+        const quantity = parseInt(quantityString);
+
+        if (quantity > 0) {
+            const result = onAdd(product, quantity);
+
             console.log("quantity form Add to cart:", result.success);
 
-            if (result.success) {
+            if (!result.success) {
+                onError?.(result.error || 'Failed to add item');
+            }
+            else{
+                onError?.('');
                 setQuantity('');
             }
+        }
+        else{
+            onError?.('Invalid quantity');
         }
     };
 
@@ -40,7 +50,7 @@ const ProductQuantityForm = memo(({
             {!isPortrait && (
                 <Button
                     mode="contained"
-                    onPress={handleAdd}
+                    onPress={() => handleAdd(product, quantity)}
                 >
                     Add
                 </Button>
@@ -53,7 +63,7 @@ const ProductQuantityForm = memo(({
                 keyboardType="numeric"
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
-                error={!!error}
+                error={!!onError}
                 focusable={true}
                 autoComplete="off"
                 importantForAutofill="no"
@@ -64,7 +74,7 @@ const ProductQuantityForm = memo(({
                     icon="chevron-right"
                     mode="contained"
                     size={25}
-                    onPress={handleAdd}
+                    onPress={() => handleAdd(product, quantity)}
                 />
             )}
         </View>

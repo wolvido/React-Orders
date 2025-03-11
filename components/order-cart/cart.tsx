@@ -9,6 +9,7 @@ import { SummaryPanel } from "../summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
+import { ProductSchema } from "@/entities/product-schema";
 
 interface CartComponentProps {
     products: Product[];
@@ -20,6 +21,8 @@ interface CartComponentProps {
     onUpdateProducts: () => Promise<void>;
     onError?: (message: string) => void;
     isLoading?: boolean;
+    productSchemas?: ProductSchema[];
+    onSchemaSelect?: (schema: ProductSchema) => void;
 }
 
 export function CartComponent({
@@ -31,7 +34,9 @@ export function CartComponent({
     onProceed,
     onError,
     onUpdateProducts,
-    isLoading
+    isLoading,
+    productSchemas,
+    onSchemaSelect
 }: CartComponentProps) {
 
     const isPortrait = useOrientation() === 'PORTRAIT';
@@ -50,6 +55,8 @@ export function CartComponent({
                     isPortrait={isPortrait}
                     onUpdateProducts={onUpdateProducts}
                     isLoading={isLoading}
+                    productSchemas={productSchemas}
+                    onSchemaSelect={onSchemaSelect}
                 />
                 <CartPanel
                     items={cart.items}

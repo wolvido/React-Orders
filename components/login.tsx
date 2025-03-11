@@ -15,7 +15,7 @@ export const LoginScreen = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [showHiddenScreen, setShowHiddenScreen] = useState(false);
 
-  const { refreshProducts } = useProducts();
+  const { refreshProducts, loadProductSchemas } = useProducts();
   const { refreshSuppliers } = useSuppliers();
 
   const { setApiUrl } = useApi();
@@ -35,6 +35,7 @@ export const LoginScreen = () => {
         return;
       }
 
+      loadProductSchemas();
       refreshProducts();
       refreshSuppliers();
       await login(user, password);

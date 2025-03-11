@@ -7,10 +7,12 @@ import { CartComponent } from "@/components/order-cart/cart";
 import orderSteps from "./order-steps-label";
 import { useOrder } from "@/context/order-context";
 import { useProducts } from "@/context/product-context";
+import { useEffect } from "react";
+import { ProductSchema } from "@/entities/product-schema";
 
 export default function AddItemsScreen() {
 
-    const { products, isLoading, updateProducts } = useProducts();
+    const { products, isLoading, updateProducts, applySchema, productSchemas } = useProducts();
     const { cart, addToCart, removeFromCart, BundleProductToCart } = useCart();
     const { updateCart } = useOrder();
 
@@ -36,6 +38,8 @@ export default function AddItemsScreen() {
                 onProceed={handleProceed}
                 isLoading={isLoading}
                 onUpdateProducts={updateProducts}
+                productSchemas={productSchemas}
+                onSchemaSelect={applySchema}
             />
         </View>
     );
