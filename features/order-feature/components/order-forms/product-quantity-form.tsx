@@ -17,6 +17,7 @@ const ProductQuantityForm = memo(({
     isPortrait
 }: ProductQuantityFormProps) => {
     const [quantity, setQuantity] = useState('');
+    const [error, setError] = useState(false);
 
     const handleQuantityChange = (text: string) => {
         // Remove any non-numeric characters
@@ -33,16 +34,19 @@ const ProductQuantityForm = memo(({
             console.log("quantity form Add to cart:", result.success);
 
             if (!result.success) {
+                setError(!!result.error);
                 onError?.(result.error || 'Failed to add item');
             }
             else{
+                setError(false);
                 onError?.('');
                 setQuantity('');
             }
         }
-        else{
-            onError?.('Invalid quantity');
-        }
+        // else{
+        //     setError(true);
+        //     onError?.('Invalid quantity:'+ quantityString);
+        // }
     };
 
     return (
@@ -63,7 +67,7 @@ const ProductQuantityForm = memo(({
                 keyboardType="numeric"
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
-                error={!!onError}
+                error={error}
                 focusable={true}
                 autoComplete="off"
                 importantForAutofill="no"
