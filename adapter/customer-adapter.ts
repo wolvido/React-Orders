@@ -1,4 +1,4 @@
-import { Customer } from "@/entities/customers";
+import { Customer } from "@/shared/entities/customers";
 
 // Create interface for the source data
 interface CustomerDTO {

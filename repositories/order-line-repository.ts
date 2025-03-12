@@ -1,8 +1,8 @@
 import { convertCartToOrderLines, convertOrderLinesToCart, RestaurantOrderLineDTO } from "@/adapter/cart-adapter";
 import app from "@/app.json";
-import { Cart } from "@/entities/cart";
+import { Cart } from "@/features/order-feature/types/cart";
 import { ProductRepository } from "./product-repository";
-import { useApi } from "@/context/dev-mode-context";
+import { useApi } from "@/shared/context/dev-mode-context";
 
 export interface IOrderLineRepository {
     createOrderLines(cart: Cart): Promise<RestaurantOrderLineDTO[]>;

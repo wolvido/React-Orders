@@ -1,11 +1,11 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
-import StepIndicator from '@/components/order-step-indicator';
+import StepIndicator from '@/features/step-indicator-feature/components/order-step-indicator';
 import orderSteps from './update-order-labels';
-import OrderFormFinal from '@/features/order-feature/components/forms/finalize-order-form';
+import OrderFormFinal from '@/features/order-feature/components/order-forms/finalize-order-form';
 import { useOrder } from '@/features/order-feature/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { useProducts } from '@/context/product-context';
+import { useProducts } from '@/shared/context/product-context';
 import { useCart } from '@/features/order-feature/context/cart-context';
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { Order } from "@/entities/order";
+import { Order } from "@/features/order-feature/types/order";
 import Status from "@/enums/status";
 import PaymentStatus from "@/enums/payment-status";
 

@@ -1,8 +1,7 @@
-import { LoginScreen } from "@/components/login";
+import { LoginScreen } from "@/features/authentication-feature/components/login";
 import { View, Text} from "react-native";
-import { useAuth } from '@/authentication/auth-context';
+import { useAuth } from '@/features/authentication-feature/context/auth-context';
 import { Redirect } from "expo-router";
-import App from "@/app.json";
 
 export default function SignInScreen() {
 

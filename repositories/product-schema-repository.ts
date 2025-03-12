@@ -1,6 +1,6 @@
-import { ProductSchema } from "@/entities/product-schema";
+import { ProductSchema } from "@/features/order-feature/types/product-schema";
 import app from "@/app.json";
-import { useApi } from "@/context/dev-mode-context";
+import { useApi } from "@/shared/context/dev-mode-context";
 import { toProductSchema } from "@/adapter/product-schema-adapter";
 
 export interface IProductSchemaRepository {

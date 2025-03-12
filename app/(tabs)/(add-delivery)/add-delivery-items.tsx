@@ -1,11 +1,11 @@
 import { DeliveryCartComponent } from "@/features/delivery-feature/components/delivery-cart/delivery-cart";
 import { useDeliveryCart } from "@/features/delivery-feature/context/delivery-cart-context";
 import { View, StyleSheet, Alert, Modal, ActivityIndicator, Text } from "react-native";
-import StepIndicator from "@/components/order-step-indicator";
+import StepIndicator from "@/features/step-indicator-feature/components/order-step-indicator";
 import deliverySteps from "./delivery-steps-label";
 import { useDelivery } from "@/features/delivery-feature/context/delivery-context";
 import { router } from "expo-router";
-import { useProducts } from "@/context/product-context";
+import { useProducts } from "@/shared/context/product-context";
 import { useState } from "react";
 
 export default function AddDeliveryItemsScreen() {

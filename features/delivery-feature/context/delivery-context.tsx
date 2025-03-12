@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Delivery } from '@/entities/delivery';
-import { ReceivedDelivery } from '@/entities/received-delivery';
+import { Delivery } from '@/features/delivery-feature/types/delivery';
+import { ReceivedDelivery } from '@/features/delivery-feature/types/received-delivery';
 import { DeliveryRepository } from '@/repositories/delivery-repository';
 import { DeliveryLineRepository } from '@/repositories/delivery-line-repository';
 
@@ -16,9 +16,7 @@ const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined
 
 export const DeliveryProvider = ({ children }: { children: React.ReactNode }) => {
     const [delivery, setDelivery] = useState<Delivery | null>(null);
-
     const [receivedDelivery, setReceivedDelivery] = useState<ReceivedDelivery | null>(null);
-
     const deliveryRepository = new DeliveryRepository();
     const deliveryLineRepository = new DeliveryLineRepository();
 
@@ -30,7 +28,7 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
 
         // Update existing delivery while preserving non-null values
         const updatedDelivery = { ...delivery };
-        
+
         Object.keys(newDelivery).forEach((key) => {
             const typedKey = key as keyof Delivery;
             if (newDelivery[typedKey] !== null) {

@@ -1,14 +1,15 @@
 // order-context.tsx
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Order } from '@/entities/order';
-import PaymentMethod from '@/entities/payment-method';
-import { Cart } from '@/entities/cart';
+import { Order } from '../types/order';
+import PaymentMethod from '@/features/order-feature/types/payment-method';
+import { Cart } from '../types/cart';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
 import { OrderRepository } from '@/repositories/order-repository';
-import { Customer } from '@/entities/customers';
+import { Customer } from '@/shared/entities/customers';
 import { OrderLineRepository } from '@/repositories/order-line-repository';
 import { CustomerRepository } from '@/repositories/customer-repository';
+import { CartItem } from '../types/cart-item';
 
 //dummy delete later
 //import { orders } from '@/dummy-data/dummy-orders';
@@ -172,7 +173,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
             }
 
             //deleted items
-            const deletedCartItems = existingCart.items.filter((item) => !cart.items.some((i) => i.id === item.id));
+            const deletedCartItems = existingCart.items.filter((item: CartItem) => !cart.items.some((i) => i.id === item.id));
             if (deletedCartItems.length > 0)
             {
                 console.log('Deleted items from context:', deletedCartItems);

@@ -1,4 +1,4 @@
-import {CashPayment, ChequePayment, BankTransferPayment, PaymentGateway }from "@/entities/payment-method";
+import {CashPayment, ChequePayment, BankTransferPayment, PaymentGateway }from "@/features/order-feature/types/payment-method";
 
 export interface PaymentDTO {
     isDeleted: boolean;

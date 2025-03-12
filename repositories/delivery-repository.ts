@@ -1,9 +1,9 @@
-import { Supplier } from "@/entities/supplier";
+import { Supplier } from "@/shared/entities/supplier";
 import app from "@/app.json";
 import { SupplierAdapter } from "@/adapter/supplier-adapter";
 import { DeliveryAdapter } from "@/adapter/delivery-adapter";
-import { Delivery } from "@/entities/delivery";
-import { useApi } from "@/context/dev-mode-context";
+import { Delivery } from "@/features/delivery-feature/types/delivery";
+import { useApi } from "@/shared/context/dev-mode-context";
 
 export interface IDeliveryRepository {
     getAllSuppliers(): Promise<Supplier[]>;

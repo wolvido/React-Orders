@@ -1,4 +1,4 @@
-import { Product } from "@/entities/product";
+import { Product } from "@/shared/entities/product";
 
 interface ProductDTO {
     // Basic product details

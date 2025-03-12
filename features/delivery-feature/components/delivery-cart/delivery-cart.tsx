@@ -1,15 +1,15 @@
 import { View, StyleSheet } from "react-native";
 import { Button, Card, TextInput, Text, List, HelperText, Searchbar, IconButton, Surface } from "react-native-paper";
 import { useState, useEffect, useCallback } from "react";
-import { ReceivedDelivery } from "@/entities/received-delivery";
-import { Product } from "@/entities/product";
-import { ReceivedItem } from "@/entities/received-item";
+import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
+import { Product } from "@/shared/entities/product";
+import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
 import { FlatList } from "react-native";
-import useOrientation from "@/hooks/orientation-hook";
+import useOrientation from "@/shared/hooks/orientation-hook";
 import DeliveryProductForm from "./delivery-product-form";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
-import { SummaryPanel } from "@/components/summary-panel";
+import { SummaryPanel } from "@/shared/components/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
 
 interface DeliveryCartComponentProps {

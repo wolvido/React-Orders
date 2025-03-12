@@ -1,7 +1,7 @@
-import { useProductHook } from "@/context-hooks/product-context-hook";
-import { Cart } from "@/entities/cart";
-import { CartItem } from "@/entities/cart-item";
-import { Product } from "@/entities/product";
+import { useProductHook } from "@/shared/context-hooks/product-context-hook";
+import { Cart } from "../types/cart";
+import { CartItem } from "../types/cart-item";
+import { Product } from "@/shared/entities/product";
 import { createContext, useContext, ReactNode, useState } from 'react';
 
 interface CartContextType {

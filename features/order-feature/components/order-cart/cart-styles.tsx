@@ -11,7 +11,6 @@ export default StyleSheet.create({
     refreshButton: {
         // borderColor: '#2196F3',
         // borderWidth: 1,
-
     },
     landscapeContentPortrait:{
         gap: 10,

@@ -3,17 +3,17 @@ import { Slot, Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
 import theme from '@/style/theme';
 
-import { AuthProvider } from '@/authentication/auth-context';
+import { AuthProvider } from '@/features/authentication-feature/context/auth-context';
 
 import {enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/features/order-feature/context/cart-context';
 import { OrderProvider } from '@/features/order-feature/context/order-context';
 import { DeliveryProvider } from '@/features/delivery-feature/context/delivery-context';
-import { PurchaseOrderProvider } from '@/context/purchase-order-context';
+import { PurchaseOrderProvider } from '@/shared/context/purchase-order-context';
 import { ScrollView } from 'react-native';
-import { ProductProvider } from '@/context/product-context';
-import { ApiProvider } from '@/context/dev-mode-context';
-import { SupplierProvider } from '@/context/supplier-context';
+import { ProductProvider } from '@/shared/context/product-context';
+import { ApiProvider } from '@/shared/context/dev-mode-context';
+import { SupplierProvider } from '@/shared/context/supplier-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {

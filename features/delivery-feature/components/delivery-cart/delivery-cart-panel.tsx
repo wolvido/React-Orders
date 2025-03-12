@@ -1,10 +1,10 @@
 import { View, StyleSheet } from "react-native";
 import { Text, IconButton } from "react-native-paper";
 import { FlatList } from "react-native";
-import { ReceivedItem } from "@/entities/received-item";
+import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
 import styles from "./delivery-styles";
-import { Product } from "@/entities/product";
-import { CollapseButton } from "@/components/collapse-button";
+import { Product } from "@/shared/entities/product";
+import { CollapseButton } from "@/shared/components/collapse-button";
 import { useState } from "react";
 
 interface DeliveryCartPanelProps {

@@ -2,24 +2,24 @@ import commonStyles from '@/style/common';
 import theme from '@/style/theme';
 import * as React from 'react';
 import { DataTable, Searchbar, Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
-import getStatusColor from '@/hooks/status-color-hook';
-import getPaymentStatusColor from '@/hooks/payment-status-color-hook';
+import getStatusColor from '@/shared/hooks/status-color-hook';
+import getPaymentStatusColor from '@/shared/hooks/payment-status-color-hook';
 import { useState, useEffect, useCallback } from 'react';
 import PaymentStatus from '@/enums/payment-status';
 import { View, Text, ScrollView } from 'react-native';
-import PaymentMethodSelector from '@/components/payment-form';
-import StatusForm from '@/components/fulfillment-status';
+import PaymentMethodSelector from '@/features/order-feature/components/payment-forms/payment-form';
+import StatusForm from '@/features/order-feature/components/fulfillment-status';
 import Status from '@/enums/status'
-import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/entities/payment-method';
+import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/features/order-feature/types/payment-method';
 import { useOrder } from '@/features/order-feature/context/order-context';
 import { OrderRepository } from '@/repositories/order-repository';
-import { Order } from '@/entities/order';
-import { useSearch } from '@/hooks/search-filter';
-import { EmptyState } from '@/components/empty-state';
+import { Order } from '@/features/order-feature/types/order';
+import { useSearch } from '@/shared/hooks/search-filter';
+import { EmptyState } from '@/shared/components/empty-state';
 import { PaymentRepository } from '@/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
 import app from '@/app.json';
-import { OrdersList } from '@/components/orders-list';
+import { OrdersList } from '@/features/order-feature/components/orders-list';
 
 
 //react component

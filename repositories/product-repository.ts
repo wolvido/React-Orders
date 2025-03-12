@@ -1,8 +1,8 @@
 import { ProductAdapter } from "@/adapter/product-adapter";
-import { Product } from "../entities/product";
+import { Product } from "@/shared/entities/product";
 import app from "@/app.json";
 import { BundleLineDTO } from "@/adapter/bundleLine-adapter";
-import { useApi } from "@/context/dev-mode-context";
+import { useApi } from "@/shared/context/dev-mode-context";
 
 export interface IProductRepository {
     getAll(): Promise<Product[]>;
