@@ -1,4 +1,4 @@
-export interface ProductSchema {
+export interface ProductSchema { //aka pricing schema
     id: number;
     description: string;
 
