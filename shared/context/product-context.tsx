@@ -186,6 +186,11 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         const { type, selectionType, modifyingValue } = productSchema;
         console.log('Applying schema context:', productSchema);
 
+        if (selectionType === 'Default') {
+            console.log('Default Delected. Skipping schema application...');
+            return;
+        }
+
         if (selectionType === 'All') {
             console.log('Applying schema to all products...');
 
