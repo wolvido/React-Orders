@@ -15,7 +15,7 @@ export function CollapseButton({
     return (
         <View style={[
             isPortrait && styles.collapseButtonContainer,
-            !isPortrait && styles.landscapeCollapseButtonContainer
+            // !isPortrait && styles.landscapeCollapseButtonContainer
         ]}>
             {isPortrait && (
                 <IconButton
@@ -40,12 +40,12 @@ export function CollapseButton({
 
 const styles = StyleSheet.create({
     collapseButtonContainer: {
-        position: 'absolute',
-        top: -30,
-        left: 0,
-        right: 0,
-        alignItems: 'center',
-        zIndex: 1,
+        //flex center
+        alignSelf: 'center',
+        height: 0,
+        zIndex: 100,
+        marginBottom: 25,
+        marginTop: -28,
     },
     landscapeCollapseButtonContainer:{
         position: 'absolute',

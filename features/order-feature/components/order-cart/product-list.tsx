@@ -132,12 +132,12 @@ export function ProductList({
             <View style={styles.searchContainer}>
                 {!isPortrait && refreshButton}
 
-                {productSchemas && onSchemaSelect && 
+                {/* {productSchemas && onSchemaSelect && 
                     <ProductSchemaMenu
                         schemas={productSchemas}
                         onSchemaSelect={onSchemaSelect}
                     />
-                }
+                } */}
 
                 <Searchbar
                     placeholder="Search products"

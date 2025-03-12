@@ -1,6 +1,25 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+    cartContainer: {
+        flexDirection: 'column',
+        justifyContent: 'flex-end', // This will push the button to the bottom
+        flex: 1,
+    },
+    collapsedCartContainer:{
+        flex: 0,
+        height: 1,
+    },
+    content: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    contentPortrait: {
+        flexDirection: 'column',
+    },
+    landscapeContentPortrait: {
+        flexDirection: 'row',
+    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -12,9 +31,9 @@ export default StyleSheet.create({
         // borderColor: '#2196F3',
         // borderWidth: 1,
     },
-    landscapeContentPortrait:{
-        gap: 10,
-    },
+    // landscapeContentPortrait:{
+    //     gap: 10,
+    // },
     mainContent:{
         flex: 1,
         padding: 10,
@@ -113,13 +132,13 @@ export default StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    content: {
-        flex: 1,
-        flexDirection: 'row', // side by side in landscape
-    },
-    contentPortrait: {
-        flexDirection: 'column', // stacked in portrait
-    },
+    // content: {
+    //     flex: 1,
+    //     flexDirection: 'row', // side by side in landscape
+    // },
+    // contentPortrait: {
+    //     flexDirection: 'column', // stacked in portrait
+    // },
     leftPanel: {
         flex: 1,
         padding: 10,

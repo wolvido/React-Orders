@@ -10,22 +10,13 @@ interface CartPanelProps {
     items: CartItem[];
     isPortrait: boolean;
     onRemoveFromCart: (cartItem: CartItem) => void;
-    collapsible?: boolean;
 }
 
 export function CartPanel({
     items,
     isPortrait,
-    onRemoveFromCart,
-    collapsible
+    onRemoveFromCart
 }: CartPanelProps) {
-
-    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
-
-    const onToggleCollapse = () => {
-        setIsCartCollapsed(!isCartCollapsed);
-    };
-
     const renderCartItem = ({ item }: { item: CartItem }) => (
         <View style={[
             styles.cartItemWrapper,
@@ -58,35 +49,23 @@ export function CartPanel({
     return (
         <View style={[
             styles.rightPanel,
-            styles.rightPanelPortrait,
-            isCartCollapsed && styles.rightPanelCollapsed
+            styles.rightPanelPortrait
         ]}>
-            
-            {collapsible && (
-                <CollapseButton
-                    isPortrait={isPortrait}
-                    isCartCollapsed={isCartCollapsed}
-                    onToggleCollapse={onToggleCollapse}
+            <View style={styles.cartContent}>
+                <Text variant="headlineMedium">Cart</Text>
+                <FlatList
+                    data={items}
+                    renderItem={renderCartItem}
+                    keyExtractor={(item) => item.product.id.toString()}
+                    style={styles.cartList}
+                    initialNumToRender={10}
+                    maxToRenderPerBatch={10}
+                    contentContainerStyle={styles.cartListContent}
+                    ListEmptyComponent={() => (
+                        <Text style={styles.emptyText}>Cart is empty</Text>
+                    )}
                 />
-            )}
-
-            {!isCartCollapsed && (
-                <View style={styles.cartContent}>
-                    <Text variant="headlineMedium">Cart</Text>
-                    <FlatList
-                        data={items}
-                        renderItem={renderCartItem}
-                        keyExtractor={(item) => item.product.id.toString()}
-                        style={styles.cartList}
-                        initialNumToRender={10}
-                        maxToRenderPerBatch={10}
-                        contentContainerStyle={styles.cartListContent}
-                        ListEmptyComponent={() => (
-                            <Text style={styles.emptyText}>Cart is empty</Text>
-                        )}
-                    />
-                </View>
-            )}
+            </View>
         </View>
     );
 }

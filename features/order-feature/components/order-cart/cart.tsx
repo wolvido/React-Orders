@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import useOrientation from "@/shared/hooks/orientation-hook";
 import { Cart } from "../../types/cart";
 import { Product } from "@/shared/entities/product";
@@ -8,6 +8,9 @@ import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
 import { ProductSchema } from "@/features/order-feature/types/product-schema";
+import { useState } from "react";
+import { CollapseButton } from "@/shared/components/collapse-button";
+import { ProductSchemaMenu } from "../product-schema/product-schema-menu";
 
 interface CartComponentProps {
     products: Product[];
@@ -38,10 +41,11 @@ export function CartComponent({
 }: CartComponentProps) {
 
     const isPortrait = useOrientation() === 'PORTRAIT';
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
 
-    // if (isLoading) {
-    //     return <Text style={styles.loadingText}>Loading...</Text>;
-    // }
+    const onToggleCollapse = () => {
+        setIsCartCollapsed(!isCartCollapsed);
+    };
 
     return (
         <View style={[styles.content, styles.contentPortrait]}>
@@ -56,12 +60,35 @@ export function CartComponent({
                     productSchemas={productSchemas}
                     onSchemaSelect={onSchemaSelect}
                 />
-                <CartPanel
-                    items={cart.items}
-                    isPortrait = {isPortrait}
-                    onRemoveFromCart={(cartItem) => onRemoveFromCart(cartItem.product)}
-                    collapsible = {true}
-                />
+
+                {/* {productSchemas && onSchemaSelect && 
+                    <ProductSchemaMenu
+                        schemas={productSchemas}
+                        onSchemaSelect={onSchemaSelect}
+                    />
+                } */}
+
+                <View style={[styles.cartContainer, isCartCollapsed && styles.collapsedCartContainer]}>
+                    {/* {productSchemas && onSchemaSelect && 
+                        <ProductSchemaMenu
+                            schemas={productSchemas}
+                            onSchemaSelect={onSchemaSelect}
+                        />
+                    } */}
+                    <CollapseButton
+                        isPortrait={isPortrait}
+                        isCartCollapsed={isCartCollapsed}
+                        onToggleCollapse={onToggleCollapse}
+                    />
+                    {!isCartCollapsed && (
+                        <CartPanel
+                            items={cart.items}
+                            isPortrait={isPortrait}
+                            onRemoveFromCart={(cartItem) => onRemoveFromCart(cartItem.product)}
+                        />
+                    )}
+
+                </View>
             </View>
             <SummaryPanel
                 total={cart.total}
