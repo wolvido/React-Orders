@@ -9,7 +9,7 @@ import useOrientation from "@/hooks/orientation-hook";
 import DeliveryProductForm from "./delivery-product-form";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
-import { SummaryPanel } from "../summary-panel";
+import { SummaryPanel } from "@/components/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
 
 interface DeliveryCartComponentProps {

@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Modal, FlatList } from 'react-native';
 import { Button, TextInput, Text, List } from 'react-native-paper';
 import { Supplier } from '@/entities/supplier';
 import { Delivery } from '@/entities/delivery';
-import { DatePicker } from './date-picker';
+import { DatePicker } from '../../../../components/date-picker';
 
 interface AddDeliveryFormProps {
     suppliers: Supplier[];

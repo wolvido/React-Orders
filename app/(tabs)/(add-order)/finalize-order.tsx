@@ -1,13 +1,13 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
-import OrderForm from '@/components/finalize-order-form';
+import OrderForm from '@/features/order-feature/components/forms/finalize-order-form';
 import StepIndicator from '@/components/order-step-indicator';
 import orderSteps from './order-steps-label';
-import OrderFormFinal from '@/components/finalize-order-form';
-import { useOrder } from '@/context/order-context';
+import OrderFormFinal from '@/features/order-feature/components/forms/finalize-order-form';
+import { useOrder } from '@/features/order-feature/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import { useProducts } from '@/context/product-context';
-import { useCart } from '@/context/cart-context';
+import { useCart } from '@/features/order-feature/context/cart-context';
 import { useState } from 'react';
 
 export default function FinalizeOrder() {

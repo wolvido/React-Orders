@@ -11,7 +11,7 @@ import PaymentMethodSelector from '@/components/payment-form';
 import StatusForm from '@/components/fulfillment-status';
 import Status from '@/enums/status'
 import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/entities/payment-method';
-import { useOrder } from '@/context/order-context';
+import { useOrder } from '@/features/order-feature/context/order-context';
 import { OrderRepository } from '@/repositories/order-repository';
 import { Order } from '@/entities/order';
 import { useSearch } from '@/hooks/search-filter';

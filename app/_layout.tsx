@@ -6,9 +6,9 @@ import theme from '@/style/theme';
 import { AuthProvider } from '@/authentication/auth-context';
 
 import {enGB, registerTranslation } from 'react-native-paper-dates';
-import { CartProvider } from '@/context/cart-context';
-import { OrderProvider } from '@/context/order-context';
-import { DeliveryProvider } from '@/context/delivery-context';
+import { CartProvider } from '@/features/order-feature/context/cart-context';
+import { OrderProvider } from '@/features/order-feature/context/order-context';
+import { DeliveryProvider } from '@/features/delivery-feature/context/delivery-context';
 import { PurchaseOrderProvider } from '@/context/purchase-order-context';
 import { ScrollView } from 'react-native';
 import { ProductProvider } from '@/context/product-context';

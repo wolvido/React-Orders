@@ -1,10 +1,10 @@
 import StepIndicator from "@/components/order-step-indicator";
-import { useOrder } from "@/context/order-context";
+import { useOrder } from "@/features/order-feature/context/order-context";
 import { Order } from "@/entities/order";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import orderUpdateSteps from "./update-order-labels";
-import OrderDetailsForm from "@/components/add-order-details-form";
+import OrderDetailsForm from "@/features/delivery-feature/components/forms/add-order-details-form";
 import { Customer } from "@/entities/customers";
 import { CustomerRepository } from "@/repositories/customer-repository";
 import { router } from "expo-router";

@@ -1,11 +1,9 @@
 import { View } from "react-native";
-import { Text } from "react-native-paper";
-import { useState } from "react";
 import useOrientation from "@/hooks/orientation-hook";
 import { Cart } from "@/entities/cart";
 import { Product } from "@/entities/product";
 import { CartItem } from "@/entities/cart-item";
-import { SummaryPanel } from "../summary-panel";
+import { SummaryPanel } from "../../../../components/summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";

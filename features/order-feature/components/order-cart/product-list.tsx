@@ -2,10 +2,10 @@ import { View, StyleSheet, FlatList } from "react-native";
 import { Card, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
 import { useState, useCallback, useEffect } from "react";
 import { Product } from "@/entities/product";
-import ProductQuantityForm from "@/components/order-cart/product-quantity-form";
+import ProductQuantityForm from "@/features/order-feature/components/forms/product-quantity-form";
 import styles from "./cart-styles";
 import theme from "@/style/theme";
-import { ProductSchemaMenu } from "./product-schema-menu";
+import { ProductSchemaMenu } from "../forms/product-schema-menu";
 import { ProductSchema } from "@/entities/product-schema";
 
 interface ProductListProps {

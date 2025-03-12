@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import OrderDetailsForm from '@/components/add-order-details-form';
+import OrderDetailsForm from '@/features/delivery-feature/components/forms/add-order-details-form';
 import StepIndicator from '@/components/order-step-indicator';
 import { ScrollView, View } from 'react-native';
 import orderSteps from './order-steps-label';
 import { Order } from '@/entities/order';
 import { router } from 'expo-router';
-import { useOrder } from '@/context/order-context';
+import { useOrder } from '@/features/order-feature/context/order-context';
 import { Customer } from '@/entities/customers';
 import { CustomerRepository } from '@/repositories/customer-repository';
 import { useAuth } from '@/authentication/auth-context';

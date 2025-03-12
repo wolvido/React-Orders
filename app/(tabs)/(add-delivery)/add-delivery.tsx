@@ -1,10 +1,10 @@
 import { ScrollView, View } from 'react-native';
 import StepIndicator from '@/components/order-step-indicator';
 import deliverySteps from './delivery-steps-label';
-import AddDeliveryForm from '@/components/add-delivery-form';
+import AddDeliveryForm from '@/features/delivery-feature/components/forms/add-delivery-form';
 import { router } from "expo-router";
 import { Delivery } from '@/entities/delivery';
-import { useDelivery } from '@/context/delivery-context';
+import { useDelivery } from '@/features/delivery-feature/context/delivery-context';
 import { useSuppliers } from '@/context/supplier-context';
 import { useAuth } from '@/authentication/auth-context';
 

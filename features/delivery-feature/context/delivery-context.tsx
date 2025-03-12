@@ -56,11 +56,6 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
         return delivery;
     };
 
-    /**
-     * 
-     * @param receivedDelivery 
-     * @returns 
-     */
     const finalizeDelivery = async (receivedDelivery: ReceivedDelivery) => {
         if (!delivery) {
             console.error('No delivery to finalize');

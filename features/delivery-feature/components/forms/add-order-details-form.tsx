@@ -4,10 +4,10 @@ import { TextInput, Button, Text } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
-import CustomersSelection from './costumers-selection';
+import CustomersSelection from '../../../../components/costumers-selection';
 import { Customer } from '@/entities/customers';
 import { Order } from '@/entities/order';
-import { DatePicker } from './date-picker';
+import { DatePicker } from '../../../../components/date-picker';
 
 // Define props interface
 interface OrderDetailsFormProps {
