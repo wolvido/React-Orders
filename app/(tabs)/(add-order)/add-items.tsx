@@ -37,8 +37,8 @@ export default function AddItemsScreen() {
                 onProceed={handleProceed}
                 isLoading={isLoading}
                 onUpdateProducts={updateProducts}
-                productSchemas={productSchemas}
-                onSchemaSelect={applySchema}
+                // productSchemas={productSchemas}
+                // onSchemaSelect={applySchema}
             />
         </View>
     );
