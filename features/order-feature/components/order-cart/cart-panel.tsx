@@ -3,8 +3,6 @@ import { Text, IconButton } from "react-native-paper";
 import { FlatList } from "react-native";
 import { CartItem } from "../../types/cart-item";
 import styles from "./cart-styles";
-import { CollapseButton } from "@/shared/components/collapse-button";
-import { useState } from "react";
 
 interface CartPanelProps {
     items: CartItem[];
