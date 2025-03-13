@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 export default function AddItemsScreen() {
 
-    const { products, isLoading, updateProducts, applySchema, productSchemas } = useProducts();
+    const { products, isLoading, updateProducts } = useProducts();
     const { cart, addToCart, removeFromCart, BundleProductToCart } = useCart();
     const { updateCart } = useOrder();
 
