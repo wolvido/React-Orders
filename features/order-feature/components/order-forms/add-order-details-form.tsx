@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Text } from 'react-native-paper';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { TextInput, Button, Text, Portal, Modal, List } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
 import Status from '@/enums/status';
 import PaymentStatus from '@/enums/payment-status';
-import CustomersSelection from '../../../../shared/components/costumers-selection';
+import { CustomersSelection } from '../../../../shared/components/costumers-selection';
 import { Customer } from '@/shared/entities/customers';
 import { Order } from '../../types/order';
 import { DatePicker } from '../../../../shared/components/date-picker';
+import { ProductSchema } from '../../types/product-schema';
+import ProductSchemaSelection from '../product-schema/product-schema-selection';
 
 // Define props interface
 interface OrderDetailsFormProps {
@@ -15,27 +17,19 @@ interface OrderDetailsFormProps {
     customers: Customer[];
     order?: Order;
     currentUser?: { username: string };
+    schemas: ProductSchema[];
+    onSchemaSelect: (schema: ProductSchema) => void;
+    defaultSchema?: ProductSchema;
 }
 
-function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDetailsFormProps) {
-    //form Handling logic
-    useEffect(() => {
-        if (order?.customer) {
-            const defaultCustomer = order.customer;
-            setSelectedCustomer(defaultCustomer);
-            setFormData(prev => ({
-                ...prev,
-                customer: defaultCustomer
-            }));
-        }
-    }, [customers]);
+function OrderDetailsForm({ onSubmit, customers, order, currentUser, schemas, onSchemaSelect, defaultSchema }: OrderDetailsFormProps) {
 
     const [formData, setFormData] = useState<Order>({
         id: order?.id || 0,
         orderType: order?.orderType || '',
         customer: {
             id: order?.customer.id || 0,
-            name: order?.customer.name || 'Walk-in',
+            name: order?.customer.name || '',
             contactNumber: order?.customer.contactNumber || '',
             address: order?.customer.address || ''
         },
@@ -65,22 +59,32 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
         if (isValid) {
             onSubmit(formData);
         }
+
+        console.log('costumer', formData.customer);
     }, [formData, onSubmit]);
     
-    //customers modal controller
-    const [visibleCustomers, setVisibleCustomers] = useState(false);
-    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-    const showCustomersModal = () => setVisibleCustomers(true);
-    const hideCustomersModal = () => setVisibleCustomers(false);
-
     const handleCustomerSelect = (customer: Customer) => {
         console.log('Selected Customer:', customer);
-        setSelectedCustomer(customer);
+
         setFormData(prev => ({
             ...prev,
             customer: customer
         }));
     };
+
+    const [isSchemaSelected, setIsSchemaSelected] = useState(false);
+    const handleSchemaSelect = (schema: ProductSchema) => {
+        setIsSchemaSelected(true);
+        onSchemaSelect(schema);
+    };
+
+    // Set default schema if provided
+    useEffect(() => {
+        if (defaultSchema) {
+            setIsSchemaSelected(true);
+            handleSchemaSelect(defaultSchema);
+        }
+    }, [defaultSchema]);
 
     return (
         <View style={styles.container}>
@@ -89,34 +93,18 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
                 value={formData.transactionDate}
                 onChange={(date) => handleInputChange('transactionDate', date as Date)}
             />
-            <View style={styles.customerInputContainer}>
-                {selectedCustomer && (
-                    <Text style={styles.customerLabel}>
-                        Customer
-                    </Text>
-                )}
-                <Button
-                    mode="outlined"
-                    onPress={showCustomersModal}
-                    style={styles.customerButton}
-                    contentStyle={styles.customerButtonContent}
-                    icon="menu-down"
-                >
-                    <Text style={[
-                        styles.customerButtonText,
-                        !selectedCustomer && styles.customerButtonPlaceholder
-                    ]}>
-                        {selectedCustomer ? selectedCustomer.name : 'Select Customer'}
-                    </Text>
-                </Button>
-            </View>
 
-            {/* <TextInput
-                mode="outlined"
-                label="Delivery Address"
-                value={formData.deliveryAddress}
-                onChangeText={(value) => handleInputChange('deliveryAddress', value)}
-            /> */}
+            <CustomersSelection
+                customers={customers}
+                onCustomerSelect={handleCustomerSelect}
+                existingCustomer={formData.customer}
+            />
+
+            <ProductSchemaSelection
+                schemas={schemas}
+                onSchemaSelect={handleSchemaSelect}
+                defaultSchema={defaultSchema}
+            />
 
             <TextInput
                 mode="outlined"
@@ -145,22 +133,57 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser }: OrderDeta
             <Button 
                 mode="contained"
                 onPress={handleSubmit}
-                disabled={!selectedCustomer}
+                disabled={!formData.customer.id || !isSchemaSelected}
             >
                 Submit Order Details
             </Button>
 
-            <CustomersSelection 
-                visible={visibleCustomers}
-                hideModal={hideCustomersModal}
-                customers={customers}
-                onSelectCustomer={handleCustomerSelect}
-            />
     </View>
     );
 }
 
 const styles = StyleSheet.create({
+    schemaInputContainer: {
+        position: 'relative',
+    },
+    schemaLabel: {
+        position: 'absolute',
+        top: -8,
+        left: 12,
+        fontSize: 12,
+        color: '#000000',
+        backgroundColor: 'white',
+        paddingHorizontal: 4,
+        zIndex: 1,
+    },
+    schemaButton: {
+        height: 56,
+        borderRadius: 4,
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#000000',
+    },
+    schemaButtonContent: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        height: '100%',
+    },
+    schemaButtonText: {
+        textAlign: 'left',
+        flex: 1,
+        color: '#000000',
+        fontSize: 16,
+    },
+    schemaButtonPlaceholder: {
+        color: '#666666',
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        padding: 20,
+        margin: 20,
+        maxHeight: '80%',
+        borderRadius: 8,
+    },
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -171,40 +194,8 @@ const styles = StyleSheet.create({
         marginBottom: 35,
         marginTop: 40,
     },
-    customerInputContainer: {
-        position: 'relative',
-    },
-    customerLabel: {
-        position: 'absolute',
-        top: -8,
-        left: 12,
-        fontSize: 12,
-        color: '#000000',
-        backgroundColor: 'white',
-        paddingHorizontal: 4,
-        zIndex: 1,
-    },
-    customerButton: {
-        height: 56,
-        borderRadius: 4,
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: '#000000',
-    },
-    customerButtonContent: {
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-between',
-        height: '100%',
-    },
-    customerButtonText: {
-        textAlign: 'left',
-        flex: 1,
-        color: '#000000',
-        fontSize: 16,
-    },
-    customerButtonPlaceholder: {
-        color: '#666666',
-    },
+
+
     
 });
 
