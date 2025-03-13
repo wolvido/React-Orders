@@ -15,8 +15,8 @@ interface ProductListProps {
     onUpdateProducts: () => Promise<void>;
     isLoading?: boolean;
     isPortrait: boolean;
-    productSchemas?: ProductSchema[];
-    onSchemaSelect?: (schema: ProductSchema) => void;
+    // productSchemas?: ProductSchema[];
+    // onSchemaSelect?: (schema: ProductSchema) => void;
 }
 
 export function ProductList({
@@ -26,8 +26,8 @@ export function ProductList({
     isPortrait,
     onUpdateProducts,
     isLoading,
-    productSchemas,
-    onSchemaSelect
+    // productSchemas,
+    // onSchemaSelect
 }: ProductListProps) {
 
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
@@ -131,14 +131,6 @@ export function ProductList({
         <View style={styles.mainContentPortrait}>
             <View style={styles.searchContainer}>
                 {!isPortrait && refreshButton}
-
-                {/* {productSchemas && onSchemaSelect && 
-                    <ProductSchemaMenu
-                        schemas={productSchemas}
-                        onSchemaSelect={onSchemaSelect}
-                    />
-                } */}
-
                 <Searchbar
                     placeholder="Search products"
                     onChangeText={setSearchQuery}

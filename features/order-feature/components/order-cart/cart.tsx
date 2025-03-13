@@ -22,8 +22,8 @@ interface CartComponentProps {
     onUpdateProducts: () => Promise<void>;
     onError?: (message: string) => void;
     isLoading?: boolean;
-    productSchemas?: ProductSchema[];
-    onSchemaSelect?: (schema: ProductSchema) => void;
+    // productSchemas?: ProductSchema[];
+    // onSchemaSelect?: (schema: ProductSchema) => void;
 }
 
 export function CartComponent({
@@ -36,8 +36,8 @@ export function CartComponent({
     onError,
     onUpdateProducts,
     isLoading,
-    productSchemas,
-    onSchemaSelect
+    // productSchemas,
+    // onSchemaSelect
 }: CartComponentProps) {
 
     const isPortrait = useOrientation() === 'PORTRAIT';
@@ -57,8 +57,8 @@ export function CartComponent({
                     isPortrait={isPortrait}
                     onUpdateProducts={onUpdateProducts}
                     isLoading={isLoading}
-                    productSchemas={productSchemas}
-                    onSchemaSelect={onSchemaSelect}
+                    // productSchemas={productSchemas}
+                    // onSchemaSelect={onSchemaSelect}
                 />
                 <CollapseButton
                     isPortrait={isPortrait}
