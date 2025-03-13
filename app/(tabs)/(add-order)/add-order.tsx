@@ -9,21 +9,21 @@ import { useOrder } from '@/features/order-feature/context/order-context';
 import { Customer } from '@/shared/entities/customers';
 import { CustomerRepository } from '@/repositories/customer-repository';
 import { useAuth } from '@/features/authentication-feature/context/auth-context';
+import { useProducts } from '@/shared/context/product-context';
+import { ProductSchema } from '@/features/order-feature/types/product-schema';
 
 //react component
 export default function AddOrderScreen() {
 
     const customerRepository = new CustomerRepository();
     const { user } = useAuth();
-
-    const { initializeOrder } = useOrder();
+    const { initializeOrder, getCurrentOrder } = useOrder();
     const [customers, setCustomers] = useState<Customer[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { applySchema, productSchemas } = useProducts();
 
     useEffect(() => {
         customerRepository.getAllCustomers().then((customers) => {
             setCustomers(customers);
-            setIsLoading(false);
         });
     }, []);
 
@@ -33,9 +33,20 @@ export default function AddOrderScreen() {
         router.push('/add-items');
     };
 
+    //default product pricing schema
+    const defaultSchema: ProductSchema = {
+        id: 1,
+        description: 'Default Pricing Schema',
+        type: '',
+        selectionType: 'Default',
+        modifyingValue: 0
+    }
+    
+
     return (
         <View style={{ flex: 1 }}>
             <StepIndicator currentStep={1} steps={orderSteps} />
+
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{
@@ -45,11 +56,17 @@ export default function AddOrderScreen() {
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                <OrderDetailsForm 
+
+                <OrderDetailsForm
                     currentUser={user || undefined} 
                     onSubmit={handleOrderSubmit} 
                     customers={customers} 
+                    schemas={productSchemas}
+                    onSchemaSelect={applySchema}
+                    order={getCurrentOrder() || undefined}
+                    defaultSchema={defaultSchema}
                 />
+
             </ScrollView>
         </View>
     );

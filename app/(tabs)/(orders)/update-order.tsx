@@ -9,6 +9,7 @@ import { Customer } from "@/shared/entities/customers";
 import { CustomerRepository } from "@/repositories/customer-repository";
 import { router } from "expo-router";
 import { useAuth } from "@/features/authentication-feature/context/auth-context";
+import { useProducts } from "@/shared/context/product-context";
 
 
 export default function UpdateOrderScreen(){
@@ -17,6 +18,7 @@ export default function UpdateOrderScreen(){
     const { getCurrentOrder } = useOrder();
     const [ order, setOrder ] = useState<Order | undefined>(undefined);
     const [ customers, setCustomers ] = useState<Customer[]>([]);
+    const { applySchema, productSchemas } = useProducts();
     const { user } = useAuth();
 
     //set order to current order
@@ -59,16 +61,20 @@ export default function UpdateOrderScreen(){
                 keyboardDismissMode="interactive"
                 automaticallyAdjustKeyboardInsets={true}
             >
-                {order ? (
-                    <OrderDetailsForm 
-                        order={order}
-                        customers={customers} 
-                        onSubmit={handleOrderSubmit}
-                        currentUser={user || undefined}
-                    />
-                ) : (
-                    <ActivityIndicator size="large" />
-                )}
+
+            {order ? (
+                <OrderDetailsForm
+                    order={order}
+                    customers={customers}
+                    onSubmit={handleOrderSubmit}
+                    currentUser={user || undefined}
+                    schemas={productSchemas}
+                    onSchemaSelect={applySchema}
+                />
+            ) : (
+                <ActivityIndicator size="large" />
+            )}
+
             </ScrollView>
             
         </View>
