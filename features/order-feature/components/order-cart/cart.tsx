@@ -60,35 +60,18 @@ export function CartComponent({
                     productSchemas={productSchemas}
                     onSchemaSelect={onSchemaSelect}
                 />
-
-                {/* {productSchemas && onSchemaSelect && 
-                    <ProductSchemaMenu
-                        schemas={productSchemas}
-                        onSchemaSelect={onSchemaSelect}
-                    />
-                } */}
-
-                <View style={[styles.cartContainer, isCartCollapsed && styles.collapsedCartContainer]}>
-                    {/* {productSchemas && onSchemaSelect && 
-                        <ProductSchemaMenu
-                            schemas={productSchemas}
-                            onSchemaSelect={onSchemaSelect}
-                        />
-                    } */}
-                    <CollapseButton
+                <CollapseButton
+                    isPortrait={isPortrait}
+                    isCartCollapsed={isCartCollapsed}
+                    onToggleCollapse={onToggleCollapse}
+                />
+                {!isCartCollapsed && (
+                    <CartPanel
+                        items={cart.items}
                         isPortrait={isPortrait}
-                        isCartCollapsed={isCartCollapsed}
-                        onToggleCollapse={onToggleCollapse}
+                        onRemoveFromCart={(cartItem) => onRemoveFromCart(cartItem.product)}
                     />
-                    {!isCartCollapsed && (
-                        <CartPanel
-                            items={cart.items}
-                            isPortrait={isPortrait}
-                            onRemoveFromCart={(cartItem) => onRemoveFromCart(cartItem.product)}
-                        />
-                    )}
-
-                </View>
+                )}
             </View>
             <SummaryPanel
                 total={cart.total}

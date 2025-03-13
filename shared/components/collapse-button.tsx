@@ -15,7 +15,7 @@ export function CollapseButton({
     return (
         <View style={[
             isPortrait && styles.collapseButtonContainer,
-            // !isPortrait && styles.landscapeCollapseButtonContainer
+            !isPortrait && styles.landscapeCollapseButtonContainer
         ]}>
             {isPortrait && (
                 <IconButton
@@ -29,6 +29,7 @@ export function CollapseButton({
             {!isPortrait && (
                 <IconButton
                     icon={isCartCollapsed ? "chevron-left" : "chevron-right"}
+                    style={isCartCollapsed ? { marginRight: 28} : { marginLeft:  0}}
                     onPress={onToggleCollapse}
                     size={20}
                     mode="contained"
@@ -48,14 +49,11 @@ const styles = StyleSheet.create({
         marginTop: -28,
     },
     landscapeCollapseButtonContainer:{
-        position: 'absolute',
-        top: 0,
-        right: 650,
-        left: 0,
-        bottom: 0,
+        width: 0,
+        zIndex: 100,
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1,
+
     },
 });
 
