@@ -181,8 +181,12 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     const loadProductSchemas = async () => {
         try {
             setIsLoading(true);
-            const data = await productSchemaRepository.getAll();
-            setProductSchemas(data);
+            const data: ProductSchema[] = await productSchemaRepository.getAll();
+
+            //filter out everything except type percentage temporarily
+            const filteredDate = data.filter(schema => schema.type === 'Percentage');
+
+            setProductSchemas(filteredDate);
         } catch (err) {
             console.error('Error loading product schemas:', err);
             throw err;
