@@ -1,8 +1,8 @@
 import { DataTable, Searchbar, Button, List, Menu  } from 'react-native-paper';
 import { View, ScrollView, useWindowDimensions } from 'react-native';
 import { Order } from '@/features/order-feature/types/order';
-import commonStyles from '@/style/common';
-import theme from '@/style/theme';
+import commonStyles from '@/shared/style/common';
+import theme from '@/shared/style/theme';
 import getPaymentStatusColor from '../../../shared/hooks/payment-status-color-hook';
 import PaymentStatus from '@/enums/payment-status';
 import { useSearch } from '../../../shared/hooks/search-filter';
