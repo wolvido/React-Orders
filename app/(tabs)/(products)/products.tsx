@@ -1,8 +1,8 @@
-import commonStyles from '@/style/common';
+import commonStyles from '@/shared/style/common';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import * as React from 'react';
 import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
-import theme from '@/style/theme';
+import theme from '@/shared/style/theme';
 import { useEffect, useState } from 'react';
 import { Product } from '@/shared/entities/product';
 import { useSearch } from '@/shared/hooks/search-filter';

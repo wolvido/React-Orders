@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Surface, Text, ActivityIndicator } from 'react-native-paper';
-import theme from '@/style/theme';
+import theme from '@/shared/style/theme';
 
 interface EmptyStateProps {
     title: string;

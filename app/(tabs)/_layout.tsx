@@ -3,7 +3,7 @@ import { CommonActions, DefaultTheme} from '@react-navigation/native';
 import { Text, BottomNavigation, IconButton, Drawer } from 'react-native-paper';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import theme from '@/style/theme';
+import theme from '@/shared/style/theme';
 import { Redirect, Tabs } from 'expo-router';
 
 import { useAuth } from '@/features/authentication-feature/context/auth-context';

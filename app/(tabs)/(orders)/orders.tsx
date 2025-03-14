@@ -1,5 +1,5 @@
-import commonStyles from '@/style/common';
-import theme from '@/style/theme';
+import commonStyles from '@/shared/style/common';
+import theme from '@/shared/style/theme';
 import * as React from 'react';
 import { DataTable, Searchbar, Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
 import getStatusColor from '@/shared/hooks/status-color-hook';

@@ -1,7 +1,7 @@
 
 import { Slot, Stack } from 'expo-router';
 import { PaperProvider } from 'react-native-paper';
-import theme from '@/style/theme';
+import theme from '@/shared/style/theme';
 
 import { AuthProvider } from '@/features/authentication-feature/context/auth-context';
 
