@@ -35,14 +35,13 @@ export default function AddOrderScreen() {
 
     //default product pricing schema
     const defaultSchema: ProductSchema = {
-        id: 1,
+        id: 0,
         description: 'Default Pricing Schema',
         type: '',
         selectionType: 'Default',
         modifyingValue: 0
     }
     
-
     return (
         <View style={{ flex: 1 }}>
             <StepIndicator currentStep={1} steps={orderSteps} />
@@ -57,15 +56,15 @@ export default function AddOrderScreen() {
                 automaticallyAdjustKeyboardInsets={true}
             >
 
-                <OrderDetailsForm
-                    currentUser={user || undefined} 
-                    onSubmit={handleOrderSubmit} 
-                    customers={customers} 
-                    schemas={productSchemas}
-                    onSchemaSelect={applySchema}
-                    order={getCurrentOrder() || undefined}
-                    defaultSchema={defaultSchema}
-                />
+            <OrderDetailsForm
+                currentUser={user || undefined} 
+                onSubmit={handleOrderSubmit} 
+                customers={customers} 
+                schemas={productSchemas}
+                onSchemaSelect={applySchema}
+                order={getCurrentOrder() || undefined}
+                defaultSchema={defaultSchema}
+            />
 
             </ScrollView>
         </View>
