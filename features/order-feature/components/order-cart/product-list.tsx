@@ -71,7 +71,7 @@ export function ProductList({
                             style={[isPortrait && styles.compactText, styles.productName]}
                             numberOfLines={2}
                         >
-                            ₱{product.price} • {product.name}
+                            ₱{product.price.toFixed(2)} • {product.name}
                         </Text>
                     </View>
 
