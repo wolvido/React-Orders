@@ -21,13 +21,14 @@ const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 export function ProductProvider({ children }: { children: ReactNode }) {
     const [products, setProducts] = useState<Product[]>([]);
+    const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
     const [stockChanges, setStockChanges] = useState<Record<number, number>>({}); 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [productSchemas, setProductSchemas] = useState<ProductSchema[]>([]);
+    const [selectedSchema, setSelectedSchema] = useState<ProductSchema | null>(null);
 
     const productRepository = new ProductRepository();
-
     const productSchemaRepository = new ProductSchemaRepository();
 
     const loadProducts = async () => {
@@ -36,6 +37,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             setError(null);
             const data = await productRepository.getAll();
             setProducts(data);
+            setOriginalProducts(data);
         } catch (err) {
             setError('Failed to load products');
             console.error('Error loading products:', err);
@@ -145,7 +147,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-     * safely updates the products by retaining the local product stock changes
+     * safely updates the products by retaining the local product stock changes and applying selected pricing schema
      */
     const updateProducts = async () => {
         try {
@@ -163,6 +165,11 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             });
 
             setProducts(updatedProducts);
+
+            if (selectedSchema) {
+                applySchema(selectedSchema);
+            }
+
         } catch (err) {
             setError('Failed to update products');
             console.error('Error updating products:', err);
@@ -186,39 +193,41 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         const { type, selectionType, modifyingValue } = productSchema;
         console.log('Applying schema context:', productSchema);
 
-        if (selectionType === 'Default') {
-            console.log('Default Delected. Skipping schema application...');
-            return;
+        // Reset prices to original values before schema application, so schemas don't stack
+        const originalPriceMap = Object.fromEntries(
+            originalProducts.map(p => [p.id, p.price])
+        );
+        setProducts(prevProducts => prevProducts.map(product => ({
+            ...product,
+            price: originalPriceMap[product.id] || product.price
+        }))); // might cause infinite loop if not handled properly in application layer
+        
+        if (productSchema.id > 0) {
+            setSelectedSchema(productSchema); //save the selected schema
         }
 
         if (selectionType === 'All') {
             console.log('Applying schema to all products...');
 
-            //if fixed
-            if (type === 'Fixed') {
-                console.log('Applying fixed schema...');
-                setProducts(prevProducts => {
-                    return prevProducts.map(product => {
-                        return {
-                            ...product,
-                            price: product.price - modifyingValue
-                        };
-                    });
-                });
-            }
+            setProducts(prevProducts => {
+                return prevProducts.map(product => {
+                    let newPrice = product.price;
 
-            //if percentage
-            if (type === 'Percentage') {
-                console.log('Applying percentage schema...');
-                setProducts(prevProducts => {
-                    return prevProducts.map(product => {
-                        return {
-                            ...product,
-                            price: product.price * (1 - modifyingValue / 100)
-                        };
-                    });
+                    if (type === 'Fixed') {
+                        newPrice = product.price - modifyingValue;
+                    } else if (type === 'Percentage') {
+                        newPrice = product.price * (1 - modifyingValue / 100);
+                    }
+
+                    // Ensure price doesn't go below 0
+                    newPrice = Math.max(0, newPrice);
+
+                    return {
+                        ...product,
+                        price: newPrice
+                    };
                 });
-            }
+            });
 
         } else if (selectionType === 'Selected') {
             console.log('Applying schema to selected products...');
