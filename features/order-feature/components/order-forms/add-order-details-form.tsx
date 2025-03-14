@@ -84,7 +84,7 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser, schemas, on
             setIsSchemaSelected(true);
             handleSchemaSelect(defaultSchema);
         }
-    }, [defaultSchema]);
+    }, []);
 
     return (
         <View style={styles.container}>
