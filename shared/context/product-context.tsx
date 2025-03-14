@@ -214,9 +214,13 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                     let newPrice = product.price;
 
                     if (type === 'Fixed') {
-                        newPrice = product.price - modifyingValue;
+                        newPrice = product.price + modifyingValue;
                     } else if (type === 'Percentage') {
-                        newPrice = product.price * (1 - modifyingValue / 100);
+                        let priceInCentavos = Math.round(product.price * 100);  // Convert to centavos
+                        let modifiedPriceInCentavos = Math.round(priceInCentavos * (1 + modifyingValue / 100)); 
+                        newPrice = modifiedPriceInCentavos / 100;  // Convert back to pesos
+                    } else if (type === 'Overwrite') {
+                        newPrice = modifyingValue;
                     }
 
                     // Ensure price doesn't go below 0
