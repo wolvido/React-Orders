@@ -1,4 +1,4 @@
-import { ProductSchema } from "@/features/order-feature/types/product-schema";
+import { ProductSchema } from "@/shared/entities/product-schema";
 
 export interface ProductSchemaDTO {
     id: number;

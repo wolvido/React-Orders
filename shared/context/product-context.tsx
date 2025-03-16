@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../entities/product';
-import { ProductSchema } from '../../features/order-feature/types/product-schema';
+import { ProductSchema } from '../entities/product-schema';
 import { ProductRepository } from '@/repositories/product-repository';
 import { ProductSchemaRepository } from '@/repositories/product-schema-repository';
+import { ProductSchemaLineRepository } from '@/repositories/product-schema-line-repository';
+import { ProductSchemaLine } from '@/shared/entities/product-schema-line';
 
 interface ProductContextType {
     products: Product[];
@@ -30,7 +32,8 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
     const productRepository = new ProductRepository();
     const productSchemaRepository = new ProductSchemaRepository();
-
+    const productSchemaLineRepository = new ProductSchemaLineRepository();
+    
     const loadProducts = async () => {
         try {
             setIsLoading(true);
@@ -183,17 +186,17 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             setIsLoading(true);
             const data: ProductSchema[] = await productSchemaRepository.getAll();
 
-            //filter out everything except type percentage temporarily
-            const filteredDate = data.filter(schema => schema.type === 'Percentage');
+            //filter out fixed and all
+            const filteredData = data.filter(schema => !(schema.type === 'Fixed' && schema.selectionType === 'All'));
 
-            setProductSchemas(filteredDate);
+            setProductSchemas(filteredData);
         } catch (err) {
             console.error('Error loading product schemas:', err);
             throw err;
         }
     }
 
-    const applySchema = (productSchema: ProductSchema) => {
+    const applySchema = async (productSchema: ProductSchema) => {
         const { type, selectionType, modifyingValue } = productSchema;
         console.log('Applying schema context:', productSchema);
 
@@ -239,11 +242,53 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
         } else if (selectionType === 'Selected') {
             console.log('Applying schema to selected products...');
-            // Apply schema to selected products
-            // This is a placeholder for future implementation
+            await applySchemalines(productSchema);
         }
     };
 
+    const applySchemalines = async (productSchema: ProductSchema) => {
+        const schemaLines = await productSchemaLineRepository.getSchemaLinesBySchemaId(productSchema.id);
+    
+        // Calculate all price updates
+        const updates = schemaLines.reduce((acc, schema) => {
+            const product = products.find(p => p.id === schema.productId);
+            if (!product) {
+                console.log('Product not found for schema line:', schema);
+                return acc;
+            }
+    
+            let newPrice = product.price;
+            switch (schema.type) {
+                case 'Fixed':
+                    newPrice = product.price + schema.modifyingValue;
+                    break;
+                case 'Percentage':
+                    const priceInCentavos = Math.round(product.price * 100);
+                    const modifiedPriceInCentavos = Math.round(priceInCentavos * (1 + schema.modifyingValue / 100));
+                    newPrice = modifiedPriceInCentavos / 100;
+                    break;
+                case 'Overwrite':
+                    newPrice = schema.modifyingValue;
+                    break;
+                default: 
+                    console.log('Unknown schema line type:', schema);
+                    break;
+            }
+    
+            acc[schema.productId] = Math.max(0, newPrice);
+            return acc;
+        }, {} as Record<string | number, number>);
+    
+        // Apply all updates in a single state update
+        setProducts(prevProducts =>
+            prevProducts.map(products =>
+                updates[products.id] !== undefined 
+                    ? { ...products, price: updates[products.id] }
+                    : products
+            )
+        );
+    };
+    
     return (
         <ProductContext.Provider value={{
             products,

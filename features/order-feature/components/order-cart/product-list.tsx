@@ -6,7 +6,7 @@ import ProductQuantityForm from "@/features/order-feature/components/order-forms
 import styles from "./cart-styles";
 import theme from "@/shared/style/theme";
 import { ProductSchemaMenu } from "../product-schema/product-schema-menu";
-import { ProductSchema } from "@/features/order-feature/types/product-schema";
+import { ProductSchema } from "@/shared/entities/product-schema";
 
 interface ProductListProps {
     products: Product[];

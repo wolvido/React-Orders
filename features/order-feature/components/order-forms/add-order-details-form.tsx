@@ -8,7 +8,7 @@ import { CustomersSelection } from '../../../../shared/components/costumers-sele
 import { Customer } from '@/shared/entities/customers';
 import { Order } from '../../types/order';
 import { DatePicker } from '../../../../shared/components/date-picker';
-import { ProductSchema } from '../../types/product-schema';
+import { ProductSchema } from '../../../../shared/entities/product-schema';
 import ProductSchemaSelection from '../product-schema/product-schema-selection';
 
 // Define props interface

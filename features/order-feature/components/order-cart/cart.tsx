@@ -7,7 +7,7 @@ import { SummaryPanel } from "../../../../shared/components/summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
-import { ProductSchema } from "@/features/order-feature/types/product-schema";
+import { ProductSchema } from "@/shared/entities/product-schema";
 import { useState } from "react";
 import { CollapseButton } from "@/shared/components/collapse-button";
 import { ProductSchemaMenu } from "../product-schema/product-schema-menu";
