@@ -129,7 +129,7 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser, schemas, on
                     onChangeText={(value) => handleInputChange('remarks', value)}
                 />
             )}
-            
+
             <Button 
                 mode="contained"
                 onPress={handleSubmit}
