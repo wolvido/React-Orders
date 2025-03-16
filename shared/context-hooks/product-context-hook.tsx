@@ -1,4 +1,5 @@
 import { useProducts } from "@/shared/context/product-context";
+import { Product } from "../entities/product";
 
 //results of operation
 interface StockOperationResult {
@@ -9,8 +10,8 @@ interface StockOperationResult {
 export function useProductHook() {
     const { reduceStock, increaseStock } = useProducts();
 
-    const handleReduceStock = (productId: number, quantity: number): StockOperationResult => {
-        return reduceStock(productId, quantity);
+    const handleReduceStock = (product: Product, quantity: number): StockOperationResult => {
+        return reduceStock(product, quantity);
     };
 
     const handleIncreaseStock = (productId: number, quantity: number, isBundleId?:boolean) => {

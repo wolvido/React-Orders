@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
      */
     const addToCart = (cartItem: CartItem) => {
         // First check stock availability
-        const stockResult = reduceStock(cartItem.product.id, cartItem.quantity);
+        const stockResult = reduceStock(cartItem.product, cartItem.quantity);
         if (!stockResult.success) {
             return { success: false, error: stockResult.error };
         }
@@ -81,7 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
      */
     const BundleProductToCart = (product: Product, quantity: number) => {
 
-        const stockResult = reduceStock(product.id, quantity);
+        const stockResult = reduceStock(product, quantity);
         if (!stockResult.success) {
             return { success: false, error: stockResult.error };
         };

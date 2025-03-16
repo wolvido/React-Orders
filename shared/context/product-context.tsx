@@ -11,7 +11,7 @@ interface ProductContextType {
     isLoading: boolean;
     error: string | null;
     refreshProducts: () => Promise<void>;
-    reduceStock: (productId: number, quantity: number) => { success: boolean; error?: string };
+    reduceStock: (product: Product, quantity: number) => { success: boolean; error?: string };
     increaseStock: (productId: number, quantity: number, isBundleId?: boolean) => void;
     updateProducts: () => Promise<void>;
     loadProductSchemas: () => Promise<void>;
@@ -54,16 +54,16 @@ export function ProductProvider({ children }: { children: ReactNode }) {
         await loadProducts();
     };
 
-    const reduceStock = (productId: number, quantity: number) => {
-        const productIndex = products.findIndex(p => p.id === productId);
-        if (productIndex === -1) {
-            return { success: false, error: 'Product not found' };
-        }
+    const reduceStock = (product: Product, quantity: number) => {
+        // const productIndex = products.findIndex(p => p.id === productId);
+        // if (productIndex === -1) {
+        //     return { success: false, error: 'Product not found' };
+        // }
     
-        const product = products[productIndex];
+        // const product = product;
 
         //swap out with the original product if the product is bundled
-        const targetProductId = product.isBundle ? (product.originalProductId || productId) : productId;
+        const targetProductId = product.isBundle ? (product.originalProductId || product.id) : product.id;
         const targetProduct = product.isBundle ? 
             products.find(p => p.id === targetProductId) : 
             product;

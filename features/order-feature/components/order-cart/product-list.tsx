@@ -96,7 +96,7 @@ export function ProductList({
                 )}
             </Card.Content>
         </Card>
-    ), [isPortrait, errors]);
+    ), [isPortrait, errors, productQuantityForm]);
 
     const onRefresh = async () => {
         console.log('Refreshing products...');
