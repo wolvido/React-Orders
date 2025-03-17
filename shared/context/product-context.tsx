@@ -55,14 +55,6 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     const reduceStock = (product: Product, quantity: number) => {
-        // const productIndex = products.findIndex(p => p.id === productId);
-        // if (productIndex === -1) {
-        //     return { success: false, error: 'Product not found' };
-        // }
-    
-        // const product = product;
-
-        //swap out with the original product if the product is bundled
         const targetProductId = product.isBundle ? (product.originalProductId || product.id) : product.id;
         const targetProduct = product.isBundle ? 
             products.find(p => p.id === targetProductId) : 
