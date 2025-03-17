@@ -217,6 +217,9 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                         let modifiedPriceInCentavos = Math.round(priceInCentavos * (1 + modifyingValue / 100)); 
                         newPrice = modifiedPriceInCentavos / 100;  // Convert back to pesos
                     }
+                    else {
+                        console.log('Invalid schema:', productSchema);
+                    }
 
                     // Ensure price doesn't go below 0
                     newPrice = Math.max(0, newPrice);
