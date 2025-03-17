@@ -100,11 +100,11 @@ function OrderDetailsForm({ onSubmit, customers, order, currentUser, schemas, on
                 existingCustomer={formData.customer}
             />
 
-            {/* <ProductSchemaSelection
+            <ProductSchemaSelection
                 schemas={schemas}
                 onSchemaSelect={handleSchemaSelect}
                 defaultSchema={defaultSchema}
-            /> */}
+            />
 
             <TextInput
                 mode="outlined"
