@@ -14,10 +14,8 @@ export interface ProductSchema { //aka pricing schema
     /**
      * used to determine which products the schema will apply to,
      * @string "All" → Apply to all products.
+     * If ProductSchema.type = "Custom" or "Mixed" or "Overwrite", this refers to custom calculations or rules, so it will be treated as "Selected".
      * @string "Selected" → Apply to selected products.
-     * its used in the backend for a simple check.
-     * If "Selected", it will pull SchemaLines-
-     * if "All", then it will apply the schema to all products
      */
     selectionType: string;
 
