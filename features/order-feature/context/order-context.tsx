@@ -11,9 +11,6 @@ import { OrderLineRepository } from '@/repositories/order-line-repository';
 import { CustomerRepository } from '@/repositories/customer-repository';
 import { CartItem } from '../types/cart-item';
 
-//dummy delete later
-//import { orders } from '@/dummy-data/dummy-orders';
-
 // Define the context type
 interface OrderContextType {
     currentOrder: Order | null;
