@@ -178,10 +178,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
             setIsLoading(true);
             const data: ProductSchema[] = await productSchemaRepository.getAll();
 
-            //filter out fixed and all
-            const filteredData = data.filter(schema => !(schema.type === 'Fixed' && schema.selectionType === 'All'));
-
-            setProductSchemas(filteredData);
+            setProductSchemas(data);
         } catch (err) {
             console.error('Error loading product schemas:', err);
             throw err;
@@ -262,7 +259,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                     newPrice = schema.modifyingValue;
                     break;
                 default: 
-                    console.log('Unknown schema line type:', schema);
+                    console.log('Invalid schema line type:', schema);
                     break;
             }
     
