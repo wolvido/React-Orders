@@ -1,12 +1,8 @@
 import { View, StyleSheet } from "react-native";
-import { Button, Card, TextInput, Text, List, HelperText, Searchbar, IconButton, Surface } from "react-native-paper";
-import { useState, useEffect, useCallback } from "react";
 import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
 import { Product } from "@/shared/entities/product";
 import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
-import { FlatList } from "react-native";
 import useOrientation from "@/shared/hooks/orientation-hook";
-import DeliveryProductForm from "./delivery-product-form";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
 import { SummaryPanel } from "@/shared/components/summary-panel";
