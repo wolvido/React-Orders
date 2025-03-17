@@ -101,7 +101,7 @@ export function DeliveryProductList({
                 )}
             </Card.Content>
         </Card>
-    ), [isPortrait, errors]);
+    ), [isPortrait, errors, deliveryProductForm]);
 
     return (
         <View style={[styles.mainContentPortrait]}>

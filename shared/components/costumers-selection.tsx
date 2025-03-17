@@ -39,7 +39,7 @@ export function CustomersSelection({
             left={props => <List.Icon {...props} icon="account" />}
             right={props => <List.Icon {...props} icon="chevron-right" />}
         />
-    ), []);
+    ), [handleCustomerSelect]);
 
     return (
         <>
