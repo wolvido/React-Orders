@@ -13,7 +13,7 @@ export interface ProductSchemaLine {
 
     /**
      * @number If Type = "Percentage", this is the percentage value (e.g., 10 means 10% discount).
-     * @number If Type = "Fixed", this is the fixed amount (e.g., 100 means ₱100 off).
+     * @number If Type = "Fixed", this is the fixed amount (e.g., -100 means ₱100 off).
      * @number If Type = "Custom", this could refer to custom calculations or rules.
      * @number If Type = "Overwrite", overwrite.
      */
