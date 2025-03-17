@@ -191,7 +191,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     const applySchema = async (productSchema: ProductSchema) => {
         const { type, selectionType, modifyingValue } = productSchema;
         console.log('Applying schema context:', productSchema);
-
+        
         // Reset prices to original values before schema application, so schemas don't stack
         const originalPriceMap = Object.fromEntries(
             originalProducts.map(p => [p.id, p.price])
@@ -214,12 +214,11 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
                     if (type === 'Fixed') {
                         newPrice = product.price + modifyingValue;
-                    } else if (type === 'Percentage') {
+                    } 
+                    else if (type === 'Percentage') {
                         let priceInCentavos = Math.round(product.price * 100);  // Convert to centavos
                         let modifiedPriceInCentavos = Math.round(priceInCentavos * (1 + modifyingValue / 100)); 
                         newPrice = modifiedPriceInCentavos / 100;  // Convert back to pesos
-                    } else if (type === 'Overwrite') {
-                        newPrice = modifyingValue;
                     }
 
                     // Ensure price doesn't go below 0
@@ -232,7 +231,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
                 });
             });
 
-        } else if (selectionType === 'Selected') {
+        } else if (selectionType === 'Selected' || type === 'Custom' || type === 'Mixed' || type === 'Overwrite') {
             console.log('Applying schema to selected products...');
             await applySchemalines(productSchema);
         }
