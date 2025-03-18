@@ -21,7 +21,7 @@ export default function TabLayout() {
     }
 
     if (!isAuthenticated) {
-        return <Redirect href="/sign-in" />;
+        return <Redirect href="/authentication" />;
     }
 
     const navigationItems = [
@@ -45,45 +45,46 @@ export default function TabLayout() {
             label: 'Add Order',
             icon: 'cart-plus' as const,
         }
-        //,
-        // {
-        //     name: '(purchase-orders)',
-        //     label: 'Purchase Orders',
-        //     icon: 'format-list-checkbox' as const,
-        // },
+        ,
+        {
+            name: '(purchase-orders)',
+            label: 'Purchase Orders',
+            icon: 'format-list-checkbox' as const,
+        },
     ];
 
     return (
         <Tabs
-        screenOptions={{
-            tabBarHideOnKeyboard: true,
-            headerShown: true,
-            headerStyle: {
-                backgroundColor: theme.colors.primary,
-            },
-            headerTintColor: 'white',
-            headerTitleStyle: {
-                fontWeight: 'bold',
-                fontSize: 20,
-            },
-            headerShadowVisible: true,
-            headerLeft: orientation === 'LANDSCAPE' ? () => (
-                <IconButton
-                    icon={drawerVisible ? "menu-open" : "menu"}
-                    iconColor="white"
-                    size={24}
-                    onPress={() => setDrawerVisible(!drawerVisible)}
-                />
-            ) : undefined,
-            headerRight: () => (
-                <IconButton
-                    icon="logout"
-                    iconColor="white"
-                    size={24}
-                    onPress={logout}
-                />
-            ),
-        }}
+            screenOptions={{
+                tabBarHideOnKeyboard: true,
+                headerShown: true,
+                headerStyle: {
+                    backgroundColor: theme.colors.primary,
+                },
+                headerTintColor: 'white',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                },
+                headerShadowVisible: true,
+                headerLeft: orientation === 'LANDSCAPE' ? () => (
+                    <IconButton
+                        icon={drawerVisible ? "menu-open" : "menu"}
+                        iconColor="white"
+                        size={24}
+                        onPress={() => setDrawerVisible(!drawerVisible)}
+                    />
+                ) : undefined,
+                headerRight: () => (
+                    <IconButton
+                        icon="logout"
+                        iconColor="white"
+                        size={24}
+                        onPress={logout}
+                    />
+                ),
+            }}
+
         tabBar={({ navigation, state, descriptors, insets }) => {
             if (orientation === 'LANDSCAPE') {
                 return (
