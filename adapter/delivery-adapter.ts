@@ -1,39 +1,5 @@
 import { Delivery } from "@/entities/delivery";
 
-// export interface DeliveryDTO {
-//     isDeleted: boolean;
-//     sys_CreateTimeStamp: string;
-//     sys_CreateUserStamp: string;
-//     sys_LastEditedTimeStamp: string;
-//     sys_LastEditedUserStamp: string;
-//     sys_DeletedTimeStamp: string;
-//     sys_DeletedUserStamp: string;
-//     state: number;
-//     isDtoSelected: boolean;
-//     deliveryDate: string;
-//     deliveryID: number;
-//     creationDate: string;
-//     supplierId: number;
-//     supplierName: string;
-//     items: number;
-//     total: number;
-//     createdBy: string;
-//     handledBy: string;
-//     deliveredBy: string;
-//     deliveryReceipt: string;
-//     shippingCost: number;
-//     deliveryCost: number;
-//     otherFee: number;
-//     deliveryDiscount: number;
-//     purchaseOrderId: number;
-//     isConfirmed: boolean;
-//     deliveryConfirmationId: number;
-//     confirmedBy: string;
-//     confirmationDate: string;
-//     status: string;
-// }
-
-
 export interface DeliveryDTO {
     // System Metadata Fields
     isDeleted: boolean; // Indicates if the record has been deleted (true = deleted)
