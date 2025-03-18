@@ -1,4 +1,4 @@
-import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
+import { ReceivedDelivery } from "@/entities/received-delivery";
 
 export interface DeliveryLineDTO {
     isDeleted: boolean;

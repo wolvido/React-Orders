@@ -2,11 +2,11 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
-import { PurchaseOrder } from '../../features/delivery-feature/types/purchase-order';
-import { Delivery } from '@/features/delivery-feature/types/delivery';
+import { PurchaseOrder } from '../../entities/purchase-order';
+import { Delivery } from '@/entities/delivery';
 import AddDeliveryForm from '../../features/delivery-feature/components/forms/add-delivery-form';
-import Status from '@/enums/status';
-import PaymentStatus from '@/enums/payment-status';
+import Status from '@/shared/enums/status';
+import PaymentStatus from '@/shared/enums/payment-status';
 import { DatePicker } from './date-picker';
 
 interface PurchaseOrderFormProps {

@@ -1,4 +1,4 @@
-import { ProductSchemaLine } from "@/shared/entities/product-schema-line";
+import { ProductSchemaLine } from "@/entities/product-schema-line";
 
 export interface ProductSchemaLineDTO {
     productSchemalineId: number;

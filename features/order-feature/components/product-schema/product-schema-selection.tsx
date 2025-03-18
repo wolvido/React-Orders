@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text, Portal, Modal, List } from 'react-native-paper';
 import { ScrollView } from 'react-native';
-import { ProductSchema } from '../../../../shared/entities/product-schema';
+import { ProductSchema } from '../../../../entities/product-schema';
 
 interface ProductSchemaSelectionProps {
     schemas: ProductSchema[];

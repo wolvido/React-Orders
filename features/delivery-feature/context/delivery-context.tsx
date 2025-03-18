@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Delivery } from '@/features/delivery-feature/types/delivery';
-import { ReceivedDelivery } from '@/features/delivery-feature/types/received-delivery';
+import { Delivery } from '@/entities/delivery';
+import { ReceivedDelivery } from '@/entities/received-delivery';
 import { DeliveryRepository } from '@/repositories/delivery-repository';
 import { DeliveryLineRepository } from '@/repositories/delivery-line-repository';
 

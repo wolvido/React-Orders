@@ -1,10 +1,9 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { Product } from '../entities/product';
-import { ProductSchema } from '../entities/product-schema';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { Product } from '../../../entities/product';
+import { ProductSchema } from '../../../entities/product-schema';
 import { ProductRepository } from '@/repositories/product-repository';
 import { ProductSchemaRepository } from '@/repositories/product-schema-repository';
 import { ProductSchemaLineRepository } from '@/repositories/product-schema-line-repository';
-import { ProductSchemaLine } from '@/shared/entities/product-schema-line';
 
 interface ProductContextType {
     products: Product[];

@@ -6,11 +6,11 @@ import orderSteps from './order-steps-label';
 import { Order } from '@/features/order-feature/types/order';
 import { router } from 'expo-router';
 import { useOrder } from '@/features/order-feature/context/order-context';
-import { Customer } from '@/shared/entities/customers';
+import { Customer } from '@/entities/customers';
 import { CustomerRepository } from '@/repositories/customer-repository';
 import { useAuth } from '@/features/authentication-feature/context/auth-context';
-import { useProducts } from '@/shared/context/product-context';
-import { ProductSchema } from '@/shared/entities/product-schema';
+import { useProducts } from '@/services/product-service/context/product-context';
+import { ProductSchema } from '@/entities/product-schema';
 
 //react component
 export default function AddOrderScreen() {

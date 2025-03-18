@@ -1,6 +1,6 @@
-import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
-import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
-import { Product } from "@/shared/entities/product";
+import { ReceivedItem } from "@/entities/received-item";
+import { ReceivedDelivery } from "@/entities/received-delivery";
+import { Product } from "@/entities/product";
 import { createContext, useContext, ReactNode, useState } from 'react';
 
 interface DeliveryContextType {

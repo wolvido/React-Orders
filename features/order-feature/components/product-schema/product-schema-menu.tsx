@@ -1,4 +1,4 @@
-import { ProductSchema } from "@/shared/entities/product-schema";
+import { ProductSchema } from "@/entities/product-schema";
 import theme from "@/shared/style/theme";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";

@@ -1,7 +1,7 @@
-import { CashPayment, ChequePayment, PaymentGateway, BankTransferPayment } from "@/features/order-feature/types/payment-method";
+import { CashPayment, ChequePayment, PaymentGateway, BankTransferPayment } from "@/entities/payment-method";
 import { convertBankTransferPaymentToPaymentDTO, convertCashPaymentToPaymentDTO, convertChequePaymentToPaymentDTO, convertPaymentGatewayToPaymentDTO } from "@/adapter/payment-adapter";
 import app from "@/app.json";
-import { useApi } from "@/shared/context/dev-mode-context";
+import { useApi } from "@/services/dev-mode-service/context/dev-mode-context";
 
 export interface IPaymentRepository {
     createCashPayment(payment: CashPayment): Promise<{paymentId: number}>;

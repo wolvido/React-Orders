@@ -1,6 +1,6 @@
-import { Product } from "@/shared/entities/product";
+import { Product } from "@/entities/product";
 import { View, StyleSheet, FlatList } from "react-native";
-import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
+import { ReceivedItem } from "@/entities/received-item";
 import { useCallback, useState } from "react";
 import { Card, Text, HelperText, Searchbar } from "react-native-paper";
 import DeliveryProductForm from "./delivery-product-form";

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
-import { PurchaseOrder } from '../../features/delivery-feature/types/purchase-order';
-import { Delivery } from '@/features/delivery-feature/types/delivery';
-import { ReceivedDelivery } from '@/features/delivery-feature/types/received-delivery';
+import { PurchaseOrder } from '../../../entities/purchase-order';
+import { Delivery } from '@/entities/delivery';
+import { ReceivedDelivery } from '@/entities/received-delivery';
 
 interface PurchaseOrderContextType {
     purchaseOrder: PurchaseOrder | null;

@@ -1,6 +1,6 @@
 // context/supplier-context.tsx
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { Supplier } from '../entities/supplier';
+import { Supplier } from '../../../entities/supplier';
 import { DeliveryRepository } from '@/repositories/delivery-repository';
 
 interface SupplierContextType {

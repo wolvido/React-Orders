@@ -1,4 +1,4 @@
-import { Supplier } from "@/shared/entities/supplier";
+import { Supplier } from "@/entities/supplier";
 
 interface SupplierDTO {
     supplierID: number;

@@ -1,4 +1,4 @@
-import PaymentMethod from "@/features/order-feature/types/payment-method";
+import PaymentMethod from "@/entities/payment-method";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from 'react-native-paper';

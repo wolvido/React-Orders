@@ -1,5 +1,5 @@
 // CustomersSelection.tsx
-import { Customer } from "../entities/customers";
+import { Customer } from "../../entities/customers";
 import { Portal, List, Button, Text, Searchbar } from 'react-native-paper';
 import { Modal, StyleSheet, FlatList, View } from 'react-native';
 import { useState, useCallback } from 'react';

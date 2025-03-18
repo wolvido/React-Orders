@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { Text, IconButton } from "react-native-paper";
 import { FlatList } from "react-native";
-import { CartItem } from "../../types/cart-item";
+import { CartItem } from "@/entities/cart-item";
 import styles from "./cart-styles";
 
 interface CartPanelProps {

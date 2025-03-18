@@ -1,6 +1,6 @@
 import { Order } from "@/features/order-feature/types/order";
-import Status from "@/enums/status";
-import PaymentStatus from "@/enums/payment-status";
+import Status from "@/shared/enums/status";
+import PaymentStatus from "@/shared/enums/payment-status";
 
 // Create interface for the source data
 interface RestaurantOrderDTO {

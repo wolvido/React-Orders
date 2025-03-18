@@ -1,4 +1,4 @@
-import { Product } from '@/shared/entities/product';
+import { Product } from '@/entities/product';
 
 export interface CartItem{ //aka orderline
     id: number;

@@ -1,7 +1,7 @@
 import { CustomerAdapter } from "@/adapter/customer-adapter";
 import app from "@/app.json";
-import { useApi } from "@/shared/context/dev-mode-context";
-import { Customer } from "@/shared/entities/customers";
+import { useApi } from "@/services/dev-mode-service/context/dev-mode-context";
+import { Customer } from "@/entities/customers";
 
 export interface ICustomerRepository {
     getAllCustomers(): Promise<Customer[]>;

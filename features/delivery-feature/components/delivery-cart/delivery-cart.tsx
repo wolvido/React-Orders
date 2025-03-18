@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
-import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
-import { Product } from "@/shared/entities/product";
-import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
+import { ReceivedDelivery } from "@/entities/received-delivery";
+import { Product } from "@/entities/product";
+import { ReceivedItem } from "@/entities/received-item";
 import useOrientation from "@/shared/hooks/orientation-hook";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";

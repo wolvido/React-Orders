@@ -1,6 +1,6 @@
-import Status from "@/enums/status";
-import { Customer } from "@/shared/entities/customers";
-import PaymentStatus from "@/enums/payment-status";
+import Status from "@/shared/enums/status";
+import { Customer } from "@/entities/customers";
+import PaymentStatus from "@/shared/enums/payment-status";
 
 export interface Order{
     id: number;

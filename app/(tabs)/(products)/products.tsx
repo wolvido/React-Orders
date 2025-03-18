@@ -4,10 +4,10 @@ import * as React from 'react';
 import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
 import theme from '@/shared/style/theme';
 import { useEffect, useState } from 'react';
-import { Product } from '@/shared/entities/product';
+import { Product } from '@/entities/product';
 import { useSearch } from '@/shared/hooks/search-filter';
 import { EmptyState } from '@/shared/components/empty-state';
-import { useProducts } from '@/shared/context/product-context';
+import { useProducts } from '@/services/product-service/context/product-context';
 
 //react component
 export default function ProductsScreen() {

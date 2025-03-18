@@ -1,13 +1,13 @@
 import { View, Text } from "react-native";
 import useOrientation from "@/shared/hooks/orientation-hook";
-import { Cart } from "../../types/cart";
-import { Product } from "@/shared/entities/product";
-import { CartItem } from "../../types/cart-item";
+import { Cart } from "@/entities/cart";
+import { Product } from "@/entities/product";
+import { CartItem } from "@/entities/cart-item";
 import { SummaryPanel } from "../../../../shared/components/summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
-import { ProductSchema } from "@/shared/entities/product-schema";
+import { ProductSchema } from "@/entities/product-schema";
 import { useState } from "react";
 import { CollapseButton } from "@/shared/components/collapse-button";
 import { ProductSchemaMenu } from "../product-schema/product-schema-menu";

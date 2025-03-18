@@ -1,5 +1,5 @@
-import { useApi } from "@/shared/context/dev-mode-context";
-import { ProductSchemaLine } from "@/shared/entities/product-schema-line";
+import { useApi } from "@/services/dev-mode-service/context/dev-mode-context";
+import { ProductSchemaLine } from "@/entities/product-schema-line";
 import app from "@/app.json";
 import { toProductSchemaLine } from "@/adapter/product-schemaline-adapter";
 

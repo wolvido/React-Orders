@@ -6,7 +6,7 @@ import OrderFormFinal from '@/features/order-feature/components/order-forms/fina
 import { useOrder } from '@/features/order-feature/context/order-context';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import { useProducts } from '@/shared/context/product-context';
+import { useProducts } from '@/services/product-service/context/product-context';
 import { useCart } from '@/features/order-feature/context/cart-context';
 import { useState } from 'react';
 

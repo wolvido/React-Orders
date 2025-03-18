@@ -1,5 +1,5 @@
-import { useProducts } from "@/shared/context/product-context";
-import { Product } from "../entities/product";
+import { useProducts } from "@/services/product-service/context/product-context";
+import { Product } from "@/entities/product";
 
 //results of operation
 interface StockOperationResult {

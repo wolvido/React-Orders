@@ -1,9 +1,9 @@
 import { View, StyleSheet } from "react-native";
 import { Text, IconButton } from "react-native-paper";
 import { FlatList } from "react-native";
-import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
+import { ReceivedItem } from "@/entities/received-item";
 import styles from "./delivery-styles";
-import { Product } from "@/shared/entities/product";
+import { Product } from "@/entities/product";
 import { CollapseButton } from "@/shared/components/collapse-button";
 import { useState } from "react";
 

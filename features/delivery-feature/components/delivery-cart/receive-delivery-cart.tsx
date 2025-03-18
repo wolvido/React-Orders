@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { Button, Card, Text, TextInput, IconButton } from "react-native-paper";
-import { ReceivedDelivery } from "@/features/delivery-feature/types/received-delivery";
-import { ReceivedItem } from "@/features/delivery-feature/types/received-item";
+import { ReceivedDelivery } from "@/entities/received-delivery";
+import { ReceivedItem } from "@/entities/received-item";
 import useOrientation from "../../../../shared/hooks/orientation-hook";
 
 //this is old, from purchase orders

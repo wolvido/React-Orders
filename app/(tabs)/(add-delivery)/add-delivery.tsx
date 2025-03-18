@@ -3,9 +3,9 @@ import StepIndicator from '@/features/step-indicator-feature/components/order-st
 import deliverySteps from './delivery-steps-label';
 import AddDeliveryForm from '@/features/delivery-feature/components/forms/add-delivery-form';
 import { router } from "expo-router";
-import { Delivery } from '@/features/delivery-feature/types/delivery';
+import { Delivery } from '@/entities/delivery';
 import { useDelivery } from '@/features/delivery-feature/context/delivery-context';
-import { useSuppliers } from '@/shared/context/supplier-context';
+import { useSuppliers } from '@/services/supplier-service/context/supplier-context';
 import { useAuth } from '@/features/authentication-feature/context/auth-context';
 
 //react component

@@ -1,6 +1,6 @@
 import { Delivery } from './delivery';
-import Status from '@/enums/status'
-import PaymentStatus from '@/enums/payment-status';
+import Status from '@/shared/enums/status'
+import PaymentStatus from '@/shared/enums/payment-status';
 
 export interface PurchaseOrder {
     id: number;

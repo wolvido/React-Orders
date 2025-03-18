@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, IconButton, TextInput } from "react-native-paper";
-import { Product } from "@/shared/entities/product";
+import { Product } from "@/entities/product";
 
 interface ProductQuantityFormProps {
     product: Product;

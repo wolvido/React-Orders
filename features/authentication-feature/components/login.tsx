@@ -4,9 +4,9 @@ import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 're
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { useAuth } from '@/features/authentication-feature/context/auth-context';
 import App from '@/app.json';
-import { useApi } from '@/shared/context/dev-mode-context';
-import { useProducts } from '@/shared/context/product-context';
-import { useSuppliers } from '@/shared/context/supplier-context';
+import { useApi } from '@/services/dev-mode-service/context/dev-mode-context';
+import { useProducts } from '@/services/product-service/context/product-context';
+import { useSuppliers } from '@/services/supplier-service/context/supplier-context';
 
 export const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();

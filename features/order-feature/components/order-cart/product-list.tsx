@@ -1,7 +1,7 @@
 import { View, StyleSheet, FlatList } from "react-native";
 import { Card, Text, HelperText, Searchbar, IconButton, ActivityIndicator } from "react-native-paper";
 import { useState, useCallback, useEffect } from "react";
-import { Product } from "@/shared/entities/product";
+import { Product } from "@/entities/product";
 import ProductQuantityForm from "@/features/order-feature/components/order-forms/product-quantity-form";
 import styles from "./cart-styles";
 import theme from "@/shared/style/theme";

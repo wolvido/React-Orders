@@ -2,13 +2,13 @@ import * as React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Portal, Modal, List } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
-import Status from '@/enums/status';
-import PaymentStatus from '@/enums/payment-status';
+import Status from '@/shared/enums/status';
+import PaymentStatus from '@/shared/enums/payment-status';
 import { CustomersSelection } from '../../../../shared/components/costumers-selection';
-import { Customer } from '@/shared/entities/customers';
-import { Order } from '../../types/order';
+import { Customer } from '@/entities/customers';
+import { Order } from '@/entities/order';
 import { DatePicker } from '../../../../shared/components/date-picker';
-import { ProductSchema } from '../../../../shared/entities/product-schema';
+import { ProductSchema } from '../../../../entities/product-schema';
 import ProductSchemaSelection from '../product-schema/product-schema-selection';
 
 // Define props interface

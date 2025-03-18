@@ -1,7 +1,7 @@
 import { OrderAdapter } from "@/adapter/order-adapter";
-import { Order } from "@/features/order-feature/types/order";
+import { Order } from "@/entities/order";
 import app from "@/app.json";
-import { useApi } from "@/shared/context/dev-mode-context";
+import { useApi } from "@/services/dev-mode-service/context/dev-mode-context";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;

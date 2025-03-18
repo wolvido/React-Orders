@@ -1,5 +1,5 @@
 // import { ReceivedDelivery } from "./received-delivery";
-import { Supplier } from "@/shared/entities/supplier";
+import { Supplier } from "@/entities/supplier";
 
 export interface Delivery {
     id: number; 

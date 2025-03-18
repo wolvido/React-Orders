@@ -1,15 +1,15 @@
 // order-context.tsx
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Order } from '../types/order';
-import PaymentMethod from '@/features/order-feature/types/payment-method';
-import { Cart } from '../types/cart';
-import Status from '@/enums/status';
-import PaymentStatus from '@/enums/payment-status';
+import { Order } from '@/entities/order';
+import PaymentMethod from '@/entities/payment-method';
+import { Cart } from '@/entities/cart';
+import Status from '@/shared/enums/status';
+import PaymentStatus from '@/shared/enums/payment-status';
 import { OrderRepository } from '@/repositories/order-repository';
-import { Customer } from '@/shared/entities/customers';
+import { Customer } from '@/entities/customers';
 import { OrderLineRepository } from '@/repositories/order-line-repository';
 import { CustomerRepository } from '@/repositories/customer-repository';
-import { CartItem } from '../types/cart-item';
+import { CartItem } from '@/entities/cart-item';
 
 // Define the context type
 interface OrderContextType {

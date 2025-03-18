@@ -1,4 +1,4 @@
-import { ProductSchema } from "@/shared/entities/product-schema";
+import { ProductSchema } from "@/entities/product-schema";
 
 export interface ProductSchemaDTO {
     id: number;

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Modal, FlatList } from 'react-native';
 import { Button, TextInput, Text, List } from 'react-native-paper';
-import { Supplier } from '@/shared/entities/supplier';
-import { Delivery } from '@/features/delivery-feature/types/delivery';
+import { Supplier } from '@/entities/supplier';
+import { Delivery } from '@/entities/delivery';
 import { DatePicker } from '../../../../shared/components/date-picker';
 
 interface AddDeliveryFormProps {

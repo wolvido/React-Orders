@@ -5,8 +5,8 @@ import CashForm from './cash-form';
 import ChequeForm from './cheque-form';
 import BankTransferForm from './bank-transfer-form';
 import GatewayForm from './gateway-form';
-import PaymentMethod from '@/features/order-feature/types/payment-method';
-import { Order } from '@/features/order-feature/types/order';
+import PaymentMethod from '@/entities//payment-method';
+import { Order } from '@/entities/order';
 
 interface PaymentMethodSelectorProps {
     orderId: number;

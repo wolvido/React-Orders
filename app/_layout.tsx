@@ -9,11 +9,11 @@ import {enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/features/order-feature/context/cart-context';
 import { OrderProvider } from '@/features/order-feature/context/order-context';
 import { DeliveryProvider } from '@/features/delivery-feature/context/delivery-context';
-import { PurchaseOrderProvider } from '@/shared/context/purchase-order-context';
+import { PurchaseOrderProvider } from '@/features/delivery-feature/context/purchase-order-context';
 import { ScrollView } from 'react-native';
-import { ProductProvider } from '@/shared/context/product-context';
-import { ApiProvider } from '@/shared/context/dev-mode-context';
-import { SupplierProvider } from '@/shared/context/supplier-context';
+import { ProductProvider } from '@/services/product-service/context/product-context';
+import { ApiProvider } from '@/services/dev-mode-service/context/dev-mode-context';
+import { SupplierProvider } from '@/services/supplier-service/context/supplier-context';
 
 registerTranslation('en', enGB)
 export default function RootLayout() {

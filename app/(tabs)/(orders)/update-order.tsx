@@ -1,15 +1,15 @@
 import StepIndicator from "@/features/step-indicator-feature/components/order-step-indicator";
 import { useOrder } from "@/features/order-feature/context/order-context";
-import { Order } from "@/features/order-feature/types/order";
+import { Order } from "@/entities//order";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import orderUpdateSteps from "./update-order-labels";
 import OrderDetailsForm from "@/features/order-feature/components/order-forms/add-order-details-form";
-import { Customer } from "@/shared/entities/customers";
+import { Customer } from "@/entities/customers";
 import { CustomerRepository } from "@/repositories/customer-repository";
 import { router } from "expo-router";
 import { useAuth } from "@/features/authentication-feature/context/auth-context";
-import { useProducts } from "@/shared/context/product-context";
+import { useProducts } from "@/services/product-service/context/product-context";
 
 
 export default function UpdateOrderScreen(){
