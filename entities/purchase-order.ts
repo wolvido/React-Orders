@@ -1,13 +1,29 @@
 import { Delivery } from './delivery';
 import Status from '@/shared/enums/status'
 import PaymentStatus from '@/shared/enums/payment-status';
+import { Supplier } from './supplier';
 
 export interface PurchaseOrder {
     id: number;
-    remarks: string;
+    createDate: Date;
+    preparedBy: string;
+    deliveryId?: number;
+    supplierId?: number;
+    supplier: Supplier;
+
+    /**
+     * date after finalization of PO
+     */
     transactionDate: Date;
-    preparedBy: string,
-    delivery: Delivery;
-    status: Status;
-    paymentStatus: PaymentStatus;
+
+    expectedDeliveryDate: Date;
+
+    isComplete: boolean;
+    isDeleted: boolean;
+    
+    noOfItems: number;
+    deliveryFee: number;
+    otherFee: number;
+
+    potentialCost: number;
 }
