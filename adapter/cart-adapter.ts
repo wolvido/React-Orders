@@ -1,5 +1,5 @@
-import { CartItem } from "@/features/order-feature/types/cart-item";
-import { Cart } from "@/features/order-feature/types/cart";
+import { CartItem } from "@/entities/cart-item";
+import { Cart } from "@/entities/cart";
 
 export interface RestaurantOrderLineDTO {
     isDeleted: boolean;
