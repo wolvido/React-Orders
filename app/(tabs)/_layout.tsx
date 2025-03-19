@@ -44,8 +44,7 @@ export default function TabLayout() {
             name: '(add-order)',
             label: 'Add Order',
             icon: 'cart-plus' as const,
-        }
-        ,
+        },
         {
             name: '(purchase-orders)',
             label: 'Purchase Orders',
