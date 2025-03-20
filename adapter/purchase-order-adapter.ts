@@ -1,4 +1,4 @@
-
+import { PurchaseOrder } from "@/entities/purchase-order";
 
 interface PurchaseOrderDTO {
     // Delivery data
@@ -43,14 +43,75 @@ interface PurchaseOrderDTO {
     
     // Related Identifiers
     orderId?: number; // Related order identifier
-    itemType: string; // Type of items in the order
+    itemType: string; // idk
     
     // System Metadata
     sys_CreateTimeStamp: string; // Timestamp of order creation (ISO 8601 format)
     sys_CreateUserStamp: string; // User who created the order
     sys_LastEditedTimeStamp: string; // Timestamp of last edit (ISO 8601 format)
     sys_LastEditedUserStamp: string; // User who last edited the order
-    sys_DeletedTimeStamp: string; // Timestamp of deletion (ISO 8601 format)
+    sys_DeletedTimeStamp: string | null; // Timestamp of deletion (ISO 8601 format)
     sys_DeletedUserStamp: string; // User who deleted the order (empty if not deleted)
 }
 
+export function PurchaseOrderDTOToEntity(dto: PurchaseOrderDTO): PurchaseOrder {
+    return {
+        id: dto.purchaseOrderId,
+        createDate: new Date(dto.createDate),
+        preparedBy: dto.preparedBy,
+        deliveryId: dto.deliveryId,
+        supplierId: dto.supplierId,
+        supplier: {
+            id: dto.supplierId || 0,
+            name: dto.supplierName,
+            address: dto.supplierAddress,
+            contactNumber: "",
+            contactPerson: "",
+        },
+        transactionDate: new Date(dto.transactionDate),
+        expectedDeliveryDate: new Date(dto.expectedDeliveryDate),
+        isComplete: dto.isComplete,
+        isDeleted: dto.isDeleted,
+        noOfItems: dto.items,
+        deliveryFee: dto.deliveryFee,
+        otherFee: dto.otherFee,
+        potentialCost: dto.potentialCost,
+        remarks: dto.remarks,
+        poDiscount: dto.poDiscount,
+    };
+}
+
+export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
+    return {
+        deliveryId: po.deliveryId,
+        createDate: po.createDate.toISOString(),
+        preparedBy: po.preparedBy,
+        supplierId: po.supplierId,
+        supplierName: po.supplier?.name || "",
+        supplierAddress: po.supplier?.address || "",
+        purchaseOrderId: po.id,
+        description: "", // No description in entity
+        approvedBy: po.preparedBy,
+        remarks: po.remarks, // No remarks in entity
+        transactionDate: po.transactionDate.toISOString(),
+        expectedDeliveryDate: po.expectedDeliveryDate.toISOString(),
+        isComplete: po.isComplete,
+        isDeleted: po.isDeleted,
+        hasErrors: false, // No error handling in entity
+        state: 0, // No state in entity
+        isDtoSelected: false, // No DTO selection in entity
+        items: po.noOfItems,
+        poDiscount: po.poDiscount, // No discount in entity
+        deliveryFee: po.deliveryFee,
+        otherFee: po.otherFee,
+        potentialCost: po.potentialCost,
+        orderId: 0, // No related order in entity
+        itemType: "", // No item type in entity
+        sys_CreateTimeStamp: po.createDate.toISOString(),
+        sys_CreateUserStamp: "",
+        sys_LastEditedTimeStamp: new Date().toISOString(),
+        sys_LastEditedUserStamp: "",
+        sys_DeletedTimeStamp: po.isDeleted ? new Date().toISOString() : null,
+        sys_DeletedUserStamp: "",
+    };
+}

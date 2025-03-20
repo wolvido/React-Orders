@@ -9,7 +9,7 @@ export interface PurchaseOrder {
     preparedBy: string;
     deliveryId?: number;
     supplierId?: number;
-    supplier: Supplier;
+    supplier?: Supplier;
 
     /**
      * date after finalization of PO
@@ -23,7 +23,10 @@ export interface PurchaseOrder {
     
     noOfItems: number;
     deliveryFee: number;
+    poDiscount: number;
     otherFee: number;
 
     potentialCost: number;
+
+    remarks: string;
 }
