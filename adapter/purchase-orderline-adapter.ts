@@ -1,88 +1,116 @@
+import { PurchaseOrderLine } from "@/entities/purchase-order-line";
 
 
-interface PurchaseOrderLineDTO {
-    /** Indicates if the record has been deleted. */
-    isDeleted: boolean;
+export interface PurchaseOrderLineDTO {
+  // System Metadata
+  isDeleted: boolean;
+  sys_CreateTimeStamp: string;
+  sys_CreateUserStamp: string;
+  sys_LastEditedTimeStamp: string;
+  sys_LastEditedUserStamp: string;
+  sys_DeletedTimeStamp: string;
+  sys_DeletedUserStamp: string;
+
+  // Status & Selection
+  state: number;
+  isDtoSelected: boolean;
+  isReceived: boolean;
+  isProcessed: boolean;
+
+  // Identifiers
+  purchaseOrderlineId: number;
+  purchaseOrderId: number;
+  productId: number;
+  rawMaterialId?: number;
+
+  // Product Details
+  productName: string;
+  itemCode: string;
+  description: string;
+  brand: string;
+  units: string;
+  itemType: string;
+
+  // Pricing & Discounts
+  basePrice: number;
+  percentageDiscount: number;
+  flatDiscount: number;
+  /**
+   * TotalPrice=(BasePrice×OrderedQuantity)−PercentageDiscount−FlatDiscount
+   */
+  totalPrice: number;
   
-    /** Timestamp when the record was created. */
-    sys_CreateTimeStamp: string;
-  
-    /** User who created the record. */
-    sys_CreateUserStamp: string;
-  
-    /** Timestamp when the record was last edited. */
-    sys_LastEditedTimeStamp: string;
-  
-    /** User who last edited the record. */
-    sys_LastEditedUserStamp: string;
-  
-    /** Timestamp when the record was deleted. */
-    sys_DeletedTimeStamp: string;
-  
-    /** User who deleted the record. */
-    sys_DeletedUserStamp: string;
-  
-    /** The current state of the record (used for tracking status). */
-    state: number;
-  
-    /** Indicates if this DTO (Data Transfer Object) is selected. */
-    isDtoSelected: boolean;
-  
-    /** Unique identifier for this purchase order line item. */
-    purchaseOrderlineId: number;
-  
-    /** Name of the product being ordered. */
-    productName: string;
-  
-    /** Unique code identifying the product. */
-    itemCode: string;
-  
-    /** Additional details about the product. */
-    description: string;
-  
-    /** Brand of the product. */
-    brand: string;
-  
-    /** Unit of measurement for the product (e.g., kg, pcs, liters). */
-    units: string;
-  
-    /** Original price of a single unit before any discounts. */
-    basePrice: number;
-  
-    /** Discount applied as a percentage (e.g., 10% off). */
-    percentageDiscount: number;
-  
-    /** Fixed amount deducted from the total price (e.g., $5 off). */
-    flatDiscount: number;
-  
-    /** Final price after applying discounts. */
-    totalPrice: number;
-  
-    /** Number of units still expected to arrive. */
-    noofOrdersToArrive: number;
-  
-    /** Total quantity of the item that was ordered. */
-    orderedQuantity: number;
-  
-    /** Number of units that have been received. */
-    receivedQuantity: number;
-  
-    /** Indicates if the order has been received (true if received but not yet delivered). */
-    isReceived: boolean;
-  
-    /** Indicates if the item has been processed for delivery. */
-    isProcessed: boolean;
-  
-    /** Foreign key linking this line item to a purchase order. */
-    purchaseOrderId: number;
-  
-    /** Foreign key linking to the product in the product catalog. */
-    productId: number;
-  
-    /** Foreign key linking to raw materials (if applicable). */
-    rawMaterialId: number;
-  
-    /** The type of item (e.g., "Product" or "RawMaterial"). */
-    itemType: string;
-  }
-  
+  // Order Details
+  noofOrdersToArrive: number;
+  orderedQuantity?: number;
+  receivedQuantity?: number;
+}
+
+export function PurchaseOrderLineDTOtoEntity(dto: PurchaseOrderLineDTO): PurchaseOrderLine {
+  return {
+    id: dto.purchaseOrderlineId,
+    purchaseOrderId: dto.purchaseOrderId,
+    productId: dto.productId,
+    product: {
+      id: dto.productId,
+      name: dto.productName,
+      price: dto.basePrice,
+      costPrice: dto.basePrice,
+      category: dto.itemType,
+      brand: dto.brand,
+      isBundle: false,
+      stocks: dto.orderedQuantity ? dto.orderedQuantity : 0,
+      unitType: dto.units,
+    },
+    basePrice: dto.basePrice,
+    percentageDiscount: dto.percentageDiscount,
+    flatDiscount: dto.flatDiscount,
+    totalPrice: dto.totalPrice,
+    noofOrdersToArrive: dto.noofOrdersToArrive,
+    orderedQuantity: dto.orderedQuantity,
+    receivedQuantity: dto.receivedQuantity,
+    isReceived: dto.isReceived,
+    isProcessed: dto.isProcessed,
+
+    itemType: dto.itemType,
+
+    creationDate: new Date(dto.sys_CreateTimeStamp),
+  };
+}
+
+export function PurchaseOrderLinetoDTO(entity: PurchaseOrderLine): PurchaseOrderLineDTO {
+  return {
+    isDeleted: false,
+    sys_CreateTimeStamp: entity.creationDate?.toISOString() || new Date().toISOString(),
+    sys_CreateUserStamp: "system",
+    sys_LastEditedTimeStamp: new Date().toISOString(),
+    sys_LastEditedUserStamp: "system",
+    sys_DeletedTimeStamp: "",
+    sys_DeletedUserStamp: "",
+
+    state: 0,
+    isDtoSelected: false,
+    isReceived: entity.isReceived,
+    isProcessed: entity.isProcessed,
+
+    purchaseOrderlineId: entity.id,
+    purchaseOrderId: entity.purchaseOrderId,
+    productId: entity.productId,
+
+    productName: entity.product?.name || "",
+    itemCode: '',
+    description: '',
+    brand: entity.product?.brand || "",
+    units: entity.product?.unitType || "",
+    itemType: entity.itemType,
+
+    basePrice: entity.basePrice,
+    percentageDiscount: entity.percentageDiscount,
+    flatDiscount: entity.flatDiscount,
+    totalPrice: entity.totalPrice,
+    
+    noofOrdersToArrive: entity.noofOrdersToArrive,
+    orderedQuantity: entity.orderedQuantity,
+    receivedQuantity: entity.receivedQuantity,
+  };
+}
