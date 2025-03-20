@@ -58,7 +58,7 @@ export class DeliveryAdapter {
             sys_CreateUserStamp: "",
             sys_LastEditedTimeStamp: new Date().toISOString(),
             sys_LastEditedUserStamp: "",
-            sys_DeletedTimeStamp: new Date().toISOString(),
+            sys_DeletedTimeStamp: "",
             sys_DeletedUserStamp: "",
             state: 0,
             isDtoSelected: false,
