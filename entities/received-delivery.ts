@@ -1,6 +1,9 @@
 import { ReceivedItem } from "./received-item";
 
-export interface ReceivedDelivery{ 
+/***
+ * aka delivery cart
+ */
+export interface ReceivedDelivery{
     total: number;
     items: ReceivedItem[];
     deliveryId: number;
