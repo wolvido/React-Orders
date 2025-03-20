@@ -1,13 +1,14 @@
 import { Supplier } from "@/entities/supplier";
 import app from "@/app.json";
 import { SupplierAdapter } from "@/adapter/supplier-adapter";
-import { DeliveryAdapter } from "@/adapter/delivery-adapter";
+import { DeliveryAdapter, DeliveryDTO } from "@/adapter/delivery-adapter";
 import { Delivery } from "@/entities/delivery";
 import { useApi } from "@/services/dev-mode-service/context/dev-mode-context";
 
 export interface IDeliveryRepository {
     getAllSuppliers(): Promise<Supplier[]>;
     createDelivery(delivery: Delivery): Promise<any>;
+    updateDelivery(delivery: Delivery): Promise<Delivery>;
 }
 
 export class DeliveryRepository implements IDeliveryRepository{
@@ -87,4 +88,29 @@ export class DeliveryRepository implements IDeliveryRepository{
             return {deliveryId: data.deliveryId};
         });
     }
+
+    async updateDelivery(delivery: Delivery): Promise<Delivery> {
+        const existingDelivery = await fetch(this.baseUrl + '/fetch-delivery/' + delivery.id)
+        const existingDeliveryData = await existingDelivery.json();
+
+        const deliveryDto = DeliveryAdapter.adaptToDTO(delivery);
+
+        deliveryDto.sys_CreateTimeStamp = existingDeliveryData.sys_CreateTimeStamp;
+
+        const response = await fetch(this.baseUrl + '/update/' + delivery.id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(deliveryDto)
+        });
+
+        console.log('Delivery Update response status:', response.status)
+        console.log('Delivery Update response repository:', response)
+
+        return await this.handleResponse<Delivery>(response);
+    }
+
+
+    
 }
