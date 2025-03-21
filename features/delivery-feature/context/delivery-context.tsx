@@ -28,7 +28,6 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
 
         // Update existing delivery while preserving non-null values
         const updatedDelivery = { ...delivery };
-
         Object.keys(newDelivery).forEach((key) => {
             const typedKey = key as keyof Delivery;
             if (newDelivery[typedKey] !== null) {
