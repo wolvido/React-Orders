@@ -28,6 +28,8 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     };
 
     /**
+     * Updates the delivery cart state with the new item and returns the updated state.
+     * Also updates an existing item if added again.
      * @param prevDelivery original delivery state
      * @param receivedItem item to be added to the delivery state
      * @returns updated delivery state with added item
