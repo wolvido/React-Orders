@@ -66,7 +66,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         isDtoSelected: false,
         
         // Other required fields with default values
-        deliverylineID: 0,
+        deliverylineID: receivedDeliveryItem.id,
         deliveryID: receivedDelivery.deliveryId,
     }));
     return deliveryLines;
