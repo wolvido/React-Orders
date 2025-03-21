@@ -1,4 +1,4 @@
-import { LoginScreen } from "@/app/login";
+import LoginScreen from "@/app/login";
 import { View, Text} from "react-native";
 import { useAuth } from '@/features/authentication-feature/context/auth-context';
 import { Redirect } from "expo-router";
