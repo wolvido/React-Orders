@@ -10,7 +10,7 @@ interface ProductQuantityFormProps {
     onError?: (message: string) => void;
 }
 
-const ProductQuantityForm = memo(({ 
+const ProductQuantityForm = memo(({
     product,
     onAdd,
     onError,
