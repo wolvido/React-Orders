@@ -3,7 +3,7 @@ import OrderDetailsForm from '@/features/order-feature/components/order-forms/ad
 import StepIndicator from '@/features/step-indicator-feature/components/order-step-indicator';
 import { ScrollView, View } from 'react-native';
 import orderSteps from './order-steps-label';
-import { Order } from '@/features/order-feature/types/order';
+import { Order } from '@/entities/order';
 import { router } from 'expo-router';
 import { useOrder } from '@/features/order-feature/context/order-context';
 import { Customer } from '@/entities/customers';
