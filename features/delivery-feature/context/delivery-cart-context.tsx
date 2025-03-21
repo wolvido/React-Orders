@@ -27,6 +27,11 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
         return items.reduce((sum, item) => sum + item.total, 0);
     };
 
+    /**
+     * @param prevDelivery original delivery state
+     * @param receivedItem item to be added to the delivery state
+     * @returns updated delivery state with added item
+     */
     const updateDeliveryItems = (prevDelivery: ReceivedDelivery, receivedItem: ReceivedItem): ReceivedItem[] => {
         const existingItemIndex = prevDelivery.items.findIndex(
             item => item.product.id === receivedItem.product.id
@@ -55,27 +60,8 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
             return [itemToAdd, ...prevDelivery.items];
         }
     };
-
-    // const customPriceProductToDelivery = (product: Product, quantity: number, price: number) => {
-    //     const receivedItem: ReceivedItem = {
-    //         product: product,
-    //         quantity: quantity,
-    //         manualPrice: price,
-    //         total: quantity * price
-    //     };
-
-    //     setDelivery(prevDelivery => {
-    //         const updatedItems = updateDeliveryItems(prevDelivery, receivedItem);
-    //         return {
-    //             items: updatedItems,
-    //             total: calculateTotal(updatedItems),
-    //             deliveryId: prevDelivery.deliveryId
-    //         };
-    //     }
-    // );
     
     const addToDelivery = (receivedItem: ReceivedItem) => {
-        console.log(receivedItem);
 
         setDelivery(prevDelivery => {
             const updatedItems = updateDeliveryItems(prevDelivery, receivedItem);
