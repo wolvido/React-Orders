@@ -6,7 +6,7 @@ export interface DeliveryLineDTO {
     sys_CreateUserStamp: string;
     sys_LastEditedTimeStamp: string;
     sys_LastEditedUserStamp: string;
-    sys_DeletedTimeStamp: string;
+    sys_DeletedTimeStamp: string | null;
     sys_DeletedUserStamp: string;
     state: number;
     isDtoSelected: boolean;
@@ -60,7 +60,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         sys_CreateUserStamp: "",
         sys_LastEditedTimeStamp: new Date().toISOString(),
         sys_LastEditedUserStamp: "",
-        sys_DeletedTimeStamp: "",
+        sys_DeletedTimeStamp: null,
         sys_DeletedUserStamp: "",
         state: 0,
         isDtoSelected: false,

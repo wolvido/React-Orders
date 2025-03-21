@@ -7,7 +7,7 @@ export interface DeliveryDTO {
     sys_CreateUserStamp: string; // Username or ID of the user who created the record
     sys_LastEditedTimeStamp: string; // Timestamp when the record was last modified
     sys_LastEditedUserStamp: string; // Username or ID of the last user who modified the record
-    sys_DeletedTimeStamp: string; // Timestamp when the record was deleted (if isDeleted = true)
+    sys_DeletedTimeStamp: string | null; // Timestamp when the record was deleted (if isDeleted = true)
     sys_DeletedUserStamp: string; // Username or ID of the user who deleted the record
   
     // State & Selection Flags
@@ -58,7 +58,7 @@ export class DeliveryAdapter {
             sys_CreateUserStamp: "",
             sys_LastEditedTimeStamp: new Date().toISOString(),
             sys_LastEditedUserStamp: "",
-            sys_DeletedTimeStamp: "",
+            sys_DeletedTimeStamp: null,
             sys_DeletedUserStamp: "",
             state: 0,
             isDtoSelected: false,
