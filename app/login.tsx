@@ -8,7 +8,7 @@ import { useApi } from '@/services/dev-mode-service/context/dev-mode-context';
 import { useProducts } from '@/services/product-service/context/product-context';
 import { useSuppliers } from '@/services/supplier-service/context/supplier-context';
 
-export const LoginScreen = () => {
+const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
@@ -139,6 +139,8 @@ export const LoginScreen = () => {
     </KeyboardAvoidingView>
   );
 };
+
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   devContainer: {
