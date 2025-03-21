@@ -13,8 +13,6 @@ interface ProductListProps {
     onUpdateProducts: () => Promise<void>;
     isLoading?: boolean;
     isPortrait: boolean;
-    // productSchemas?: ProductSchema[];
-    // onSchemaSelect?: (schema: ProductSchema) => void;
 }
 
 export function ProductList({
@@ -24,8 +22,6 @@ export function ProductList({
     isPortrait,
     onUpdateProducts,
     isLoading,
-    // productSchemas,
-    // onSchemaSelect
 }: ProductListProps) {
 
     const [errors, setErrors] = useState<{ [key: number]: string }>({});
