@@ -41,7 +41,7 @@ export function DeliveryProductList({
                 [productId]: errorMessage
             }));
             onError?.(errorMessage);
-            return
+            return;
         }
 
         //const quantity = parseInt(quantities[productId]);
@@ -54,6 +54,7 @@ export function DeliveryProductList({
             manualPrice: customPrice,
             total: customPrice * quantity  // Use custom price here
         };
+
         onAddToDelivery(receivedItem);
     };
 
