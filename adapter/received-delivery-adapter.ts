@@ -29,6 +29,11 @@ export interface DeliveryLineDTO {
     vehicleName: string;
 }
 
+/**
+ * Converts a received delivery to a list of delivery lines.
+ * @param receivedDelivery The received delivery to convert.
+ * @returns The list of delivery lines.
+ */
 export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: ReceivedDelivery): DeliveryLineDTO[] {
     console.log('Converting received delivery to delivery lines:', receivedDelivery);
     const deliveryLines: DeliveryLineDTO[] = receivedDelivery.items.map(receivedDeliveryItem => ({
@@ -42,7 +47,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         itemType: "",
         itemCode: "",
         rawMaterialId: 0,
-        units: "",
+        units: receivedDeliveryItem.product.unitType,
         remarks: "",
         deliveredBy: receivedDelivery.deliveredBy,
         totalPrice: (receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.costPrice) * receivedDeliveryItem.quantity,
@@ -55,7 +60,7 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         sys_CreateUserStamp: "",
         sys_LastEditedTimeStamp: new Date().toISOString(),
         sys_LastEditedUserStamp: "",
-        sys_DeletedTimeStamp: new Date().toISOString(),
+        sys_DeletedTimeStamp: "",
         sys_DeletedUserStamp: "",
         state: 0,
         isDtoSelected: false,
