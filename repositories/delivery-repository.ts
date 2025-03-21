@@ -70,7 +70,7 @@ export class DeliveryRepository implements IDeliveryRepository{
     createDelivery(delivery: Delivery): Promise<{deliveryId: number}> {
         const deliveryDto = DeliveryAdapter.adaptToDTO(delivery);
 
-        console.log(deliveryDto);
+        console.log('create delivery from repository DTO:', deliveryDto);
 
         return fetch(this.baseUrl + '/create', {
             method: 'POST',
