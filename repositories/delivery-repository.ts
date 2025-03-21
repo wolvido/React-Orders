@@ -9,6 +9,7 @@ export interface IDeliveryRepository {
     getAllSuppliers(): Promise<Supplier[]>;
     createDelivery(delivery: Delivery): Promise<any>;
     updateDelivery(delivery: Delivery): Promise<Delivery>;
+    getDeliveryById(id: number): Promise<Delivery>;
 }
 
 export class DeliveryRepository implements IDeliveryRepository{
@@ -111,6 +112,8 @@ export class DeliveryRepository implements IDeliveryRepository{
         return await this.handleResponse<Delivery>(response);
     }
 
-
-    
+    async getDeliveryById(id: number): Promise<Delivery> {
+        const response = await fetch(this.baseUrl + '/fetch-delivery/' + id);
+        return await this.handleResponse<Delivery>(response);
+    }
 }
