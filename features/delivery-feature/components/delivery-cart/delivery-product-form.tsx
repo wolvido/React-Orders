@@ -59,7 +59,6 @@ const DeliveryProductForm = memo(({
         onAdd(receivedItem);
 
         setQuantity('');
-        setPrice('');
         setError(false);
     };
 
