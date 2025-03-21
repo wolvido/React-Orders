@@ -73,7 +73,7 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
 
             const jsonReturn = await deliveryRepository.createDelivery(updatedDelivery);
 
-            const updatedReceivedDelivery: ReceivedDelivery ={
+            const updatedReceivedDelivery: ReceivedDelivery = {
                 ...receivedDelivery, 
                 deliveryId: jsonReturn.deliveryId
             };
