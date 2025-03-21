@@ -1,60 +1,66 @@
+import { Product } from "@/entities/product";
+import { ReceivedItem } from "@/entities/received-item";
 import { memo, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Button, IconButton, TextInput, Text} from "react-native-paper";
 
 interface DeliveryProductFormProps {
-    productId: number;
-    onAdd: (productId: number, quantity: number, price?: number) => void;
-    error?: string;
+    product: Product;
+    onAdd: (receivedItem: ReceivedItem) => void;
+    onError?: (message: string) => void;
     isPortrait?: boolean;
 }
 
 const DeliveryProductForm = memo(({
-    productId, 
+    product, 
     onAdd,
-    error,
+    onError,
     isPortrait 
 }: DeliveryProductFormProps) => {
     const [quantity, setQuantity] = useState('');
     const [price, setPrice] = useState<string>('');
-    const [localError, setLocalError] = useState('');
+    const [error, setError] = useState(false);
 
     const handlePriceChange = (text: string) => {
         const numericValue = text.replace(/[^0-9]/g, '');
-        console.log("numeric price handler:"+numericValue);
+        
         setPrice(numericValue);
-        setLocalError('');
+        setError(false);
     }
 
     const handleQuantityChange = (text: string) => {
         const numericValue = text.replace(/[^0-9]/g, '');
         setQuantity(numericValue);
-        setLocalError('');
+        setError(false);
     };
 
-    const handleAdd = () => {
+    const handleAddItem = (product: Product) => {
+
         const numericQuantity = parseInt(quantity);
-        if (!numericQuantity || numericQuantity < 1) {
-            setLocalError('Quantity must be at least 1');
+        const numericPrice = parseInt(price);
+        
+        // Check if product exists or quantity is valid
+        if (!product || !quantity) return;
+        
+        if (numericQuantity < 1) {
             return;
         }
 
-        console.log("price on add form:"+price);
+        const customPrice = numericPrice ? numericPrice : product.costPrice;
+    
+        const receivedItem: ReceivedItem = {
+            id: 0,
+            product: product,
+            quantity: numericQuantity,
+            manualPrice: customPrice,
+            total: customPrice * numericQuantity  // Use custom price here
+        };
 
-        //price must be number text
-        if (price === ''){
-            onAdd(productId, numericQuantity, undefined);
-        }
-        else{
-            console.log("passing price to parent: "+price);
-            const numericPrice = parseInt(price);
-            onAdd(productId, numericQuantity, numericPrice);
-        }
+        onAdd(receivedItem);
 
-        // Clear inputs after successful add
         setQuantity('');
-        //setPrice('');
-        setLocalError('');
+        setPrice('');
+        setError(false);
     };
 
     return (
@@ -62,7 +68,7 @@ const DeliveryProductForm = memo(({
             {!isPortrait && (
                 <Button
                     mode="contained"
-                    onPress={handleAdd}
+                    onPress={() => handleAddItem(product)}
                 >
                     Add
                 </Button>
@@ -75,7 +81,7 @@ const DeliveryProductForm = memo(({
                 keyboardType="numeric"
                 style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
                 maxLength={10}
-                error={!!error || !!localError && !price}
+                error={error}
                 focusable={true}
                 autoComplete="off"
                 importantForAutofill="no"
@@ -89,7 +95,7 @@ const DeliveryProductForm = memo(({
                 keyboardType="numeric"
                 style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
                 maxLength={5}
-                error={!!error || !!localError && !quantity}
+                error={error}
                 focusable={true}
                 autoComplete="off"
                 importantForAutofill="no"
@@ -100,7 +106,7 @@ const DeliveryProductForm = memo(({
                     icon="chevron-right"
                     mode="contained"
                     size={20}
-                    onPress={handleAdd}
+                    onPress={() => handleAddItem(product)}
                 />
             )}
         </View>

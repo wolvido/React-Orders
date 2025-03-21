@@ -28,52 +28,29 @@ export function DeliveryProductList({
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleAddItem = (productId: number, quantity: number, price?: number) => {
-        const product = products.find(p => p.id === productId);
-
-        // Check if product exists or quantity is valid
-        if (!product || !quantity) return;
-        
-        if (quantity < 1) {
-            const errorMessage = 'Quantity must be at least 1';
-            setErrors(prev => ({
-                ...prev,
-                [productId]: errorMessage
-            }));
-            onError?.(errorMessage);
-            return;
-        }
-
-        //const quantity = parseInt(quantities[productId]);
-        const customPrice = price ? price : product.costPrice;
-        console.log(customPrice);
-    
-        const receivedItem: ReceivedItem = {
-            product: product,
-            quantity: quantity,
-            manualPrice: customPrice,
-            total: customPrice * quantity  // Use custom price here
-        };
-
-        onAddToDelivery(receivedItem);
+    const handleError = (productId: number, error: string) => {
+        setErrors(prev => ({
+            ...prev,
+            [productId]: error
+        }));
     };
 
-    const deliveryProductForm = (productId: number) => {
+    const deliveryProductForm = (product: Product) => {
         return (
             <DeliveryProductForm
-                productId={productId}
-                onAdd={handleAddItem}
-                error={errors[productId]}
+                product={product}
+                onAdd={onAddToDelivery}
+                onError={(error) => handleError(product.id, error)}
                 isPortrait={isPortrait}
             />
         );
-    }
+    };
 
     const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
         <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
             <Card.Content style={styles.cardContent}>
                 <View style={styles.cardLayout}>
-                    {!isPortrait && deliveryProductForm(product.id)}
+                    {!isPortrait && deliveryProductForm(product)}
 
                     <View style={styles.productInfo}>
                         <Text
@@ -91,7 +68,7 @@ export function DeliveryProductList({
                         </Text>
                     </View>
 
-                    {isPortrait && deliveryProductForm(product.id)}
+                    {isPortrait && deliveryProductForm(product)}
 
                 </View>
                 
