@@ -89,7 +89,7 @@ export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
         supplierId: po.supplierId,
         supplierName: po.supplier?.name || "",
         supplierAddress: po.supplier?.address || "",
-        purchaseOrderId: po.id,
+        purchaseOrderId: po.id || 0,
         description: "", // No description in entity
         approvedBy: po.preparedBy,
         remarks: po.remarks, // No remarks in entity

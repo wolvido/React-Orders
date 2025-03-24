@@ -93,7 +93,7 @@ export function PurchaseOrderLinetoDTO(entity: PurchaseOrderLine): PurchaseOrder
     isReceived: entity.isReceived,
     isProcessed: entity.isProcessed,
 
-    purchaseOrderlineId: entity.id,
+    purchaseOrderlineId: entity.id || 0,
     purchaseOrderId: entity.purchaseOrderId,
     productId: entity.productId,
 
