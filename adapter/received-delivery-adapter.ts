@@ -1,4 +1,5 @@
 import { ReceivedDelivery } from "@/entities/received-delivery";
+import { ReceivedItem } from "@/entities/received-item";
 
 export interface DeliveryLineDTO {
     isDeleted: boolean;
@@ -66,8 +67,74 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         isDtoSelected: false,
         
         // Other required fields with default values
-        deliverylineID: receivedDeliveryItem.id,
+        deliverylineID: receivedDeliveryItem.id || 0,
         deliveryID: receivedDelivery.deliveryId,
     }));
     return deliveryLines;
+}
+
+export function deliveryLinesToReceivedDelivery(deliveryLines: DeliveryLineDTO[]): ReceivedDelivery {
+    if (!deliveryLines || deliveryLines.length === 0) {
+        return {
+            total: 0,
+            items: [],
+            deliveryId: 0,
+            deliveredBy: "",
+        };
+    }
+
+    try {
+        const receivedItems: ReceivedItem[] = deliveryLines.map(deliveryLine => ({
+            id: deliveryLine.deliverylineID,
+            product: {
+                id: deliveryLine.productID,
+                name: deliveryLine.productName,
+                brand: deliveryLine.brand,
+                costPrice: deliveryLine.unitPrice,
+                unitType: deliveryLine.units,
+                category: "",
+                isBundle: false,
+                stocks: 0,
+                price: 0,
+            },
+            quantity: deliveryLine.receivedQuantity,
+            total: deliveryLine.totalPrice,
+        }));
+
+        const total = receivedItems.reduce((acc, item) => acc + item.total, 0);
+
+        return {
+            total,
+            items: receivedItems,
+            deliveryId: deliveryLines[0].deliveryID,
+            deliveredBy: deliveryLines[0].deliveredBy,
+        };
+    } catch (error) {
+        console.error('Error converting delivery lines to received delivery:', error);
+        return {
+            total: 0,
+            items: [],
+            deliveryId: 0,
+            deliveredBy: "",
+        };
+    }
+}
+
+export function deliveryLineToReceivedItem(deliveryLine: DeliveryLineDTO): ReceivedItem {
+    return {
+        id: deliveryLine.deliverylineID,
+        product: {
+            id: deliveryLine.productID,
+            name: deliveryLine.productName,
+            brand: deliveryLine.brand,
+            costPrice: deliveryLine.unitPrice,
+            unitType: deliveryLine.units,
+            category: "",
+            isBundle: false,
+            stocks: 0,
+            price: 0,
+        },
+        quantity: deliveryLine.receivedQuantity,
+        total: deliveryLine.totalPrice,
+    };
 }
