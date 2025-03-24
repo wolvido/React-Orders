@@ -14,7 +14,6 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-
         const { getApiUrl, hasApiUrl } = useApi();
 
         if (hasApiUrl()) {
@@ -55,7 +54,6 @@ export class OrderRepository implements IOrderRepository {
             }
             console.log('response ok');
             
-
             const data = await this.handleResponse<Order[]>(response);
             return data;
         } catch (error) {
