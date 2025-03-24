@@ -31,7 +31,7 @@ export class OrderLineRepository implements IOrderLineRepository {
         try {
             const response = await fetch(this.baseUrl+`/fetch-orderlines/${orderId}`);
     
-            console.log('Response status:', response.status); // Log response status
+            console.log('Response status get cart repository:', response.status); // Log response status
     
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -48,7 +48,7 @@ export class OrderLineRepository implements IOrderLineRepository {
             return cart;
 
         } catch (error) {
-            console.error('Error in getCart:', error);
+            console.error('Error in getCart repository:', error);
             throw error;
         }
     }
