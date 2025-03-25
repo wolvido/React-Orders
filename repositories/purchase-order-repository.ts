@@ -89,7 +89,7 @@ export class PurchaseOrderRepository implements IPurchaseOrderRepository {
 
     async getById(id: number): Promise<PurchaseOrder | null> {
         try {
-            const response = await fetch(`${this.baseUrl}/fetch-purchase-orders/${id}`);
+            const response = await fetch(`${this.baseUrl}/fetch-purchase-order/${id}`);
             return this.handleResponse<PurchaseOrder>(response);
         }
         catch (error) {
