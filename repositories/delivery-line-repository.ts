@@ -140,7 +140,7 @@ export class DeliveryLineRepository implements IDeliveryLineRepository {
             console.log('deleting deliveryLines from repo:', deliveryLines); // Log what we're sending
 
             const response = await fetch(this.baseUrl+`/bulk-delete`, {
-                method: 'POST',
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
