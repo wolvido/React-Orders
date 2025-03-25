@@ -63,7 +63,7 @@ export class PurchaseOrderRepository implements IPurchaseOrderRepository {
     async update(purchaseOrder: PurchaseOrder): Promise<PurchaseOrder> {
         const purchaseOrderDTO = PurchaseOrderToDTO(purchaseOrder);
 
-        try{
+        try {
             const response = await fetch(`${this.baseUrl}/update/${purchaseOrder.id}`, {
                 method: 'PUT',
                 headers: {
@@ -85,7 +85,6 @@ export class PurchaseOrderRepository implements IPurchaseOrderRepository {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
             throw new Error('Failed to update purchase order on repo' + errorMessage);
         }
-
     }
 
     async getById(id: number): Promise<PurchaseOrder | null> {
