@@ -1,6 +1,3 @@
-import { Delivery } from './delivery';
-import Status from '@/shared/enums/status'
-import PaymentStatus from '@/shared/enums/payment-status';
 import { Supplier } from './supplier';
 
 export interface PurchaseOrder {
