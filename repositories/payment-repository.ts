@@ -26,6 +26,8 @@ export class PaymentRepository implements IPaymentRepository {
 
     async createCashPayment(payment: CashPayment): Promise<{paymentId: number}> {
         const paymentDto = convertCashPaymentToPaymentDTO(payment);
+        
+        console.log('cash payment DTO date: ', paymentDto.paymentDate);
 
         try{
             const response = await fetch(`${this.baseUrl}/create`, {
