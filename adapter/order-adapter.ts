@@ -2,6 +2,7 @@ import { Order } from "@/entities/order";
 import Status from "@/shared/enums/status";
 import PaymentStatus from "@/shared/enums/payment-status";
 
+
 // Create interface for the source data
 interface RestaurantOrderDTO {
     restaurantOrderId?: number;
@@ -87,9 +88,9 @@ export class OrderAdapter {
         return {
             // sys something something
             isDeleted: false,
-            sys_CreateTimeStamp: new Date().toLocaleString(),
+            sys_CreateTimeStamp: new Date().toLocalISOString(),
             sys_CreateUserStamp: "",
-            sys_LastEditedTimeStamp: new Date().toLocaleString(),
+            sys_LastEditedTimeStamp: new Date().toLocalISOString(),
             sys_LastEditedUserStamp: "",
             sys_DeletedTimeStamp: null,
             sys_DeletedUserStamp: "",
@@ -99,7 +100,7 @@ export class OrderAdapter {
             // Mapped fields from Order
             restaurantOrderId: order.id || 0,
             orderType: order.orderType,
-            orderDate: order.transactionDate.toISOString(),
+            orderDate: order.transactionDate.toLocalISOString(),
             balance: order.balance,
             total: order.total,
             isPaid: order.isPaid,
@@ -112,8 +113,8 @@ export class OrderAdapter {
             address: order.deliveryAddress || order.customer.address ,
 
             // restaurant bullshit
-            releaseDate: new Date().toLocaleString(),
-            dueDate: new Date().toLocaleString(),
+            releaseDate: new Date().toLocalISOString(),
+            dueDate: new Date().toLocalISOString(),
             releasedBy: "",
             isGrouped: false,
             diningType: "",
@@ -125,7 +126,7 @@ export class OrderAdapter {
             discount: 0,
             description: "",
             status: "",
-            servedTime: new Date().toLocaleString(),
+            servedTime: new Date().toLocalISOString(),
             salesAgentId: 0,
             salesAgentName: "",
             invoiceNumber: "",
@@ -140,9 +141,9 @@ export class OrderAdapter {
     //     return {
     //         // sys something something
     //         isDeleted: false,
-    //         sys_CreateTimeStamp: new Date().toLocaleString(),
+    //         sys_CreateTimeStamp: new Date().toLocalISOString(),
     //         sys_CreateUserStamp: "",
-    //         sys_LastEditedTimeStamp: new Date().toLocaleString(),
+    //         sys_LastEditedTimeStamp: new Date().toLocalISOString(),
     //         sys_LastEditedUserStamp: "",
     //         sys_DeletedTimeStamp: null,
     //         sys_DeletedUserStamp: "",
@@ -152,7 +153,7 @@ export class OrderAdapter {
     //         // Mapped fields from Order
     //         restaurantOrderId: order.id || 0,
     //         orderType: order.orderType,
-    //         orderDate: order.transactionDate.toISOString(),
+    //         orderDate: order.transactionDate.toLocalISOString(),
     //         balance: order.balance,
     //         total: order.total,
     //         isPaid: order.isPaid,
@@ -165,8 +166,8 @@ export class OrderAdapter {
     //         address: order.deliveryAddress || order.customer.address ,
 
     //         // restaurant bullshit
-    //         releaseDate: new Date().toLocaleString(),
-    //         dueDate: new Date().toLocaleString(),
+    //         releaseDate: new Date().toLocalISOString(),
+    //         dueDate: new Date().toLocalISOString(),
     //         releasedBy: "",
     //         isGrouped: false,
     //         diningType: "",
@@ -178,7 +179,7 @@ export class OrderAdapter {
     //         discount: 0,
     //         description: "",
     //         status: "",
-    //         servedTime: new Date().toLocaleString(),
+    //         servedTime: new Date().toLocalISOString(),
     //         salesAgentId: 0,
     //         salesAgentName: "",
     //         invoiceNumber: "",

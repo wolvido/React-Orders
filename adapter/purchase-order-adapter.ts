@@ -84,7 +84,7 @@ export function PurchaseOrderDTOToEntity(dto: PurchaseOrderDTO): PurchaseOrder {
 export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
     return {
         deliveryId: po.deliveryId,
-        createDate: po.createDate.toISOString(),
+        createDate: po.createDate.toLocalISOString(),
         preparedBy: po.preparedBy,
         supplierId: po.supplierId,
         supplierName: po.supplier?.name || "",
@@ -93,8 +93,8 @@ export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
         description: "", // No description in entity
         approvedBy: po.preparedBy,
         remarks: po.remarks, // No remarks in entity
-        transactionDate: po.transactionDate.toISOString(),
-        expectedDeliveryDate: po.expectedDeliveryDate.toISOString(),
+        transactionDate: po.transactionDate.toLocalISOString(),
+        expectedDeliveryDate: po.expectedDeliveryDate.toLocalISOString(),
         isComplete: po.isComplete,
         isDeleted: po.isDeleted,
         hasErrors: false, // No error handling in entity
@@ -107,11 +107,11 @@ export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
         potentialCost: po.potentialCost,
         orderId: 0, // No related order in entity
         itemType: "", // No item type in entity
-        sys_CreateTimeStamp: po.createDate.toISOString(),
+        sys_CreateTimeStamp: po.createDate.toLocalISOString(),
         sys_CreateUserStamp: "",
-        sys_LastEditedTimeStamp: new Date().toLocaleString(),
+        sys_LastEditedTimeStamp: new Date().toLocalISOString(),
         sys_LastEditedUserStamp: "",
-        sys_DeletedTimeStamp: po.isDeleted ? new Date().toLocaleString() : null,
+        sys_DeletedTimeStamp: po.isDeleted ? new Date().toLocalISOString() : null,
         sys_DeletedUserStamp: "",
     };
 }

@@ -54,17 +54,17 @@ export class DeliveryAdapter {
     static adaptToDTO(delivery: Delivery): DeliveryDTO {
         return {
             isDeleted: false,
-            sys_CreateTimeStamp: new Date().toLocaleString(),
+            sys_CreateTimeStamp: new Date().toLocalISOString(),
             sys_CreateUserStamp: "",
-            sys_LastEditedTimeStamp: new Date().toLocaleString(),
+            sys_LastEditedTimeStamp: new Date().toLocalISOString(),
             sys_LastEditedUserStamp: "",
             sys_DeletedTimeStamp: null,
             sys_DeletedUserStamp: "",
             state: 0,
             isDtoSelected: false,
-            deliveryDate: delivery.deliveryDate.toISOString(),
+            deliveryDate: delivery.deliveryDate.toLocalISOString(),
             deliveryID: 0,
-            creationDate: new Date().toLocaleString(),
+            creationDate: new Date().toLocalISOString(),
             supplierId: delivery.supplier.id,
             supplierName: delivery.supplier.name,
             items: 0,
@@ -81,13 +81,13 @@ export class DeliveryAdapter {
             isConfirmed: false,
             deliveryConfirmationId: 0,
             confirmedBy: "",
-            confirmationDate: new Date().toLocaleString(),
+            confirmationDate: new Date().toLocalISOString(),
             status: "Pending",
 
             //update
             isSelected: false,
             plateNO: "",
-            receiptDate: new Date().toLocaleString(),
+            receiptDate: new Date().toLocalISOString(),
 
         };
     }
