@@ -89,10 +89,10 @@ export class OrderRepository implements IOrderRepository {
 
     async create(order: Omit<Order, 'id'>): Promise<{orderId: number}> {
         // Convert the order to DTO format before sending
-        console.log("order address in repository: "+order.deliveryAddress);
-        console.log("order remarks in repository: "+order.remarks);
-        
+
         const orderDto = OrderAdapter.reverse(order as Order);
+
+        console.log('Order DTO from repo:', orderDto);
 
         orderDto.restaurantOrderId = 0;
         
