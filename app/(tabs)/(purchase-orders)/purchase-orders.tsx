@@ -7,7 +7,7 @@ export default function PurchaseOrdersScreen() {
             <MaterialIcons name="construction" size={64} color="#666" />
             <Text style={styles.title}>Work in Progress</Text>
             <Text style={styles.subtitle}>
-                Purchase Orders feature is currently under development, Thank you for your patience.
+                Purchase Orders feature is currently under development.
             </Text>
         </View>
     );

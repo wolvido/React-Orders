@@ -167,7 +167,7 @@ export default function OrdersScreen() {
         const order = await getOrderbyId(id);
         if (order) {
             setUpdateOrder(order);
-        }   
+        }
 
         setIsLoading(false);
     };
