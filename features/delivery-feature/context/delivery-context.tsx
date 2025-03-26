@@ -86,7 +86,7 @@ export const DeliveryProvider = ({ children }: { children: React.ReactNode }) =>
             setDelivery(null);
             setReceivedDelivery(null);
 
-            if ((jsonReturn.deliveryId > 0) && (resultDeliveryLines.length > 0)) {
+            if ((jsonReturn.deliveryId > 0) && (resultDeliveryLines.items.length > 0)) {
                 return {
                     success: true,
                     message: 'Delivery Finalized with ID: ' + jsonReturn.deliveryId
