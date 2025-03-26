@@ -142,7 +142,7 @@ export class OrderLineRepository implements IOrderLineRepository {
             //for every order lines, set isDeleted to true and sys deleted timestamp to now
             orderLines.forEach((orderLine) => {
                 orderLine.isDeleted = true;
-                orderLine.sys_DeletedTimeStamp = new Date().toISOString();
+                orderLine.sys_DeletedTimeStamp = new Date().toLocaleString();
             });
 
             console.log('Sending delete orderLines:', orderLines);

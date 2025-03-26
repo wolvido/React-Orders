@@ -109,9 +109,9 @@ export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
         itemType: "", // No item type in entity
         sys_CreateTimeStamp: po.createDate.toISOString(),
         sys_CreateUserStamp: "",
-        sys_LastEditedTimeStamp: new Date().toISOString(),
+        sys_LastEditedTimeStamp: new Date().toLocaleString(),
         sys_LastEditedUserStamp: "",
-        sys_DeletedTimeStamp: po.isDeleted ? new Date().toISOString() : null,
+        sys_DeletedTimeStamp: po.isDeleted ? new Date().toLocaleString() : null,
         sys_DeletedUserStamp: "",
     };
 }

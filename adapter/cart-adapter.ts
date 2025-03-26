@@ -41,9 +41,9 @@ export function convertCartToOrderLines(cart: Cart): RestaurantOrderLineDTO[] {
         
         // System fields with default values
         isDeleted: false,
-        sys_CreateTimeStamp: new Date().toISOString(),
+        sys_CreateTimeStamp: new Date().toLocaleString(),
         sys_CreateUserStamp: "",
-        sys_LastEditedTimeStamp: new Date().toISOString(),
+        sys_LastEditedTimeStamp: new Date().toLocaleString(),
         sys_LastEditedUserStamp: "",
         sys_DeletedTimeStamp: null,
         sys_DeletedUserStamp: "",

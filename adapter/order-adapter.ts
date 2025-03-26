@@ -87,9 +87,9 @@ export class OrderAdapter {
         return {
             // sys something something
             isDeleted: false,
-            sys_CreateTimeStamp: new Date().toISOString(),
+            sys_CreateTimeStamp: new Date().toLocaleString(),
             sys_CreateUserStamp: "",
-            sys_LastEditedTimeStamp: new Date().toISOString(),
+            sys_LastEditedTimeStamp: new Date().toLocaleString(),
             sys_LastEditedUserStamp: "",
             sys_DeletedTimeStamp: null,
             sys_DeletedUserStamp: "",
@@ -112,8 +112,8 @@ export class OrderAdapter {
             address: order.deliveryAddress || order.customer.address ,
 
             // restaurant bullshit
-            releaseDate: new Date().toISOString(),
-            dueDate: new Date().toISOString(),
+            releaseDate: new Date().toLocaleString(),
+            dueDate: new Date().toLocaleString(),
             releasedBy: "",
             isGrouped: false,
             diningType: "",
@@ -125,7 +125,7 @@ export class OrderAdapter {
             discount: 0,
             description: "",
             status: "",
-            servedTime: new Date().toISOString(),
+            servedTime: new Date().toLocaleString(),
             salesAgentId: 0,
             salesAgentName: "",
             invoiceNumber: "",
@@ -140,9 +140,9 @@ export class OrderAdapter {
     //     return {
     //         // sys something something
     //         isDeleted: false,
-    //         sys_CreateTimeStamp: new Date().toISOString(),
+    //         sys_CreateTimeStamp: new Date().toLocaleString(),
     //         sys_CreateUserStamp: "",
-    //         sys_LastEditedTimeStamp: new Date().toISOString(),
+    //         sys_LastEditedTimeStamp: new Date().toLocaleString(),
     //         sys_LastEditedUserStamp: "",
     //         sys_DeletedTimeStamp: null,
     //         sys_DeletedUserStamp: "",
@@ -165,8 +165,8 @@ export class OrderAdapter {
     //         address: order.deliveryAddress || order.customer.address ,
 
     //         // restaurant bullshit
-    //         releaseDate: new Date().toISOString(),
-    //         dueDate: new Date().toISOString(),
+    //         releaseDate: new Date().toLocaleString(),
+    //         dueDate: new Date().toLocaleString(),
     //         releasedBy: "",
     //         isGrouped: false,
     //         diningType: "",
@@ -178,7 +178,7 @@ export class OrderAdapter {
     //         discount: 0,
     //         description: "",
     //         status: "",
-    //         servedTime: new Date().toISOString(),
+    //         servedTime: new Date().toLocaleString(),
     //         salesAgentId: 0,
     //         salesAgentName: "",
     //         invoiceNumber: "",

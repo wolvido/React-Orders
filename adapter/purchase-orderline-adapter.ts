@@ -81,9 +81,9 @@ export function PurchaseOrderLineDTOtoEntity(dto: PurchaseOrderLineDTO): Purchas
 export function PurchaseOrderLinetoDTO(entity: PurchaseOrderLine): PurchaseOrderLineDTO {
   return {
     isDeleted: false,
-    sys_CreateTimeStamp: entity.creationDate?.toISOString() || new Date().toISOString(),
+    sys_CreateTimeStamp: entity.creationDate?.toISOString() || new Date().toLocaleString(),
     sys_CreateUserStamp: "system",
-    sys_LastEditedTimeStamp: new Date().toISOString(),
+    sys_LastEditedTimeStamp: new Date().toLocaleString(),
     sys_LastEditedUserStamp: "system",
     sys_DeletedTimeStamp: "",
     sys_DeletedUserStamp: "",
