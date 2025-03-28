@@ -141,7 +141,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-     * safely updates the products by retaining the local product stock changes and applying selected pricing schema
+     * @description safely updates the products by retaining the local product stock changes and applying selected pricing schema
      */
     const updateProducts = async () => {
         try {
