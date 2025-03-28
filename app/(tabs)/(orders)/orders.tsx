@@ -1,11 +1,7 @@
-import commonStyles from '@/shared/style/common';
 import theme from '@/shared/style/theme';
 import * as React from 'react';
-import { DataTable, Searchbar, Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
-import getStatusColor from '@/shared/hooks/status-color-hook';
-import getPaymentStatusColor from '@/shared/hooks/payment-status-color-hook';
+import { Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
 import { useState, useEffect, useCallback } from 'react';
-import PaymentStatus from '@/shared/enums/payment-status';
 import { View, Text, ScrollView } from 'react-native';
 import PaymentMethodSelector from '@/features/order-feature/components/payment-forms/payment-form';
 import StatusForm from '@/features/order-feature/components/fulfillment-status';
@@ -14,7 +10,6 @@ import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, Payment
 import { useOrder } from '@/features/order-feature/context/order-context';
 import { OrderRepository } from '@/repositories/order-repository';
 import { Order } from '@/entities/order';
-import { useSearch } from '@/shared/hooks/search-filter';
 import { EmptyState } from '@/shared/components/empty-state';
 import { PaymentRepository } from '@/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
