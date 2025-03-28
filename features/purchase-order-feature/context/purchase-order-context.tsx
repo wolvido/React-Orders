@@ -1,11 +1,11 @@
 import { PurchaseOrder } from "@/entities/purchase-order";
 import { PurchaseOrderRepository } from "@/repositories/purchase-order-repository";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 interface PurchaseOrderContextType {
     selectedPurchaseOrder: PurchaseOrder | null;
     purchaseOrders: PurchaseOrder[];
-    reLoadPurchaseOrders: () => Promise<void>;
+    reloadPurchaseOrders: () => Promise<void>;
     getPurchaseOrderByid: (id: number) => Promise<PurchaseOrder | undefined>;
     isLoading: boolean;
 }
@@ -31,7 +31,7 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
         }
     };
 
-    const reLoadPurchaseOrders = async () => {
+    const reloadPurchaseOrders = async () => {
         await loadPurchaseOrders();
     };
 
@@ -55,7 +55,7 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
             value={{
                 selectedPurchaseOrder,
                 purchaseOrders,
-                reLoadPurchaseOrders,
+                reloadPurchaseOrders,
                 getPurchaseOrderByid,
                 isLoading,
             }}
@@ -64,3 +64,11 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
         </PurchaseOrderContext.Provider>
     );
 };
+
+export function usePurchaseOrder(){
+    const context = useContext(PurchaseOrderContext);
+    if (!context) {
+        throw new Error("usePurchaseOrder must be used within a PurchaseOrderProvider");
+    }
+    return context;
+}
