@@ -7,6 +7,7 @@ import App from '@/app.json';
 import { useApi } from '@/services/dev-mode-service/context/dev-mode-context';
 import { useProducts } from '@/services/product-service/context/product-context';
 import { useSuppliers } from '@/services/supplier-service/context/supplier-context';
+import { usePurchaseOrder } from '@/features/purchase-order-feature/context/purchase-order-context';
 
 const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
@@ -17,6 +18,7 @@ const LoginScreen = () => {
 
   const { refreshProducts, loadProductSchemas } = useProducts();
   const { refreshSuppliers } = useSuppliers();
+  const { reloadPurchaseOrders } = usePurchaseOrder();
 
   const { setApiUrl } = useApi();
 
@@ -38,6 +40,7 @@ const LoginScreen = () => {
       loadProductSchemas();
       refreshProducts();
       refreshSuppliers();
+      reloadPurchaseOrders();
       await login(user, password);
     } catch (error) {
       console.error('Login failed:', error);
