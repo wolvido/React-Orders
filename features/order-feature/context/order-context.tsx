@@ -33,7 +33,6 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 // Provider component
 export function OrderProvider({ children }: { children: ReactNode }) {
     const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
-
     const [cart, setCart] = useState<Cart>({ items: [], total: 0, orderId: 0 });
 
     const orderRepository = new OrderRepository();
@@ -196,21 +195,17 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     };
 
     const getOrderbyId = async (id: number): Promise<Order | undefined> => {
-
         try {
             const order = await orderRepository.getById(id);
             if (order) {
                 return order;
-
             } else {
                 return undefined;
-
             }
         } catch (error) {
             console.error('Error fetching order:', error);
             throw error;
         }
-        
     };
 
     const setOrder = (order: Order) => {
