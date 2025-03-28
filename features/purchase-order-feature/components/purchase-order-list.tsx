@@ -45,7 +45,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
     useEffect(() => {
         setPage(0);
     }, [itemsPerPage]);
-    
+
     return (
         <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <DataTable.Header style={styles.extraHeader}>
@@ -80,20 +80,20 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <ScrollView style={{ flex: 1 }}>
                     <DataTable>
-                        {filteredItems.slice(from, to).map((poItem) => (
-                            <DataTable.Row key={poItem.id}>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.supplier?.name}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.transactionDate.toDateString()}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.expectedDeliveryDate.toDateString()}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.preparedBy}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.isComplete ? 'Received' : 'Pending'}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{poItem.remarks}</DataTable.Cell>
+                        {filteredItems.slice(from, to).map((item) => (
+                            <DataTable.Row key={item.id}>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.supplier?.name}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.transactionDate.toDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.expectedDeliveryDate.toDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.preparedBy}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.isComplete ? 'Received' : 'Pending'}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.remarks}</DataTable.Cell>
                                 {
                                     isPortrait ?
                                     (
                                         <DataTable.Cell style={{flexGrow: 1}}>
                                             <Menu
-                                                visible={menuVisible === poItem.id}
+                                                visible={menuVisible === item.id}
                                                 onDismiss={closeMenu}
                                                 anchor={
                                                     <Button 
@@ -102,16 +102,16 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                                                         compact
                                                         style={{ backgroundColor: '#f2f2f2' }}
                                                         textColor="black"
-                                                        onPress={() => openMenu(poItem.id)}
+                                                        onPress={() => openMenu(item.id)}
                                                     >
                                                         Actions
                                                     </Button>
                                                 }
                                                 style={{ marginTop: 40 }} // Adjust to position correctly
                                             >
-                                                {!poItem.isComplete && (
+                                                {!item.isComplete && (
                                                     <Menu.Item 
-                                                        onPress={() => onReceivePo(poItem.id)} 
+                                                        onPress={() => onReceivePo(item.id)} 
                                                         title="Receive"
                                                         leadingIcon="check"
                                                     />
@@ -119,7 +119,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
 
                                                 {onViewDetails && (
                                                     <Menu.Item 
-                                                        onPress={() => onViewDetails(poItem.id)} 
+                                                        onPress={() => onViewDetails(item.id)} 
                                                         title="View Details"
                                                         leadingIcon="eye"
                                                     />
@@ -132,8 +132,8 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                                             <DataTable.Cell style={{flexGrow: 1}}>
                                                 <Button
                                                     mode='contained'
-                                                    onPress={() => onReceivePo(poItem.id)}
-                                                    disabled={poItem.isComplete}
+                                                    onPress={() => onReceivePo(item.id)}
+                                                    disabled={item.isComplete}
                                                 >
                                                     Receive
                                                 </Button>
@@ -142,7 +142,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                                             {onViewDetails && (
                                                 <Button
                                                     mode='contained'
-                                                    onPress={() => onViewDetails(poItem.id)}
+                                                    onPress={() => onViewDetails(item.id)}
                                                 >
                                                     View Details
                                                 </Button>
