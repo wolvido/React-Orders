@@ -89,7 +89,6 @@ export default function ProductsScreen() {
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <ScrollView style={{ flex: 1 }}>
                     <DataTable>
-
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
                                 <DataTable.Cell style={{ flex: 2 }} >{item.name}</DataTable.Cell>
