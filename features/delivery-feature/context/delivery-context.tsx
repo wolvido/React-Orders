@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Delivery } from '@/entities/delivery';
 import { ReceivedDelivery } from '@/entities/received-delivery';
 import { DeliveryRepository } from '@/repositories/delivery-repository';
@@ -14,7 +14,7 @@ interface DeliveryContextType {
 
 const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined);
 
-export const DeliveryProvider = ({ children }: { children: React.ReactNode }) => {
+export const DeliveryProvider = ({ children }: { children: ReactNode }) => {
     const [delivery, setDelivery] = useState<Delivery | null>(null);
     const [receivedDelivery, setReceivedDelivery] = useState<ReceivedDelivery | null>(null);
     const deliveryRepository = new DeliveryRepository();
