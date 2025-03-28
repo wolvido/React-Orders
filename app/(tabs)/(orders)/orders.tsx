@@ -60,42 +60,7 @@ export default function OrdersScreen() {
         }
     }, [selectedOrderId]);
 
-    const searchableFields: (keyof Order)[] = [
-        'orderType',
-        'customer',
-    ];
-
-    const { searchQuery, setSearchQuery, filteredItems } = useSearch<Order>(
-        items,
-        searchableFields
-    );
-
     const{ updatePaymentById, updateFulfillmentById } = useOrder();
-
-    //handles the state of table pagination
-    const [page, setPage] = useState<number>(0);
-
-    //stores the initial selection for the number of items per page
-    const [numberOfItemsPerPageList] = useState([10, 20, 40, 60]);
-        //used for the dropdown menu to display the possible options
-
-    //switches the page options
-    const [itemsPerPage, onItemsPerPageChange] = useState(
-      numberOfItemsPerPageList[0]
-    );
-
-    //calculates the range of items per page in display
-    //whenever the page changes, it calculates from what index of the array the currect state is
-    const from = page * itemsPerPage; 
-    //calculates the end of the range
-    const to = Math.min((page + 1) * itemsPerPage, items.length);
-  
-    //resets the page to the start item range changes, 
-    // so that it doesnt break when page doesnt exist
-    useEffect(() => {
-      setPage(0);
-    }, [itemsPerPage]);
-        //sometimes a page wont exist when you expand the number of items per page
 
     //payment status
     const [showStatusModal, setShowStatusModal] = useState(false);
@@ -172,7 +137,7 @@ export default function OrdersScreen() {
         setIsLoading(false);
     };
     
-    // Add this useEffect
+    //navigate to update order screen
     useEffect(() => {
         if (updateOrder) {
             setOrder(updateOrder);
