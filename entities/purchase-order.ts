@@ -23,7 +23,7 @@ export interface PurchaseOrder {
     poDiscount: number;
     otherFee: number;
 
-    potentialCost: number;
+    potentialCost: number; // total cost of items in PO
 
     remarks: string;
 }

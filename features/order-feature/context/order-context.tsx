@@ -11,7 +11,6 @@ import { OrderLineRepository } from '@/repositories/order-line-repository';
 import { CustomerRepository } from '@/repositories/customer-repository';
 import { CartItem } from '@/entities/cart-item';
 
-// Define the context type
 interface OrderContextType {
     currentOrder: Order | null;
     updatePaymentById: (paymentMethod: PaymentMethod, orderId: number) => void;
@@ -144,6 +143,11 @@ export function OrderProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    /**
+     * 
+     * @returns void
+     * @description Finalizes update order by creating, updating, or deleting order lines based on the current cart and existing order.
+     */
     const finalizeOrderUpdate = async () => {
         if (!currentOrder) return;
     

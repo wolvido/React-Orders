@@ -58,7 +58,6 @@ export default function AddDeliveryItemsScreen() {
         }
     };
 
-
     return (
         <View style={styles.container}>
             <StepIndicator currentStep={2} backPath="./add-delivery" steps={deliverySteps} />
