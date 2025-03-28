@@ -1,36 +1,29 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from '@expo/vector-icons';
+import PurchaseOrderList from "@/features/purchase-order-feature/components/purchase-order-list";
+import { usePurchaseOrder } from "@/features/purchase-order-feature/context/purchase-order-context";
+import { useEffect } from "react";
 
 export default function PurchaseOrdersScreen() {
+
+    const { purchaseOrders, reloadPurchaseOrders } = usePurchaseOrder();
+
+    useEffect(() => {
+        if (purchaseOrders.length === 0) {
+            reloadPurchaseOrders();
+        }
+    }, []);
+
     return (
-        <View style={styles.container}>
-            <MaterialIcons name="construction" size={64} color="#666" />
-            <Text style={styles.title}>Work in Progress</Text>
-            <Text style={styles.subtitle}>
-                Purchase Orders feature is currently under development.
-            </Text>
+        <View style={{ flex: 1 }}>
+            <PurchaseOrderList
+                poItems={purchaseOrders}
+                onReceivePo={() => {}}
+                onViewDetails={() => {}}
+            />
         </View>
     );
+    
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginTop: 16,
-        color: '#333',
-    },
-    subtitle: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        marginTop: 8,
-    },
-});
+
