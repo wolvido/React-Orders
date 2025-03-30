@@ -2,11 +2,11 @@ import commonStyles from '@/src/shared/style/common';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import * as React from 'react';
 import { Text, ActivityIndicator, DataTable, Searchbar, Surface } from 'react-native-paper';
-import theme from '@/src/shared/style/theme';
+import theme from '@/src/shared/lib/theme/theme';
 import { Suspense, useEffect, useState } from 'react';
 import { Product } from '@/src/entities/product/type/product';
-import { useSearch } from '@/src/shared/hooks/search-filter';
-import { EmptyState } from '@/src/shared/components/empty-state';
+import { useSearch } from '@/src/shared/lib/search/search-filter';
+import { EmptyState } from '@/src/shared/ui/empty-state';
 import { useProducts } from '@/src/services/product-service/context/product-context';
 
 //react component

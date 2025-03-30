@@ -1,4 +1,4 @@
-import Status from "@/src/shared/enums/status";
+import Status from "@/src/shared/lib/theme/status";
 
 const getStatusColor = (status: Status) => {
     switch (status) {

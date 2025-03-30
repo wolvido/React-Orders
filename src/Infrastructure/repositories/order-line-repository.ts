@@ -2,7 +2,7 @@ import { convertCartToOrderLines, convertOrderLinesToCart, RestaurantOrderLineDT
 import app from "@/app.json";
 import { Cart } from "@/src/entities/cart/type/cart";
 import { ProductRepository } from "./product-repository";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IOrderLineRepository {
     createOrderLines(cart: Cart): Promise<RestaurantOrderLineDTO[]>;
@@ -17,7 +17,7 @@ export class OrderLineRepository implements IOrderLineRepository {
 
     constructor() {
 
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/OrderLine';

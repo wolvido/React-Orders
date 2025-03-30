@@ -2,12 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
-import { useAuth } from '@/src/features/authentication-feature/context/auth-context';
-import App from '@/app.json';
-import { useApi } from '@/src/services/dev-mode-service/context/dev-mode-context';
+import { useAuth } from '@/src/features/auth-feature/context/auth-context';
 import { useProducts } from '@/src/services/product-service/context/product-context';
 import { useSuppliers } from '@/src/services/supplier-service/context/supplier-context';
 import { usePurchaseOrder } from '@/src/features/purchase-order-feature/context/purchase-order-context';
+import { DevModeScreen } from '@/src/features/dev-mode-feature/components/dev-mode-screen';
 
 const LoginScreen = () => {
   const { login, isAuthenticated, isLoading } = useAuth();
@@ -19,8 +18,6 @@ const LoginScreen = () => {
   const { refreshProducts, loadProductSchemas } = useProducts();
   const { refreshSuppliers } = useSuppliers();
   const { reloadPurchaseOrders } = usePurchaseOrder();
-
-  const { setApiUrl } = useApi();
 
   useEffect(() => {
     console.log('Auth State:', { isAuthenticated, isLoading });
@@ -49,33 +46,7 @@ const LoginScreen = () => {
 
   if (showHiddenScreen) {
     return (
-      <ScrollView style={styles.devContainer}>
-        <Text variant="headlineMedium" style={styles.devTitle}>Developer Screen</Text>
-        
-        {Object.entries(App.api).map(([name, url]) => (
-          <Surface key={name} style={styles.apiCard} elevation={2}>
-            <Text variant="titleMedium">
-              {name.charAt(0).toUpperCase() + name.slice(1).replace(/([A-Z])/g, ' $1')}
-            </Text>
-            <Text variant="bodySmall" numberOfLines={1}>{url}</Text>
-            <Button 
-              mode="contained" 
-              onPress={() => setApiUrl(url)}
-              style={styles.apiButton}
-            >
-              Set as Active
-            </Button>
-          </Surface>
-        ))}
-
-        <Button 
-          mode="contained" 
-          onPress={() => setShowHiddenScreen(false)}
-          style={styles.apiButton}
-        >
-          Back to Login
-        </Button>
-      </ScrollView>
+      <DevModeScreen setDisplayDevModeScreen={setShowHiddenScreen} />
     );
   }
 

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { SegmentedButtons, Text } from 'react-native-paper';
 import { useState, useEffect } from 'react';
-import Status from '@/src/shared/enums/status';
+import Status from '@/src/shared/lib/theme/status';
 
 interface StatusFormProps {
     defaultStatus: Status;

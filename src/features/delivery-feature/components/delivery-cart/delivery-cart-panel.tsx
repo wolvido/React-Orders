@@ -4,7 +4,7 @@ import { FlatList } from "react-native";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
 import styles from "./delivery-styles";
 import { Product } from "@/src/entities/product/type/product";
-import { CollapseButton } from "@/src/shared/components/collapse-button";
+import { CollapseButton } from "@/src/shared/ui/collapse-button";
 import { useState } from "react";
 
 interface DeliveryCartPanelProps {

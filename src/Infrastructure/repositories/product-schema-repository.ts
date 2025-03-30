@@ -1,6 +1,6 @@
 import { ProductSchema } from "@/src/entities/product-schema/type/product-schema";
 import app from "@/app.json";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { toProductSchema } from "@/src/Infrastructure/adapter/product-schema-adapter";
 
 export interface IProductSchemaRepository {
@@ -15,7 +15,7 @@ export class ProductSchemaRepository implements IProductSchemaRepository {
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/ProductSchema';

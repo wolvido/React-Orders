@@ -1,6 +1,6 @@
 import { Order } from "@/src/entities/order/type/order";
-import Status from "@/src/shared/enums/status";
-import PaymentStatus from "@/src/shared/enums/payment-status";
+import Status from "@/src/shared/lib/theme/status";
+import PaymentStatus from "@/src/shared/lib/theme/payment-status";
 
 
 // Create interface for the source data

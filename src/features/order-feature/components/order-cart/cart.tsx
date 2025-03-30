@@ -1,14 +1,14 @@
 import { View } from "react-native";
-import useOrientation from "@/src/shared/hooks/orientation-hook";
+import useOrientation from "@/src/shared/lib/device/orientation-hook";
 import { Cart } from "@/src/entities/cart/type/cart";
 import { Product } from "@/src/entities/product/type/product";
 import { CartItem } from "@/src/entities/cart-item/type/cart-item";
-import { SummaryPanel } from "../../../../shared/components/summary-panel";
+import { SummaryPanel } from "../../../../shared/ui/summary-panel";
 import styles from "./cart-styles";
 import { CartPanel } from "./cart-panel";
 import { ProductList } from "./product-list";
 import { useState } from "react";
-import { CollapseButton } from "@/src/shared/components/collapse-button";
+import { CollapseButton } from "@/src/shared/ui/collapse-button";
 
 interface CartComponentProps {
     products: Product[];

@@ -1,5 +1,5 @@
 import { ProductSchema } from "@/src/entities/product-schema/type/product-schema";
-import theme from "@/src/shared/style/theme";
+import theme from "@/src/shared/lib/theme/theme";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Menu, TouchableRipple, Text, IconButton, Surface, Chip } from "react-native-paper";

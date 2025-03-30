@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import theme from '@/src/shared/style/theme';
+import theme from '@/src/shared/lib/theme/theme';
 
 type NavigationItem = {
     name: string;

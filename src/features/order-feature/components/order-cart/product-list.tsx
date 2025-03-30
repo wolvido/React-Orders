@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Product } from "@/src/entities/product/type/product";
 import ProductQuantityForm from "@/src/features/order-feature/components/order-forms/product-quantity-form";
 import styles from "./cart-styles";
-import theme from "@/src/shared/style/theme";
+import theme from "@/src/shared/lib/theme/theme";
 
 interface ProductListProps {
     products: Product[];

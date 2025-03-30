@@ -2,7 +2,7 @@ import { ProductAdapter } from "@/src/Infrastructure/adapter/product-adapter";
 import { Product } from "@/src/entities/product/type/product";
 import app from "@/app.json";
 import { BundleLineDTO } from "@/src/Infrastructure/adapter/bundleLine-adapter";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IProductRepository {
     getAll(): Promise<Product[]>;
@@ -16,7 +16,7 @@ export class ProductRepository implements IProductRepository{
 
     constructor() {
 
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/Product';

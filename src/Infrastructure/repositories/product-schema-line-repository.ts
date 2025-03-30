@@ -1,4 +1,4 @@
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { ProductSchemaLine } from "@/src/entities/product-schema-line/type/product-schema-line";
 import app from "@/app.json";
 import { toProductSchemaLine } from "@/src/Infrastructure/adapter/product-schemaline-adapter";
@@ -11,7 +11,7 @@ export class ProductSchemaLineRepository implements IProductSchemaLineRepository
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/ProductSchemaline';

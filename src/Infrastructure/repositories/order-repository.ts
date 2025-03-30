@@ -1,7 +1,7 @@
 import { OrderAdapter } from "@/src/Infrastructure/adapter/order-adapter";
 import { Order } from "@/src/entities/order/type/order";
 import app from "@/app.json";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IOrderRepository {
     getById(id: number): Promise<Order | null>;
@@ -14,7 +14,7 @@ export class OrderRepository implements IOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/Order';

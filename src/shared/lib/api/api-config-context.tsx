@@ -6,9 +6,9 @@ type ApiContextType = {
   hasApiUrl: () => boolean;
 };
 
-const ApiContext = createContext<ApiContextType | undefined>(undefined);
+const ApiConfigContext = createContext<ApiContextType | undefined>(undefined);
 
-export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
+export const ApiConfigProvider = ({ children }: { children: React.ReactNode }) => {
   const [apiUrl, setApiUrl] = useState<string | undefined>(undefined); 
 
   const getApiUrl = () => apiUrl;
@@ -16,17 +16,17 @@ export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   const hasApiUrl = () => apiUrl !== undefined;
 
   return (
-    <ApiContext.Provider value={{ getApiUrl, setApiUrl: setNewApiUrl, hasApiUrl }}>
+    <ApiConfigContext.Provider value={{ getApiUrl, setApiUrl: setNewApiUrl, hasApiUrl }}>
       {children}
-    </ApiContext.Provider>
+    </ApiConfigContext.Provider>
   );
 };
 
 // Custom hook to use the API context
-export const useApi = () => {
-  const context = useContext(ApiContext);
+export const useApiConfig  = () => {
+  const context = useContext(ApiConfigContext);
   if (context === undefined) {
-    throw new Error('useApi must be used within an ApiProvider');
+    throw new Error('ApiConfigContext must be used within an ApiConfigProvider');
   }
   return context;
 };

@@ -1,7 +1,7 @@
 import { CashPayment, ChequePayment, PaymentGateway, BankTransferPayment } from "@/src/entities/payment-method/type/payment-method";
 import { convertBankTransferPaymentToPaymentDTO, convertCashPaymentToPaymentDTO, convertChequePaymentToPaymentDTO, convertPaymentGatewayToPaymentDTO } from "@/src/Infrastructure/adapter/payment-adapter";
 import app from "@/app.json";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IPaymentRepository {
     createCashPayment(payment: CashPayment): Promise<{paymentId: number}>;
@@ -15,7 +15,7 @@ export class PaymentRepository implements IPaymentRepository {
 
     constructor() {
 
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/Payment';

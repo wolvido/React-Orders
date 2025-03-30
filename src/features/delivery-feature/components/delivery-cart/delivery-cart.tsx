@@ -2,10 +2,10 @@ import { View, StyleSheet } from "react-native";
 import { ReceivedDelivery } from "@/src/entities/received-delivery/type/received-delivery";
 import { Product } from "@/src/entities/product/type/product";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
-import useOrientation from "@/src/shared/hooks/orientation-hook";
+import useOrientation from "@/src/shared/lib/device/orientation-hook";
 import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
-import { SummaryPanel } from "@/src/shared/components/summary-panel";
+import { SummaryPanel } from "@/src/shared/ui/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
 
 interface DeliveryCartComponentProps {

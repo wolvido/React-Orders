@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 import { useOrder } from '@/src/features/order-feature/context/order-context';
 import { Customer } from '@/src/entities/customer/type/customers';
 import { CustomerRepository } from '@/src/Infrastructure/repositories/customer-repository';
-import { useAuth } from '@/src/features/authentication-feature/context/auth-context';
+import { useAuth } from '@/src/features/auth-feature/context/auth-context';
 import { useProducts } from '@/src/services/product-service/context/product-context';
 import { ProductSchema } from '@/src/entities/product-schema/type/product-schema';
 

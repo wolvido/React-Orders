@@ -1,6 +1,6 @@
 import LoginScreen from "@/src/app/login";
 import { View, Text} from "react-native";
-import { useAuth } from '@/src/features/authentication-feature/context/auth-context';
+import { useAuth } from '@/src/features/auth-feature/context/auth-context';
 import { Redirect } from "expo-router";
 
 export default function AuthenticationScreen() {

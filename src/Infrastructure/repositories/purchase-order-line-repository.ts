@@ -1,5 +1,5 @@
 import { PurchaseOrderLine } from "@/src/entities/purchase-order-line/type/purchase-order-line";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import {PurchaseOrderLineDTOtoEntity, PurchaseOrderLinetoDTO} from "@/src/Infrastructure/adapter/purchase-orderline-adapter";
 import app from "@/app.json";
 
@@ -13,7 +13,7 @@ export class PurchaseOrderLineRepository implements IPurchaseOrderLineRepository
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/PurchaseOrderline';

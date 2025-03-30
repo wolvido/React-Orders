@@ -1,4 +1,4 @@
-import useOrientation from '../../../shared/hooks/orientation-hook';
+import useOrientation from '../../../shared/lib/device/orientation-hook';
 import { RelativePathString, useRouter } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';

@@ -2,12 +2,12 @@ import * as React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Portal, Modal, List } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
-import Status from '@/src/shared/enums/status';
-import PaymentStatus from '@/src/shared/enums/payment-status';
-import { CustomersSelection } from '../../../../shared/components/costumers-selection';
+import Status from '@/src/shared/lib/theme/status';
+import PaymentStatus from '@/src/shared/lib/theme/payment-status';
+import { CustomersSelection } from '../../../../shared/ui/costumers-selection';
 import { Customer } from '@/src/entities/customer/type/customers';
 import { Order } from '@/src/entities/order/type/order';
-import { DatePicker } from '../../../../shared/components/date-picker';
+import { DatePicker } from '../../../../shared/ui/date-picker';
 import { ProductSchema } from '../../../../entities/product-schema/type/product-schema';
 import ProductSchemaSelection from '../product-schema/product-schema-selection';
 

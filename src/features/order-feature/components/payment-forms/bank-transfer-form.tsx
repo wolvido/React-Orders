@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button, HelperText } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
-import { DatePicker } from "../../../../shared/components/date-picker";
+import { DatePicker } from "../../../../shared/ui/date-picker";
 
 type BankTransferPayment = Extract<PaymentMethod, { type: "Bank Transfer" }>;
 

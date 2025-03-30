@@ -1,6 +1,6 @@
-import Status from "@/src/shared/enums/status";
+import Status from "@/src/shared/lib/theme/status";
 import { Customer } from "../../customer/type/customers";
-import PaymentStatus from "@/src/shared/enums/payment-status";
+import PaymentStatus from "@/src/shared/lib/theme/payment-status";
 
 export interface Order{
     id: number;

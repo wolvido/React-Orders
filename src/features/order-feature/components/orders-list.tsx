@@ -2,10 +2,10 @@ import { DataTable, Searchbar, Button, List, Menu  } from 'react-native-paper';
 import { View, ScrollView, useWindowDimensions } from 'react-native';
 import { Order } from '@/src/entities/order/type/order';
 import commonStyles from '@/src/shared/style/common';
-import theme from '@/src/shared/style/theme';
-import getPaymentStatusColor from '../../../shared/hooks/payment-status-color-hook';
-import PaymentStatus from '@/src/shared/enums/payment-status';
-import { useSearch } from '../../../shared/hooks/search-filter';
+import theme from '@/src/shared/lib/theme/theme';
+import getPaymentStatusColor from '../../../shared/lib/theme/payment-status-color-hook';
+import PaymentStatus from '@/src/shared/lib/theme/payment-status';
+import { useSearch } from '../../../shared/lib/search/search-filter';
 import { useState, useEffect } from 'react';
 
 interface OrdersListProps {

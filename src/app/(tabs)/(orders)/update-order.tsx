@@ -8,7 +8,7 @@ import OrderDetailsForm from "@/src/features/order-feature/components/order-form
 import { Customer } from "@/src/entities/customer/type/customers";
 import { CustomerRepository } from "@/src/Infrastructure/repositories/customer-repository";
 import { router } from "expo-router";
-import { useAuth } from "@/src/features/authentication-feature/context/auth-context";
+import { useAuth } from "@/src/features/auth-feature/context/auth-context";
 import { useProducts } from "@/src/services/product-service/context/product-context";
 
 

@@ -2,7 +2,7 @@ import PaymentMethod from "@/src/entities/payment-method/type/payment-method";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Button } from 'react-native-paper';
-import { DatePicker } from "../../../../shared/components/date-picker";
+import { DatePicker } from "../../../../shared/ui/date-picker";
 
 type ChequePayment = Extract<PaymentMethod, { type: "Cheque" }>;
 

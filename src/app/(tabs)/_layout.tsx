@@ -3,13 +3,13 @@ import { CommonActions, DefaultTheme} from '@react-navigation/native';
 import { Text, BottomNavigation, IconButton, Drawer } from 'react-native-paper';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import theme from '@/src/shared/style/theme';
+import theme from '@/src/shared/lib/theme/theme';
 import { Redirect, Tabs } from 'expo-router';
 
-import { useAuth } from '@/src/features/authentication-feature/context/auth-context';
-import useOrientation from '@/src/shared/hooks/orientation-hook';
+import { useAuth } from '@/src/features/auth-feature/context/auth-context';
+import useOrientation from '@/src/shared/lib/device/orientation-hook';
 import { View, StyleSheet, Animated, Pressable, } from 'react-native';
-import { LandscapeDrawer } from '@/src/shared/components/landscape-drawer';
+import { LandscapeDrawer } from '@/src/shared/ui/landscape-drawer';
 
 export default function TabLayout() {
     const orientation = useOrientation();

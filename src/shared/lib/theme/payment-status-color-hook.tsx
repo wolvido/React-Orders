@@ -1,4 +1,4 @@
-import PaymentStatus from '@/src/shared/enums/payment-status';
+import PaymentStatus from '@/src/shared/lib/theme/payment-status';
 
 const getPaymentStatusColor = (status: PaymentStatus) => {
     switch (status) {

@@ -3,7 +3,7 @@ import app from "@/app.json";
 import { SupplierAdapter } from "@/src/Infrastructure/adapter/supplier-adapter";
 import { DeliveryAdapter, DeliveryDTO } from "@/src/Infrastructure/adapter/delivery-adapter";
 import { Delivery } from "@/src/entities/delivery/type/delivery";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IDeliveryRepository {
     getAllSuppliers(): Promise<Supplier[]>;
@@ -16,7 +16,7 @@ export class DeliveryRepository implements IDeliveryRepository{
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/Delivery';

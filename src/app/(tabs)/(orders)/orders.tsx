@@ -1,16 +1,16 @@
-import theme from '@/src/shared/style/theme';
+import theme from '@/src/shared/lib/theme/theme';
 import * as React from 'react';
 import { Button, Portal, Modal, Appbar, ActivityIndicator, Card } from 'react-native-paper';
 import { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import PaymentMethodSelector from '@/src/features/order-feature/components/payment-forms/payment-form';
 import StatusForm from '@/src/features/order-feature/components/fulfillment-status';
-import Status from '@/src/shared/enums/status'
+import Status from '@/src/shared/lib/theme/status'
 import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/src/entities/payment-method/type/payment-method';
 import { useOrder } from '@/src/features/order-feature/context/order-context';
 import { OrderRepository } from '@/src/Infrastructure/repositories/order-repository';
 import { Order } from '@/src/entities/order/type/order';
-import { EmptyState } from '@/src/shared/components/empty-state';
+import { EmptyState } from '@/src/shared/ui/empty-state';
 import { PaymentRepository } from '@/src/Infrastructure/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
 import app from '@/app.json';

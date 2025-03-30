@@ -1,5 +1,5 @@
 import { PurchaseOrder } from "@/src/entities/purchase-order/type/purchase-order";
-import { useApi } from "@/src/services/dev-mode-service/context/dev-mode-context";
+import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { PurchaseOrderToDTO, PurchaseOrderDTOToEntity } from "@/src/Infrastructure/adapter/purchase-order-adapter";
 import app from "@/app.json";
 
@@ -13,7 +13,7 @@ export class PurchaseOrderRepository implements IPurchaseOrderRepository {
     private baseUrl: string;
 
     constructor() {
-        const { getApiUrl, hasApiUrl } = useApi();
+        const { getApiUrl, hasApiUrl } = useApiConfig();
 
         if (hasApiUrl()) {
             this.baseUrl = getApiUrl() + '/PurchaseOrder';

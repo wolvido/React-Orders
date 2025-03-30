@@ -1,4 +1,4 @@
-import useOrientation from '../hooks/orientation-hook';
+import useOrientation from '../lib/device/orientation-hook';
 import React, { useState, useMemo } from 'react';
 import { View, Modal, StyleSheet, Animated, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { Text, TouchableRipple, IconButton } from 'react-native-paper';
