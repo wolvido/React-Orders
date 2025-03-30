@@ -4,7 +4,7 @@
     "slug": "first-test-app",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/images/cento-icon.png",
+    "icon": "./src/assets/images/cento-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,7 +14,7 @@
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/cento-icon.png",
+        "foregroundImage": "./src/assets/images/cento-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.winzyl.cento.app"
@@ -22,14 +22,14 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/cento-icon.png"
+      "favicon": "./src/assets/images/cento-icon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/cento-icon.png",
+          "image": "./src/assets/images/cento-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
