@@ -9,7 +9,7 @@ import { Customer } from "@/src/entities/customer/type/customers";
 import { CustomerRepository } from "@/src/Infrastructure/repositories/customer-repository";
 import { router } from "expo-router";
 import { useAuth } from "@/src/features/auth-feature/context/auth-context";
-import { useProducts } from "@/src/services/product-service/context/product-context";
+import { useProducts } from "@/src/entities/product/context-service/product-context";
 
 
 export default function UpdateOrderScreen(){

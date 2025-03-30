@@ -8,9 +8,9 @@ import { enGB, registerTranslation } from 'react-native-paper-dates';
 import { CartProvider } from '@/src/features/order-feature/context/cart-context';
 import { OrderProvider } from '@/src/features/order-feature/context/order-context';
 import { DeliveryProvider } from '@/src/features/delivery-feature/context/delivery-context';
-import { ProductProvider } from '@/src/services/product-service/context/product-context';
+import { ProductProvider } from '@/src/entities/product/context-service/product-context';
 import { ApiConfigProvider } from '@/src/shared/lib/api/api-config-context';
-import { SupplierProvider } from '@/src/services/supplier-service/context/supplier-context';
+import { SupplierProvider } from '@/src/entities/supplier/context-service/supplier-context';
 import { PurchaseOrderProvider } from '@/src/features/purchase-order-feature/context/purchase-order-context';
 
 registerTranslation('en', enGB)

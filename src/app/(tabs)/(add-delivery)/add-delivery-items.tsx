@@ -5,7 +5,7 @@ import StepIndicator from "@/src/features/step-indicator-feature/components/orde
 import deliverySteps from "./delivery-steps-label";
 import { useDelivery } from "@/src/features/delivery-feature/context/delivery-context";
 import { router } from "expo-router";
-import { useProducts } from "@/src/services/product-service/context/product-context";
+import { useProducts } from "@/src/entities/product/context-service/product-context";
 import { useState } from "react";
 
 export default function AddDeliveryItemsScreen() {

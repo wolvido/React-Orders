@@ -5,7 +5,7 @@ import AddDeliveryForm from '@/src/features/delivery-feature/components/forms/ad
 import { router } from "expo-router";
 import { Delivery } from '@/src/entities/delivery/type/delivery';
 import { useDelivery } from '@/src/features/delivery-feature/context/delivery-context';
-import { useSuppliers } from '@/src/services/supplier-service/context/supplier-context';
+import { useSuppliers } from '@/src/entities/supplier/context-service/supplier-context';
 import { useAuth } from '@/src/features/auth-feature/context/auth-context';
 
 //react component

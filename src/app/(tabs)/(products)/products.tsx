@@ -7,7 +7,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { Product } from '@/src/entities/product/type/product';
 import { useSearch } from '@/src/shared/lib/search/search-filter';
 import { EmptyState } from '@/src/shared/ui/empty-state';
-import { useProducts } from '@/src/services/product-service/context/product-context';
+import { useProducts } from "@/src/entities/product/context-service/product-context";
 
 //react component
 export default function ProductsScreen() {

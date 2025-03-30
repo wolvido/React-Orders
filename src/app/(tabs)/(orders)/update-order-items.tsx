@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { useCart } from "@/src/features/order-feature/context/cart-context";
 import { CartComponent } from "@/src/features/order-feature/components/order-cart/cart";
 import { useOrder } from "@/src/features/order-feature/context/order-context";
-import { useProducts } from "@/src/services/product-service/context/product-context";
+import { useProducts } from "@/src/entities/product/context-service/product-context";
 import updateOrderSteps from "./update-order-labels";
 import { OrderLineRepository } from "@/src/Infrastructure/repositories/order-line-repository";
 import { useEffect, useState } from "react";

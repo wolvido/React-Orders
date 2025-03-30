@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text, Surface, useTheme } from 'react-native-paper';
 import { useAuth } from '@/src/features/auth-feature/context/auth-context';
-import { useProducts } from '@/src/services/product-service/context/product-context';
-import { useSuppliers } from '@/src/services/supplier-service/context/supplier-context';
+import { useProducts } from '@/src/entities/product/context-service/product-context';
+import { useSuppliers } from '@/src/entities/supplier/context-service/supplier-context';
 import { usePurchaseOrder } from '@/src/features/purchase-order-feature/context/purchase-order-context';
 import { DevModeScreen } from '@/src/features/dev-mode-feature/components/dev-mode-screen';
 

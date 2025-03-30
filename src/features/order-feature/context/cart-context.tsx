@@ -1,4 +1,4 @@
-import { useProductHook } from "@/src/services/product-service/context-hooks/product-context-hook";
+import { useProductHook } from "@/src/entities/product/context-service/product-context-hook";
 import { Cart } from "@/src/entities/cart/type/cart";
 import { CartItem } from "@/src/entities/cart-item/type/cart-item";
 import { Product } from "@/src/entities/product/type/product";
