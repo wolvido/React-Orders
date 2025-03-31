@@ -1,4 +1,4 @@
-import { useProducts } from "@/src/services/product-service/context/product-context";
+import { useProducts } from "./product-context";
 import { Product } from "@/src/entities/product/type/product";
 
 //results of operation
