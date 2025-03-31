@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { TextInput, Button, Text, Portal, Modal, List } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 import { useCallback, useEffect, useState } from 'react';
 import Status from '@/src/shared/lib/theme/status';
 import PaymentStatus from '@/src/shared/lib/theme/payment-status';
-import { CustomersSelection } from '../../../../shared/ui/costumers-selection';
+import { CustomersSelection } from '../../../../entities/customer/ui/costumers-selection';
 import { Customer } from '@/src/entities/customer/type/customers';
 import { Order } from '@/src/entities/order/type/order';
 import { DatePicker } from '../../../../shared/ui/date-picker';
