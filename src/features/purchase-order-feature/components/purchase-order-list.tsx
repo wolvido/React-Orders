@@ -73,7 +73,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                 <DataTable.Title style={{flexGrow: 1}}>Prepared By</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Remarks</DataTable.Title>
-                <DataTable.Title style={{flexGrow: 1}}>Actions</DataTable.Title>
+                <DataTable.Title style={{flexGrow: 0.7}}>Actions</DataTable.Title>
             </DataTable.Header>
 
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -82,12 +82,12 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.supplier?.name}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{item.transactionDate.toDateString()}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{item.expectedDeliveryDate.toDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
+                                <DataTable.Cell style={{flexGrow: 1}}>{item.expectedDeliveryDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.preparedBy}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.isComplete ? 'Received' : 'Pending'}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.remarks}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>
+                                <DataTable.Cell style={{flexGrow: 0.7}}>
                                     <Menu
                                         visible={menuVisible === item.id}
                                         onDismiss={closeMenu}
