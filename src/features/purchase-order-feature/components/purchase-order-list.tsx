@@ -46,6 +46,9 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
         setPage(0);
     }, [itemsPerPage]);
 
+    //sort the items newest to oldest
+    poItems.sort((a, b) => new Date(b.transactionDate).getTime() - new Date(a.transactionDate).getTime());
+
     return (
         <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <DataTable.Header style={styles.extraHeader}>
