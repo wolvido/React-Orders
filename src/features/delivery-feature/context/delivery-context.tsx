@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Delivery } from '@/src/entities/delivery/type/delivery';
 import { ReceivedDelivery } from '@/src/entities/received-delivery/type/received-delivery';
-import { DeliveryRepository } from '@/src/Infrastructure/repositories/delivery-repository';
-import { DeliveryLineRepository } from '@/src/Infrastructure/repositories/delivery-line-repository';
+import { DeliveryRepository } from '@/src/infrastructure/repositories/delivery-repository';
+import { DeliveryLineRepository } from '@/src/infrastructure/repositories/delivery-line-repository';
 
 interface DeliveryContextType {
     delivery: Delivery | null;

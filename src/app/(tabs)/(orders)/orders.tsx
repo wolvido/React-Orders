@@ -8,10 +8,10 @@ import StatusForm from '@/src/features/order-feature/components/fulfillment-stat
 import Status from '@/src/shared/lib/theme/status'
 import PaymentMethod, { BankTransferPayment, CashPayment, ChequePayment, PaymentGateway } from '@/src/entities/payment-method/type/payment-method';
 import { useOrder } from '@/src/features/order-feature/context/order-context';
-import { OrderRepository } from '@/src/Infrastructure/repositories/order-repository';
+import { OrderRepository } from '@/src/infrastructure/repositories/order-repository';
 import { Order } from '@/src/entities/order/type/order';
 import { EmptyState } from '@/src/shared/ui/empty-state';
-import { PaymentRepository } from '@/src/Infrastructure/repositories/payment-repository';
+import { PaymentRepository } from '@/src/infrastructure/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
 import app from '@/app.json';
 import { OrdersList } from '@/src/features/order-feature/components/orders-list';

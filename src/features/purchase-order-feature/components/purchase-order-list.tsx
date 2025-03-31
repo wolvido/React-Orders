@@ -73,8 +73,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                 <DataTable.Title style={{flexGrow: 1}}>Prepared By</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Status</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Remarks</DataTable.Title>
-                {isPortrait && <DataTable.Title style={{flexGrow: 3}}>Actions</DataTable.Title>}
-                {!isPortrait && <DataTable.Title style={{flexGrow: 4}}>Actions</DataTable.Title>}
+                <DataTable.Title style={{flexGrow: 1}}>Actions</DataTable.Title>
             </DataTable.Header>
 
             <View style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -88,69 +87,42 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.preparedBy}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.isComplete ? 'Received' : 'Pending'}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.remarks}</DataTable.Cell>
-                                {
-                                    isPortrait ?
-                                    (
-                                        <DataTable.Cell style={{flexGrow: 1}}>
-                                            <Menu
-                                                visible={menuVisible === item.id}
-                                                onDismiss={closeMenu}
-                                                anchor={
-                                                    <Button 
-                                                        mode="contained"
-                                                        icon="menu"
-                                                        compact
-                                                        style={{ backgroundColor: '#f2f2f2' }}
-                                                        textColor="black"
-                                                        onPress={() => openMenu(item.id)}
-                                                    >
-                                                        Actions
-                                                    </Button>
-                                                }
-                                                style={{ marginTop: 40 }} // Adjust to position correctly
+                                <DataTable.Cell style={{flexGrow: 1}}>
+                                    <Menu
+                                        visible={menuVisible === item.id}
+                                        onDismiss={closeMenu}
+                                        anchor={
+                                            <Button 
+                                                mode="contained"
+                                                icon="menu"
+                                                compact
+                                                style={{ backgroundColor: '#f2f2f2' }}
+                                                textColor="black"
+                                                onPress={() => openMenu(item.id)}
                                             >
-                                                {!item.isComplete && (
-                                                    <Menu.Item 
-                                                        onPress={() => onReceivePo(item.id)} 
-                                                        title="Receive"
-                                                        leadingIcon="check"
-                                                    />
-                                                )}
+                                                Actions
+                                            </Button>
+                                        }
+                                        style={{ marginTop: 40 }} // Adjust to position correctly
+                                    >
+                                        {!item.isComplete && (
+                                            <Menu.Item 
+                                                onPress={() => onReceivePo(item.id)} 
+                                                title="Receive"
+                                                leadingIcon="download"
+                                            />
+                                        )}
 
-                                                {onViewDetails && (
-                                                    <Menu.Item 
-                                                        onPress={() => onViewDetails(item.id)} 
-                                                        title="View Details"
-                                                        leadingIcon="eye"
-                                                    />
-                                                )}
-                                                
-                                            </Menu>
-                                        </DataTable.Cell>
-                                    ) : (
-                                        <>
-                                            <DataTable.Cell style={{flexGrow: 1}}>
-                                                <Button
-                                                    mode='contained'
-                                                    onPress={() => onReceivePo(item.id)}
-                                                    disabled={item.isComplete}
-                                                >
-                                                    Receive
-                                                </Button>
-                                            </DataTable.Cell>
-                                            <DataTable.Cell style={{flexGrow: 2}}>
-                                            {onViewDetails && (
-                                                <Button
-                                                    mode='contained'
-                                                    onPress={() => onViewDetails(item.id)}
-                                                >
-                                                    View Details
-                                                </Button>
-                                            )}
-                                            </DataTable.Cell>
-                                        </>
-                                    )
-                                }
+                                        {onViewDetails && (
+                                            <Menu.Item 
+                                                onPress={() => onViewDetails(item.id)} 
+                                                title="View Details"
+                                                leadingIcon="eye"
+                                            />
+                                        )}
+                                        
+                                    </Menu>
+                                </DataTable.Cell>
                             </DataTable.Row>
                         ))}
                     </DataTable>
@@ -183,7 +155,6 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                 />
 
             </View>
-
         </View>
     );
 }

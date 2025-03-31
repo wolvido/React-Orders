@@ -1,7 +1,7 @@
 import { Supplier } from "@/src/entities/supplier/type/supplier";
 import app from "@/app.json";
-import { SupplierAdapter } from "@/src/Infrastructure/adapter/supplier-adapter";
-import { DeliveryAdapter, DeliveryDTO } from "@/src/Infrastructure/adapter/delivery-adapter";
+import { SupplierAdapter } from "@/src/infrastructure/adapter/supplier-adapter";
+import { DeliveryAdapter } from "@/src/infrastructure/adapter/delivery-adapter";
 import { Delivery } from "@/src/entities/delivery/type/delivery";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 

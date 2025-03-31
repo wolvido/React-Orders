@@ -1,6 +1,6 @@
 import { PurchaseOrderLine } from "@/src/entities/purchase-order-line/type/purchase-order-line";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
-import {PurchaseOrderLineDTOtoEntity, PurchaseOrderLinetoDTO} from "@/src/Infrastructure/adapter/purchase-orderline-adapter";
+import {PurchaseOrderLineDTOtoEntity, PurchaseOrderLinetoDTO} from "@/src/infrastructure/adapter/purchase-orderline-adapter";
 import app from "@/app.json";
 
 export interface IPurchaseOrderLineRepository {

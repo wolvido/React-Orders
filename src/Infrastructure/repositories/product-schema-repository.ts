@@ -1,7 +1,7 @@
 import { ProductSchema } from "@/src/entities/product-schema/type/product-schema";
 import app from "@/app.json";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
-import { toProductSchema } from "@/src/Infrastructure/adapter/product-schema-adapter";
+import { toProductSchema } from "@/src/infrastructure/adapter/product-schema-adapter";
 
 export interface IProductSchemaRepository {
     getAll(): Promise<ProductSchema[]>;

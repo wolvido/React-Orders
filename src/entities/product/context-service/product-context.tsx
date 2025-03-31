@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Product } from '../../../entities/product/type/product';
 import { ProductSchema } from '../../../entities/product-schema/type/product-schema';
-import { ProductRepository } from '@/src/Infrastructure/repositories/product-repository';
-import { ProductSchemaRepository } from '@/src/Infrastructure/repositories/product-schema-repository';
-import { ProductSchemaLineRepository } from '@/src/Infrastructure/repositories/product-schema-line-repository';
+import { ProductRepository } from '@/src/infrastructure/repositories/product-repository';
+import { ProductSchemaRepository } from '@/src/infrastructure/repositories/product-schema-repository';
+import { ProductSchemaLineRepository } from '@/src/infrastructure/repositories/product-schema-line-repository';
 
 interface ProductContextType {
     products: Product[];

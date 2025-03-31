@@ -1,4 +1,4 @@
-import { OrderAdapter } from "@/src/Infrastructure/adapter/order-adapter";
+import { OrderAdapter } from "@/src/infrastructure/adapter/order-adapter";
 import { Order } from "@/src/entities/order/type/order";
 import app from "@/app.json";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";

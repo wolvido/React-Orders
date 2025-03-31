@@ -7,7 +7,7 @@ import { CartComponent } from "@/src/features/order-feature/components/order-car
 import { useOrder } from "@/src/features/order-feature/context/order-context";
 import { useProducts } from "@/src/entities/product/context-service/product-context";
 import updateOrderSteps from "./update-order-labels";
-import { OrderLineRepository } from "@/src/Infrastructure/repositories/order-line-repository";
+import { OrderLineRepository } from "@/src/infrastructure/repositories/order-line-repository";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
 

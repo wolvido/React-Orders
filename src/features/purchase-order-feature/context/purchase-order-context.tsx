@@ -1,5 +1,5 @@
 import { PurchaseOrder } from "@/src/entities/purchase-order/type/purchase-order";
-import { PurchaseOrderRepository } from "@/src/Infrastructure/repositories/purchase-order-repository";
+import { PurchaseOrderRepository } from "@/src/infrastructure/repositories/purchase-order-repository";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface PurchaseOrderContextType {

@@ -1,9 +1,9 @@
-import { convertReceivedDeliveryToDeliveryLines, DeliveryLineDTO } from "@/src/Infrastructure/adapter/received-delivery-adapter";
+import { convertReceivedDeliveryToDeliveryLines } from "@/src/infrastructure/adapter/received-delivery-adapter";
 import app from "@/app.json";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { ReceivedDelivery } from "@/src/entities/received-delivery/type/received-delivery";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
-import { deliveryLinesToReceivedDelivery, deliveryLineToReceivedItem } from "@/src/Infrastructure/adapter/received-delivery-adapter";
+import { deliveryLinesToReceivedDelivery, deliveryLineToReceivedItem } from "@/src/infrastructure/adapter/received-delivery-adapter";
 
 export interface IDeliveryLineRepository {
     createDeliveryLines(receivedDelivery: ReceivedDelivery): Promise<ReceivedDelivery>;

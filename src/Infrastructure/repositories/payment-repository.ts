@@ -1,5 +1,5 @@
 import { CashPayment, ChequePayment, PaymentGateway, BankTransferPayment } from "@/src/entities/payment-method/type/payment-method";
-import { convertBankTransferPaymentToPaymentDTO, convertCashPaymentToPaymentDTO, convertChequePaymentToPaymentDTO, convertPaymentGatewayToPaymentDTO } from "@/src/Infrastructure/adapter/payment-adapter";
+import { convertBankTransferPaymentToPaymentDTO, convertCashPaymentToPaymentDTO, convertChequePaymentToPaymentDTO, convertPaymentGatewayToPaymentDTO } from "@/src/infrastructure/adapter/payment-adapter";
 import app from "@/app.json";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 

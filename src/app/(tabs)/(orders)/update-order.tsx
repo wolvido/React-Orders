@@ -6,7 +6,7 @@ import { ActivityIndicator, ScrollView, View } from "react-native";
 import orderUpdateSteps from "./update-order-labels";
 import OrderDetailsForm from "@/src/features/order-feature/components/order-forms/add-order-details-form";
 import { Customer } from "@/src/entities/customer/type/customers";
-import { CustomerRepository } from "@/src/Infrastructure/repositories/customer-repository";
+import { CustomerRepository } from "@/src/infrastructure/repositories/customer-repository";
 import { router } from "expo-router";
 import { useAuth } from "@/src/features/auth-feature/context/auth-context";
 import { useProducts } from "@/src/entities/product/context-service/product-context";

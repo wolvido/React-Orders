@@ -1,7 +1,7 @@
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { ProductSchemaLine } from "@/src/entities/product-schema-line/type/product-schema-line";
 import app from "@/app.json";
-import { toProductSchemaLine } from "@/src/Infrastructure/adapter/product-schemaline-adapter";
+import { toProductSchemaLine } from "@/src/infrastructure/adapter/product-schemaline-adapter";
 
 export interface IProductSchemaLineRepository {
     getSchemaLinesBySchemaId(schemaId: number): Promise<ProductSchemaLine[]>;

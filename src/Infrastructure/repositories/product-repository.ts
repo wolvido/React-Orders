@@ -1,7 +1,7 @@
-import { ProductAdapter } from "@/src/Infrastructure/adapter/product-adapter";
+import { ProductAdapter } from "@/src/infrastructure/adapter/product-adapter";
 import { Product } from "@/src/entities/product/type/product";
 import app from "@/app.json";
-import { BundleLineDTO } from "@/src/Infrastructure/adapter/bundleLine-adapter";
+import { BundleLineDTO } from "@/src/infrastructure/adapter/bundleLine-adapter";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 
 export interface IProductRepository {

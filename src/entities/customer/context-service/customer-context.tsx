@@ -1,7 +1,7 @@
 // context/customer-context.tsx
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { Customer } from '@/src/entities/customer/type/customers';
-import { CustomerRepository } from '@/src/Infrastructure/repositories/customer-repository';
+import { CustomerRepository } from '@/src/infrastructure/repositories/customer-repository';
 
 interface CustomerContextType {
     customers: Customer[];

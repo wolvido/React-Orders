@@ -5,10 +5,10 @@ import PaymentMethod from '@/src/entities/payment-method/type/payment-method';
 import { Cart } from '@/src/entities/cart/type/cart';
 import Status from '@/src/shared/lib/theme/status';
 import PaymentStatus from '@/src/shared/lib/theme/payment-status';
-import { OrderRepository } from '@/src/Infrastructure/repositories/order-repository';
+import { OrderRepository } from '@/src/infrastructure/repositories/order-repository';
 import { Customer } from '@/src/entities/customer/type/customers';
-import { OrderLineRepository } from '@/src/Infrastructure/repositories/order-line-repository';
-import { CustomerRepository } from '@/src/Infrastructure/repositories/customer-repository';
+import { OrderLineRepository } from '@/src/infrastructure/repositories/order-line-repository';
+import { CustomerRepository } from '@/src/infrastructure/repositories/customer-repository';
 import { CartItem } from '@/src/entities/cart-item/type/cart-item';
 
 interface OrderContextType {

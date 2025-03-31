@@ -1,4 +1,4 @@
-import { CustomerAdapter } from "@/src/Infrastructure/adapter/customer-adapter";
+import { CustomerAdapter } from "@/src/infrastructure/adapter/customer-adapter";
 import app from "@/app.json";
 import { useApiConfig } from "@/src/shared/lib/api/api-config-context";
 import { Customer } from "@/src/entities/customer/type/customers";
