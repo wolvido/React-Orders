@@ -4,6 +4,7 @@ import { Button, TextInput, Text, List } from 'react-native-paper';
 import { Supplier } from '@/src/entities/supplier/type/supplier';
 import { Delivery } from '@/src/entities/delivery/type/delivery';
 import { DatePicker } from '../../../../shared/ui/date-picker';
+import { SuppliersSelection } from '@/src/entities/supplier/ui/suppliers-selection';
 
 interface AddDeliveryFormProps {
     suppliers: Supplier[];
@@ -19,7 +20,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
     const [receiptNumber, setReceiptNumber] = useState('');
     const [handledBy, setHandledBy] = useState(currentUser?.username || '');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
-    const [showSupplierModal, setShowSupplierModal] = useState(false);
+
     const [total, setTotal] = useState(0);
 
     // Populate form when existingDelivery is provided
@@ -58,33 +59,16 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
         onSubmit(newDelivery);
     };
 
-    const handleSupplierSelect = (selectedSupplier: Supplier) => {
-        setSupplier(selectedSupplier);
-        setShowSupplierModal(false);
-    };
+
 
     return (
         <View>
             <View style={styles.form}>
-            {supplier && (
-                    <Text style={styles.supplierLabel}>
-                        Supplier
-                    </Text>
-                )}
-                <Button
-                    mode="outlined"
-                    onPress={() => setShowSupplierModal(true)}
-                    style={[styles.input, styles.supplierButton]}
-                    contentStyle={styles.supplierButtonContent}
-                    icon="menu-down"
-                >
-                    <Text style={[
-                        styles.supplierButtonText,
-                        !supplier && styles.supplierButtonPlaceholder
-                    ]}>
-                        {supplier ? supplier.name : 'Select Supplier'}
-                    </Text>
-                </Button>
+                <SuppliersSelection
+                    suppliers={suppliers}
+                    onSupplierSelect={setSupplier}
+                    existingSupplier={supplier}
+                />
 
                 <DatePicker
                     label="Delivery Date"
@@ -127,46 +111,7 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
                 </Button>
             </View>
 
-            <Modal
-                visible={showSupplierModal}
-                onDismiss={() => setShowSupplierModal(false)}
-                animationType="slide"
-            >
-                <View style={styles.modalContainer}>
-                    <Text variant="headlineMedium" style={styles.modalTitle}>
-                        Select Supplier
-                    </Text>
-                    <FlatList
-                        data={suppliers}
-                        keyExtractor={(item) => item.id.toString()}
-                        initialNumToRender={10}
-                        maxToRenderPerBatch={10}
-                        renderItem={({ item }) => (
-                            <List.Item
-                                key={item.id}
-                                title={item.name}
-                                description={item.address}
-                                onPress={() => handleSupplierSelect(item)}
-                                right={props => <List.Icon {...props} icon="chevron-right" />}
-                            />
-                        )}
-                        contentContainerStyle={styles.listContent}
-                        ListEmptyComponent={() => (
-                            <List.Item
-                                title="Suppliers Loading..."
-                                description="Please wait"
-                            />
-                        )}
-                    />
-                    <Button
-                        mode="contained"
-                        onPress={() => setShowSupplierModal(false)}
-                        style={styles.modalCloseButton}
-                    >
-                        Close
-                    </Button>
-                </View>
-            </Modal>
+
         </View>
     );
 };
