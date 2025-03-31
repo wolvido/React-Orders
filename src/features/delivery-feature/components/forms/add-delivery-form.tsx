@@ -20,7 +20,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
     const [receiptNumber, setReceiptNumber] = useState('');
     const [handledBy, setHandledBy] = useState(currentUser?.username || '');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
-
     const [total, setTotal] = useState(0);
 
     // Populate form when existingDelivery is provided
@@ -58,8 +57,6 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
 
         onSubmit(newDelivery);
     };
-
-
 
     return (
         <View>
