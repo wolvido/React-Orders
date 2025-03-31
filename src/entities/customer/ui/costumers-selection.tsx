@@ -1,5 +1,5 @@
 // CustomersSelection.tsx
-import { Customer } from "../../entities/customer/type/customers";
+import { Customer } from "../type/customers";
 import { Portal, List, Button, Text, Searchbar } from 'react-native-paper';
 import { Modal, StyleSheet, FlatList, View } from 'react-native';
 import { useState, useCallback } from 'react';
@@ -10,8 +10,8 @@ interface CustomersSelectionProps {
     existingCustomer?: Customer | null;
 }
 
-export function CustomersSelection({ 
-    customers, 
+export function CustomersSelection({
+    customers,
     onCustomerSelect,
     existingCustomer
 }: CustomersSelectionProps) {
@@ -111,7 +111,7 @@ export function CustomersSelection({
             </Modal>
         </Portal></>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
