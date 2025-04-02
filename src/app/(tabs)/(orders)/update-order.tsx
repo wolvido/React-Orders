@@ -62,18 +62,18 @@ export default function UpdateOrderScreen(){
                 automaticallyAdjustKeyboardInsets={true}
             >
 
-            {order ? (
-                <OrderDetailsForm
-                    order={order}
-                    customers={customers}
-                    onSubmit={handleOrderSubmit}
-                    currentUser={user || undefined}
-                    schemas={productSchemas}
-                    onSchemaSelect={applySchema}
-                />
-            ) : (
-                <ActivityIndicator size="large" />
-            )}
+                {order ? (
+                    <OrderDetailsForm
+                        order={order}
+                        customers={customers}
+                        onSubmit={handleOrderSubmit}
+                        currentUser={user || undefined}
+                        schemas={productSchemas}
+                        onSchemaSelect={applySchema}
+                    />
+                ) : (
+                    <ActivityIndicator size="large" />
+                )}
 
             </ScrollView>
             
