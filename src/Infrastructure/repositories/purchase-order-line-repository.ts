@@ -44,7 +44,7 @@ export class PurchaseOrderLineRepository implements IPurchaseOrderLineRepository
 
     async getByPoId(poLineId: number): Promise<PurchaseOrderLine | null> {
         try{
-            const response = await fetch(`${this.baseUrl}/fetch-purchaseOrderline/${poLineId}`);
+            const response = await fetch(`${this.baseUrl}/fetch-purchaseOrderlines/${poLineId}`);
             if (!response.ok) {
                 console.warn('response not ok on get PO line repo');
                 throw new Error(`HTTP error! status: ${response.status}`);
