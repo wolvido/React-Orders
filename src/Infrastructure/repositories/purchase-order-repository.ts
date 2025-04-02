@@ -39,7 +39,7 @@ export class PurchaseOrderRepository implements IPurchaseOrderRepository {
             return await purchaseOrders as T;
         }
 
-        return await PurchaseOrderToDTO(data) as T;
+        return await PurchaseOrderDTOToEntity(data) as T;
     };
 
     async getAll(): Promise<PurchaseOrder[]> {
