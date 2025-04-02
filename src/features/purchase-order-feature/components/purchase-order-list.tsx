@@ -70,6 +70,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
             </DataTable.Header>
 
             <DataTable.Header>
+                <DataTable.Title style={{flexGrow: 0.6}}>PO No.</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Supplier</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Transaction Date</DataTable.Title>
                 <DataTable.Title style={{flexGrow: 1}}>Expected Del. Date</DataTable.Title>
@@ -84,6 +85,7 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                     <DataTable>
                         {filteredItems.slice(from, to).map((item) => (
                             <DataTable.Row key={item.id}>
+                                <DataTable.Cell style={{flexGrow: 0.6}}>{item.id}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.supplier?.name}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.expectedDeliveryDate.toLocaleDateString()}</DataTable.Cell>
