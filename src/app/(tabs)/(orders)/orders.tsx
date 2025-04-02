@@ -13,14 +13,11 @@ import { Order } from '@/src/entities/order/type/order';
 import { EmptyState } from '@/src/shared/ui/empty-state';
 import { PaymentRepository } from '@/src/infrastructure/repositories/payment-repository';
 import { router, useFocusEffect } from 'expo-router';
-import app from '@/app.json';
 import { OrdersList } from '@/src/features/order-feature/components/orders-list';
 
 
 //react component
 export default function OrdersScreen() {
-
-    console.log("current api:"+ app.api.main);
 
     const orderRepository = new OrderRepository();
     const paymentRepository = new PaymentRepository();
