@@ -1,12 +1,15 @@
 import { PurchaseOrder } from "@/src/entities/purchase-order/type/purchase-order";
 import { PurchaseOrderRepository } from "@/src/infrastructure/repositories/purchase-order-repository";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { Delivery } from "@/src/entities/delivery/type/delivery";
 
 interface PurchaseOrderContextType {
     selectedPurchaseOrder: PurchaseOrder | null;
     purchaseOrders: PurchaseOrder[];
     reloadPurchaseOrders: () => Promise<void>;
-    getPurchaseOrderByid: (id: number) => Promise<PurchaseOrder | undefined>;
+    getPurchaseOrderById: (id: number) => Promise<PurchaseOrder | undefined>;
+    setSelectedPurchaseOrder: (purchaseOrder: PurchaseOrder) => void;
+    PurchaseOrderToDelivery: (purchaseOrder: PurchaseOrder) => Partial<Delivery>;
     isLoading: boolean;
 }
 
@@ -35,7 +38,7 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
         await loadPurchaseOrders();
     };
 
-    const getPurchaseOrderByid = async (id: number): Promise<PurchaseOrder | undefined> => {
+    const getPurchaseOrderById = async (id: number): Promise<PurchaseOrder | undefined> => {
         try{
             const purchaseOrder = await purchaseOrderRepository.getById(id);
             if (purchaseOrder) {
@@ -50,13 +53,36 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
         }
     };
 
+    const PurchaseOrderToDelivery = (purchaseOrder: PurchaseOrder): Partial<Delivery> => {
+        return {
+            id: purchaseOrder.deliveryId || 0,
+
+            // receiptNumber: string; not in purchase order, added on user input.
+
+            // supplier: Supplier;
+            supplier: purchaseOrder.supplier,
+
+            // deliveryDate: Date; //user input, date now by default.
+
+            // deliveredBy: string; //user input.
+
+            // total: number; //to be calculated from PO cart.
+
+            // handledBy: string; //not in PO desktop, but will be added by user in mobile.
+
+            // creationDate: Date; //created as soon as PO is received or partial received.
+        };
+    };
+
     return (
         <PurchaseOrderContext.Provider
             value={{
                 selectedPurchaseOrder,
                 purchaseOrders,
                 reloadPurchaseOrders,
-                getPurchaseOrderByid,
+                getPurchaseOrderById,
+                setSelectedPurchaseOrder,
+                PurchaseOrderToDelivery,
                 isLoading,
             }}
         >
