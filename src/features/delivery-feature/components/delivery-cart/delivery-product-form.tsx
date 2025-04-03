@@ -1,32 +1,37 @@
 import { Product } from "@/src/entities/product/type/product";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, IconButton, TextInput, Text} from "react-native-paper";
+import { Button, IconButton, TextInput, Text, Menu} from "react-native-paper";
 
 interface DeliveryProductFormProps {
     product: Product;
     onAdd: (receivedItem: ReceivedItem) => void;
     onError?: (message: string) => void;
     isPortrait?: boolean;
+    onSubTotalChange?: (subtotal: number) => void;
 }
 
 const DeliveryProductForm = memo(({
     product, 
     onAdd,
     onError,
-    isPortrait 
+    isPortrait,
+    onSubTotalChange,
 }: DeliveryProductFormProps) => {
     const [quantity, setQuantity] = useState('');
-    const [price, setPrice] = useState<string>('');
+    const [price, setPrice] = useState<string>(product.costPrice.toString());
     const [error, setError] = useState(false);
+    const [flatDiscount, setFlatDiscount] = useState('');
+    const [percentageDiscount, setPercentageDiscount] = useState('');
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [subtotal, setSubtotal] = useState(0);
 
     const handlePriceChange = (text: string) => {
         const numericValue = text.replace(/[^0-9]/g, '');
-        
         setPrice(numericValue);
         setError(false);
-    }
+    };
 
     const handleQuantityChange = (text: string) => {
         const numericValue = text.replace(/[^0-9]/g, '');
@@ -34,10 +39,58 @@ const DeliveryProductForm = memo(({
         setError(false);
     };
 
+    const handleFlatDiscountChange = (text: string) => {
+        const numericValue = text.replace(/[^0-9]/g, '');
+        setFlatDiscount(numericValue);
+        setError(false);
+    };
+
+    const handlePercentageDiscountChange = (text: string) => {
+
+        const numericValue = text.replace(/[^0-9]/g, '');
+
+        if (parseInt(numericValue) > 100) {
+            setError(true);
+            onError?.('Percentage discount cannot exceed 100%');
+        } else {
+            setError(false);
+        }
+
+        if (parseInt(numericValue) <= 100) {
+            setPercentageDiscount(numericValue);
+        }
+
+        setError(false);
+    };
+
+    useEffect(() => {
+
+        const numericQuantity = parseInt(quantity);
+
+        const numericPrice = parseFloat(price);
+
+        const numericFlatDiscount = parseFloat(flatDiscount) || 0;
+
+        const numericPercentageDiscount = parseFloat(percentageDiscount) || 0;
+
+        const customPrice = numericPrice ? numericPrice : product.costPrice;
+
+        const discountAmount = numericFlatDiscount + (customPrice * (numericPercentageDiscount / 100));
+
+        const discountedPrice = customPrice - discountAmount;
+
+        const calculatedSubtotal = (discountedPrice * numericQuantity) || 0;
+
+        setSubtotal(calculatedSubtotal);
+        onSubTotalChange?.(calculatedSubtotal);
+        setError(false);
+
+    },[flatDiscount, percentageDiscount, price, quantity]);
+
     const handleAddItem = (product: Product) => {
 
         const numericQuantity = parseInt(quantity);
-        const numericPrice = parseInt(price);
+        const numericPrice = parseFloat(price);
         
         // Check if product exists or quantity is valid
         if (!product || !quantity) return;
@@ -53,7 +106,9 @@ const DeliveryProductForm = memo(({
             product: product,
             quantity: numericQuantity,
             manualPrice: customPrice,
-            total: customPrice * numericQuantity  // Use custom price here
+            total: subtotal,
+            discountPercentage: parseFloat(percentageDiscount),
+            discountFlat: parseFloat(percentageDiscount),
         };
 
         onAdd(receivedItem);
@@ -64,14 +119,55 @@ const DeliveryProductForm = memo(({
 
     return (
         <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
-            {!isPortrait && (
-                <Button
+            {!isPortrait ? (
+                <IconButton
+                    icon="chevron-right"
                     mode="contained"
+                    size={20}
                     onPress={() => handleAddItem(product)}
-                >
-                    Add
-                </Button>
-            )}
+                />
+            ) : (            
+                <View style={styles.inputGroup}>
+                    <Menu
+                        visible={menuVisible}
+                        onDismiss={() => setMenuVisible(false)}
+                        anchor={
+                            <IconButton
+                                icon="percent"
+                                size={16}
+                                mode="outlined"
+                                style={styles.discountButton}
+                                onPress={() => setMenuVisible(true)}
+                            />
+                        }
+                        contentStyle={styles.menuContent}
+                    >
+                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Discount:</Text>
+                        <View style={styles.discountInputs}>
+                            <TextInput
+                                mode="outlined"
+                                label="Flat"
+                                value={flatDiscount}
+                                onChangeText={handleFlatDiscountChange}
+                                keyboardType="numeric"
+                                dense
+                                style={styles.discountInput}
+                            />
+                            <TextInput
+                                mode="outlined"
+                                label="Percentage"
+                                value={percentageDiscount}
+                                onChangeText={handlePercentageDiscountChange}
+                                keyboardType="numeric"
+                                dense
+                                style={styles.discountInput}
+                            />
+                        </View>
+                    </Menu>
+                </View>
+                )
+            }
+
             <TextInput
                 mode="outlined"
                 label="Price"
@@ -86,6 +182,7 @@ const DeliveryProductForm = memo(({
                 importantForAutofill="no"
                 textContentType="none"
             />
+
             <TextInput
                 mode="outlined"
                 label="Qty"
@@ -100,13 +197,53 @@ const DeliveryProductForm = memo(({
                 importantForAutofill="no"
                 textContentType="none"
             />
-            {isPortrait && (
+            
+            {isPortrait ? (
                 <IconButton
                     icon="chevron-right"
                     mode="contained"
                     size={20}
                     onPress={() => handleAddItem(product)}
                 />
+            ) : (
+                <View style={styles.inputGroup}>
+                    <Menu
+                        visible={menuVisible}
+                        onDismiss={() => setMenuVisible(false)}
+                        anchor={
+                            <IconButton
+                                icon="percent"
+                                size={16}
+                                mode="outlined"
+                                style={styles.discountButtonLandscape}
+                                onPress={() => setMenuVisible(true)}
+                            />
+                        }
+                        contentStyle={styles.menuContent}
+                    >
+                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Discount:</Text>
+                        <View style={styles.discountInputs}>
+                            <TextInput
+                                mode="outlined"
+                                label="Flat"
+                                value={flatDiscount}
+                                onChangeText={handleFlatDiscountChange}
+                                keyboardType="numeric"
+                                dense
+                                style={styles.discountInput}
+                            />
+                            <TextInput
+                                mode="outlined"
+                                label="Percentage"
+                                value={percentageDiscount}
+                                onChangeText={handlePercentageDiscountChange}
+                                keyboardType="numeric"
+                                dense
+                                style={styles.discountInput}
+                            />
+                        </View>
+                    </Menu>
+                </View>
             )}
         </View>
     );
@@ -115,16 +252,67 @@ const DeliveryProductForm = memo(({
 export default DeliveryProductForm;
 
 const styles = StyleSheet.create({
-    actionSectionLandscape: {
-        flex: 3
+    inputGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
     },
+    
+    discountButton: {
+        margin: 0,
+        marginLeft: -8,
+        borderRadius: 4,
+        height: 30,
+        width: 30
+    },
+
+    discountButtonLandscape: {
+        margin: 0,
+        marginLeft: 0,
+        borderRadius: 4,
+        height: 30,
+        width: 30
+    },
+    
+    menuContent: {
+        padding: 8,
+        marginTop: 4,
+    },
+    
+    discountInputs: {
+        flexDirection: 'row',
+        gap: 8,
+        padding: 4,
+        minWidth: 160,
+    },
+    
+    discountInput: {
+        flex: 1,
+        height: 40,
+        fontSize: 12,
+    },
+    
     priceInput: {
-        width: 80,
+        width: 70,
     },
+    
     priceInputPortrait: {
         width: 50,
         height: 35,
         fontSize: 12,
+    },
+    
+    quantityInput: {
+        width: 70,
+    },
+    
+    quantityInputPortrait: {
+        width: 50,
+        height: 35,
+        fontSize: 12,
+    },
+    actionSectionLandscape: {
+        flex: 3
     },
     actionSection: {
         flexDirection: 'row',
@@ -329,14 +517,6 @@ const styles = StyleSheet.create({
     actionSectionPortrait: {
         gap: 4,
         justifyContent: 'flex-end',
-    },
-    quantityInput: {
-        width: 80,
-    },
-    quantityInputPortrait: {
-        width: 50,
-        height: 35, // reduced height
-        fontSize: 12,
     },
     compactText: {
         fontSize: 13,
