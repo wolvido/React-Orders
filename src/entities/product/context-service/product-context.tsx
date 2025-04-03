@@ -49,7 +49,7 @@ export function ProductProvider({ children }: { children: ReactNode }) {
     };
 
     const refreshProducts = async () => {
-        setStockChanges({}); 
+        setStockChanges({});
         await loadProducts();
     };
 
