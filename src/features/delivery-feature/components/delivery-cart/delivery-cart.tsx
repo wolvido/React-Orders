@@ -8,7 +8,7 @@ import { DeliveryCartPanel } from "./delivery-cart-panel";
 import { SummaryPanel } from "@/src/shared/ui/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
 
-interface DeliveryCartComponentProps {
+interface DeliveryCartProps {
     products: Product[];
     delivery: ReceivedDelivery;
     onAddToDelivery: (receivedItem: ReceivedItem) => void;
@@ -17,14 +17,14 @@ interface DeliveryCartComponentProps {
     onError?: (message: string) => void;
 }
 
-export function DeliveryCartComponent({
+export function DeliveryCart({
     products,
     delivery,
     onAddToDelivery,
     onRemoveFromDelivery,
     onProceed,
     onError
-}: DeliveryCartComponentProps) {
+}: DeliveryCartProps) {
     const isPortrait = useOrientation() === 'PORTRAIT';
 
     return (
