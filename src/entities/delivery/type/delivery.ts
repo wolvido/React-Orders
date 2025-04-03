@@ -12,4 +12,9 @@ export interface Delivery {
     handledBy: string;
 
     creationDate: Date;
+
+    plateNo: string; 
+    receiptDate: Date;
+    items: number; //items count
+
 }
