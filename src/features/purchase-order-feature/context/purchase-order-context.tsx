@@ -20,7 +20,7 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const purchaseOrderRepository = new PurchaseOrderRepository(); // Assuming you have a PurchaseOrderRepository
+    const purchaseOrderRepository = new PurchaseOrderRepository();
 
     const loadPurchaseOrders = async () => {
         setIsLoading(true);
@@ -56,21 +56,7 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
     const PurchaseOrderToDelivery = (purchaseOrder: PurchaseOrder): Partial<Delivery> => {
         return {
             id: purchaseOrder.deliveryId || 0,
-
-            // receiptNumber: string; not in purchase order, added on user input.
-
-            // supplier: Supplier;
             supplier: purchaseOrder.supplier,
-
-            // deliveryDate: Date; //user input, date now by default.
-
-            // deliveredBy: string; //user input.
-
-            // total: number; //to be calculated from PO cart.
-
-            // handledBy: string; //not in PO desktop, but will be added by user in mobile.
-
-            // creationDate: Date; //created as soon as PO is received or partial received.
         };
     };
 
