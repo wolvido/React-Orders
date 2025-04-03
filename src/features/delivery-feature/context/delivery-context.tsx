@@ -66,9 +66,11 @@ export const DeliveryProvider = ({ children }: { children: ReactNode }) => {
         receivedDelivery.deliveredBy = delivery.deliveredBy;
 
         try{
+            // add the total and items count to the delivery
             const updatedDelivery: Delivery = {
                 ...delivery,
-                total: receivedDelivery.total
+                total: receivedDelivery.total,
+                items: receivedDelivery.items.length,
             };
 
             const jsonReturn = await deliveryRepository.createDelivery(updatedDelivery);
