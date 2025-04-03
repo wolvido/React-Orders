@@ -67,7 +67,7 @@ export class DeliveryAdapter {
             creationDate: new Date().toLocalISOString(),
             supplierId: delivery.supplier.id,
             supplierName: delivery.supplier.name,
-            items: 0,
+            items: delivery.items,
             total: delivery.total,
             createdBy: '',
             handledBy: delivery.handledBy,
@@ -86,8 +86,8 @@ export class DeliveryAdapter {
 
             //update
             isSelected: false,
-            plateNO: "",
-            receiptDate: new Date().toLocalISOString(),
+            plateNO: delivery.plateNo,
+            receiptDate: delivery.receiptDate.toLocalISOString(),
 
         };
     }
@@ -108,6 +108,10 @@ export class DeliveryAdapter {
             deliveredBy: dto.deliveredBy,
             total: dto.total,
             handledBy: dto.handledBy,
+
+            plateNo: dto.plateNO,
+            receiptDate: new Date(dto.receiptDate),
+            items: dto.items,
         };
     }
 }
