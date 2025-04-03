@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         gap: 16,
         justifyContent: 'flex-start',
-
     },
     detailItem: {
         minWidth: 170,
