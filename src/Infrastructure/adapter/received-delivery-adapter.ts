@@ -28,6 +28,9 @@ export interface DeliveryLineDTO {
     unitPrice: number;
     vehicleId: number;
     vehicleName: string;
+
+    percentageDiscount?: number;
+    flatDiscount?: number;
 }
 
 /**
@@ -54,6 +57,9 @@ export function convertReceivedDeliveryToDeliveryLines(receivedDelivery: Receive
         totalPrice: (receivedDeliveryItem.manualPrice ?? receivedDeliveryItem.product.costPrice) * receivedDeliveryItem.quantity,
         vehicleId: 0,
         vehicleName: "",
+
+        percentageDiscount: receivedDeliveryItem.discountPercentage,
+        flatDiscount: receivedDeliveryItem.discountFlat,
         
         // System fields with default values
         isDeleted: false,
@@ -99,6 +105,10 @@ export function deliveryLinesToReceivedDelivery(deliveryLines: DeliveryLineDTO[]
             },
             quantity: deliveryLine.receivedQuantity,
             total: deliveryLine.totalPrice,
+
+            manualPrice: deliveryLine.unitPrice,
+            discountPercentage: deliveryLine.percentageDiscount,
+            discountFlat: deliveryLine.flatDiscount,
         }));
 
         const total = receivedItems.reduce((acc, item) => acc + item.total, 0);
@@ -136,5 +146,8 @@ export function deliveryLineToReceivedItem(deliveryLine: DeliveryLineDTO): Recei
         },
         quantity: deliveryLine.receivedQuantity,
         total: deliveryLine.totalPrice,
+
+        discountPercentage: deliveryLine.percentageDiscount,
+        discountFlat: deliveryLine.flatDiscount,
     };
 }
