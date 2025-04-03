@@ -26,7 +26,7 @@ export function DeliveryCart({
     onError
 }: DeliveryCartProps) {
     const isPortrait = useOrientation() === 'PORTRAIT';
-
+    
     return (
         <View style={[styles.content, styles.contentPortrait]}>
 
