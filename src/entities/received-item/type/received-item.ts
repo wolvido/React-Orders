@@ -9,4 +9,7 @@ export interface ReceivedItem {
     quantity: number;
     total: number;
     manualPrice?: number;
+
+    discountPercentage?: number;
+    discountFlat?: number;
 }
