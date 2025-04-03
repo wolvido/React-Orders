@@ -10,10 +10,11 @@ interface AddDeliveryFormProps {
     suppliers: Supplier[];
     onSubmit: (delivery: Delivery) => void;
     existingDelivery?: Delivery; // Optional delivery to edit
+    existingPartialDelivery?: Partial<Delivery>; // Optional partial delivery to edit
     currentUser?: { username: string };
 }
 
-export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, currentUser }: AddDeliveryFormProps) => {
+export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, currentUser, existingPartialDelivery }: AddDeliveryFormProps) => {
     const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
     const [creationDate, setCreationDate] = useState<Date>(new Date());
     const [deliveredBy, setDeliveredBy] = useState('');
@@ -21,6 +22,10 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
     const [handledBy, setHandledBy] = useState(currentUser?.username || '');
     const [supplier, setSupplier] = useState<Supplier | null>(null);
     const [total, setTotal] = useState(0);
+
+    const [plateNo, setPlateNo] = useState('');
+    const [receiptDate, setReceiptDate] = useState<Date>(new Date());
+    const [items, setItems] = useState(0);
 
     // Populate form when existingDelivery is provided
     useEffect(() => {
@@ -31,7 +36,22 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
             setSupplier(existingDelivery.supplier);
             setHandledBy(existingDelivery.handledBy);
             setTotal(existingDelivery.total);
+            setPlateNo(existingDelivery.plateNo);
+            setReceiptDate(existingDelivery.receiptDate);
+            setItems(existingDelivery.items);
         }
+
+        if (existingPartialDelivery?.id){ setItems(existingPartialDelivery.id); }
+        if (existingPartialDelivery?.receiptNumber){ setReceiptNumber(existingPartialDelivery.receiptNumber); }
+        if (existingPartialDelivery?.supplier){ setSupplier(existingPartialDelivery.supplier); }
+        if (existingPartialDelivery?.deliveryDate){ setDeliveryDate(existingPartialDelivery.deliveryDate); }
+        if (existingPartialDelivery?.deliveredBy){ setDeliveredBy(existingPartialDelivery.deliveredBy); }
+        if (existingPartialDelivery?.total){ setTotal(existingPartialDelivery.total); }
+        if (existingPartialDelivery?.handledBy){ setHandledBy(existingPartialDelivery.handledBy); }
+        if (existingPartialDelivery?.creationDate){ setCreationDate(existingPartialDelivery.creationDate); }
+        if (existingPartialDelivery?.plateNo){ setPlateNo(existingPartialDelivery.plateNo); }
+        if (existingPartialDelivery?.receiptDate){ setReceiptDate(existingPartialDelivery.receiptDate); }
+        if (existingPartialDelivery?.items){ setItems(existingPartialDelivery.items); }
 
         setCreationDate(new Date());
 
@@ -53,6 +73,10 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
             receiptNumber: receiptNumber,
             creationDate: creationDate,
             handledBy: handledBy,
+
+            plateNo: plateNo,
+            receiptDate: receiptDate,
+            items: items,
         };
 
         onSubmit(newDelivery);
@@ -94,6 +118,20 @@ export const AddDeliveryForm = ({ suppliers, onSubmit, existingDelivery, current
                     label="Receipt Number"
                     value={receiptNumber}
                     onChangeText={setReceiptNumber}
+                    mode="outlined"
+                    style={styles.input}
+                />
+
+                <DatePicker
+                    label="Receipt Date"
+                    value={receiptDate}
+                    onChange={(d) => d && setReceiptDate(d)}
+                />
+
+                <TextInput
+                    label="Plate Number"
+                    value={plateNo}
+                    onChangeText={setPlateNo}
                     mode="outlined"
                     style={styles.input}
                 />
