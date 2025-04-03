@@ -1,10 +1,10 @@
 import { Product } from "@/src/entities/product/type/product";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
-import { useCallback, useState } from "react";
-import { Card, Text, HelperText, Searchbar } from "react-native-paper";
-import DeliveryProductForm from "./delivery-product-form";
+import { useState } from "react";
+import { Text, Searchbar } from "react-native-paper";
 import styles from "./delivery-styles";
+import { DeliveryProductItem } from "./delivery-product-item";
 
 interface DeliveryProductListProps {
     products: Product[];
@@ -19,67 +19,21 @@ export function DeliveryProductList({
     onError,
     isPortrait
 }: DeliveryProductListProps) {
-    const [errors, setErrors] = useState<{ [key: number]: string }>({});
     const [searchQuery, setSearchQuery] = useState('');
-
     products = products.filter(product => !product.isBundle);
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleError = (productId: number, error: string) => {
-        setErrors(prev => ({
-            ...prev,
-            [productId]: error
-        }));
-    };
-
-    const deliveryProductForm = (product: Product) => {
-        return (
-            <DeliveryProductForm
-                product={product}
-                onAdd={onAddToDelivery}
-                onError={(error) => handleError(product.id, error)}
-                isPortrait={isPortrait}
-            />
-        );
-    };
-
-    const renderProductItem = useCallback(({ item: product }: { item: Product }) => (
-        <Card style={[styles.productCard, isPortrait && styles.productCardPortrait]}>
-            <Card.Content style={styles.cardContent}>
-                <View style={styles.cardLayout}>
-                    {!isPortrait && deliveryProductForm(product)}
-
-                    <View style={styles.productInfo}>
-                        <Text
-                            variant={"bodyMedium"}
-                            style={[isPortrait && styles.compactText, styles.productName]}
-                            numberOfLines={2}
-                        >
-                            BasePrice : ₱{product.costPrice} • {product.name}
-                        </Text>
-                    </View>
-    
-                    <View style={styles.stockInfo}>
-                        <Text variant="bodySmall">
-                            Stock: {product.stocks}
-                        </Text>
-                    </View>
-
-                    {isPortrait && deliveryProductForm(product)}
-
-                </View>
-                
-                {errors[product.id] && (
-                    <HelperText type="error" visible={true}>
-                        {errors[product.id]}
-                    </HelperText>
-                )}
-            </Card.Content>
-        </Card>
-    ), [isPortrait, errors, deliveryProductForm]);
+    const renderProductItem = ({ item: product }: { item: Product }) => (
+        <DeliveryProductItem
+            product={product}
+            onAddToDelivery={onAddToDelivery}
+            onError={onError}
+            isPortrait={isPortrait}
+        /> 
+    );
 
     return (
         <View style={[styles.mainContentPortrait]}>
