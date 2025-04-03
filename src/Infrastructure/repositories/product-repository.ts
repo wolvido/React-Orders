@@ -110,7 +110,9 @@ export class ProductRepository implements IProductRepository{
             }
             console.log('products response ok');
 
-        return await this.handleResponse<Product[]>(response);
+            const data = await this.handleResponse<Product[]>(response);
+
+            return data;
 
         }
         catch (error) {
