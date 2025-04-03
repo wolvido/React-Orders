@@ -1,4 +1,4 @@
-import { DeliveryCartComponent } from "@/src/features/delivery-feature/components/delivery-cart/delivery-cart";
+import { DeliveryCart } from "@/src/features/delivery-feature/components/delivery-cart/delivery-cart";
 import { useDeliveryCart } from "@/src/features/delivery-feature/context/delivery-cart-context";
 import { View, StyleSheet, Alert, Modal, ActivityIndicator, Text } from "react-native";
 import StepIndicator from "@/src/features/step-indicator-feature/components/order-step-indicator";
@@ -12,7 +12,7 @@ export default function AddDeliveryItemsScreen() {
     const [isLoading, setIsLoading] = useState(false);
     const { products } = useProducts();
     const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
-    const{ delivery, addToDelivery, removeFromDelivery, getDelivery} = useDeliveryCart();
+    const{ delivery, addToDelivery, removeFromDelivery, getDelivery, clearDelivery} = useDeliveryCart();
     const { refreshProducts } = useProducts();
 
     const handleProceed = async () => {
@@ -20,6 +20,7 @@ export default function AddDeliveryItemsScreen() {
         try {
             updateReceivedDelivery(getDelivery());
             const deliveryResult = await finalizeDelivery(getDelivery());
+            clearDelivery(); // Clear the delivery cart after finalizing
 
             try {
                 await refreshProducts();
@@ -37,7 +38,10 @@ export default function AddDeliveryItemsScreen() {
                     [
                         { 
                             text: "OK", 
-                            onPress: () => router.push("/(tabs)/(products)/products") 
+                            onPress: () => {
+                                router.push("/(tabs)/(add-delivery)/add-delivery");
+                                router.push("/(tabs)/(products)/products");
+                            }
                         }
                     ]
                 );
@@ -62,7 +66,7 @@ export default function AddDeliveryItemsScreen() {
         <View style={styles.container}>
             <StepIndicator currentStep={2} backPath="./add-delivery" steps={deliverySteps} />
 
-            <DeliveryCartComponent
+            <DeliveryCart
                 products={products}
                 delivery={delivery}
                 onAddToDelivery={addToDelivery}
