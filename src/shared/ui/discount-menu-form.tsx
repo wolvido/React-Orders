@@ -112,6 +112,13 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
                                     >
                                         Apply
                                     </Button>
+                                    <Button
+                                        mode="contained"
+                                        onPress={() => setMenuVisible(false)}
+                                        style={{ marginTop: 8 }}
+                                    >
+                                        Cancel
+                                    </Button>
                                 </View>
                             </View>
                         </View>
