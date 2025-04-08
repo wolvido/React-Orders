@@ -14,7 +14,7 @@ interface DeliveryContextType {
 const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined);
 
 export function DeliveryCartProvider({ children }: { children: ReactNode }) {
-    const [delivery, setDelivery] = useState<ReceivedDelivery >(
+    const [delivery, setDelivery] = useState<ReceivedDelivery>(
         {
             items: [],
             total: 0,
@@ -28,11 +28,10 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-     * Updates the delivery cart state with the new item and returns the updated state.
-     * Also updates an existing item if added again.
-     * @param prevDelivery original delivery state
+     * Updates the delivery cart state with a new item or updates the existing item if it already exists.
+     * @param prevDelivery original delivery type state
      * @param receivedItem item to be added to the delivery state
-     * @returns updated delivery state with added item
+     * @returns updated delivery cart state
      */
     const updateDeliveryItems = (prevDelivery: ReceivedDelivery, receivedItem: ReceivedItem): ReceivedItem[] => {
         const existingItemIndex = prevDelivery.items.findIndex(
@@ -41,23 +40,31 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
     
         if (existingItemIndex >= 0) {
             // Update existing item
+            console.log("Updating existing item in delivery cart", receivedItem);
             return prevDelivery.items.map((item, index) => {
                 if (index === existingItemIndex) {
                     const priceToUse = receivedItem.manualPrice ?? item.product.costPrice;
+                    const flatDiscount = receivedItem.discountFlat || 0;
+                    const percentageDiscount = receivedItem.discountPercentage || 0;
+                    const discountAmount = flatDiscount + (priceToUse * (percentageDiscount / 100));
+                    const discountedPrice = priceToUse - discountAmount;
+
                     return {
                         ...item,
                         quantity: item.quantity + receivedItem.quantity,
                         manualPrice: receivedItem.manualPrice,
-                        total: (item.quantity + receivedItem.quantity) * priceToUse
+                        total: (item.quantity + receivedItem.quantity) * discountedPrice,
+                        discountFlat: flatDiscount,
+                        discountPercentage: percentageDiscount,
                     };
                 }
                 return item;
             });
         } else {
             // Add new item
+            console.log("Adding new item to delivery cart", receivedItem);
             const itemToAdd = {
-                ...receivedItem,
-                total: receivedItem.quantity * (receivedItem.manualPrice ?? receivedItem.product.costPrice)
+                ...receivedItem
             };
             return [itemToAdd, ...prevDelivery.items];
         }
@@ -67,6 +74,7 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
 
         setDelivery(prevDelivery => {
             const updatedItems = updateDeliveryItems(prevDelivery, receivedItem);
+            console.log("manual price", updatedItems[0].manualPrice);
             return {
                 items: updatedItems,
                 total: calculateTotal(updatedItems),
