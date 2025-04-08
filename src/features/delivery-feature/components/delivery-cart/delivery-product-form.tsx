@@ -80,7 +80,7 @@ const DeliveryProductForm = memo(({
         // Check if product exists or quantity is valid
         if (!product || !quantity) return;
         
-        if (numericQuantity < 1) {
+        if (numericQuantity < 1 ) {
             return;
         }
 
@@ -106,21 +106,21 @@ const DeliveryProductForm = memo(({
     return (
         <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
             {!isPortrait ? (
-                <IconButton
-                    icon="chevron-right"
-                    mode="contained"
-                    size={20}
-                    onPress={() => handleAddItem(product)}
-                />
-            ) : (            
+                    <IconButton
+                        icon="chevron-right"
+                        mode="contained"
+                        size={20}
+                        onPress={() => handleAddItem(product)}
+                    />
+                ) : (
                     <DiscountMenuForm
                         onApplyDiscount={onApplyDiscount}
                         visible={menuVisible}
                         onError={onError}
                     />
-
                 )
             }
+
             <View style={styles.inputGroup}>
             
                 <TextInput
@@ -152,6 +152,7 @@ const DeliveryProductForm = memo(({
                     importantForAutofill="no"
                     textContentType="none"
                 />
+
             </View>
             
             {isPortrait ? (
