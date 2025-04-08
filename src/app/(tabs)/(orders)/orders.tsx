@@ -139,17 +139,6 @@ export default function OrdersScreen() {
 
     // Check if there are no items and show loading state
     if (items.length === 0) {
-        //if portrait
-        if (window.innerWidth < window.innerHeight) {
-            return (
-                <EmptyState
-                    title="Awaiting Data..."
-                    subtitle="Orders will be available shortly"
-                    loading={true}
-                />
-            );
-        }
-
         return (
             <EmptyState 
                 title="Awaiting Data..."
@@ -157,7 +146,6 @@ export default function OrdersScreen() {
                 loading={true}
             />
         );
-
     }
 
     //sort the items newest to oldest
