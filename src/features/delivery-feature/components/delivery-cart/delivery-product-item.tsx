@@ -72,7 +72,7 @@ export const DeliveryProductItem = ({
                     <View style={[styles.subTotalInfoPortrait, !isPortrait && styles.subTotalInfoLandscape]}>
                         {isPortrait && (
                             <Text variant="bodySmall">
-                                Subtotal:  <Text variant="bodyMedium">₱{subtotal}</Text>
+                                Subtotal:  <Text variant="bodyMedium">₱{subtotal.toFixed(2)}</Text>
                             </Text>
                         )}
 
