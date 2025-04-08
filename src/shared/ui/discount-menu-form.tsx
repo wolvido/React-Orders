@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, StyleSheet, Modal, Pressable, useWindowDimensions } from "react-native";
-import { Button, IconButton, TextInput, Text, Portal} from "react-native-paper";
+import { Button, IconButton, TextInput, Text, Portal, Menu} from "react-native-paper";
 
 interface DiscountMenuFormProps {
     onApplyDiscount: (percentageDiscount?: number, flatDiscount?: number) => void;
@@ -16,10 +16,17 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
     const [flatDiscount, setFlatDiscount] = useState('');
     const [percentageDiscount, setPercentageDiscount] = useState('');
     const [error, setError] = useState(false);
+    const [isDiscounted, setIsDiscounted] = useState(false);
 
     const handlePercentageDiscountChange = (text: string) => {
 
-        const numericValue = text.replace(/[^0-9]/g, '');
+        const numericValue = text === '' ? '' : text.replace(/[^0-9]/g, '');
+
+        if (numericValue === '') {
+            setPercentageDiscount('');
+            setError(false);
+            return;
+        }
 
         if (parseInt(numericValue) > 100) {
             setError(true);
@@ -36,24 +43,39 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
     };
 
     const handleFlatDiscountChange = (text: string) => {
-        const numericValue = text.replace(/[^0-9]/g, '');
+        const numericValue = text === '' ? '' : text.replace(/[^0-9]/g, '');
         setFlatDiscount(numericValue);
         setError(false);
     };
 
     const onSubmit = () => {
         const flat = parseFloat(flatDiscount) || 0;
+        console.log('Flat discount:', flat);
+
         const percentage = parseFloat(percentageDiscount) || 0;
+        console.log('Percentage discount:', percentage);
+
+        onApplyDiscount(percentage, flat);
+        setMenuVisible(false);
+        setError(false);
+        onError?.('');
 
         if (flat > 0 || percentage > 0) {
-            onApplyDiscount(percentage, flat);
-            setMenuVisible(false);
-            setError(false);
-            onError?.('');
-        } else {
-            onError?.('Please enter a valid discount value.');
+            setIsDiscounted(true);
+        }
+        if(flat === 0 && percentage === 0) {
+            setIsDiscounted(false);
         }
 
+    };
+
+    const onCancel = () => {
+        setMenuVisible(false);
+        if (!isDiscounted) {
+            setFlatDiscount('');
+            setPercentageDiscount('');
+        }
+        setError(false);
     }
 
     return (
@@ -64,6 +86,7 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
                 </Text>
                 <IconButton
                     icon="percent"
+                    containerColor={isDiscounted ? '#66b2b2' : 'white'}
                     size={16}
                     mode="outlined"
                     style={ [isPortait && (styles.discountButton), !isPortait && (styles.discountButtonLandscape)] }
@@ -73,7 +96,10 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
 
             <Portal>
                 {menuVisible && (
-                    <View style={StyleSheet.absoluteFill}>
+                    <Pressable
+                        //onPress={() => setMenuVisible(false)}
+                        style={styles.overlay}
+                    >
                         <View style={[styles.popup]}>
                             <View style={styles.popupContent}>
                                 <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Discount:</Text>
@@ -114,7 +140,7 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
                                     </Button>
                                     <Button
                                         mode="contained"
-                                        onPress={() => setMenuVisible(false)}
+                                        onPress={onCancel}
                                         style={{ marginTop: 8 }}
                                     >
                                         Cancel
@@ -122,7 +148,7 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </Pressable>
                 )}
             </Portal>
         </View>
@@ -132,6 +158,10 @@ export const DiscountMenuForm = ({ onApplyDiscount, visible, onError }: Discount
 
 const styles = StyleSheet.create({
     overlay: {
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         ...StyleSheet.absoluteFillObject,
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
@@ -140,13 +170,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     popup: {
+        transform: 'translateY(-120px)',
         position: 'absolute',
         backgroundColor: 'white',
         borderRadius: 8,
         padding: 16,
         // Adjust these values based on your button position
-        top: 50,
-        left: 16,
         elevation: 5,
         shadowColor: '#000',
         shadowOffset: {

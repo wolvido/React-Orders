@@ -1,8 +1,9 @@
 import { Product } from "@/src/entities/product/type/product";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
+import { DiscountMenuForm } from "@/src/shared/ui/discount-menu-form";
 import { memo, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { Button, IconButton, TextInput, Text, Menu} from "react-native-paper";
+import { IconButton, TextInput, Text, Menu} from "react-native-paper";
 
 interface DeliveryProductFormProps {
     product: Product;
@@ -22,8 +23,8 @@ const DeliveryProductForm = memo(({
     const [quantity, setQuantity] = useState('');
     const [price, setPrice] = useState<string>(product.costPrice.toString());
     const [error, setError] = useState(false);
-    const [flatDiscount, setFlatDiscount] = useState('');
-    const [percentageDiscount, setPercentageDiscount] = useState('');
+    const [flatDiscount, setFlatDiscount] = useState(0);
+    const [percentageDiscount, setPercentageDiscount] = useState(0);
     const [menuVisible, setMenuVisible] = useState(false);
     const [subtotal, setSubtotal] = useState(0);
 
@@ -39,52 +40,36 @@ const DeliveryProductForm = memo(({
         setError(false);
     };
 
-    const handleFlatDiscountChange = (text: string) => {
-        const numericValue = text.replace(/[^0-9]/g, '');
-        setFlatDiscount(numericValue);
-        setError(false);
-    };
+    const onApplyDiscount = (percentageDiscount?: number, flatDiscount?: number) => {
 
-    const handlePercentageDiscountChange = (text: string) => {
-
-        const numericValue = text.replace(/[^0-9]/g, '');
-
-        if (parseInt(numericValue) > 100) {
-            setError(true);
-            onError?.('Percentage discount cannot exceed 100%');
-        } else {
-            setError(false);
+        if(!flatDiscount){
+            setFlatDiscount(0);
+            flatDiscount = 0;
+        }
+        if(!percentageDiscount){
+            setPercentageDiscount(0);
+            percentageDiscount = 0;
         }
 
-        if (parseInt(numericValue) <= 100) {
-            setPercentageDiscount(numericValue);
-        }
-
-        setError(false);
+        setFlatDiscount(flatDiscount);
+        setPercentageDiscount(percentageDiscount);
+        setMenuVisible(false);
     };
 
     useEffect(() => {
 
         const numericQuantity = parseInt(quantity);
-
         const numericPrice = parseFloat(price);
-
-        const numericFlatDiscount = parseFloat(flatDiscount) || 0;
-
-        const numericPercentageDiscount = parseFloat(percentageDiscount) || 0;
-
+        const numericFlatDiscount = flatDiscount;
+        const numericPercentageDiscount = percentageDiscount;
         const customPrice = numericPrice ? numericPrice : product.costPrice;
-
         const discountAmount = numericFlatDiscount + (customPrice * (numericPercentageDiscount / 100));
-
         const discountedPrice = customPrice - discountAmount;
-
         const calculatedSubtotal = (discountedPrice * numericQuantity) || 0;
 
         setSubtotal(calculatedSubtotal);
         onSubTotalChange?.(calculatedSubtotal);
         setError(false);
-
     },[flatDiscount, percentageDiscount, price, quantity]);
 
     const handleAddItem = (product: Product) => {
@@ -100,6 +85,7 @@ const DeliveryProductForm = memo(({
         }
 
         const customPrice = numericPrice ? numericPrice : product.costPrice;
+        console.log('subtotal', subtotal);
     
         const receivedItem: ReceivedItem = {
             id: 0,
@@ -107,8 +93,8 @@ const DeliveryProductForm = memo(({
             quantity: numericQuantity,
             manualPrice: customPrice,
             total: subtotal,
-            discountPercentage: parseFloat(percentageDiscount),
-            discountFlat: parseFloat(percentageDiscount),
+            discountPercentage: percentageDiscount,
+            discountFlat: flatDiscount,
         };
 
         onAdd(receivedItem);
@@ -127,76 +113,46 @@ const DeliveryProductForm = memo(({
                     onPress={() => handleAddItem(product)}
                 />
             ) : (            
-                <View style={styles.inputGroup}>
-                    <Menu
+                    <DiscountMenuForm
+                        onApplyDiscount={onApplyDiscount}
                         visible={menuVisible}
-                        onDismiss={() => setMenuVisible(false)}
-                        anchor={
-                            <IconButton
-                                icon="percent"
-                                size={16}
-                                mode="outlined"
-                                style={styles.discountButton}
-                                onPress={() => setMenuVisible(true)}
-                            />
-                        }
-                        contentStyle={styles.menuContent}
-                    >
-                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Discount:</Text>
-                        <View style={styles.discountInputs}>
-                            <TextInput
-                                mode="outlined"
-                                label="Flat"
-                                value={flatDiscount}
-                                onChangeText={handleFlatDiscountChange}
-                                keyboardType="numeric"
-                                dense
-                                style={styles.discountInput}
-                            />
-                            <TextInput
-                                mode="outlined"
-                                label="Percentage"
-                                value={percentageDiscount}
-                                onChangeText={handlePercentageDiscountChange}
-                                keyboardType="numeric"
-                                dense
-                                style={styles.discountInput}
-                            />
-                        </View>
-                    </Menu>
-                </View>
+                        onError={onError}
+                    />
+
                 )
             }
+            <View style={styles.inputGroup}>
+            
+                <TextInput
+                    mode="outlined"
+                    label="Price"
+                    value={price}
+                    onChangeText={handlePriceChange}
+                    keyboardType="numeric"
+                    style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
+                    maxLength={10}
+                    error={error}
+                    focusable={true}
+                    autoComplete="off"
+                    importantForAutofill="no"
+                    textContentType="none"
+                />
 
-            <TextInput
-                mode="outlined"
-                label="Price"
-                value={price}
-                onChangeText={handlePriceChange}
-                keyboardType="numeric"
-                style={[styles.priceInput, isPortrait && styles.priceInputPortrait]}
-                maxLength={10}
-                error={error}
-                focusable={true}
-                autoComplete="off"
-                importantForAutofill="no"
-                textContentType="none"
-            />
-
-            <TextInput
-                mode="outlined"
-                label="Qty"
-                value={quantity}
-                onChangeText={handleQuantityChange}
-                keyboardType="numeric"
-                style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
-                maxLength={5}
-                error={error}
-                focusable={true}
-                autoComplete="off"
-                importantForAutofill="no"
-                textContentType="none"
-            />
+                <TextInput
+                    mode="outlined"
+                    label="Qty"
+                    value={quantity}
+                    onChangeText={handleQuantityChange}
+                    keyboardType="numeric"
+                    style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
+                    maxLength={5}
+                    error={error}
+                    focusable={true}
+                    autoComplete="off"
+                    importantForAutofill="no"
+                    textContentType="none"
+                />
+            </View>
             
             {isPortrait ? (
                 <IconButton
@@ -206,44 +162,11 @@ const DeliveryProductForm = memo(({
                     onPress={() => handleAddItem(product)}
                 />
             ) : (
-                <View style={styles.inputGroup}>
-                    <Menu
-                        visible={menuVisible}
-                        onDismiss={() => setMenuVisible(false)}
-                        anchor={
-                            <IconButton
-                                icon="percent"
-                                size={16}
-                                mode="outlined"
-                                style={styles.discountButtonLandscape}
-                                onPress={() => setMenuVisible(true)}
-                            />
-                        }
-                        contentStyle={styles.menuContent}
-                    >
-                        <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Discount:</Text>
-                        <View style={styles.discountInputs}>
-                            <TextInput
-                                mode="outlined"
-                                label="Flat"
-                                value={flatDiscount}
-                                onChangeText={handleFlatDiscountChange}
-                                keyboardType="numeric"
-                                dense
-                                style={styles.discountInput}
-                            />
-                            <TextInput
-                                mode="outlined"
-                                label="Percentage"
-                                value={percentageDiscount}
-                                onChangeText={handlePercentageDiscountChange}
-                                keyboardType="numeric"
-                                dense
-                                style={styles.discountInput}
-                            />
-                        </View>
-                    </Menu>
-                </View>
+                <DiscountMenuForm
+                    onApplyDiscount={onApplyDiscount}
+                    visible={menuVisible}
+                    onError={onError}
+                />
             )}
         </View>
     );
@@ -256,6 +179,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
+    },
+
+    formGroup:{
+        flexDirection: 'column',
     },
     
     discountButton: {
