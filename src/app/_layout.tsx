@@ -25,19 +25,19 @@ export default function RootLayout() {
                                 <PurchaseOrderProvider>
                                     <DeliveryProvider>
                                         <CartProvider>
-                                                <Stack
-                                                    screenOptions={{
-                                                    headerStyle: {
-                                                        backgroundColor: 'green'
-                                                    },
-                                                    headerTintColor: '#fff',
-                                                    headerShown: false,
-                                                    headerTitleStyle: {
-                                                        fontWeight: 'bold',
-                                                    },
-                                                    }}>
-                                                    
-                                                </Stack>
+                                            <Stack
+                                                screenOptions={{
+                                                headerStyle: {
+                                                    backgroundColor: 'green'
+                                                },
+                                                headerTintColor: '#fff',
+                                                headerShown: false,
+                                                headerTitleStyle: {
+                                                    fontWeight: 'bold',
+                                                },
+                                                }}>
+                                                
+                                            </Stack>
                                         </CartProvider>
                                     </DeliveryProvider>
                                 </PurchaseOrderProvider>
