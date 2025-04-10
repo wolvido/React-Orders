@@ -6,16 +6,15 @@ export interface PurchaseOrderLine {
     productId: number;
     product?: Product;
 
-    basePrice: number;
+    //these values do not change on receive, they are set when the PO is created regardless of any editing done on receive
+    basePrice: number; // per unit price, basically product price. This is editable on PO creation.
+    totalPrice: number; //basically subtotal price, basePrice * orderedQuantity * discounts
     percentageDiscount: number;
     flatDiscount: number;
-    totalPrice: number;
 
-    noofOrdersToArrive: number; 
-        // lets not bother with this for now, just let it pass around
-
-    orderedQuantity?: number;
-    receivedQuantity?: number;
+    noofOrdersToArrive: number; // quantity of items yet to be received
+    orderedQuantity?: number; // original ordered quantity, received or not received, it stays the same as initial noOfOrdersToArrive
+    receivedQuantity?: number; // null when not received. Basically the inverse of noofOrdersToArrive.
 
     /**
      *  if the item has been received but not yet delivered.
