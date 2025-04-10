@@ -15,7 +15,6 @@ import { PaymentRepository } from '@/src/infrastructure/repositories/payment-rep
 import { router, useFocusEffect } from 'expo-router';
 import { OrdersList } from '@/src/features/order-feature/components/orders-list';
 
-
 //react component
 export default function OrdersScreen() {
 

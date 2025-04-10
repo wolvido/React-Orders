@@ -22,9 +22,9 @@ export default function AddDeliveryScreen() {
     }
     
     return (
-        <View style={{ flex: 1 }}>            
+        <View style={{ flex: 1 }}>
             <StepIndicator currentStep={1} steps={deliverySteps}/>
-            <ScrollView 
+            <ScrollView
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{ 
                     paddingBottom: 100 // Add extra padding at bottom
