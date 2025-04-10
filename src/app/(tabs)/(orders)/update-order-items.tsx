@@ -26,7 +26,7 @@ export default function UpdateOrderItemsScreen() {
                 setCart(cart);
             });
         }
-        
+
         console.log(cart);
     }, []);
 
