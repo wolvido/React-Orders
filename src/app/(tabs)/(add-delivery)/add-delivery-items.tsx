@@ -10,10 +10,9 @@ import { useState } from "react";
 
 export default function AddDeliveryItemsScreen() {
     const [isLoading, setIsLoading] = useState(false);
-    const { products } = useProducts();
+    const { products, refreshProducts } = useProducts();
     const { updateReceivedDelivery, finalizeDelivery } = useDelivery();
-    const{ delivery, addToDelivery, removeFromDelivery, getDelivery, clearDelivery} = useDeliveryCart();
-    const { refreshProducts } = useProducts();
+    const { delivery, addToDelivery, removeFromDelivery, getDelivery, clearDelivery} = useDeliveryCart();
 
     const handleProceed = async () => {
         setIsLoading(true);
@@ -89,7 +88,7 @@ export default function AddDeliveryItemsScreen() {
             </Modal>
 
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
