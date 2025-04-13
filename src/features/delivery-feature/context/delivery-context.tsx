@@ -9,7 +9,7 @@ interface DeliveryContextType {
     initializeDelivery: (newDelivery: Delivery) => void;
     updateReceivedDelivery: (receivedDelivery: ReceivedDelivery) => void;
     getDelivery: () => Delivery | null;
-    finalizeDelivery: (receivedDelivery: ReceivedDelivery) => Promise<{success: boolean, message: string} | undefined>;
+    finalizeDelivery: (receivedDeliveryParam?: ReceivedDelivery) => Promise<{success: boolean, message: string} | undefined>;
 }
 
 const DeliveryContext = createContext<DeliveryContextType | undefined>(undefined);
@@ -53,7 +53,7 @@ export const DeliveryProvider = ({ children }: { children: ReactNode }) => {
         return delivery;
     };
 
-    const finalizeDelivery = async (receivedDelivery: ReceivedDelivery) => {
+    const finalizeDelivery = async (receivedDeliveryParam?: ReceivedDelivery) => {
         if (!delivery) {
             console.error('No delivery to finalize');
             return {
@@ -62,21 +62,31 @@ export const DeliveryProvider = ({ children }: { children: ReactNode }) => {
             };
         }
 
+        const receivedDeliveryToFinalize = receivedDelivery || receivedDeliveryParam;
+
+        if (!receivedDeliveryToFinalize) {
+            console.error('No received delivery to finalize');
+            return {
+                success: false,
+                message: 'No received delivery to finalize'
+            };
+        }
+
         //assign deliveredBy to receivedDelivery lines
-        receivedDelivery.deliveredBy = delivery.deliveredBy;
+        receivedDeliveryToFinalize.deliveredBy = delivery.deliveredBy;
 
         try{
             // add the total and items count to the delivery
             const updatedDelivery: Delivery = {
                 ...delivery,
-                total: receivedDelivery.total,
-                items: receivedDelivery.items.length,
+                total: receivedDeliveryToFinalize.total,
+                items: receivedDeliveryToFinalize.items.length,
             };
 
             const jsonReturn = await deliveryRepository.createDelivery(updatedDelivery);
 
             const updatedReceivedDelivery: ReceivedDelivery = {
-                ...receivedDelivery, 
+                ...receivedDeliveryToFinalize, 
                 deliveryId: jsonReturn.deliveryId
             };
 
