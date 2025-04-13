@@ -129,7 +129,7 @@ export function DeliveryCartProvider({ children }: { children: ReactNode }) {
 export function useDeliveryCart() {
     const context = useContext(DeliveryContext);
     if (context === undefined) {
-        throw new Error('useDelivery must be used within a DeliveryProvider');
+        throw new Error('useDeliveryCart must be used within a DeliveryProvider');
     }
     return context;
 }
