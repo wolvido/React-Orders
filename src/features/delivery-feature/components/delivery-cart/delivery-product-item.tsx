@@ -3,7 +3,7 @@ import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Card, HelperText, Text } from "react-native-paper";
-import DeliveryProductForm from "./delivery-product-form";
+import { DeliveryProductForm } from "./delivery-product-form";
 
 interface DeliveryProductItemProps {
     product: Product;
