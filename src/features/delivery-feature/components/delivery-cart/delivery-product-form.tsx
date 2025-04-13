@@ -13,7 +13,7 @@ interface DeliveryProductFormProps {
     onSubTotalChange?: (subtotal: number) => void;
 }
 
-const DeliveryProductForm = memo(({
+export const DeliveryProductForm = memo(({
     product, 
     onAdd,
     onError,
@@ -172,8 +172,6 @@ const DeliveryProductForm = memo(({
         </View>
     );
 });
-
-export default DeliveryProductForm;
 
 const styles = StyleSheet.create({
     inputGroup: {
