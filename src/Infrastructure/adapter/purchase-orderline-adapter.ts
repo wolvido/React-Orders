@@ -5,11 +5,11 @@ export interface PurchaseOrderLineDTO {
   // System Metadata
   isDeleted: boolean;
   sys_CreateTimeStamp: string;
-  sys_CreateUserStamp: string;
-  sys_LastEditedTimeStamp: string;
-  sys_LastEditedUserStamp: string;
-  sys_DeletedTimeStamp: string;
-  sys_DeletedUserStamp: string;
+  sys_CreateUserStamp: string | null;
+  sys_LastEditedTimeStamp: string | null;
+  sys_LastEditedUserStamp: string | null;
+  sys_DeletedTimeStamp: string | null;
+  sys_DeletedUserStamp: string | null;
 
   // Status & Selection
   state: number;
@@ -85,8 +85,8 @@ export function PurchaseOrderLinetoDTO(entity: PurchaseOrderLine): PurchaseOrder
     sys_CreateUserStamp: "system",
     sys_LastEditedTimeStamp: new Date().toLocalISOString(),
     sys_LastEditedUserStamp: "system",
-    sys_DeletedTimeStamp: "",
-    sys_DeletedUserStamp: "",
+    sys_DeletedTimeStamp: null,
+    sys_DeletedUserStamp: null,
 
     state: 0,
     isDtoSelected: false,

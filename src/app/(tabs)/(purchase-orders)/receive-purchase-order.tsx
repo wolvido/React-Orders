@@ -5,19 +5,42 @@ import { usePurchaseOrder } from "@/src/features/purchase-order-feature/context/
 import StepIndicator from "@/src/features/step-indicator-feature/components/order-step-indicator";
 import { Text } from "react-native-paper";
 import poSteps from "./po-steps-label";
+import { useDelivery } from "@/src/features/delivery-feature/context/delivery-context";
+import { Delivery } from "@/src/entities/delivery/type/delivery";
+import { router } from "expo-router";
+import { usePurchaseOrderListing } from "@/src/features/purchase-order-feature/context/purchase-order-listing-context";
+import { usePurchaseOrderLine } from "@/src/entities/purchase-order-line/context-service/purchase-order-line-context";
+import { useEffect } from "react";
 
 export default function ReceivePurchaseOrderScreen() {
 
-    const { selectedPurchaseOrder, PurchaseOrderToDelivery } = usePurchaseOrder();
-
+    const { selectedPurchaseOrder, purchaseOrderToDelivery } = usePurchaseOrder();
+    const { initializeDelivery } = useDelivery();
     const { user } = useAuth();
+
+    const { setInitialPOListing } = usePurchaseOrderListing();
+    const { getPurchaseOrderLinesById } = usePurchaseOrderLine();
+
+    const handleSubmit = (delivery: Delivery) => {
+        console.log("Delivery initialized from PO:", delivery);
+        initializeDelivery(delivery);
+        router.push("/purchase-order-items");
+    };
 
     // Check if selectedPurchaseOrder is null or undefined before proceeding
     if (!selectedPurchaseOrder) {
         return <Text>Error: No purchase order selected</Text>;
-    }
+    };
 
-    const deliveryDetails = PurchaseOrderToDelivery(selectedPurchaseOrder);
+    useEffect(() => {
+        if (selectedPurchaseOrder) {
+            getPurchaseOrderLinesById(selectedPurchaseOrder.id).then((lines) => {
+                setInitialPOListing(lines);
+            });
+        }
+    }, [selectedPurchaseOrder]);
+
+    const deliveryDetails = purchaseOrderToDelivery(selectedPurchaseOrder);
 
     return (
         <>
@@ -27,9 +50,7 @@ export default function ReceivePurchaseOrderScreen() {
         <AddDeliveryForm
             suppliers={deliveryDetails.supplier ? [deliveryDetails.supplier] : []}
 
-            onSubmit={(delivery) => {
-                console.log("Delivery submitted:", delivery);
-            }}
+            onSubmit={handleSubmit}
 
             existingPartialDelivery={deliveryDetails} 
             currentUser={user || undefined}

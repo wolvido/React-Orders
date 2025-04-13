@@ -3,10 +3,13 @@ import { PurchaseOrderLine } from "@/src/entities/purchase-order-line/type/purch
 import { ReceivedDelivery } from "@/src/entities/received-delivery/type/received-delivery";
 import useOrientation from "@/src/shared/lib/device/orientation-hook";
 import { View, StyleSheet } from "react-native";
+import { PurchaseOrderProductList } from "./product-list/purchase-order-product-list";
+import { PurchaseOrderCartPanel } from "./cart-panel/purchase-order-cart-panel";
+import { SummaryPanel } from "@/src/shared/ui/summary-panel";
 
 interface PurchaseOrderCartProps {
     purchaseOrderLines: PurchaseOrderLine[];
-    deliveryCart: ReceivedDelivery;
+    delivery: ReceivedDelivery;
     onAddToCart: (poLine: PurchaseOrderLine) => void;
     onRemoveFromCart: (product: Product) => void;
     onProceed: () => void;
@@ -15,7 +18,7 @@ interface PurchaseOrderCartProps {
 
 export const PurchaseOrderCart = ({
     purchaseOrderLines,
-    deliveryCart,
+    delivery,
     onAddToCart,
     onRemoveFromCart,
     onProceed,
@@ -26,6 +29,25 @@ export const PurchaseOrderCart = ({
     return (
         <View style={[styles.content, styles.contentPortrait]}>
             <View style={[styles.content, isPortrait && styles.contentPortrait, !isPortrait && styles.landscapeContentPortrait]}>
+                <PurchaseOrderProductList
+                    purchaseOrderLines={purchaseOrderLines}
+                    onAddToCart={onAddToCart}
+                    onError={onError}
+                    isPortrait={isPortrait}
+                />
+
+                <PurchaseOrderCartPanel
+                    items={delivery.items}
+                    isPortrait={isPortrait}
+                    onRemoveFromCart={onRemoveFromCart}
+                    collapsible={true}
+                />
+
+                <SummaryPanel
+                    total={delivery.total}
+                    quantity={delivery.items.map((item) => item.quantity).reduce((a, b) => a + b, 0)}
+                    onProceed={onProceed}
+                />
             </View>
         </View>
     );

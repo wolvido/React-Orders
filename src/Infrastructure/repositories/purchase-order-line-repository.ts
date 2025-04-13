@@ -4,7 +4,7 @@ import {PurchaseOrderLineDTOtoEntity, PurchaseOrderLinetoDTO} from "@/src/infras
 import app from "@/app.json";
 
 export interface IPurchaseOrderLineRepository {
-    getByPoId(poLineId: number): Promise<PurchaseOrderLine | null>;
+    getByPoId(poLineId: number): Promise<PurchaseOrderLine[]>;
     updatePoLine(poLine: PurchaseOrderLine): Promise<PurchaseOrderLine>;
     deletePoLine(poLineId: number): Promise<PurchaseOrderLine>;
 }
@@ -42,14 +42,19 @@ export class PurchaseOrderLineRepository implements IPurchaseOrderLineRepository
         return await PurchaseOrderLineDTOtoEntity(data) as T;
     }
 
-    async getByPoId(poLineId: number): Promise<PurchaseOrderLine | null> {
+    /**
+     * 
+     * @param poLineId The id of the purchase order with which the lines are associated.
+     * @returns the purchase order lines associated with the purchase order id.
+     */
+    async getByPoId(poLineId: number): Promise<PurchaseOrderLine[]> {
         try{
             const response = await fetch(`${this.baseUrl}/fetch-purchaseOrderlines/${poLineId}`);
             if (!response.ok) {
-                console.warn('response not ok on get PO line repo');
+                console.warn('response not ok on get PO lines repo');
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return await this.handleResponse<PurchaseOrderLine>(response);
+            return await this.handleResponse<PurchaseOrderLine[]>(response);
         }
         catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';

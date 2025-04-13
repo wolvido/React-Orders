@@ -27,7 +27,7 @@ export const PurchaseOrderProductForm = ({
     const [flatDiscount, setFlatDiscount] = useState(poLine.flatDiscount);
     const [percentageDiscount, setPercentageDiscount] = useState(poLine.percentageDiscount);
 
-    const [receivedQuantityText, setReceivedQuantityText] = useState<string>(poLine.receivedQuantity?.toString() ?? '');
+    const [quantityText, setQuantityText] = useState<string>('');
     const [unitPriceText, setUnitPriceText] = useState<string>(poLine.basePrice.toString());
 
     const handlePriceChange = (text: string) => {
@@ -38,17 +38,18 @@ export const PurchaseOrderProductForm = ({
 
     const handleQuantityChange = (text: string) => {
         const numericValue = text.replace(/[^0-9]/g, '');
-        const orderedQuantity = poLine.noofOrdersToArrive;
+        const unreceivedQuantity = poLine.noofOrdersToArrive;
 
         // Check if the quantity exceeds the ordered quantity
-        if (parseInt(numericValue) > orderedQuantity) {
+        if (parseInt(numericValue) > unreceivedQuantity) {
             setError(true);
-            onError?.('Received quantity cannot exceed ordered quantity.');
+            onError?.('Receive quantity cannot exceed unreceived quantity of ' + unreceivedQuantity);
             return;
         }
 
-        setReceivedQuantityText(numericValue);
+        setQuantityText(numericValue);
         setError(false);
+        onError?.('');
     };
     
     const onApplyDiscount = (percentageDiscount?: number, flatDiscount?: number) => {
@@ -68,7 +69,7 @@ export const PurchaseOrderProductForm = ({
     };
 
     const handleAddItem = (poLine: PurchaseOrderLine) => {
-        const numericQuantity = parseInt(receivedQuantityText);
+        const numericQuantity = parseInt(quantityText);
         const numericPrice = parseFloat(unitPriceText);
 
         if (numericQuantity < 1) {
@@ -78,7 +79,8 @@ export const PurchaseOrderProductForm = ({
         const newPoLine: PurchaseOrderLine = {
             ...poLine,
             basePrice: numericPrice,
-            receivedQuantity: numericQuantity,
+            noofOrdersToArrive: poLine.noofOrdersToArrive - numericQuantity,
+            receivedQuantity: (poLine.receivedQuantity ?? 0) + numericQuantity,
             flatDiscount: flatDiscount,
             percentageDiscount: percentageDiscount,
             totalPrice: subTotal,
@@ -86,13 +88,14 @@ export const PurchaseOrderProductForm = ({
 
         onAdd(newPoLine);
 
-        setReceivedQuantityText('');
+        setQuantityText('');
         setError(false);
+        
     };
 
     useEffect(() => {
 
-        const numericQuantity = parseInt(receivedQuantityText);
+        const numericQuantity = parseInt(quantityText);
         const numericPrice = parseFloat(unitPriceText);
         const numericFlatDiscount = flatDiscount;
         const numericPercentageDiscount = percentageDiscount;
@@ -104,7 +107,7 @@ export const PurchaseOrderProductForm = ({
         setSubtotal(calculatedSubtotal);
         onSubTotalChange?.(calculatedSubtotal);
         setError(false);
-    },[flatDiscount, percentageDiscount, unitPriceText, receivedQuantityText]);
+    },[flatDiscount, percentageDiscount, unitPriceText, quantityText]);
 
     return (
         <View style={[styles.actionSection, isPortrait && styles.actionSectionPortrait, !isPortrait && styles.actionSectionLandscape]}>
@@ -144,7 +147,7 @@ export const PurchaseOrderProductForm = ({
                 <TextInput
                     mode="outlined"
                     label="Qty"
-                    value={receivedQuantityText}
+                    value={quantityText}
                     onChangeText={handleQuantityChange}
                     keyboardType="numeric"
                     style={[styles.quantityInput, isPortrait && styles.quantityInputPortrait]}
