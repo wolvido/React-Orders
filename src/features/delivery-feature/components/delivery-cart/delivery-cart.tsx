@@ -3,7 +3,6 @@ import { ReceivedDelivery } from "@/src/entities/received-delivery/type/received
 import { Product } from "@/src/entities/product/type/product";
 import { ReceivedItem } from "@/src/entities/received-item/type/received-item";
 import useOrientation from "@/src/shared/lib/device/orientation-hook";
-import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
 import { SummaryPanel } from "@/src/shared/ui/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
@@ -19,14 +18,14 @@ interface DeliveryCartProps {
     onError?: (message: string) => void;
 }
 
-export function DeliveryCart({
+export const DeliveryCart = ({
     products,
     delivery,
     onAddToDelivery,
     onRemoveFromDelivery,
     onProceed,
     onError
-}: DeliveryCartProps) {
+}: DeliveryCartProps) => {
     const isPortrait = useOrientation() === 'PORTRAIT';
 
     const [isCartCollapsed, setIsCartCollapsed] = useState(false);
@@ -66,5 +65,17 @@ export function DeliveryCart({
             />
         </View>
     );
-}
+};
 
+const styles = StyleSheet.create({
+    content: {
+        flex: 1,
+        flexDirection: 'row', // side by side in landscape
+    },
+    contentPortrait: {
+        flexDirection: 'column', // stacked in portrait
+    },
+    landscapeContentPortrait:{
+        flexDirection: 'row',
+    },
+});
