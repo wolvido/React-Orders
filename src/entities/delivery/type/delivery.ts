@@ -17,4 +17,9 @@ export interface Delivery {
     receiptDate: Date;
     items: number; //items count
 
+    /**
+     * if delivery is from a purchase order
+     */
+    purchaseOrderId?: number; 
+
 }

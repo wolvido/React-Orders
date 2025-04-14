@@ -77,7 +77,7 @@ export class DeliveryAdapter {
             deliveryCost: 0,
             otherFee: 0,
             deliveryDiscount: 0,
-            purchaseOrderId: 0,
+            purchaseOrderId: delivery.purchaseOrderId || 0,
             isConfirmed: false,
             deliveryConfirmationId: 0,
             confirmedBy: "",
@@ -112,6 +112,8 @@ export class DeliveryAdapter {
             plateNo: dto.plateNO,
             receiptDate: new Date(dto.receiptDate),
             items: dto.items,
+
+            purchaseOrderId: dto.purchaseOrderId,
         };
     }
 }

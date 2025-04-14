@@ -22,6 +22,7 @@ export default function ReceivePurchaseOrderScreen() {
     const { getPurchaseOrderLinesById } = usePurchaseOrderLine();
 
     const handleSubmit = (delivery: Delivery) => {
+        delivery.purchaseOrderId = selectedPurchaseOrder?.id;
         console.log("Delivery initialized from PO:", delivery);
         initializeDelivery(delivery);
         router.push("/purchase-order-items");
