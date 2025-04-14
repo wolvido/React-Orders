@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     landscapeContentPortrait:{
-        gap: 10,
+        flexDirection: 'row',
     },
     mainContent:{
         flex: 1,

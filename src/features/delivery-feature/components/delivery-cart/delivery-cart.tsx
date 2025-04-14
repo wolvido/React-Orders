@@ -7,6 +7,8 @@ import styles from "./delivery-styles";
 import { DeliveryCartPanel } from "./delivery-cart-panel";
 import { SummaryPanel } from "@/src/shared/ui/summary-panel";
 import { DeliveryProductList } from "./delivery-product-list";
+import { CollapseButton } from "@/src/shared/ui/collapse-button";
+import { useState } from "react";
 
 interface DeliveryCartProps {
     products: Product[];
@@ -26,6 +28,12 @@ export function DeliveryCart({
     onError
 }: DeliveryCartProps) {
     const isPortrait = useOrientation() === 'PORTRAIT';
+
+    const [isCartCollapsed, setIsCartCollapsed] = useState(false);
+
+    const onToggleCollapse = () => {
+        setIsCartCollapsed(!isCartCollapsed);
+    };
     
     return (
         <View style={[styles.content, styles.contentPortrait]}>
@@ -38,11 +46,16 @@ export function DeliveryCart({
                     isPortrait={isPortrait}
                 />
 
+                <CollapseButton
+                    isPortrait={isPortrait}
+                    isCartCollapsed={isCartCollapsed}
+                    onToggleCollapse={onToggleCollapse}
+                />
+
                 <DeliveryCartPanel
                     items={delivery.items}
                     isPortrait={isPortrait}
                     onRemoveFromDelivery={onRemoveFromDelivery}
-                    collapsible={true}
                 />
             </View>
 
