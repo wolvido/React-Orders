@@ -101,12 +101,12 @@ export function PurchaseOrderToDTO(po: PurchaseOrder): PurchaseOrderDTO {
         state: 0, // No state in entity
         isDtoSelected: false, // No DTO selection in entity
         items: po.noOfItems,
-        poDiscount: po.poDiscount, // No discount in entity
+        poDiscount: po.poDiscount,
         deliveryFee: po.deliveryFee,
         otherFee: po.otherFee,
         potentialCost: po.potentialCost,
         orderId: 0, // No related order in entity
-        itemType: "", // No item type in entity
+        itemType: "Product", // Product for now, no raw material feature yet
         sys_CreateTimeStamp: po.createDate.toLocalISOString(),
         sys_CreateUserStamp: "",
         sys_LastEditedTimeStamp: new Date().toLocalISOString(),
