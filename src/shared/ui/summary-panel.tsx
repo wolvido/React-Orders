@@ -11,7 +11,7 @@ export function SummaryPanel({ total, quantity, onProceed }: SummaryPanelProps) 
     return (
         <View style={styles.summaryContainer}>
             <Text variant="titleLarge" style={styles.total}>
-                Total: ₱{total}
+                Total: ₱{total.toFixed(2)}
             </Text>
             <Text variant="titleLarge" style={styles.total}>
                 Quantity: {quantity}
