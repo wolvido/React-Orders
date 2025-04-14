@@ -92,7 +92,7 @@ export default function PurchaseOrderItemsScreen() {
                 [{ text: "OK" }]
             );
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
