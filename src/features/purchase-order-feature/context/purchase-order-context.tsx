@@ -59,7 +59,6 @@ export const PurchaseOrderProvider = ({ children }: { children: ReactNode }) => 
 
     /**
      * Converts a purchase order to a partial delivery form.
-     * The rest of the form 
      * @param purchaseOrder purchase order form.
      * @returns delivery partial form with the purchase order data.
      */
