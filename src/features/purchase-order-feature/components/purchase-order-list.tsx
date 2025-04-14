@@ -90,7 +90,16 @@ export default function PurchaseOrderList(  { poItems, onReceivePo, onViewDetail
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.transactionDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.expectedDeliveryDate.toLocaleDateString()}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.preparedBy}</DataTable.Cell>
-                                <DataTable.Cell style={{flexGrow: 1}}>{item.isComplete ? 'Received' : 'Pending'}</DataTable.Cell>
+                                <DataTable.Cell 
+                                    style={
+                                        {flexGrow: 1}
+                                    }
+                                    textStyle = {{
+                                        color: item.isComplete ? '#2ecc71' : theme.colors.error,
+                                    }}
+                                    >
+                                        {item.isComplete ? 'Received' : 'Pending'}
+                                </DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 1}}>{item.remarks}</DataTable.Cell>
                                 <DataTable.Cell style={{flexGrow: 0.7}}>
                                     <Menu
