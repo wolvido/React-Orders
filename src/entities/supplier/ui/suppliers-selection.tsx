@@ -64,7 +64,7 @@ export const SuppliersSelection = ({
                     </Text>
 
                     <Searchbar
-                        placeholder="Search customers..."
+                        placeholder="Search Suppliers..."
                         onChangeText={setSearchQuery}
                         value={searchQuery}
                         style={styles.searchBar}
