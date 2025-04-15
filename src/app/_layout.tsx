@@ -21,10 +21,8 @@ export default function RootLayout() {
                 <ProductProvider>
                     <SupplierProvider>
                         <PaperProvider theme={theme}>
-                            <OrderProvider>
                                 <PurchaseOrderProvider>
                                     <DeliveryProvider>
-                                        <CartProvider>
                                             <Stack
                                                 screenOptions={{
                                                 headerStyle: {
@@ -38,10 +36,8 @@ export default function RootLayout() {
                                                 }}>
                                                 
                                             </Stack>
-                                        </CartProvider>
                                     </DeliveryProvider>
                                 </PurchaseOrderProvider>
-                            </OrderProvider>
                         </PaperProvider>
                     </SupplierProvider>
                 </ProductProvider>
